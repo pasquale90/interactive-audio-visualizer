@@ -1,13 +1,16 @@
 CC :=g++
 OPTIONS :=-g -pedantic -Wall -Wextra -Wno-error
 # COMPILE :=$(CC) $(NOPTIONS)
-OBJECTS :=main.o
+OBJECTS :=main.o tempsignal.o
 
-all: $(OBJECTS) audio_visualizer
-	$(CC) $(OPTIONS) $(OBJECTS)
+runnable: $(OBJECTS) runnable
+	$(CC) $(OPTIONS) $(OBJECTS) -o runnable
 
-main.o: main.cpp
-	$(CC) $(OPTIONS) -c main.cpp -I libs/AudioFile
+main.o: main.cpp tempsignal.h
+	$(CC) $(OPTIONS) -c main.cpp -Ilibs/AudioFile -Ibuild -o main.o
+
+tempsignal.o: tempsignal.h
+	$(CC) $(OPTIONS) -c tempsignal.cpp -Ilibs/AudioFile -o tempsignal.o
 
 clean:
 	rm -f *.o
