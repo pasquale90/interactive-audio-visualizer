@@ -9,7 +9,7 @@
   - git clone https://github.com/pasquale90/audio-visualizer-processing.git //a token may be needed
   - cd audio-visualizer-procesing/example_build_hello
   - Run in cmd : <br />
-	g++ main.cpp -o hello.exe && hello.exe
+	> g++ main.cpp -o hello.exe && hello.exe
 
 
 
