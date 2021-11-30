@@ -5,20 +5,20 @@
 # Compile instructions
 
   ## Windows
-  Install MingW compiler
-  git clone https://github.com/pasquale90/audio-visualizer-processing.git //a token may be needed
-  cd audio-visualizer-procesing/example_build_hello
-  Run in cmd : 
+  - Install MingW compiler
+  - git clone https://github.com/pasquale90/audio-visualizer-processing.git //a token may be needed
+  - cd audio-visualizer-procesing/example_build_hello
+  - Run in cmd : 
 	g++ main.cpp -o hello.exe && hello.exe
 
 
 
   ## Linux
-  Install gcc compiler
-  Install GNU Make (version used is 4.2.1)
-  git clone https://github.com/pasquale90/audio-visualizer-processing.git //a token may be needed
-  cd audio-visualizer-procesing/example_build_hello
-  Run in terminal:
+  - Install gcc compiler
+  - Install GNU Make (version used is 4.2.1)
+  - git clone https://github.com/pasquale90/audio-visualizer-processing.git //a token may be needed
+  - cd audio-visualizer-procesing/example_build_hello
+  - Run in terminal:
 	$ make && ./run
 	$ make clean
   
