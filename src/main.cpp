@@ -27,12 +27,11 @@ int main(){
 }
 */
 
-
 #include "tempsignal.h"
 int main(){
   std::string filepath="media/birds.wav";
   TempSignal signal=TempSignal(filepath);
   signal.info();
+  signal.listener();
   signal.print_samples();
 }
-
