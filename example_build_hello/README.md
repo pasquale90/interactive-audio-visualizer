@@ -8,7 +8,7 @@
   - Install MingW compiler
   - git clone https://github.com/pasquale90/audio-visualizer-processing.git //a token may be needed
   - cd audio-visualizer-procesing/example_build_hello
-  - Run in cmd : 
+  - Run in cmd : <br />
 	g++ main.cpp -o hello.exe && hello.exe
 
 
@@ -18,8 +18,8 @@
   - Install GNU Make (version used is 4.2.1)
   - git clone https://github.com/pasquale90/audio-visualizer-processing.git //a token may be needed
   - cd audio-visualizer-procesing/example_build_hello
-  - Run in terminal:
-	$ make && ./run
+  - Run in terminal:<br />
+	$ make && ./run <br />
 	$ make clean
   
   
