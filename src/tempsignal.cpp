@@ -1,57 +1,68 @@
 #include<iostream>
+#include "tempsignal.h"
+#include <math.h>
+#include <iostream>
+#include <thread>
+#include "timer.h"
 //#include <vector>
 //#include "AudioFile.h"
-#include "tempsignal.h"
 
-#include <math.h> // somewhere earler (for M_PI and sinf()) ERASE
-
-/*
-AudioFile<double> gitexample(){
-  // 1. Create an AudioBuffer
-  // (BTW, AudioBuffer is just a vector of vectors)
-  //already declated in .h file//
-  // 2. Set to (e.g.) two channels
-  buffer.resize (2);
-  // 3. Set number of samples per channel
-  buffer[0].resize (100000);
-  buffer[1].resize (100000);
-
-  // 4. do something here to fill the buffer with samples, e.g.
-
-
-  // then...
-
-  int numChannels = 2;
-  int numSamplesPerChannel = 100000;
-  float sampleRate = 44100.f;
-  float frequency = 440.f;
-
-  for (int i = 0; i < numSamplesPerChannel; i++)
-  {
-    float sample = sinf (2. * M_PI * ((float) i / sampleRate) * frequency) ;
-
-    for (int channel = 0; channel < numChannels; channel++)
-         buffer[channel][i] = sample * 0.5;
+void TempSignal::stream(){
+  while (num_samples>(buffer_count*buffer_size)){
+  //while(buffer_count<(int)num_samples/(buffer_size*buffer_count)
+    //reset buffer
+    /*
+    std::cout<<"buffer_size\t"<<buffer_size
+    <<", buffer_count\t"<<buffer_count
+    <<", num_samples\t"<<num_samples
+    <<", num_samplesx2\t"<<num_samples*2
+    <<", multiplication\t"<<buffer_size*buffer_count<<std::endl;
+    */
+    set_buffer();
+    ++buffer_count;
+    //if(buffer_count>10)
+    break;
   }
+}
 
-  // 5. Put into the AudioFile object
-  //bool ok = audioFile.setAudioBuffer (buffer);
-  return buffer;
+void TempSignal::set_buffer(){
+   //for (int i=0;i<buffer_size;++i){
+   for (int i=buffer_count*buffer_size;i<((buffer_count+1)*buffer_size)-1;++i){
+    for (int channel=0;channel<num_channels;++channel){
+      buffer[channel][i]=signal.samples[channel][i];
+      //std::cout<<i<<"\t"<<buffer[channel][i]<<std::endl;
+      //std::cout<<i<<"\t"<<signal.samples[channel][i]<<std::endl;
+      //std::cout<<(buffer_count*buffer_size)<<", "<<(((buffer_count+1)*buffer_size)-1)<<", "<<i<<std::endl;
+    }
+  }
 }
 
 
+void TempSignal::set_buffer_size(int buffer_size){
+  this->buffer_size=buffer_size;
+  buffer.resize (this->num_channels);
 
-*/
+  for (int i=0;i<this->num_channels;i++){
+    // 3. Set number of samples per channel
+    buffer[i].resize (buffer_size);
+  }
+  //initialize buffer_count
+  buffer_count=0;
+}
 
-
+void TempSignal::set_num_channels(bool stereo){
+  if(stereo){
+    this->num_channels=2;}
+  else{
+    this->num_channels=1;}
+}
 
 void TempSignal::print_samples(){
-  static int i=0;
+  //static int i=0;
   int channel = 0;
-  int numSamples = signal.getNumSamplesPerChannel();
-  std::cout<<"This file has "<<numSamples<<" for each channel"<<std::endl;
+  std::cout<<"This file has "<<num_samples<<" for each channel"<<std::endl;
 
-  for (int i = 0; i < numSamples;i++){
+  for (int i = 0; i < num_samples;i++){
     double currentSample = signal.samples[channel][i];
     if (i<20){
       std::cout<<currentSample<<std::endl;
@@ -60,7 +71,7 @@ void TempSignal::print_samples(){
   }
 }
 
-
+//RENAME TO stream() INSTEAD?
 void TempSignal::listener(){
   char user_input;
   int stop=0;
@@ -77,44 +88,13 @@ void TempSignal::info(){
 
 TempSignal::TempSignal(std::string filepath){
   this->signal.load(filepath);
-  this->sampleRate = this->signal.getSampleRate();
-  int bitDepth = this->signal.getBitDepth();
-
-  this->numSamples = this->signal.getNumSamplesPerChannel();
+  this->sample_rate = this->signal.getSampleRate();
+  this->bit_depth = this->signal.getBitDepth();
+  this->num_samples = this->signal.getNumSamplesPerChannel();
   this->lengthInSeconds = this->signal.getLengthInSeconds();
-  this->numChannels = this->signal.getNumChannels();
-  this->isMono = this->signal.isMono();
-  this->isStereo = this->signal.isStereo();
+  this->num_channels = this->signal.getNumChannels();
+  this->is_mono = this->signal.isMono();
+  this->is_stereo = this->signal.isStereo();
 }
 
 TempSignal::~TempSignal(){}
-
-
-
-
-
-/*
-*/
-
-
-
-
-
-/*
-
-#ifndef TEMPSIGNAL_INCLUDED
-#define TEMPSIGNAL_INCLUDED
-
-//Forward declaration
-class AudioFile;
-
-class TempSignal{
-public:
-  std::vector<double> stream();
-  std::vector<double> get_buffer();
-protected:
-  AudioFile<double> audioread();
-private:
-  std::vector<double> *buffer;
-};
-*/

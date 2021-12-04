@@ -9,35 +9,40 @@
 class TempSignal{
   public:
     TempSignal();
-    //TempSignal(const char* filepath);
-    TempSignal(std::string filepath);
+    TempSignal(std::string filepath);    //TempSignal(const char* filepath);
     ~TempSignal();
 
-    std::vector<double> stream();
-    std::vector<double> get_buffer();
-
-
-
-    void listener();
-    void print_samples();
     void info();
+    void print_samples();
+    void listener();
+
+    int get_num_channels(){return num_channels;};
+    int get_buffer_size(){return buffer_size;};
+    std::vector<double> get_buffer();
+    void stream();    //std::vector<double> stream();
+
+
+    //move them to protected??
+    void set_num_channels(bool stereo);
+    void set_buffer_size(int buffer_size);
+    void set_buffer();
+
   protected:
     AudioFile<double> audioread();
+    void set_sample_rate(int sample_rate);
+
   private:
     AudioFile<double> signal;
-    AudioFile<double>::AudioBuffer buffer;
-
-    int sampleRate;
-    int bitDepth;
-    int numSamples;
+    AudioFile<double>::AudioBuffer buffer;    //std::vector<double> *buffer;
+    int sample_rate;
+    int bit_depth;
+    int num_samples;
     double lengthInSeconds;
-
-    int numChannels;
-    bool isMono;
-    bool isStereo;
-
-
-    //std::vector<double> *buffer;
+    int num_channels;
+    bool is_mono;
+    bool is_stereo;
+    int buffer_size;
+    int buffer_count;//static?
 };
 
 #endif

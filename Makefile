@@ -3,7 +3,7 @@ OPTIONS :=-g -pedantic -Wall -Wextra -Wno-error
 # COMPILE :=$(CC) $(NOPTIONS)
 OBJECTS :=build/main.o build/tempsignal.o
 
-runnable: $(OBJECTS) runnable
+runnable: $(OBJECTS) #runnable
 	$(CC) $(OPTIONS) $(OBJECTS) -o runnable
 
 build/main.o: src/main.cpp src/tempsignal.h
