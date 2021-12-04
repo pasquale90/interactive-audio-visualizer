@@ -19,7 +19,7 @@
   - git clone https://github.com/pasquale90/audio-visualizer-processing.git //a token may be needed
   - cd audio-visualizer-procesing/example_build_hello
   - Run in terminal:<br />
-	$ make && ./run <br />
-	$ make clean
+	>$ make && ./run <br />
+	>$ make clean
   
   
