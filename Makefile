@@ -1,16 +1,14 @@
 CC :=g++
-OPTIONS :=-g -pedantic -Wall -Wextra -Wno-error
+OPTIONS :=-g -std=c++11 -pedantic -Wall -Wextra -Wno-error
 # COMPILE :=$(CC) $(NOPTIONS)
-OBJECTS :=build/main.o build/tempsignal.o
+OBJECTS :=build/main.o 
+JACK := -L/usr/lib64 -ljack -ljackserver
 
 runnable: $(OBJECTS) #runnable
 	$(CC) $(OPTIONS) $(OBJECTS) -o runnable
 
-build/main.o: src/main.cpp src/tempsignal.h
-	$(CC) $(OPTIONS) -c src/main.cpp -Ilibs/AudioFile -Ibuild -o build/main.o
-
-build/tempsignal.o: src/tempsignal.h
-	$(CC) $(OPTIONS) -c src/tempsignal.cpp -Ilibs/AudioFile -o build/tempsignal.o
+build/main.o: src/simple_client.cpp /usr/include/jack/jack.h /usr/include/jack/types.h
+	$(CC) $(OPTIONS) -c src/simple_client.cpp -Ibuild -o build/simple_client.o
 
 clean:
 	rm -f build/*.o runnable
