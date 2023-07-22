@@ -1,3 +1,7 @@
 .vscode
 ./temp
 ./media
+temp
+media
+./temp/*
+./media/*
