@@ -1,0 +1,256 @@
+[sudo] password for sonic_dev: jackd 0.125.0rc1
+Copyright 2001-2009 Paul Davis, Stephane Letz, Jack O'Quinn, Torben Hohn and others.
+jackd comes with ABSOLUTELY NO WARRANTY
+This is free software, and you are welcome to redistribute it
+under certain conditions; see the file COPYING for details
+
+getting driver descriptor from /usr/lib/x86_64-linux-gnu/jack/jack_net.so
+getting driver descriptor from /usr/lib/x86_64-linux-gnu/jack/jack_oss.so
+getting driver descriptor from /usr/lib/x86_64-linux-gnu/jack/jack_alsa.so
+getting driver descriptor from /usr/lib/x86_64-linux-gnu/jack/jack_dummy.so
+getting driver descriptor from /usr/lib/x86_64-linux-gnu/jack/jack_alsa_midi.so
+getting driver descriptor from /usr/lib/x86_64-linux-gnu/jack/jack_firewire.so
+no message buffer overruns
+JACK compiled with System V SHM support.
+server `default' registered
+registered builtin port type 32 bit float mono audio
+registered builtin port type 8 bit raw midi
+clock source = system clock via clock_gettime
+loading driver ..
+start poll on 3 fd's
+apparent rate = 16000
+creating alsa driver ... hw:K6|hw:K6|512|2|16000|0|0|nomon|swmeter|-|32bit
+new client: alsa_pcm, uuid = 8589934593 type 1 @ 0x5582a4c1bb70 fd = -1
+configuring for 16000Hz, period = 512 frames (32.0 ms), buffer = 2 periods
+ALSA: final selected sample format for capture: 32bit integer little-endian
+ALSA: use 2 periods for capture
+ALSA: final selected sample format for playback: 32bit integer little-endian
+ALSA: use 2 periods for playback
+new buffer size 512
+resizing port buffer segment for type 0, one buffer = 2048 bytes
+resizing port buffer segment for type 1, one buffer = 2048 bytes
+registered port system:capture_1, offset = 2048
+registered port system:capture_2, offset = 4096
+registered port system:capture_3, offset = 6144
+registered port system:capture_4, offset = 8192
+registered port system:capture_5, offset = 10240
+registered port system:capture_6, offset = 12288
+registered port system:playback_1, offset = 0
+registered port system:playback_2, offset = 0
+registered port system:playback_3, offset = 0
+registered port system:playback_4, offset = 0
+registered port system:playback_5, offset = 0
+registered port system:playback_6, offset = 0
+++ jack_sort_graph
+++ jack_rechain_graph():
+-- jack_rechain_graph()
+-- jack_sort_graph
+26977 waiting for signals
+server thread back from poll
+new client: JamRec, uuid = 8589934594 type 2 @ 0x7f78cd93d000 fd = 12
+start poll on 4 fd's
+server thread back from poll
+new client JamRec using 13 for events
+start poll on 4 fd's
+server thread back from poll
+registered port JamRec:inputPort, offset = 0
+start poll on 4 fd's
+server thread back from poll
+registered port JamRec:leftPort, offset = 14336
+start poll on 4 fd's
+server thread back from poll
+registered port JamRec:rightPort, offset = 16384
+start poll on 4 fd's
+server thread back from poll
+++ jack_sort_graph
+client event poll on 13 for JamRec starts at 12006696548
+back from client event poll after 9 usecs
+client event poll on 13 for JamRec starts at 12006696562
+back from client event poll after 6 usecs
+++ jack_rechain_graph():
++++ client is now JamRec active ? 1
+client JamRec: start_fd=7, execution_order=0.
+client event poll on 13 for JamRec starts at 12006696579
+back from client event poll after 14 usecs
+client JamRec: wait_fd=9, execution_order=1 (last client).
+-- jack_rechain_graph()
+-- jack_sort_graph
+client event poll on 13 for JamRec starts at 12006696598
+back from client event poll after 50 usecs
+client event poll on 13 for JamRec starts at 12006696651
+back from client event poll after 49 usecs
+client event poll on 13 for JamRec starts at 12006696702
+back from client event poll after 6 usecs
+start poll on 4 fd's
+server thread back from poll
+connect system:capture_1 and JamRec:inputPort (forward)
+client event poll on 13 for JamRec starts at 12006696726
+back from client event poll after 6 usecs
+++ jack_sort_graph
+client event poll on 13 for JamRec starts at 12006696736
+back from client event poll after 5 usecs
+client event poll on 13 for JamRec starts at 12006696744
+back from client event poll after 5 usecs
+++ jack_rechain_graph():
++++ client is now JamRec active ? 1
+client JamRec: start_fd=7, execution_order=0.
+client event poll on 13 for JamRec starts at 12006696757
+back from client event poll after 11 usecs
+client JamRec: wait_fd=9, execution_order=1 (last client).
+-- jack_rechain_graph()
+-- jack_sort_graph
+start poll on 4 fd's
+server thread back from poll
+connect JamRec:leftPort and system:playback_1 (output)
+client event poll on 13 for JamRec starts at 12006696784
+back from client event poll after 5 usecs
+++ jack_sort_graph
+client event poll on 13 for JamRec starts at 12006696793
+back from client event poll after 5 usecs
+client event poll on 13 for JamRec starts at 12006696801
+back from client event poll after 5 usecs
+++ jack_rechain_graph():
++++ client is now JamRec active ? 1
+client JamRec: start_fd=7, execution_order=0.
+client event poll on 13 for JamRec starts at 12006696813
+back from client event poll after 10 usecs
+client JamRec: wait_fd=9, execution_order=1 (last client).
+-- jack_rechain_graph()
+-- jack_sort_graph
+start poll on 4 fd's
+server thread back from poll
+connect JamRec:rightPort and system:playback_2 (output)
+client event poll on 13 for JamRec starts at 12006696838
+back from client event poll after 5 usecs
+++ jack_sort_graph
+client event poll on 13 for JamRec starts at 12006696847
+back from client event poll after 5 usecs
+client event poll on 13 for JamRec starts at 12006696855
+back from client event poll after 5 usecs
+++ jack_rechain_graph():
++++ client is now JamRec active ? 1
+client JamRec: start_fd=7, execution_order=0.
+client event poll on 13 for JamRec starts at 12006696867
+back from client event poll after 9 usecs
+client JamRec: wait_fd=9, execution_order=1 (last client).
+-- jack_rechain_graph()
+-- jack_sort_graph
+start poll on 4 fd's
+load = 1.1069 max usecs: 257.000, spare = 11352.000
+load = 1.6474 max usecs: 254.000, spare = 11355.000
+load = 2.8652 max usecs: 474.000, spare = 11135.000
+load = 3.0650 max usecs: 379.000, spare = 11230.000
+load = 2.9538 max usecs: 330.000, spare = 11279.000
+load = 3.4624 max usecs: 461.000, spare = 11148.000
+load = 3.5143 max usecs: 414.000, spare = 11195.000
+load = 2.8081 max usecs: 244.000, spare = 11365.000
+load = 3.2819 max usecs: 436.000, spare = 11173.000
+load = 3.4499 max usecs: 420.000, spare = 11189.000
+load = 3.2109 max usecs: 345.000, spare = 11264.000
+load = 3.6814 max usecs: 482.000, spare = 11127.000
+load = 3.0897 max usecs: 290.000, spare = 11319.000
+load = 2.9317 max usecs: 322.000, spare = 11287.000
+load = 2.6761 max usecs: 281.000, spare = 11328.000
+load = 3.1427 max usecs: 419.000, spare = 11190.000
+load = 2.8936 max usecs: 307.000, spare = 11302.000
+load = 2.9801 max usecs: 356.000, spare = 11253.000
+load = 2.8080 max usecs: 306.000, spare = 11303.000
+load = 2.8942 max usecs: 346.000, spare = 11263.000
+load = 2.9933 max usecs: 359.000, spare = 11250.000
+load = 3.3616 max usecs: 433.000, spare = 11176.000
+load = 3.4424 max usecs: 409.000, spare = 11200.000
+load = 2.8884 max usecs: 271.000, spare = 11338.000
+load = 3.4513 max usecs: 466.000, spare = 11143.000
+load = 3.2460 max usecs: 353.000, spare = 11256.000
+load = 3.0572 max usecs: 333.000, spare = 11276.000
+load = 2.7733 max usecs: 289.000, spare = 11320.000
+load = 3.1224 max usecs: 403.000, spare = 11206.000
+load = 2.8318 max usecs: 295.000, spare = 11314.000
+load = 2.6908 max usecs: 296.000, spare = 11313.000
+load = 2.7452 max usecs: 325.000, spare = 11284.000
+load = 2.6388 max usecs: 294.000, spare = 11315.000
+load = 2.8441 max usecs: 354.000, spare = 11255.000
+load = 2.7141 max usecs: 300.000, spare = 11309.000
+load = 2.6319 max usecs: 296.000, spare = 11313.000
+load = 3.1464 max usecs: 425.000, spare = 11184.000
+load = 2.9945 max usecs: 330.000, spare = 11279.000
+load = 2.7678 max usecs: 295.000, spare = 11314.000
+load = 2.9215 max usecs: 357.000, spare = 11252.000
+load = 2.9725 max usecs: 351.000, spare = 11258.000
+load = 3.3426 max usecs: 431.000, spare = 11178.000
+load = 3.2520 max usecs: 367.000, spare = 11242.000
+load = 3.3057 max usecs: 390.000, spare = 11219.000
+load = 2.9450 max usecs: 300.000, spare = 11309.000
+load = 2.9326 max usecs: 339.000, spare = 11270.000
+load = 2.6981 max usecs: 286.000, spare = 11323.000
+load = 2.7790 max usecs: 332.000, spare = 11277.000
+load = 2.8151 max usecs: 331.000, spare = 11278.000
+load = 2.6652 max usecs: 292.000, spare = 11317.000
+load = 3.4947 max usecs: 502.000, spare = 11107.000
+load = 3.2763 max usecs: 355.000, spare = 11254.000
+load = 3.2447 max usecs: 373.000, spare = 11236.000
+load = 3.6811 max usecs: 478.000, spare = 11131.000
+load = 3.5289 max usecs: 392.000, spare = 11217.000
+load = 3.3494 max usecs: 368.000, spare = 11241.000
+load = 3.4750 max usecs: 418.000, spare = 11191.000
+load = 4.0805 max usecs: 544.000, spare = 11065.000
+load = 3.8234 max usecs: 414.000, spare = 11195.000
+load = 3.4364 max usecs: 354.000, spare = 11255.000
+load = 3.3118 max usecs: 370.000, spare = 11239.000
+load = 3.0384 max usecs: 321.000, spare = 11288.000
+load = 2.9448 max usecs: 331.000, spare = 11278.000
+load = 2.9153 max usecs: 335.000, spare = 11274.000
+load = 2.6507 max usecs: 277.000, spare = 11332.000
+load = 3.0869 max usecs: 409.000, spare = 11200.000
+load = 2.6934 max usecs: 267.000, spare = 11342.000
+load = 2.8757 max usecs: 355.000, spare = 11254.000
+load = 3.0228 max usecs: 368.000, spare = 11241.000
+load = 2.7475 max usecs: 287.000, spare = 11322.000
+load = 2.7994 max usecs: 331.000, spare = 11278.000
+load = 2.6573 max usecs: 292.000, spare = 11317.000
+load = 2.5820 max usecs: 291.000, spare = 11318.000
+load = 3.1516 max usecs: 432.000, spare = 11177.000
+load = 3.0014 max usecs: 331.000, spare = 11278.000
+load = 3.0512 max usecs: 360.000, spare = 11249.000
+load = 3.0891 max usecs: 363.000, spare = 11246.000
+load = 2.9701 max usecs: 331.000, spare = 11278.000
+load = 3.1217 max usecs: 380.000, spare = 11229.000
+load = 3.2061 max usecs: 382.000, spare = 11227.000
+load = 3.1191 max usecs: 352.000, spare = 11257.000
+load = 3.0972 max usecs: 357.000, spare = 11252.000
+load = 2.8278 max usecs: 297.000, spare = 11312.000
+load = 2.9386 max usecs: 354.000, spare = 11255.000
+load = 3.0930 max usecs: 377.000, spare = 11232.000
+load = 3.2176 max usecs: 388.000, spare = 11221.000
+load = 3.0387 max usecs: 332.000, spare = 11277.000
+load = 3.3929 max usecs: 435.000, spare = 11174.000
+load = 2.9369 max usecs: 288.000, spare = 11321.000
+load = 3.0448 max usecs: 366.000, spare = 11243.000
+load = 2.8705 max usecs: 313.000, spare = 11296.000
+load = 2.6714 max usecs: 287.000, spare = 11322.000
+load = 2.4943 max usecs: 269.000, spare = 11340.000
+load = 2.5048 max usecs: 292.000, spare = 11317.000
+load = 2.8632 max usecs: 374.000, spare = 11235.000
+load = 2.8745 max usecs: 335.000, spare = 11274.000
+load = 3.1083 max usecs: 388.000, spare = 11221.000
+load = 3.0229 max usecs: 341.000, spare = 11268.000
+load = 2.5107 max usecs: 232.000, spare = 11377.000
+load = 3.3485 max usecs: 486.000, spare = 11123.000
+load = 3.2894 max usecs: 375.000, spare = 11234.000
+load = 4.2203 max usecs: 598.000, spare = 11011.000
+load = 3.7770 max usecs: 387.000, spare = 11222.000
+load = 4.4425 max usecs: 593.000, spare = 11016.000
+load = 3.3368 max usecs: 259.000, spare = 11350.000
+load = 4.3258 max usecs: 617.000, spare = 10992.000
+load = 4.2044 max usecs: 474.000, spare = 11135.000
+load = 4.1437 max usecs: 474.000, spare = 11135.000
+load = 3.3726 max usecs: 302.000, spare = 11307.000
+load = 3.4608 max usecs: 412.000, spare = 11197.000
+load = 3.1689 max usecs: 334.000, spare = 11275.000
+load = 2.8507 max usecs: 294.000, spare = 11315.000
+load = 3.6090 max usecs: 507.000, spare = 11102.000
+load = 3.7900 max usecs: 461.000, spare = 11148.000
+load = 3.4240 max usecs: 355.000, spare = 11254.000
+load = 3.1678 max usecs: 338.000, spare = 11271.000
+load = 3.0483 max usecs: 340.000, spare = 11269.000
+load = 3.0230 max usecs: 348.000, spare = 11261.000
