@@ -15,6 +15,14 @@ int process (jack_nframes_t nframes, void* arg)
     in = (float *)jack_port_get_buffer (input_port, nframes);
     left = (float *)jack_port_get_buffer (output_port_left, nframes);
     right= (float *)jack_port_get_buffer(output_port_right, nframes);
+
+    
+    int ctr=nframes;
+    while(ctr){
+        std::cout<<in[nframes-ctr]<<" ";
+        ctr--;
+    }std::cout<<std::endl<<std::endl<<std::endl;
+
     std::memcpy (left, in, sizeof (float) *nframes);
     std::memcpy (right, in, sizeof (float) *nframes);
     return 0;
