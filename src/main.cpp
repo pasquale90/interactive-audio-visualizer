@@ -16,4 +16,6 @@ int main(int argc,void* args){
     myAudioStrem.AudioRouting();
     // myAudioStrem.streamAudio(); //bufferLeft,bufferRight
     myAudioStrem.closeStream();
+
+    return 0;
 }
