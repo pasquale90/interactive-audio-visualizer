@@ -6,7 +6,7 @@ if [ -z "$1" ]; then
     exit 1
 fi
 # start_jackd
-start_server="jackd --realtime --verbose -t 10000 -d alsa -d hw:PCH -r 16000 -p 512"
+start_server="jackd --realtime --verbose -t 10000 -d alsa -d hw:K6 -r 16000 -p 512"
 echo ${sudopass} | sudo -S -k nohup ${start_server} &> logs/audioServer.log &
 
 make clean
