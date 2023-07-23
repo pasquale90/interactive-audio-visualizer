@@ -5,7 +5,7 @@
 #include <math.h>
 #include <fftw3.h>
 #define N 16
-#define M_PI 3.14
+// #define M_PI 3.14
 
 int main(void) {
   fftw_complex in[N], out[N], in2[N]; /* double [2] */
