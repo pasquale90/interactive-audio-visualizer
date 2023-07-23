@@ -4,14 +4,13 @@ int streamAudio (jack_nframes_t nframes, void *arg){
     return static_cast<AudioStream*>(arg)->streamBuffer(nframes);
 }
 
-AudioStream::AudioStream(){
-    const char* serverName=NULL;
-    const char* clientName="myAudioStream"; 
+AudioStream::AudioStream(const char* serverName,const char* clientName){
+    
     server_name=serverName;
     client_name=clientName;  
     jack_options_t options = JackUseExactName;//(JackSessionID|JackServerName|JackNoStartServer|JackUseExactName|JackNullOption)
 	jack_status_t status;
-        
+    
     /* open a client connection to the JACK server */
 	client = jack_client_open (client_name, options, &status,server_name);
 

@@ -10,10 +10,12 @@
 #include <cstring>
 #include <unistd.h>
 
+// int streamAudio (jack_nframes_t nframes, void *arg);
+
 class AudioStream{
 public:
 
-    AudioStream(); //const char*,const char*
+    AudioStream(const char* serverName,const char* clientName); //const char*,const char*
     ~AudioStream();
 
     void AudioRouting();
