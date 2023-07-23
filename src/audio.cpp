@@ -1,59 +1,14 @@
-#include <iostream>
-#include <cstring>
-#include <unistd.h>
-#include <jack/jack.h>
-#include <jack/types.h>
+#include "audio.h"
 
-jack_port_t *input_port;
-jack_port_t *output_port_left;
-jack_port_t *output_port_right;
-jack_client_t *client;
-
-int process (jack_nframes_t nframes, void* arg)
-{
-    float *in,*left,*right;
-    in = (float *)jack_port_get_buffer (input_port, nframes);
-    left = (float *)jack_port_get_buffer (output_port_left, nframes);
-    right= (float *)jack_port_get_buffer(output_port_right, nframes);
-
-    
-    int ctr=nframes;
-    while(ctr){
-        std::cout<<in[nframes-ctr]<<" ";
-        ctr--;
-    }std::cout<<std::endl<<std::endl<<std::endl;
-
-    std::memcpy (left, in, sizeof (float) *nframes);
-    std::memcpy (right, in, sizeof (float) *nframes);
-    return 0;
-
-    /*
-     *
-     *
-        ADD METHODS HERE
-                SO AS TO BE PROCESSED BY CHANNEL'S CALLBACK
-     *
-     *
-     */
-
-
-    return 0;
+int streamAudio (jack_nframes_t nframes, void *arg){
+    return static_cast<AudioStream*>(arg)->streamBuffer(nframes);
 }
 
-void jack_shutdown (void *arg)
-{
-	exit (1);
-}
-
-int main(){
-
-    std::cout<<"Hello AudioStream"<<std::endl;
-
-    const char *server_name=NULL;
-    const char *client_name="AudioStream";
-    const char **fromdevice;
-    const char **todevice;
-
+AudioStream::AudioStream(){
+    const char* serverName=NULL;
+    const char* clientName="myAudioStream"; 
+    server_name=serverName;
+    client_name=clientName;  
     jack_options_t options = JackUseExactName;//(JackSessionID|JackServerName|JackNoStartServer|JackUseExactName|JackNullOption)
 	jack_status_t status;
         
@@ -74,9 +29,33 @@ int main(){
     if (status & JackServerStarted) {
         std::cout<<"\t>>JACK server started"<<std::endl;
     }
+}
+
+AudioStream::~AudioStream(){
+
+}
+    
+void AudioStream::AudioRouting(){
+    // /* open a client connection to the JACK server */
+	// client = jack_client_open (client_name, options, &status,server_name);
+
+    // if (status & JackNameNotUnique) {    //client name not unique, set a client name;
+    //     client_name = jack_get_client_name(client);
+    //     std::cerr<<"\t>>unique name "<<client_name<<" assigned to the client obj."<<std::endl;
+    // }
+	// if (client == NULL) {
+    //     std::cerr<<"\t>>jack_client_open() failed, status = "<<status<<std::endl;
+    //     if (status & JackServerFailed) {
+    //         std::cerr<<"\t>>Unable to connect to JACK server"<<std::endl;
+    //     }
+    //     exit (1);
+    // }
+    // if (status & JackServerStarted) {
+    //     std::cout<<"\t>>JACK server started"<<std::endl;
+    // }
 
     //callback
-    if (jack_set_process_callback (client,process,0)){ //arg
+    if (jack_set_process_callback (client,streamAudio,0)){ //arg
             std::cerr<<"\t>>Callback operation failed"<<std::endl;
     }
 
@@ -145,16 +124,53 @@ int main(){
         }
     }
 
+}
+
+void AudioStream::closeStream(){
     int simple_quit=0;
     while (!simple_quit)    /* keep running until until we get a quit event */
-
 #ifdef WIN32
         Sleep(1*1000);
 #else
         sleep(1);
 #endif
-
     jack_client_close (client);
+}
 
+
+// int AudioStream::BufferCallback(jack_nframes_t x, void* p)
+// {
+//     return static_cast<AudioStream*>(p)->process(x);
+// }
+
+
+int AudioStream::streamBuffer(jack_nframes_t nframes){
+    float *in,*left,*right;
+    in = (float *)jack_port_get_buffer (input_port, nframes);
+    left = (float *)jack_port_get_buffer (output_port_left, nframes);
+    right= (float *)jack_port_get_buffer(output_port_right, nframes);
+
+    
+    int ctr=nframes;
+    while(ctr){
+        std::cout<<in[nframes-ctr]<<" ";
+        ctr--;
+    }std::cout<<std::endl<<std::endl<<std::endl;
+
+    std::memcpy (left, in, sizeof (float) *nframes);
+    std::memcpy (right, in, sizeof (float) *nframes);
     return 0;
+    /*
+     *
+     *
+        ADD METHODS HERE
+                SO AS TO BE PROCESSED BY CHANNEL'S CALLBACK
+     *
+     *
+     */
+}
+
+void AudioStream::jack_shutdown (void *arg)
+{
+	exit (1);
 }
