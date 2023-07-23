@@ -16,4 +16,4 @@ build/audio.o: src/audio.h src/audio.h #/usr/include/jack/jack.h /usr/include/ja
 
 
 clean:
-	rm -f build/*.o test
+	rm -f build/*.o test logs/*
