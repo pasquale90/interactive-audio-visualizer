@@ -1,7 +1,7 @@
 CC :=g++ -std=c++11 
 OPTIONS :=-g -pedantic -Wall -Wextra -Wno-error
 OBJECTS :=build/fft.o
-FFT :=/usr/local/lib/libfftw3.a #-L/usr/local/lib -Wl,-Bstatic -lfftw3 -lm
+FFT :=-lfftw3 #/usr/local/lib/libfftw3.a #-L/usr/local/lib -Wl,-Bstatic -lfftw3 -lm
 # JACK := -L/usr/lib64 -ljack -ljackserver
 
 test: $(OBJECTS)
