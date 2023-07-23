@@ -24,12 +24,18 @@ public:
     void closeStream();
     int streamBuffer(jack_nframes_t nframes);
 
+    bool trigger_chunk;
+
+    // int get_signal(float *in,void (*)(float*));
+
 private:
     jack_port_t *input_port;
     jack_port_t *output_port_left;
     jack_port_t *output_port_right;
     jack_client_t *client;
 
+    float *in;
+    
     const char *server_name;
     const char *client_name ;
     const char **fromdevice;
@@ -39,6 +45,7 @@ private:
 
     // int streamAudio(jack_nframes_t nframes, void *arg); //float *buffer 
 };
+
 
 #endif
 

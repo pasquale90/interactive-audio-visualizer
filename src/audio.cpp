@@ -1,19 +1,21 @@
 #include "audio.h"
 
-int streamAudio (jack_nframes_t nframes, void *arg){
+// AudioStream myAudioStream;
+void audioBufferCallback(float* in);
+
+int streamAudio (jack_nframes_t nframes, void *arg){ //, float *in,void (*threading)(float *sig)
     return static_cast<AudioStream*>(arg)->streamBuffer(nframes);
 }
-
 AudioStream::AudioStream(const char* serverName,const char* clientName){
     
     server_name=serverName;
     client_name=clientName;  
-    jack_options_t options = JackUseExactName;//(JackSessionID|JackServerName|JackNoStartServer|JackUseExactName|JackNullOption)
+    jack_options_t options = JackSessionID;//(JackSessionID|JackServerName|JackNoStartServer|JackUseExactName|JackNullOption)
 	jack_status_t status;
-    
+    std::cout<<"before client open"<<std::endl;
     /* open a client connection to the JACK server */
 	client = jack_client_open (client_name, options, &status,server_name);
-
+    std::cout<<"after client open"<<std::endl;
     if (status & JackNameNotUnique) {    //client name not unique, set a client name;
         client_name = jack_get_client_name(client);
         std::cerr<<"\t>>unique name "<<client_name<<" assigned to the client obj."<<std::endl;
@@ -54,7 +56,7 @@ void AudioStream::AudioRouting(){
     // }
 
     //callback
-    if (jack_set_process_callback (client,streamAudio,0)){ //arg
+    if (jack_set_process_callback (client,streamAudio,this)){ //arg
             std::cerr<<"\t>>Callback operation failed"<<std::endl;
     }
 
@@ -144,12 +146,18 @@ void AudioStream::closeStream(){
 
 
 int AudioStream::streamBuffer(jack_nframes_t nframes){
-    float *in,*left,*right;
+        
+    float *left,*right;
+    
     in = (float *)jack_port_get_buffer (input_port, nframes);
+
+    audioBufferCallback(in);
+    // std::cout<<"in "<<*in<<std::endl;
+    // trigger_chunk=!trigger_chunk;
+
     left = (float *)jack_port_get_buffer (output_port_left, nframes);
     right= (float *)jack_port_get_buffer(output_port_right, nframes);
 
-    
     int ctr=nframes;
     while(ctr){
         std::cout<<in[nframes-ctr]<<" ";
@@ -158,6 +166,10 @@ int AudioStream::streamBuffer(jack_nframes_t nframes){
 
     std::memcpy (left, in, sizeof (float) *nframes);
     std::memcpy (right, in, sizeof (float) *nframes);
+
+    std::cout<<"in "<<*in<<std::endl;
+    std::cout<<"ol "<<*right<<std::endl;
+    std::cout<<"or "<<*left<<std::endl;
     return 0;
     /*
      *
