@@ -90,6 +90,15 @@ void AudioStream::AudioRouting(){
         std::cerr<<"\t>>no physical capture devices"<<std::endl;
         exit (1);
     }
+//SKILL POINT get that signal from EACH DEVICE------> http://www.vttoth.com/CMS/index.php/technical-notes/68
+    const char **temp_device=fromdevice;
+    std::cout<<"Device list Input>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n\n\n\n\n"<<std::endl;
+    int devCount=0;
+    while(*temp_device!=NULL){
+        std::cout<<devCount<<":"<<*temp_device<<" ";
+        *temp_device++;
+        devCount++;
+    }std::cout<<"\n\n\n\n\n"<<std::endl;
 
     /*Getting acces to destination ports*/
     todevice = jack_get_ports (client, NULL, NULL, JackPortIsPhysical|JackPortIsInput);
