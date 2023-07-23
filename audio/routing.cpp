@@ -47,10 +47,10 @@ void jack_shutdown (void *arg)
 
 int main(){
 
-    std::cout<<"Hello JamRec"<<std::endl;
+    std::cout<<"Hello AudioStream"<<std::endl;
 
     const char *server_name=NULL;
-    const char *client_name="JamRec";
+    const char *client_name="AudioStream";
     const char **fromdevice;
     const char **todevice;
 
