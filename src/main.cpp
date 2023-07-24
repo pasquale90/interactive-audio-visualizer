@@ -1,4 +1,5 @@
 #include "audio.h"
+#include "fft.h" // MAKE IT A CLASS?
 #include <iostream>
 #include <cstdlib>
 #include <string>
@@ -12,6 +13,7 @@ int BUFFER_SIZE;
 void audioBufferCallback(float* in){
     // audioBuffer=*in;
     std::cout<<"main in "<<*in<<std::endl;
+    computeFFT(in,BUFFER_SIZE);
 }
 
 int main(int argc,char **argv){
