@@ -1,22 +1,32 @@
 #include "audio.h"
 #include "fft.h" // MAKE IT A CLASS?
+#include "visualizer.h"
 #include <iostream>
 #include <cstdlib>
 #include <string>
 
+
+int WIDTH=700;
+int HEIGHT=700;
 // float* bufferLeft;
 // float* bufferRight;
 float audioBuffer{NULL};
 int SAMPLE_RATE;
 int BUFFER_SIZE;
+Visualizer vs;
 
 void audioBufferCallback(float* in){
     // audioBuffer=*in;
     std::cout<<"main in "<<*in<<std::endl;
-    computeFFT(in,BUFFER_SIZE);
+    // computeFFT(in,BUFFER_SIZE);
+    
+    vs.stream_frames();
 }
 
 int main(int argc,char **argv){
+
+    vs=Visualizer(WIDTH,HEIGHT);
+
     std::cout<<"\n\n";
     std::cout<<"Hello Audio Visualizer"<<std::endl;
     std::cout<<"\n\n";
@@ -28,7 +38,6 @@ int main(int argc,char **argv){
 
     const char* serverName=NULL;
     const char* clientName="myAudioStream"; 
-
     AudioStream *myAudioStrem = new AudioStream(serverName,clientName); //NULL,"myAudioStream"
 
     std::cout<<"\n\n";
@@ -37,6 +46,10 @@ int main(int argc,char **argv){
     myAudioStrem->AudioRouting();
     // myAudioStrem.streamAudio(); //bufferLeft,bufferRight
     myAudioStrem->closeStream();
+
+    std::cout<<"\n\n";
+    std::cout<<"Reached the end of main"<<std::endl;
+    std::cout<<"\n\n";
 
     return 0;
 }
