@@ -133,7 +133,6 @@ void AudioStream::AudioRouting(){
             std::cout<<"Saving record in active development"<<std::endl;
         }
     }
-
 }
 
 void AudioStream::closeStream(){
