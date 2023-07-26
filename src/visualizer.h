@@ -18,13 +18,13 @@ private:
     cv::Mat videoframe;
     int R,G,B;
 
-    int empty_visualizer();
+    int update_bg_frame();
     // AudioVisualizer av;
 
     int incrR,incrG,incrB;
     bool ascR,ascG,ascB;
     int MIN{0},MAX{255};
-    void change_colors();
+    void change_BG_color();
     int update_counter;
     int update_ratio=4;
 

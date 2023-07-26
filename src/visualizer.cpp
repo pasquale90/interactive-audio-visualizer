@@ -26,39 +26,34 @@ Visualizer::~Visualizer(){
     cv::destroyWindow("Visualizer");  
 }
 
-int Visualizer::empty_visualizer(){
+int Visualizer::update_bg_frame(){
     
     if (videoframe.empty()) 
     {
         std::cout << "\n Image not created. You have done something wrong. \n";
-        return -1;    // Unsuccessful.
+        return 0;    // Unsuccessful.
     }
 
-    if (update_counter%update_ratio==0){
+    if (update_counter%update_ratio==0){                                    // is this a legitimate solution? otherwise try threads
         cv::imshow("Visualizer", videoframe);//Showing the video//
         cv::waitKey(1); //Allowing 1 milliseconds frame processing time
-
-        change_colors();
-
-        cv::Scalar color(B,R,G);
-        videoframe.setTo(color);
+        change_BG_color();
     }
     update_counter++;
-    return 0;
+    return 1;
 }
 
 int Visualizer::stream_frames(float *in){
-    int success=empty_visualizer();
+    if(!update_bg_frame()){
+        std::cout<<"Visualizer::stream_frames : error when showing backround"<<std::endl;
+    }
 
     // audio_visualizer(); #
     // user_visualizer();  #
 }
 
 
-void Visualizer::change_colors(){
-    std::cout<<"RGB1:"<<B<<" "<<R<<" "<<G<<std::endl;
-    std::cout<<incrR<<" "<<incrG<<" "<<incrB<<std::endl;
-    std::cout<<ascR<<" "<<ascG<<" "<<ascB<<std::endl;
+void Visualizer::change_BG_color(){
 
     if (ascR){
         if (R>=MAX) {
@@ -98,7 +93,9 @@ void Visualizer::change_colors(){
             B+=incrB;
         }else B-=incrB;
     }
-    std::cout<<"RGB2:"<<B<<" "<<R<<" "<<G<<std::endl;
-    std::cout<<incrR<<" "<<incrG<<" "<<incrB<<std::endl;
-    std::cout<<ascR<<" "<<ascG<<" "<<ascB<<std::endl;
+    // std::cout<<"RGB2:"<<B<<" "<<R<<" "<<G<<std::endl;
+    // std::cout<<incrR<<" "<<incrG<<" "<<incrB<<std::endl;
+    // std::cout<<ascR<<" "<<ascG<<" "<<ascB<<std::endl;
+    cv::Scalar color(B,R,G);
+    videoframe.setTo(color);
 }
