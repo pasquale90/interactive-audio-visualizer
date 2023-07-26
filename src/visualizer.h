@@ -12,7 +12,7 @@ public:
     Visualizer(int width,int height);
     Visualizer();
     ~Visualizer();
-    void stream_frames();
+    int stream_frames(float*);
 private:
     cv::Mat videoframe;
 

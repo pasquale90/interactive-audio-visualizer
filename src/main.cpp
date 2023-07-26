@@ -20,7 +20,9 @@ void audioBufferCallback(float* in){
     std::cout<<"main in "<<*in<<std::endl;
     // computeFFT(in,BUFFER_SIZE);
     
-    vs.stream_frames();
+    // updateFrame(in,NULL);
+    vs.stream_frames(in);
+    // Visualizer2(WIDTH,HEIGHT);
 }
 
 int main(int argc,char **argv){
