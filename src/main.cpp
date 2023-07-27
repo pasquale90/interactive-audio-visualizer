@@ -6,10 +6,8 @@
 #include <string>
 
 
-int WIDTH=700;
+int WIDTH=1000;
 int HEIGHT=700;
-// float* bufferLeft;
-// float* bufferRight;
 float audioBuffer{NULL};
 int SAMPLE_RATE;
 int BUFFER_SIZE;
@@ -27,8 +25,6 @@ void audioBufferCallback(float* in){
 
 int main(int argc,char **argv){
 
-    vs=Visualizer(WIDTH,HEIGHT);
-
     std::cout<<"\n\n";
     std::cout<<"Hello Audio Visualizer"<<std::endl;
     std::cout<<"\n\n";
@@ -37,6 +33,8 @@ int main(int argc,char **argv){
     BUFFER_SIZE=std::stoi(argv[2]);
     std::cout<<"SAMPLE RATE = "<<SAMPLE_RATE<<std::endl;
     std::cout<<"BUFFER_SIZE = "<<BUFFER_SIZE<<std::endl;
+
+    vs=Visualizer(WIDTH,HEIGHT,SAMPLE_RATE,BUFFER_SIZE);
 
     const char* serverName=NULL;
     const char* clientName="myAudioStream"; 

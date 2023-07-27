@@ -4,8 +4,8 @@ make
 
 ################################################################ ARGUMENTS ################################################################
 audio_device=K6
-sample_rate=16000
-buffer_size=512
+sample_rate=16000 #44100 #
+buffer_size=256 #512 #256 #
 startJack_command="jackd --realtime --verbose -t 1000 -d alsa"
 startJack_command="${startJack_command} -d hw:${audio_device}"
 startJack_command="${startJack_command} -r ${sample_rate}"

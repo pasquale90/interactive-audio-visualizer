@@ -7,27 +7,38 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/core/mat.hpp>
 #include "opencv2/highgui/highgui.hpp"
+#include <queue>
 
 class Visualizer{
 public:
-    Visualizer(int width,int height);
+    Visualizer(int,int,int,int);
     Visualizer();
     ~Visualizer();
     int stream_frames(float*);
 private:
+    int W,H;
     cv::Mat videoframe;
     int R,G,B;
 
-    int update_bg_frame();
-    // AudioVisualizer av;
+    int update_BG_frame();
+    int update_wave_frame(float*);
+    int update_spectrogram(float*);
+
+    float *dft;
+    std::queue<float> wave;
+    int x_trans;
+    int redxtrans; //reduces the time that x transition changes (used for the waveform)
+    bool ascX;
+    
+    int SR;
+    int buffer_size;
 
     int incrR,incrG,incrB;
     bool ascR,ascG,ascB;
-    int MIN{0},MAX{255};
+    int MIN{0},MAX{200};
     void change_BG_color();
     int update_counter;
-    int update_ratio=4;
-
+    int update_ratio;
 };
 
 
