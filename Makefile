@@ -12,7 +12,7 @@ test: $(OBJECTS) #runnable
 	$(CC) $(OPTIONS) $(OBJECTS) $(JACK) $(FFT) $(LOPENCV) -o test 
 
 build/main.o: src/main.cpp # /usr/include/jack/jack.h /usr/include/jack/types.h
-	$(CC) $(OPTIONS) -c src/main.cpp -I/usr/include $(JACK) $(FFT) $(IOPENCV) -o build/main.o 
+	$(CC) $(OPTIONS) -c src/main.cpp -I/usr/include $(JACK) $(FFT) $(IOPENCV) -o build/main.o
 
 build/audio.o: src/audio.h src/audio.h #/usr/include/jack/jack.h /usr/include/jack/types.h
 	$(CC) $(OPTIONS) -c src/audio.cpp -I/usr/include $(JACK) -o build/audio.o

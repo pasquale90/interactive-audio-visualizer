@@ -1,5 +1,10 @@
 #include "visualizer.h"
-void hamming(int, float*) ;
+
+// void* Visualizer::visualize(void* args){
+//     static_cast<Visualizer*>(args)->stream_frames();
+//     return NULL;   
+//     // return ((Visualizer *)args)->stream_frames(in);
+// }
 
 Visualizer::Visualizer(int width,int height,int sampleRate,int bufferSize){
     W=width;
@@ -24,7 +29,7 @@ Visualizer::Visualizer(int width,int height,int sampleRate,int bufferSize){
     std::deque<float> wave(width*redxtrans);
     x_trans=0;
     ascX=true;
-    redxtrans=16;
+    redxtrans=1;
 
     update_counter=0;
     buffer_size=bufferSize;
@@ -40,21 +45,32 @@ Visualizer::~Visualizer(){
     cv::destroyWindow("Visualizer");  
 }
 
-int Visualizer::stream_frames(float *in){
+int Visualizer::stream_frames(float* in){
+    buffer=in;
+
     if (update_counter%update_ratio==0){                                    // is this a legitimate solution? otherwise try threads
 
         cv::imshow("Visualizer", videoframe);//Showing the video//
         cv::waitKey(1); //Allowing 1 milliseconds frame processing time
 
+        //check white pixels
+        int white_pixel_counter=0;
+        for (int i=0;i<W;i++){
+            for (int j=H/5;j<(H-H/5);j++){
+                if(videoframe.at<cv::Vec3b>(j,i)[0]==255) white_pixel_counter++;
+            }
+        }
+        std::cout<<white_pixel_counter<<" == "<<wave.size()<<" ??"<<std::endl;
         // at the end
         if(!update_BG_frame()){
             std::cout<<"Visualizer::stream_frames : error update_bg_frame"<<std::endl;
         }
         update_counter%=update_ratio;
     }
-    update_wave_frame(in);
+    update_wave_frame();
 
     update_counter++;
+    return 1;
 }
 
 int Visualizer::update_BG_frame(){
@@ -111,15 +127,15 @@ void Visualizer::change_BG_color(){
     videoframe.setTo(color);
 }
 
-int Visualizer::update_wave_frame(float *buffer){
-
+int Visualizer::update_wave_frame(){
+    
 // KEEP ONLY A FEW
     int ctr=buffer_size; // counter to iterate over buffer
-    int hop=1;//
+    int hop=1;// buffer stride
 
     while(ctr>0) {
         int idx=buffer_size-ctr;
-        if (wave.size()+buffer_size<(W*redxtrans)){
+        if ((wave.size()+buffer_size)<(W*redxtrans)){
             wave.push(buffer[idx]); //buffer[idx]
             // std::cout<<"filling sample "<<idx<<" with value "<< buffer[idx]<<" and normalized value "<<norm<<" --> wave size "<<wave.size()<<std::endl; //
             // std::cout<<" head "<<wave.front()<<" tail "<<wave.back()<<std::endl;

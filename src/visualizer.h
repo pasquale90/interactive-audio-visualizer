@@ -14,17 +14,21 @@ public:
     Visualizer(int,int,int,int);
     Visualizer();
     ~Visualizer();
-    int stream_frames(float*);
+    int stream_frames(float* in); //
+    // static void* visualize(void*);
+
+
 private:
     int W,H;
     cv::Mat videoframe;
     int R,G,B;
 
     int update_BG_frame();
-    int update_wave_frame(float*);
+    int update_wave_frame();
     int update_spectrogram(float*);
 
     float *dft;
+    float *buffer;
     std::queue<float> wave;
     int x_trans;
     int redxtrans; //reduces the time that x transition changes (used for the waveform)
@@ -39,6 +43,7 @@ private:
     void change_BG_color();
     int update_counter;
     int update_ratio;
+
 };
 
 

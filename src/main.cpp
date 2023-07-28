@@ -4,14 +4,16 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
-
+// #include <pthread.h>
 
 int WIDTH=1000;
 int HEIGHT=700;
 float audioBuffer{NULL};
 int SAMPLE_RATE;
 int BUFFER_SIZE;
+
 Visualizer vs;
+// pthread_t visThread;
 
 void audioBufferCallback(float* in){
     // audioBuffer=*in;
@@ -19,7 +21,9 @@ void audioBufferCallback(float* in){
     // computeFFT(in,BUFFER_SIZE);
     
     // updateFrame(in,NULL);
+    
     vs.stream_frames(in);
+    // pthread_join(visThread, NULL);
     // Visualizer2(WIDTH,HEIGHT);
 }
 
@@ -34,7 +38,10 @@ int main(int argc,char **argv){
     std::cout<<"SAMPLE RATE = "<<SAMPLE_RATE<<std::endl;
     std::cout<<"BUFFER_SIZE = "<<BUFFER_SIZE<<std::endl;
 
+
     vs=Visualizer(WIDTH,HEIGHT,SAMPLE_RATE,BUFFER_SIZE);
+    // pthread_create(&visThread,NULL,&Visualizer::visualize,&vs);
+    
 
     const char* serverName=NULL;
     const char* clientName="myAudioStream"; 
