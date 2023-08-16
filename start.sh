@@ -2,6 +2,9 @@
 make clean
 make
 
+source ~/miniconda3/etc/profile.d/conda.sh
+conda activate melEnv
+
 ################################################################ ARGUMENTS ################################################################
 audio_device=K6
 sample_rate=16000 #44100 #
