@@ -45,7 +45,7 @@ Visualizer::~Visualizer(){
     cv::destroyWindow("Visualizer");  
 }
 
-int Visualizer::stream_frames(float* in){
+int Visualizer::stream_frames(float* in,bool isBeat){
     buffer=in;
 
     if (update_counter%update_ratio==0){                                    // is this a legitimate solution? otherwise try threads
@@ -60,15 +60,28 @@ int Visualizer::stream_frames(float* in){
                 if(videoframe.at<cv::Vec3b>(j,i)[0]==255) white_pixel_counter++;
             }
         }
-        std::cout<<white_pixel_counter<<" == "<<wave.size()<<" ??"<<std::endl;
+//debug ==
+        // std::cout<<white_pixel_counter<<" == "<<wave.size()<<" ??"<<std::endl;
         // at the end
+
+        
+        update_counter%=update_ratio;
+}
+
+    if (isBeat){
+        if (incrR<17) incrR+=7; 
+        else incrR=3;
+        if (incrG>5) incrG+=1; 
+        else incrG=1;
+        if (incrB>21) incrB+=3; 
+        else incrB=7;
+
         if(!update_BG_frame()){
             std::cout<<"Visualizer::stream_frames : error update_bg_frame"<<std::endl;
         }
-        update_counter%=update_ratio;
     }
-    update_wave_frame();
 
+    update_wave_frame();
     update_counter++;
     return 1;
 }
@@ -131,7 +144,7 @@ int Visualizer::update_wave_frame(){
     
 // KEEP ONLY A FEW
     int ctr=buffer_size; // counter to iterate over buffer
-    int hop=1;// buffer stride
+    int hop=73;// buffer stride
 
     while(ctr>0) {
         int idx=buffer_size-ctr;

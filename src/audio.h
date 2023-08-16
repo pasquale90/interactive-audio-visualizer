@@ -4,8 +4,6 @@
 #include <jack/jack.h>
 #include <jack/types.h>
 
-
-
 #include <iostream>
 #include <cstring>
 #include <unistd.h>
@@ -42,7 +40,7 @@ private:
     const char **todevice;
 
     static void jack_shutdown (void *arg);
-
+    //init BTrack
     // int streamAudio(jack_nframes_t nframes, void *arg); //float *buffer 
 };
 

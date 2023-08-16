@@ -5,7 +5,7 @@ make
 ################################################################ ARGUMENTS ################################################################
 audio_device=K6
 sample_rate=16000 #44100 #
-buffer_size=256 #512 #256 #
+buffer_size=512 #256 #
 startJack_command="jackd --realtime --verbose -t 1000 -d alsa"
 startJack_command="${startJack_command} -d hw:${audio_device}"
 startJack_command="${startJack_command} -r ${sample_rate}"
@@ -26,7 +26,8 @@ echo ${sudopass} | sudo -S -k nohup ${startJack_command} &> logs/audioServer.log
 
 sleep 2
 
-echo ${sudopass} | sudo -S -k ./test ${sample_rate} ${buffer_size} &> logs/audio.log &
+# echo ${sudopass} | sudo -S -k ./test ${sample_rate} ${buffer_size} &> logs/audio.log &
+echo ${sudopass} | sudo -S -k ./test ${sample_rate} ${buffer_size} 
 
 echo "Application is running."
 echo -e "Run \n\t$ bash stop.sh \nto stop it."

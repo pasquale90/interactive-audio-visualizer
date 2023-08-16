@@ -1,6 +1,7 @@
 #include "audio.h"
 #include "fft.h" // MAKE IT A CLASS?
 #include "visualizer.h"
+#include "beatracker.h"
 #include <iostream>
 #include <cstdlib>
 #include <string>
@@ -11,18 +12,26 @@ int HEIGHT=700;
 float audioBuffer{NULL};
 int SAMPLE_RATE;
 int BUFFER_SIZE;
+Beatracker bt;
 
 Visualizer vs;
 // pthread_t visThread;
 
 void audioBufferCallback(float* in){
     // audioBuffer=*in;
-    std::cout<<"main in "<<*in<<std::endl;
+    // std::cout<<"main in "<<*in<<std::endl;
     // computeFFT(in,BUFFER_SIZE);
     
     // updateFrame(in,NULL);
-    
-    vs.stream_frames(in);
+    bool isBeat=bt.isBeat(in);
+    // bool isBeat=bt.isOnset(in);
+    if (isBeat)
+    {
+        // do something on the beat
+        std::cout<<"Beat!"<<std::endl;
+    }
+
+    vs.stream_frames(in,isBeat);
     // pthread_join(visThread, NULL);
     // Visualizer2(WIDTH,HEIGHT);
 }
@@ -38,7 +47,10 @@ int main(int argc,char **argv){
     std::cout<<"SAMPLE RATE = "<<SAMPLE_RATE<<std::endl;
     std::cout<<"BUFFER_SIZE = "<<BUFFER_SIZE<<std::endl;
 
+    // Beatracker bt(BUFFER_SIZE);
+    Beatracker bt(BUFFER_SIZE);
 
+    std::cout<<"exited beatrackerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr\n\n\n\n "<<std::endl;
     vs=Visualizer(WIDTH,HEIGHT,SAMPLE_RATE,BUFFER_SIZE);
     // pthread_create(&visThread,NULL,&Visualizer::visualize,&vs);
     

@@ -14,7 +14,7 @@ public:
     Visualizer(int,int,int,int);
     Visualizer();
     ~Visualizer();
-    int stream_frames(float* in); //
+    int stream_frames(float* in,bool isBeat); //
     // static void* visualize(void*);
 
 

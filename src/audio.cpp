@@ -146,17 +146,9 @@ void AudioStream::closeStream(){
     jack_client_close (client);
 }
 
-
-// int AudioStream::BufferCallback(jack_nframes_t x, void* p)
-// {
-//     return static_cast<AudioStream*>(p)->process(x);
-// }
-
-
 int AudioStream::streamBuffer(jack_nframes_t nframes){
         
     float *left,*right;
-    
     in = (float *)jack_port_get_buffer (input_port, nframes);
 
     audioBufferCallback(in);
@@ -166,18 +158,18 @@ int AudioStream::streamBuffer(jack_nframes_t nframes){
     left = (float *)jack_port_get_buffer (output_port_left, nframes);
     right= (float *)jack_port_get_buffer(output_port_right, nframes);
 
-    int ctr=nframes;
-    while(ctr){
-        std::cout<<in[nframes-ctr]<<" ";
-        ctr--;
-    }std::cout<<std::endl<<std::endl<<std::endl;
+    // int ctr=nframes;
+    // while(ctr){
+        // std::cout<<in[nframes-ctr]<<" ";
+        // ctr--;
+    // }std::cout<<std::endl<<std::endl<<std::endl;
 
     std::memcpy (left, in, sizeof (float) *nframes);
     std::memcpy (right, in, sizeof (float) *nframes);
 
-    std::cout<<"in "<<*in<<std::endl;
-    std::cout<<"ol "<<*right<<std::endl;
-    std::cout<<"or "<<*left<<std::endl;
+    // std::cout<<"in "<<*in<<std::endl;
+    // std::cout<<"ol "<<*right<<std::endl;
+    // std::cout<<"or "<<*left<<std::endl;
     return 0;
     /*
      *
