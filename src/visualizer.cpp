@@ -26,16 +26,20 @@ Visualizer::Visualizer(int width,int height,int sampleRate,int bufferSize){
     
     dft=NULL;
     
-    std::deque<float> wave(width*redxtrans);
+    std::deque<double> wave(width*redxtrans);
     x_trans=0;
     ascX=true;
     redxtrans=1;
 
+    fps=30;
     update_counter=0;
     buffer_size=bufferSize;
     SR=sampleRate;
 
-    update_ratio=5;
+    update_ratio=(SR/buffer_size)/fps;
+    std::cout<<"update ratio "<<update_ratio<<std::endl;
+
+    tempcounter=0;
 }
 
 Visualizer::Visualizer(){
@@ -45,10 +49,12 @@ Visualizer::~Visualizer(){
     cv::destroyWindow("Visualizer");  
 }
 
-int Visualizer::stream_frames(float* in,bool isBeat){
+int Visualizer::stream_frames(double* in,bool isBeat){
     buffer=in;
 
     if (update_counter%update_ratio==0){                                    // is this a legitimate solution? otherwise try threads
+        
+        update_wave_frame();
 
         cv::imshow("Visualizer", videoframe);//Showing the video//
         cv::waitKey(1); //Allowing 1 milliseconds frame processing time
@@ -63,15 +69,14 @@ int Visualizer::stream_frames(float* in,bool isBeat){
 //debug ==
         // std::cout<<white_pixel_counter<<" == "<<wave.size()<<" ??"<<std::endl;
         // at the end
-
         
         update_counter%=update_ratio;
-}
-
+    }
+    
     if (isBeat){
-        if (incrR<17) incrR+=7; 
+        if (incrR<17) incrR+=7;
         else incrR=3;
-        if (incrG>5) incrG+=1; 
+        if (incrG>5) incrG+=1;
         else incrG=1;
         if (incrB>21) incrB+=3; 
         else incrB=7;
@@ -79,10 +84,14 @@ int Visualizer::stream_frames(float* in,bool isBeat){
         if(!update_BG_frame()){
             std::cout<<"Visualizer::stream_frames : error update_bg_frame"<<std::endl;
         }
+    
+    
     }
 
+    
     update_wave_frame();
     update_counter++;
+    tempcounter+=SR/buffer_size;
     return 1;
 }
 
@@ -184,7 +193,7 @@ int Visualizer::update_wave_frame(){
 }
 
 
-int Visualizer::update_spectrogram(float *fft){
+int Visualizer::update_spectrogram(double *fft){
 //append to dft
     // if(update_counter%update_ratio==1)
     //     dft=NULL;   

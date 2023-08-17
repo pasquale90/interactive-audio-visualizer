@@ -14,7 +14,7 @@ public:
     Visualizer(int,int,int,int);
     Visualizer();
     ~Visualizer();
-    int stream_frames(float* in,bool isBeat); //
+    int stream_frames(double* in,bool isBeat); //
     // static void* visualize(void*);
 
 
@@ -25,15 +25,16 @@ private:
 
     int update_BG_frame();
     int update_wave_frame();
-    int update_spectrogram(float*);
+    int update_spectrogram(double*);
 
     float *dft;
-    float *buffer;
-    std::queue<float> wave;
+    double *buffer;
+    std::queue<double> wave;
     int x_trans;
     int redxtrans; //reduces the time that x transition changes (used for the waveform)
     bool ascX;
     
+    int fps;
     int SR;
     int buffer_size;
 
@@ -44,6 +45,7 @@ private:
     int update_counter;
     int update_ratio;
 
+    int tempcounter;
 };
 
 

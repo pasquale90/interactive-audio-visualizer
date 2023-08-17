@@ -1,7 +1,7 @@
 #include "audio.h"
 
 // AudioStream myAudioStream;
-void audioBufferCallback(float* in);
+void audioBufferCallback(double *in);
 
 int streamAudio (jack_nframes_t nframes, void *arg){ //, float *in,void (*threading)(float *sig)
     return static_cast<AudioStream*>(arg)->streamBuffer(nframes);
@@ -12,10 +12,10 @@ AudioStream::AudioStream(const char* serverName,const char* clientName){
     client_name=clientName;  
     jack_options_t options = JackSessionID;//(JackSessionID|JackServerName|JackNoStartServer|JackUseExactName|JackNullOption)
 	jack_status_t status;
-    std::cout<<"before client open"<<std::endl;
+    
     /* open a client connection to the JACK server */
 	client = jack_client_open (client_name, options, &status,server_name);
-    std::cout<<"after client open"<<std::endl;
+
     if (status & JackNameNotUnique) {    //client name not unique, set a client name;
         client_name = jack_get_client_name(client);
         std::cerr<<"\t>>unique name "<<client_name<<" assigned to the client obj."<<std::endl;
@@ -37,24 +37,7 @@ AudioStream::~AudioStream(){
 }
     
 void AudioStream::AudioRouting(){
-    // /* open a client connection to the JACK server */
-	// client = jack_client_open (client_name, options, &status,server_name);
-
-    // if (status & JackNameNotUnique) {    //client name not unique, set a client name;
-    //     client_name = jack_get_client_name(client);
-    //     std::cerr<<"\t>>unique name "<<client_name<<" assigned to the client obj."<<std::endl;
-    // }
-	// if (client == NULL) {
-    //     std::cerr<<"\t>>jack_client_open() failed, status = "<<status<<std::endl;
-    //     if (status & JackServerFailed) {
-    //         std::cerr<<"\t>>Unable to connect to JACK server"<<std::endl;
-    //     }
-    //     exit (1);
-    // }
-    // if (status & JackServerStarted) {
-    //     std::cout<<"\t>>JACK server started"<<std::endl;
-    // }
-
+    
     //callback
     if (jack_set_process_callback (client,streamAudio,this)){ //arg
             std::cerr<<"\t>>Callback operation failed"<<std::endl;
@@ -148,37 +131,18 @@ void AudioStream::closeStream(){
 
 int AudioStream::streamBuffer(jack_nframes_t nframes){
         
-    float *left,*right;
-    in = (float *)jack_port_get_buffer (input_port, nframes);
+    double *left,*right;
+    in = (double *)jack_port_get_buffer (input_port, nframes);
 
     audioBufferCallback(in);
-    // std::cout<<"in "<<*in<<std::endl;
-    // trigger_chunk=!trigger_chunk;
 
-    left = (float *)jack_port_get_buffer (output_port_left, nframes);
-    right= (float *)jack_port_get_buffer(output_port_right, nframes);
+    left = (double *)jack_port_get_buffer (output_port_left, nframes);
+    right= (double *)jack_port_get_buffer(output_port_right, nframes);
 
-    // int ctr=nframes;
-    // while(ctr){
-        // std::cout<<in[nframes-ctr]<<" ";
-        // ctr--;
-    // }std::cout<<std::endl<<std::endl<<std::endl;
+    std::memcpy (left, in, sizeof (double) *nframes);
+    std::memcpy (right, in, sizeof (double) *nframes);
 
-    std::memcpy (left, in, sizeof (float) *nframes);
-    std::memcpy (right, in, sizeof (float) *nframes);
-
-    // std::cout<<"in "<<*in<<std::endl;
-    // std::cout<<"ol "<<*right<<std::endl;
-    // std::cout<<"or "<<*left<<std::endl;
     return 0;
-    /*
-     *
-     *
-        ADD METHODS HERE
-                SO AS TO BE PROCESSED BY CHANNEL'S CALLBACK
-     *
-     *
-     */
 }
 
 void AudioStream::jack_shutdown (void *arg)

@@ -11,14 +11,16 @@ LOPENCV =-L/usr/local/lib -lopencv_core -lopencv_highgui -lopencv_videoio -lopen
 IOPENCV=-I/usr/local/include/opencv4
 
 LIBSAMPLERATE :=-I/usr/local/include -lsamplerate #-L/usr/lib/x86_64-linux-gnu
-# KISSFFT :=-I/home/sonic_dev/Desktop/btack/BTrack/libs/kiss_fft130
-BTRACK :=-Ilibs/BTrack/src  #-DUSE_FFTW 
+
+BTRACK_kiss :=$(KISSFFT) -DUSE_KISS_FFT
+BTRACK_fftw3 :=$(FFT) -DUSE_FFTW 
+BTRACK :=-Ilibs/BTrack/src $(LIBSAMPLERATE) $(BTRACK_fftw3) 
 
 test: $(OBJECTS) #runnable
-	$(CC) $(OPTIONS) $(OBJECTS) $(JACK) $(FFT) $(KISSFFT) $(LOPENCV) $(LIBSAMPLERATE) $(BTRACK) -o test -DUSE_KISS_FFT
+	$(CC) $(OPTIONS) $(OBJECTS) $(JACK) $(FFT) $(LOPENCV) $(BTRACK) -o test
 
 build/main.o: src/main.cpp # /usr/include/jack/jack.h /usr/include/jack/types.h
-	$(CC) $(OPTIONS) -c src/main.cpp -I/usr/include $(JACK) $(FFT) $(KISSFFT) $(IOPENCV) $(LIBSAMPLERATE) $(BTRACK) -o build/main.o -DUSE_KISS_FFT
+	$(CC) $(OPTIONS) -c src/main.cpp -I/usr/include $(JACK) $(FFT) $(IOPENCV) $(BTRACK) -o build/main.o
 
 build/audio.o: src/audio.h src/audio.h #/usr/include/jack/jack.h /usr/include/jack/types.h
 	$(CC) $(OPTIONS) -c src/audio.cpp -I/usr/include $(JACK) -o build/audio.o
@@ -33,13 +35,13 @@ build/visualizer.o: src/visualizer.h src/visualizer.cpp /usr/local/include/openc
 	$(CC) $(OPTIONS) -c src/visualizer.cpp $(IOPENCV) -o build/visualizer.o $(LOPENCV)
 
 build/btracker.o: src/beatracker.cpp src/beatracker.h
-	$(CC) $(OPTIONS) -c src/beatracker.cpp $(LIBSAMPLERATE) $(KISSFFT) $(BTRACK) -o build/btracker.o -DUSE_KISS_FFT
+	$(CC) $(OPTIONS) -c src/beatracker.cpp $(BTRACK) -o build/btracker.o
 
 build/btrack.o: libs/BTrack/src/BTrack.cpp libs/BTrack/src/BTrack.h
-	$(CC) $(OPTIONS) -c libs/BTrack/src/BTrack.cpp $(LIBSAMPLERATE) $(KISSFFT)  $(BTRACK) -o build/btrack.o -DUSE_KISS_FFT
+	$(CC) $(OPTIONS) -c libs/BTrack/src/BTrack.cpp $(BTRACK) -o build/btrack.o
 
 build/onset.o: libs/BTrack/src/OnsetDetectionFunction.cpp libs/BTrack/src/BTrack.h
-	$(CC) $(OPTIONS) -c libs/BTrack/src/OnsetDetectionFunction.cpp $(LIBSAMPLERATE) $(KISSFFT)  $(BTRACK) -o build/onset.o -DUSE_KISS_FFT
+	$(CC) $(OPTIONS) -c libs/BTrack/src/OnsetDetectionFunction.cpp $(BTRACK) -o build/onset.o
 
 clean:
 	rm -f build/*.o test logs/*

@@ -17,8 +17,10 @@ public:
     Beatracker(int);
     ~Beatracker();
     
-    bool isBeat(float*);
-    bool isOnset(float*);
+    bool isBeat(double*);
+    bool isOnset(double*);
+
+    float getCurrTempoEstimate();
 };
 
 #endif
