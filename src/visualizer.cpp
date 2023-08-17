@@ -38,8 +38,6 @@ Visualizer::Visualizer(int width,int height,int sampleRate,int bufferSize){
 
     update_ratio=(SR/buffer_size)/fps;
     std::cout<<"update ratio "<<update_ratio<<std::endl;
-
-    tempcounter=0;
 }
 
 Visualizer::Visualizer(){
@@ -87,11 +85,9 @@ int Visualizer::stream_frames(double* in,bool isBeat){
     
     
     }
-
     
     update_wave_frame();
     update_counter++;
-    tempcounter+=SR/buffer_size;
     return 1;
 }
 

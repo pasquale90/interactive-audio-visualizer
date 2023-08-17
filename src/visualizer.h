@@ -44,8 +44,6 @@ private:
     void change_BG_color();
     int update_counter;
     int update_ratio;
-
-    int tempcounter;
 };
 
 
