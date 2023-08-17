@@ -58,20 +58,27 @@ int Visualizer::stream_frames(double* in,bool isBeat){
         cv::waitKey(1); //Allowing 1 milliseconds frame processing time
 
         //check white pixels
-        int white_pixel_counter=0;
-        for (int i=0;i<W;i++){
-            for (int j=H/5;j<(H-H/5);j++){
-                if(videoframe.at<cv::Vec3b>(j,i)[0]==255) white_pixel_counter++;
-            }
-        }
+        // int white_pixel_counter=0;
+        // for (int i=0;i<W;i++){
+        //     for (int j=H/5;j<(H-H/5);j++){
+        //         if(videoframe.at<cv::Vec3b>(j,i)[0]==255) white_pixel_counter++;
+        //     }
+        // }
 //debug ==
         // std::cout<<white_pixel_counter<<" == "<<wave.size()<<" ??"<<std::endl;
         // at the end
-        
+        // if(!update_BG_frame()){
+        //     std::cout<<"Visualizer::stream_frames : error update_bg_frame"<<std::endl;
+        // }
         update_counter%=update_ratio;
     }
     
     if (isBeat){
+        if (incrR<17) incrR+=7;
+        int tincrR=incrR;
+        int tincrG=incrG;
+        int tincrB=incrB;
+
         if (incrR<17) incrR+=7;
         else incrR=3;
         if (incrG>5) incrG+=1;
@@ -83,9 +90,10 @@ int Visualizer::stream_frames(double* in,bool isBeat){
             std::cout<<"Visualizer::stream_frames : error update_bg_frame"<<std::endl;
         }
     
-    
+        incrR=tincrR;
+        incrG=tincrG;
+        incrB=tincrB;   
     }
-    
     update_wave_frame();
     update_counter++;
     return 1;
