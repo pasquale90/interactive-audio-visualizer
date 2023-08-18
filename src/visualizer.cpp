@@ -24,27 +24,36 @@ Visualizer::Visualizer(int width,int height,int sampleRate,int bufferSize){
     ascG=true;
     ascB=true;
     
-    dft=NULL;
+    dft=new double[H];
     
     std::deque<double> wave(width*redxtrans);
     x_trans=0;
     ascX=true;
     redxtrans=1;
 
+    f_x_trans=0; // the x transition for the spectrogram
+
     fps=30;
     update_counter=0;
     buffer_size=bufferSize;
     SR=sampleRate;
-
+    
     update_ratio=(SR/buffer_size)/fps;
     std::cout<<"update ratio "<<update_ratio<<std::endl;
+
+    sp=new Spetrogram(buffer_size,H);
 }
 
 Visualizer::Visualizer(){
 }
 
 Visualizer::~Visualizer(){
+    
+    
     cv::destroyWindow("Visualizer");  
+    videoframe.release();
+    sp->~Spetrogram();  
+    delete[] dft;
 }
 
 int Visualizer::stream_frames(double* in,bool isBeat){
@@ -95,6 +104,9 @@ int Visualizer::stream_frames(double* in,bool isBeat){
         incrB=tincrB;   
     }
     update_wave_frame();
+
+    update_spectrogram(in);
+
     update_counter++;
     return 1;
 }
@@ -197,7 +209,20 @@ int Visualizer::update_wave_frame(){
 }
 
 
-int Visualizer::update_spectrogram(double *fft){
+int Visualizer::update_spectrogram(double *in){
+    // dft=
+    sp->computeFFT(in,dft);
+    for (int i=0;i<H;i++){
+        int y_trans=i;
+        // std::cout<<"filling canvas with in position y "<<y_trans<<std::endl;
+        // std::cout<<"filling canvas with in position x "<<x_trans<<std::endl;
+        videoframe.at<cv::Vec3b>(y_trans,f_x_trans)[0] = dft[i]*255;//newval[0];
+        videoframe.at<cv::Vec3b>(y_trans,f_x_trans)[1] = dft[i]*255;//newval[1];
+        videoframe.at<cv::Vec3b>(y_trans,f_x_trans)[2] = dft[i]*255;//newval[2];
+    }
+    f_x_trans++;
+    f_x_trans%=W;
+    
 //append to dft
     // if(update_counter%update_ratio==1)
     //     dft=NULL;   

@@ -2,12 +2,14 @@
 #define VISUALIZER_H
 
 // #include "audio_visualizer.h"
+#include "fft.h"
 #include <opencv2/opencv.hpp> //OpenCV header to use VideoCapture class//
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/core/core.hpp>
 #include <opencv2/core/mat.hpp>
 #include "opencv2/highgui/highgui.hpp"
 #include <queue>
+
 
 class Visualizer{
 public:
@@ -27,12 +29,14 @@ private:
     int update_wave_frame();
     int update_spectrogram(double*);
 
-    float *dft;
+    double *dft;
     double *buffer;
     std::queue<double> wave;
     int x_trans;
     int redxtrans; //reduces the time that x transition changes (used for the waveform)
     bool ascX;
+
+    int f_x_trans;
     
     int fps;
     int SR;
@@ -44,6 +48,8 @@ private:
     void change_BG_color();
     int update_counter;
     int update_ratio;
+
+    Spetrogram *sp;
 };
 
 

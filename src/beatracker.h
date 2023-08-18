@@ -21,6 +21,7 @@ public:
     bool isOnset(double*);
 
     float getCurrTempoEstimate();
+    void getFFT();
 };
 
 #endif

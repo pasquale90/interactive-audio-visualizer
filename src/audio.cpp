@@ -106,16 +106,16 @@ void AudioStream::AudioRouting(){
     free (fromdevice);
     free (todevice);
     
-    std::cout<<"Press: \n R for rec \n S for save \n Ctl+C to quit. "<<std::endl;
-    std::string input;
-    while(std::cin>>input){
-        if (input=="R"){
-            std::cout<<"Storing buffer in active development"<<std::endl;
-        }
-        if (input=="S"){
-            std::cout<<"Saving record in active development"<<std::endl;
-        }
-    }
+    // std::cout<<"Press: \n R for rec \n S for save \n Ctl+C to quit. "<<std::endl;
+    // std::string input;
+    // while(std::cin>>input){
+    //     if (input=="R"){
+    //         std::cout<<"Storing buffer in active development"<<std::endl;
+    //     }
+    //     if (input=="S"){
+    //         std::cout<<"Saving record in active development"<<std::endl;
+    //     }
+    // }
 }
 
 void AudioStream::closeStream(){

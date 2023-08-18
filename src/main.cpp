@@ -1,5 +1,4 @@
 #include "audio.h"
-#include "fft.h" // MAKE IT A CLASS?
 #include "visualizer.h"
 #include "beatracker.h"
 #include <iostream>
@@ -12,16 +11,19 @@ int HEIGHT=700;
 int FPS=25;
 int SAMPLE_RATE;
 int BUFFER_SIZE;
-Beatracker bt;
-Visualizer vs;
+Beatracker *bt;
+Visualizer *vs;
+
 
 int temp=0;
 void audioBufferCallback(double* in){
-
-    // computeFFT(in,BUFFER_SIZE);
+    
+    
     
     // updateFrame(in,NULL);
-    bool isBeat=bt.isBeat(in);
+    bool isBeat=bt->isBeat(in);
+    
+    // bt.getFFT();
     // bool isOnset=bt.isOnset(in);
     // std::cout<<"Current tempo estimate "<<bt.getCurrTempoEstimate()<<std::endl;
 
@@ -32,7 +34,7 @@ void audioBufferCallback(double* in){
     //     temp++;
     // }
 
-    vs.stream_frames(in,isBeat); // showFrame,
+    vs->stream_frames(in,isBeat); // showFrame,
 }
 
 int main(int argc,char **argv){
@@ -46,9 +48,8 @@ int main(int argc,char **argv){
     std::cout<<"SAMPLE RATE = "<<SAMPLE_RATE<<std::endl;
     std::cout<<"BUFFER_SIZE = "<<BUFFER_SIZE<<std::endl;
 
-    Beatracker bt(BUFFER_SIZE);
-
-    vs=Visualizer(WIDTH,HEIGHT,SAMPLE_RATE,BUFFER_SIZE);    
+    bt = new Beatracker(BUFFER_SIZE);
+    vs=new Visualizer(WIDTH,HEIGHT,SAMPLE_RATE,BUFFER_SIZE);    
 
     const char* serverName=NULL;
     const char* clientName="myAudioStream"; 
@@ -58,12 +59,15 @@ int main(int argc,char **argv){
     std::cout<<"Hello Audio Stream"<<std::endl;
     std::cout<<"\n\n";
     myAudioStrem->AudioRouting();
-    // myAudioStrem.streamAudio(); //bufferLeft,bufferRight
     myAudioStrem->closeStream();
 
     std::cout<<"\n\n";
     std::cout<<"Reached the end of main"<<std::endl;
     std::cout<<"\n\n";
 
+    
+   
+    bt->~Beatracker();
+    vs->~Visualizer();
     return 0;
 }
