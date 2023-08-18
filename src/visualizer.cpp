@@ -34,7 +34,7 @@ Visualizer::Visualizer(int width,int height,int sampleRate,int bufferSize){
     f_x_trans=0; // the x transition for the spectrogram
 
     fps=30;
-    bufferCount=0;
+    bufferCount=1;
     buffer_size=bufferSize;
     SR=sampleRate;
     
@@ -57,15 +57,23 @@ Visualizer::~Visualizer(){
     delete[] dft;
 }
 
+void Visualizer::showFrame(){
+    cv::imshow("Visualizer", videoframe);//Showing the video//
+    cv::waitKey(1); //Allowing 1 milliseconds frame processing time
+}
+
 int Visualizer::stream_frames(double* in,bool isBeat){
+    std::cout<<"bufferCount -->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"<<bufferCount<<" ";
     buffer=in;
 
     if (bufferCount%buffersPerFrame==0){                                    // is this a legitimate solution? otherwise try threads
+
+        std::cout<<" shows the frame"<<std::endl;
         
         update_wave_frame();
 
-        cv::imshow("Visualizer", videoframe);//Showing the video//
-        cv::waitKey(1); //Allowing 1 milliseconds frame processing time
+        showFrame();
+
 
         //check white pixels
         // int white_pixel_counter=0;
@@ -80,8 +88,7 @@ int Visualizer::stream_frames(double* in,bool isBeat){
         // if(!update_BG_frame()){
         //     std::cout<<"Visualizer::stream_frames : error update_bg_frame"<<std::endl;
         // }
-        bufferCount%=buffersPerFrame;
-    }
+    }else std::cout<<" does not show the frame"<<std::endl;
     
     if (isBeat){
         if (incrR<17) incrR+=7;
@@ -109,6 +116,8 @@ int Visualizer::stream_frames(double* in,bool isBeat){
     update_spectrogram(in);
 
     bufferCount++;
+    bufferCount%=buffersPerFrame;
+
     return 1;
 }
 

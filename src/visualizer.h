@@ -23,6 +23,7 @@ public:
 private:
     int W,H;
     cv::Mat videoframe;
+    void showFrame();
     int R,G,B;
 
     int update_BG_frame();
