@@ -34,17 +34,18 @@ Visualizer::Visualizer(int width,int height,int sampleRate,int bufferSize){
     f_x_trans=0; // the x transition for the spectrogram
 
     fps=30;
-    update_counter=0;
+    bufferCount=0;
     buffer_size=bufferSize;
     SR=sampleRate;
     
-    update_ratio=(SR/buffer_size)/fps;
-    std::cout<<"update ratio "<<update_ratio<<std::endl;
+    buffersPerFrame=(SR/buffer_size)/fps;
+    std::cout<<"buffersPerFrame "<<buffersPerFrame<<std::endl;
 
     sp=new Spetrogram(buffer_size,H);
 }
 
 Visualizer::Visualizer(){
+    
 }
 
 Visualizer::~Visualizer(){
@@ -59,7 +60,7 @@ Visualizer::~Visualizer(){
 int Visualizer::stream_frames(double* in,bool isBeat){
     buffer=in;
 
-    if (update_counter%update_ratio==0){                                    // is this a legitimate solution? otherwise try threads
+    if (bufferCount%buffersPerFrame==0){                                    // is this a legitimate solution? otherwise try threads
         
         update_wave_frame();
 
@@ -79,7 +80,7 @@ int Visualizer::stream_frames(double* in,bool isBeat){
         // if(!update_BG_frame()){
         //     std::cout<<"Visualizer::stream_frames : error update_bg_frame"<<std::endl;
         // }
-        update_counter%=update_ratio;
+        bufferCount%=buffersPerFrame;
     }
     
     if (isBeat){
@@ -107,7 +108,7 @@ int Visualizer::stream_frames(double* in,bool isBeat){
 
     update_spectrogram(in);
 
-    update_counter++;
+    bufferCount++;
     return 1;
 }
 
@@ -224,7 +225,7 @@ int Visualizer::update_spectrogram(double *in){
     f_x_trans%=W;
     
 //append to dft
-    // if(update_counter%update_ratio==1)
+    // if(bufferCount%buffersPerFrame==1)
     //     dft=NULL;   
 
     // if (!dft){
@@ -249,7 +250,7 @@ int Visualizer::update_spectrogram(double *in){
     // }
 
 //visualize fft
-    // int numBuffer=update_counter%update_ratio;
+    // int numBuffer=bufferCount%buffersPerFrame;
     // // if(numBuffer!=0){
     // int y=H/2;
     // // for (int j=0;j<buffer_size;j++){ //numBuffer*buffer_size

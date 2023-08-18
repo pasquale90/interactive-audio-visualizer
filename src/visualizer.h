@@ -46,8 +46,8 @@ private:
     bool ascR,ascG,ascB;
     int MIN{0},MAX{200};
     void change_BG_color();
-    int update_counter;
-    int update_ratio;
+    int bufferCount;
+    int buffersPerFrame;
 
     Spetrogram *sp;
 };
