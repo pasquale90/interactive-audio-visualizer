@@ -34,14 +34,14 @@ Visualizer::Visualizer(int width,int height,int sampleRate,int bufferSize){
     f_x_trans=0; // the x transition for the spectrogram
 
     fps=30;
-    bufferCount=1;
+    bufferCount=0;
     buffer_size=bufferSize;
     SR=sampleRate;
     
     buffersPerFrame=(SR/buffer_size)/fps;
     std::cout<<"buffersPerFrame "<<buffersPerFrame<<std::endl;
 
-    sp=new Spetrogram(buffer_size,H);
+    sp=new Spetrogram(buffer_size,buffersPerFrame,H);
 }
 
 Visualizer::Visualizer(){
@@ -63,17 +63,14 @@ void Visualizer::showFrame(){
 }
 
 int Visualizer::stream_frames(double* in,bool isBeat){
-    std::cout<<"bufferCount -->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"<<bufferCount<<" ";
+    // std::cout<<"bufferCount -->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"<<bufferCount<<" ";
     buffer=in;
 
-    if (bufferCount%buffersPerFrame==0){                                    // is this a legitimate solution? otherwise try threads
+    if (bufferCount==0){                                    // is this a legitimate solution? otherwise try threads
 
-        std::cout<<" shows the frame"<<std::endl;
-        
-        update_wave_frame();
+        // std::cout<<" shows the frame"<<std::endl;
 
         showFrame();
-
 
         //check white pixels
         // int white_pixel_counter=0;
@@ -85,11 +82,17 @@ int Visualizer::stream_frames(double* in,bool isBeat){
 //debug ==
         // std::cout<<white_pixel_counter<<" == "<<wave.size()<<" ??"<<std::endl;
         // at the end
-        // if(!update_BG_frame()){
-        //     std::cout<<"Visualizer::stream_frames : error update_bg_frame"<<std::endl;
-        // }
-    }else std::cout<<" does not show the frame"<<std::endl;
-    
+        if(!update_BG_frame()){
+            std::cout<<"Visualizer::stream_frames : error update_bg_frame"<<std::endl;
+        }
+    }else {
+        // std::cout<<" is processing the frame"<<std::endl;
+    }
+
+    //start preparing for the next frame
+    sp->prepare_spectrogram(bufferCount,in);
+
+
     if (isBeat){
         if (incrR<17) incrR+=7;
         int tincrR=incrR;
@@ -111,13 +114,21 @@ int Visualizer::stream_frames(double* in,bool isBeat){
         incrG=tincrG;
         incrB=tincrB;   
     }
+    
     update_wave_frame();
 
-    update_spectrogram(in);
+    
+    if (bufferCount==buffersPerFrame-1){ // last frame to process before showing 
+    //do something special using the last buffer?? --> compute the FFT for the concatenated signal
+        // std::cout<<"computes the FFT"<<std::endl;
+        
+        update_spectrogram(in);
+    }
 
     bufferCount++;
     bufferCount%=buffersPerFrame;
 
+         
     return 1;
 }
 
@@ -127,7 +138,7 @@ int Visualizer::update_BG_frame(){
         std::cout << "\n Image not created. You have done something wrong. \n";
         return 0;    // Unsuccessful.
     }
-    change_BG_color();
+    // change_BG_color();
     return 1;
 }
 
@@ -221,14 +232,13 @@ int Visualizer::update_wave_frame(){
 
 int Visualizer::update_spectrogram(double *in){
     // dft=
-    sp->computeFFT(in,dft);
+    sp->computeFFT(dft);
     for (int i=0;i<H;i++){
-        int y_trans=i;
-        // std::cout<<"filling canvas with in position y "<<y_trans<<std::endl;
-        // std::cout<<"filling canvas with in position x "<<x_trans<<std::endl;
-        videoframe.at<cv::Vec3b>(y_trans,f_x_trans)[0] = dft[i]*255;//newval[0];
-        videoframe.at<cv::Vec3b>(y_trans,f_x_trans)[1] = dft[i]*255;//newval[1];
-        videoframe.at<cv::Vec3b>(y_trans,f_x_trans)[2] = dft[i]*255;//newval[2];
+        int f_y_trans=i;
+        // std::cout<<"videoframe[y:"<<f_y_trans<<"][x:"<<f_x_trans<<"]="<<dft[i]<<"-------------->*255="<<(int)(dft[i]*255)<<" made "<<(int)(dft[i]*255)%255<<std::endl;
+        videoframe.at<cv::Vec3b>(f_y_trans,f_x_trans)[0] = (int)(dft[i]*255)%255;//newval[0];
+        videoframe.at<cv::Vec3b>(f_y_trans,f_x_trans)[1] = (int)(dft[i]*255)%255;//newval[1];
+        videoframe.at<cv::Vec3b>(f_y_trans,f_x_trans)[2] = (int)(dft[i]*255)%255;//newval[2];
     }
     f_x_trans++;
     f_x_trans%=W;

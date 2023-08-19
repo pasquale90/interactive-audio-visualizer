@@ -12,21 +12,24 @@
 class Spetrogram{
 public:
     Spetrogram();
-    Spetrogram(int,int);
+    Spetrogram(int,int,int);
     ~Spetrogram();
-    double* computeFFT(double*,double*);
-    
+    double* computeFFT(double*);
+    void prepare_spectrogram(int,double*);
     
 private:
     int buffer_size;
     int height;
+    int buffers_per_frame;
     double *hamming_window;
     fftw_complex *fft_in;
     fftw_complex *fft_out;
     fftw_plan p;
-    double *log_fft_out;
     
-    void hamming();
+    double *FFTcol;
+    int siglen;
+    
+    void hamming(int);
 
 };
 

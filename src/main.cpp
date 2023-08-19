@@ -6,8 +6,8 @@
 #include <string>
 #include <chrono>
 
-int WIDTH=1000;
-int HEIGHT=700;
+int WIDTH=1024;
+int HEIGHT=512;
 int FPS=25;
 int SAMPLE_RATE;
 int BUFFER_SIZE;
