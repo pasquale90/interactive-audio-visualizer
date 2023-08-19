@@ -28,7 +28,7 @@ Spectrogram::Spectrogram(int bufferSize, int buffersPerFrame, int fheight) :  bu
   fft_out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * height);
   std::cout<<"Spetrogram initialized with buffer size "<<buffer_size<<" and height "<<height<<std::endl;
 
-  avg=0;
+  avgw=0;
 }
 
 Spectrogram::~Spectrogram(){
@@ -60,7 +60,7 @@ void Spectrogram::prepare_spectrogram(int buffCount,double *signal){
     // std::cout<<" i "<<i<<" ctr "<<ctr<<std::endl;
     fft_in[i][0]=signal[ctr]*hamming_window[i]; // (0.54 - (0.46 * cos( 2 * PI * (i / ((buffer_size - 1) * 1.0)))));
     fft_in[i][1]=0;
-    avg+=fft_in[i][0];
+    avgw+=fft_in[i][0];
     
     ctr++;   
 
@@ -73,9 +73,10 @@ void Spectrogram::prepare_spectrogram(int buffCount,double *signal){
 }
 
 
-double* Spectrogram::computeFFT(double *magnitude){ //float*
+double* Spectrogram::computeFFT(double *magnitude, double &minf, double &maxf){ //float*
 
   int i;
+  double rcpVerticalZoom=1.0;
   // for (i=0;i<buffer_size;++i){
   //   std::cout<<" hamming_window[i] "<< hamming_window[i]<<std::endl; // (0.54 - (0.46 * cos( 2 * PI * (i / ((buffer_size - 1) * 1.0)))))<<std::endl; //;
   // }
@@ -85,36 +86,30 @@ double* Spectrogram::computeFFT(double *magnitude){ //float*
   fftw_execute(p);
 
   // normalize
-  avg/= (siglen/2);
-  std::cout<<"avg "<<avg<<std::endl;
-
-  double rcpVerticalZoom=1.0;
-
+  // avgw/= (siglen/2);
+  // std::cout<<"avg "<<avgw<<std::endl;
+  minf=(20*log10f( sqrtf( fft_out[0][0]*fft_out[0][0]+ fft_out[0][1]*fft_out[i][1] ) * rcpVerticalZoom ) + 1.0f) * 0.5f;
+  maxf=minf;
+  
   //log magnitude
   for (i = 0; i < height; i++) {
-    // log_fft_out[i] = 0.5 * log( pow(fft_out[i][0],2) + pow(fft_out[i][1],2) );      //   1/2*(
-    
-    fft_out[i][0] /= avg;
-    fft_out[i][1] /= avg;
-    // FFTcol[i]=log(sqrt(fft_out[i][0]*fft_out[i][0]+ fft_out[i][1]*fft_out[i][1]));//Here I have calculated the y axis of the spectrum in dB
-    FFTcol[i]=(log10f( sqrtf( fft_out[i][0]*fft_out[i][0]+ fft_out[i][1]*fft_out[i][1] ) * rcpVerticalZoom ) + 1.0f) * 0.5f;
-    // fft_out[i][0]/=height;
-    // fft_out[i][1]/=height;
-    magnitude[i]=abs(FFTcol[i]);
+
+    // fft_out[i][0] /= avgw;
+    // fft_out[i][1] /= avgw;
+
+    magnitude[i]=(20*log10f( sqrtf( fft_out[i][0]*fft_out[i][0]+ fft_out[i][1]*fft_out[i][1] ) * rcpVerticalZoom ) + 1.0f) * 0.5f;
+
+    if (magnitude[i] < minf) minf=magnitude[i];
+    if (magnitude[i] > maxf) maxf=magnitude[i];
+
   }
 
-
-  //print
-  // for (i = 0; i < buffer_size; i++)
-    // printf("fft out: %3d %+9.5f %+9.5f I \n",
-        // i, fft_out[i][0], fft_out[i][1]);
-        
-        // if (fft_out[i][0] < -1.0 || fft_out[i][0] > 1.0)
-        //   std::cout<<"i "<<i<<" : fft_out[i][0] "<<fft_out[i][0]<<std::endl;
-        // if (fft_out[i][1] < -1.0 || fft_out[i][1] > 1.0)
-        //   std::cout<<"i "<<i<<" : fft_out[i][1] "<<fft_out[i][1]<<std::endl;  
-  // printf("\n\n\n\n\n");
-  avg=0;
+  // normalize(magnitude,min,max);
+  //normalize
+  // for (i = 0; i < height; i++) {
+  //   magnitude[i] = (FFTcol[i]-minf)/(maxf-minf);
+  // }
+  // avgw=0;
 }
 
 void Spectrogram::new_approach(double *spectro){
@@ -131,13 +126,69 @@ void Spectrogram::new_approach(double *spectro){
     while( count2 < max2 )
     {
         const double realValue   = fft_out[count2 + 0][0];
-        const double imagValue   = fft_out[count2 + 1][0];
+        const double imagValue   = fft_out[count2 + 1][1];
         const double value   = (log10f( sqrtf( (realValue * realValue) + (imagValue * imagValue) ) * rcpVerticalZoom ) + 1.0f) * 0.5f;
         spectro[count2 >> 1] = abs(value);
         count2 += 2;
     }
 }
 
+/* Last working version - artistic fft
+double* Spectrogram::computeFFT(double *magnitude){ //float*
+
+  int i;
+  double rcpVerticalZoom=1.0;
+  // for (i=0;i<buffer_size;++i){
+  //   std::cout<<" hamming_window[i] "<< hamming_window[i]<<std::endl; // (0.54 - (0.46 * cos( 2 * PI * (i / ((buffer_size - 1) * 1.0)))))<<std::endl; //;
+  // }
+
+  p = fftw_plan_dft_1d(height, fft_in, fft_out, FFTW_FORWARD, FFTW_ESTIMATE);
+
+  fftw_execute(p);
+
+  // normalize
+  avgw/= (siglen/2);
+  std::cout<<"avg "<<avgw<<std::endl;
+  minf=(log10f( sqrtf( fft_out[0][0]*fft_out[0][0]+ fft_out[0][1]*fft_out[i][1] ) * rcpVerticalZoom ) + 1.0f) * 0.5f;
+  maxf=minf;
+  
+
+  //log magnitude
+  for (i = 0; i < height; i++) {
+    // log_fft_out[i] = 0.5 * log( pow(fft_out[i][0],2) + pow(fft_out[i][1],2) );      //   1/2*(
+    
+    // fft_out[i][0] /= avgw;
+    // fft_out[i][1] /= avgw;
+
+    // FFTcol[i]=log(sqrt(fft_out[i][0]*fft_out[i][0]+ fft_out[i][1]*fft_out[i][1]));//Here I have calculated the y axis of the spectrum in dB
+    FFTcol[i]=(log10f( sqrtf( fft_out[i][0]*fft_out[i][0]+ fft_out[i][1]*fft_out[i][1] ) * rcpVerticalZoom ) + 1.0f) * 0.5f;
+
+    if (FFTcol[i] < minf) minf=FFTcol[i];
+    if (FFTcol[i] > maxf) maxf=FFTcol[i];
+    // fft_out[i][0]/=height;
+    // fft_out[i][1]/=height;
+    // magnitude[i]=abs(FFTcol[i]);
+  }
+
+  // normalize(magnitude,min,max);
+  //normalize
+  for (i = 0; i < height; i++) {
+    magnitude[i] = (FFTcol[i]-minf)/(maxf-minf);
+  }
+
+  //print
+  // for (i = 0; i < buffer_size; i++)
+    // printf("fft out: %3d %+9.5f %+9.5f I \n",
+        // i, fft_out[i][0], fft_out[i][1]);
+        
+        // if (fft_out[i][0] < -1.0 || fft_out[i][0] > 1.0)
+        //   std::cout<<"i "<<i<<" : fft_out[i][0] "<<fft_out[i][0]<<std::endl;
+        // if (fft_out[i][1] < -1.0 || fft_out[i][1] > 1.0)
+        //   std::cout<<"i "<<i<<" : fft_out[i][1] "<<fft_out[i][1]<<std::endl;  
+  // printf("\n\n\n\n\n");
+  avgw=0;
+}
+*/
 
 /*
 double* Spectrogram::computeFFT(double *magnitude){ //float*

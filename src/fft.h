@@ -14,7 +14,7 @@ public:
     Spectrogram();
     Spectrogram(int,int,int);
     ~Spectrogram();
-    double* computeFFT(double*);
+    double* computeFFT(double*,double&,double&);
         void new_approach(double*);
 
     void prepare_spectrogram(int,double*);
@@ -33,7 +33,8 @@ private:
     
     void hamming(int);
 
-    double avg; // not currently used
+    double avgw; // not currently used
+    // double minf,maxf;
 };
 
 #endif

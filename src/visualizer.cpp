@@ -42,6 +42,8 @@ Visualizer::Visualizer(int width,int height,int sampleRate,int bufferSize){
     std::cout<<"buffersPerFrame "<<buffersPerFrame<<std::endl;
 
     sp=new Spectrogram(buffer_size,buffersPerFrame,H);
+    
+    beatCount=0;
 }
 
 Visualizer::Visualizer(){
@@ -92,36 +94,35 @@ int Visualizer::stream_frames(double* in,bool isBeat){
     //start preparing for the next frame
     sp->prepare_spectrogram(bufferCount,in);
 
-
+    
     if (isBeat){
-        if (incrR<17) incrR+=7;
-        int tincrR=incrR;
-        int tincrG=incrG;
-        int tincrB=incrB;
+        // if (incrR<17) incrR+=7;
+        // int tincrR=incrR;
+        // int tincrG=incrG;
+        // int tincrB=incrB;
 
-        if (incrR<17) incrR+=7;
-        else incrR=3;
-        if (incrG>5) incrG+=1;
-        else incrG=1;
-        if (incrB>21) incrB+=3; 
-        else incrB=7;
-
+        // if (incrR<17) incrR+=7;
+        // else incrR=3;
+        // if (incrG>5) incrG+=1;
+        // else incrG=1;
+        // if (incrB>21) incrB+=3; 
+        // else incrB=7;
+        std::cout<<bufferCount<<" " ;
         if(!update_BG_frame()){
             std::cout<<"Visualizer::stream_frames : error update_bg_frame"<<std::endl;
         }
+        showFrame();
     
-        incrR=tincrR;
-        incrG=tincrG;
-        incrB=tincrB;   
+        // incrR=tincrR;
+        // incrG=tincrG;
+        // incrB=tincrB;   
     }
     
     update_wave_frame();
 
-    
     if (bufferCount==buffersPerFrame-1){ // last frame to process before showing 
     //do something special using the last buffer?? --> compute the FFT for the concatenated signal
         // std::cout<<"computes the FFT"<<std::endl;
-        
         update_spectrogram(in);
     }
 
@@ -185,13 +186,33 @@ void Visualizer::change_BG_color(){
     }
     cv::Scalar color(B,R,G);
     // videoframe.setTo(color);
-    for (int i=0;i<W;i++){
-        for (int j=0;j<H;j++){
-            videoframe.at<cv::Vec3b>(j,i)[0] += fB;//newval[0];
-            videoframe.at<cv::Vec3b>(j,i)[1] += fR;//newval[1];
-            videoframe.at<cv::Vec3b>(j,i)[2] += fG;//newval[2];
+
+// first way to change the color
+    if (beatCount%9==0){
+        for (int i=0;i<W-f_x_trans;i++){
+            for (int j=0;j<H;j++){
+                videoframe.at<cv::Vec3b>(j,i)[0] += fB;//newval[0];
+                videoframe.at<cv::Vec3b>(j,i)[1] += fR;//newval[1];
+                videoframe.at<cv::Vec3b>(j,i)[2] += fG;//newval[2];
+            }
         }
     }
+// second way to change the color
+    else{   
+
+        for (int i=0;i<W-f_x_trans;i++){
+            for (int j=0;j<H;j++){
+                if (i>H/2-H/6 && i<H/2+H/6)
+                    videoframe.at<cv::Vec3b>(j,i)[0] += fB;//newval[0];
+                else if (i<H/6 || i>H-H/6)
+                    videoframe.at<cv::Vec3b>(j,i)[1] += fR;//newval[1];
+                else
+                    videoframe.at<cv::Vec3b>(j,i)[2] += fG;//newval[2];
+            }
+        }
+    }
+    beatCount++;
+    beatCount%=9;
 }
 
 int Visualizer::update_wave_frame(){
@@ -240,14 +261,29 @@ int Visualizer::update_wave_frame(){
 
 int Visualizer::update_spectrogram(double *in){
     // dft=
-    sp->computeFFT(dft);
+    double minf,maxf;
+    sp->computeFFT(dft,minf,maxf);
     // sp->new_approach(dft);
     for (int i=0;i<H;i++){
         int f_y_trans=i;
+
+        //normalize min max in range [0,1]
+        dft[i]=(dft[i]-minf)/(maxf-minf);
+        
         // std::cout<<"videoframe[y:"<<f_y_trans<<"][x:"<<f_x_trans<<"]="<<dft[i]<<"-------------->*255="<<(int)(dft[i]*255)<<" made "<<(int)(dft[i]*255)%255<<std::endl;
-        videoframe.at<cv::Vec3b>(f_y_trans,f_x_trans)[0] = (int)(dft[i]*255)%255;//newval[0]; *0.7
-        videoframe.at<cv::Vec3b>(f_y_trans,f_x_trans)[1] = (int)(dft[i]*255)%255;//newval[1]; *0.3
-        videoframe.at<cv::Vec3b>(f_y_trans,f_x_trans)[2] = (int)(dft[i]*255)%255;//newval[2]; *0.2
+        // videoframe.at<cv::Vec3b>(f_y_trans,f_x_trans)[0] = (int)(dft[i]*255)%255;//newval[0]; *0.7
+        // videoframe.at<cv::Vec3b>(f_y_trans,f_x_trans)[1] = (int)(dft[i]*255)%255;//newval[1]; *0.3
+        // videoframe.at<cv::Vec3b>(f_y_trans,f_x_trans)[2] = (int)(dft[i]*255)%255;//newval[2]; *0.2
+        
+        
+
+        if (i>H/2-H/6 && i<H/2+H/6)
+            videoframe.at<cv::Vec3b>(f_y_trans,f_x_trans)[0] = (int)(dft[i]*255)%255;//newval[0]; *0.7
+        else if (i<H/6 || i>H-H/6)
+            videoframe.at<cv::Vec3b>(f_y_trans,f_x_trans)[1] = (int)(dft[i]*255)%255;//newval[1]; *0.3
+        else
+            videoframe.at<cv::Vec3b>(f_y_trans,f_x_trans)[2] = (int)(dft[i]*255)%255;//newval[2]; *0.2
+
     }
     f_x_trans++;
     f_x_trans%=W;

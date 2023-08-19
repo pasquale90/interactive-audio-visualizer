@@ -26,7 +26,7 @@ private:
     void showFrame();
     int R,G,B;
 
-    int update_BG_frame();
+    int update_BG_frame(); // remove this isDownBeat dependency
     int update_wave_frame();
     int update_spectrogram(double*);
 
@@ -51,6 +51,7 @@ private:
     int buffersPerFrame;
 
     Spectrogram *sp;
+    int beatCount;
 };
 
 

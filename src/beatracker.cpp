@@ -7,6 +7,9 @@ Beatracker::Beatracker(){
 
 Beatracker::Beatracker(int bufferSize) :  buffer_size(bufferSize) { 
     BTrack btracker(bufferSize/2, bufferSize);
+    
+    // std::queue<double> energyEnvelopeList;
+    isdownbeat=false;
     std::cout<<"Beatracker initialized with buffer size "<<buffer_size<<std::endl;
 }
 
@@ -14,9 +17,39 @@ Beatracker::~Beatracker(){
     btracker.~BTrack();
 }
 
+void Beatracker::check_downbeat(double *buffer){ // assume 4 beats per bar --> actually returns true if it is the maximum energy envelope of the last 4 beats
+    
+    //calculate the energy envelope of the signal
+    double sum = 0;
+    // sum the squares of the samples
+    for (int i = 0;i < buffer_size;i++) 
+        sum += (buffer[i] * buffer[i]);
+
+
+    energyEnvelopeList.push(sum);
+    if (energyEnvelopeList.size()==9) energyEnvelopeList.pop();
+    for (int i=0;i<energyEnvelopeList.size();i++){
+        if (sum>energyEnvelopeList.front())
+        {
+            isdownbeat=true;
+            return;
+        }
+    }
+    isdownbeat=false;
+
+    // std::cout<<"sum "<<sum<<std::endl;
+    // btracker.processOnsetDetectionFunctionSample(sum/buffer_size);
+    // isdownbeat = btracker.beatDueInCurrentFrame();
+}
+
 bool Beatracker::isBeat(double *buffer){
     btracker.processAudioFrame(buffer);
-    return btracker.beatDueInCurrentFrame();
+    bool isbeat=btracker.beatDueInCurrentFrame();
+
+    if (isbeat) 
+        check_downbeat(buffer);
+
+    return isbeat;
 }
 
 bool Beatracker::isOnset(double *buffer){
@@ -31,6 +64,10 @@ bool Beatracker::isOnset(double *buffer){
 
 float Beatracker::getCurrTempoEstimate(){
     return btracker.getCurrentTempoEstimate();
+}
+
+bool Beatracker::isDownbeat(){
+    return isdownbeat;
 }
 
 void Beatracker::getFFT(){

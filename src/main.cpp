@@ -18,23 +18,23 @@ Visualizer *vs;
 int temp=0;
 void audioBufferCallback(double* in){
     
-    
-    
     // updateFrame(in,NULL);
     bool isBeat=bt->isBeat(in);
     
+// Onset detection?
+    // bool isDownBeat=bt->isDownbeat();
     // bt.getFFT();
-    // bool isOnset=bt.isOnset(in);
+    // bool isOnset=bt->isOnset(in);
+    
     // std::cout<<"Current tempo estimate "<<bt.getCurrTempoEstimate()<<std::endl;
-
     // if (isBeat)
     // {
     //     // do something on the beat
-    //     std::cout<<temp%4<<" Beat!"<<std::endl;
+    //     std::cout<<temp%4<<" Beat! ---------> "<<isDownBeat<<std::endl;
     //     temp++;
     // }
 
-    vs->stream_frames(in,isBeat); // showFrame,
+    vs->stream_frames(in,isBeat);
 }
 
 int main(int argc,char **argv){
