@@ -81,7 +81,7 @@ double* Spectrogram::computeFFT(double *magnitude, double &minf, double &maxf){ 
   //   std::cout<<" hamming_window[i] "<< hamming_window[i]<<std::endl; // (0.54 - (0.46 * cos( 2 * PI * (i / ((buffer_size - 1) * 1.0)))))<<std::endl; //;
   // }
 
-  p = fftw_plan_dft_1d(height, fft_in, fft_out, FFTW_FORWARD, FFTW_ESTIMATE);
+  p = fftw_plan_dft_1d(height, fft_in, fft_out, FFTW_FORWARD, FFTW_MEASURE); //FFTW_ESTIMATE
 
   fftw_execute(p);
 
