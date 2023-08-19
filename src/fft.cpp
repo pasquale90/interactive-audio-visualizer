@@ -94,8 +94,8 @@ double* Spectrogram::computeFFT(double *magnitude){ //float*
   for (i = 0; i < height; i++) {
     // log_fft_out[i] = 0.5 * log( pow(fft_out[i][0],2) + pow(fft_out[i][1],2) );      //   1/2*(
     
-    // fft_out[i][0] /= avg;
-    // fft_out[i][1] /= avg;
+    fft_out[i][0] /= avg;
+    fft_out[i][1] /= avg;
     // FFTcol[i]=log(sqrt(fft_out[i][0]*fft_out[i][0]+ fft_out[i][1]*fft_out[i][1]));//Here I have calculated the y axis of the spectrum in dB
     FFTcol[i]=(log10f( sqrtf( fft_out[i][0]*fft_out[i][0]+ fft_out[i][1]*fft_out[i][1] ) * rcpVerticalZoom ) + 1.0f) * 0.5f;
     // fft_out[i][0]/=height;

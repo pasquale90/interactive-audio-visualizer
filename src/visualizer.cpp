@@ -82,9 +82,9 @@ int Visualizer::stream_frames(double* in,bool isBeat){
 //debug ==
         // std::cout<<white_pixel_counter<<" == "<<wave.size()<<" ??"<<std::endl;
         // at the end
-        if(!update_BG_frame()){
-            std::cout<<"Visualizer::stream_frames : error update_bg_frame"<<std::endl;
-        }
+        // if(!update_BG_frame()){
+        //     std::cout<<"Visualizer::stream_frames : error update_bg_frame"<<std::endl;
+        // }
     }else {
         // std::cout<<" is processing the frame"<<std::endl;
     }
@@ -143,47 +143,55 @@ int Visualizer::update_BG_frame(){
 }
 
 void Visualizer::change_BG_color(){
+    int fR,fG,fB;
 
     if (ascR){
         if (R>=MAX) {
             ascR=false;
-            R-=incrR;
-        }else R+=incrR;
+            fR=-incrR;
+        }else R=+incrR;
 
     }else{
         if(R<=MIN){
             ascR=true;
-            R+=incrR;
-        }else R-=incrR;
+            fR=-incrR;
+        }else fR=+incrR;
     }
 
     if (ascG){
         if (G>=MAX) {
             ascG=false;
-            G-=incrG;
-        }else G+=incrG;
+            fG=-incrG;
+        }else fG=+incrG;
 
     }else{
         if(G<=MIN){
             ascG=true;
-            G+=incrG;
-        }else G-=incrG;
+            fG=+incrG;
+        }else fG=-incrG;
     }
     
     if (ascB){
         if (B>=MAX) {
             ascB=false;
-            B-=incrB;
-        }else B+=incrB;
+            fB=-incrB;
+        }else fB=+incrB;
 
     }else{
         if(B<=MIN){
             ascB=true;
-            B+=incrB;
-        }else B-=incrB;
+            fB=+incrB;
+        }else fB=-incrB;
     }
     cv::Scalar color(B,R,G);
     // videoframe.setTo(color);
+    for (int i=0;i<W;i++){
+        for (int j=0;j<H;j++){
+            videoframe.at<cv::Vec3b>(j,i)[0] += fB;//newval[0];
+            videoframe.at<cv::Vec3b>(j,i)[1] += fR;//newval[1];
+            videoframe.at<cv::Vec3b>(j,i)[2] += fG;//newval[2];
+        }
+    }
 }
 
 int Visualizer::update_wave_frame(){

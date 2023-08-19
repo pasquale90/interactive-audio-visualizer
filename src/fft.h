@@ -33,7 +33,7 @@ private:
     
     void hamming(int);
 
-    double avg;
+    double avg; // not currently used
 };
 
 #endif
