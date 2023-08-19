@@ -10,7 +10,7 @@ Visualizer::Visualizer(int width,int height,int sampleRate,int bufferSize){
     W=width;
     H=height;
     cv::namedWindow("Visualizer",cv::WINDOW_AUTOSIZE);
-    cv::Mat img(height,width, CV_8UC3,cv::Scalar(0,0,0));
+    cv::Mat img(height,width, CV_8UC3,cv::Scalar(255,255,255));
     videoframe = img;
 
     R=0;
@@ -41,7 +41,7 @@ Visualizer::Visualizer(int width,int height,int sampleRate,int bufferSize){
     buffersPerFrame=(SR/buffer_size)/fps;
     std::cout<<"buffersPerFrame "<<buffersPerFrame<<std::endl;
 
-    sp=new Spetrogram(buffer_size,buffersPerFrame,H);
+    sp=new Spectrogram(buffer_size,buffersPerFrame,H);
 }
 
 Visualizer::Visualizer(){
@@ -53,7 +53,7 @@ Visualizer::~Visualizer(){
     
     cv::destroyWindow("Visualizer");  
     videoframe.release();
-    sp->~Spetrogram();  
+    sp->~Spectrogram();  
     delete[] dft;
 }
 
@@ -138,7 +138,7 @@ int Visualizer::update_BG_frame(){
         std::cout << "\n Image not created. You have done something wrong. \n";
         return 0;    // Unsuccessful.
     }
-    // change_BG_color();
+    change_BG_color();
     return 1;
 }
 
@@ -183,7 +183,7 @@ void Visualizer::change_BG_color(){
         }else B-=incrB;
     }
     cv::Scalar color(B,R,G);
-    videoframe.setTo(color);
+    // videoframe.setTo(color);
 }
 
 int Visualizer::update_wave_frame(){
@@ -233,12 +233,13 @@ int Visualizer::update_wave_frame(){
 int Visualizer::update_spectrogram(double *in){
     // dft=
     sp->computeFFT(dft);
+    // sp->new_approach(dft);
     for (int i=0;i<H;i++){
         int f_y_trans=i;
         // std::cout<<"videoframe[y:"<<f_y_trans<<"][x:"<<f_x_trans<<"]="<<dft[i]<<"-------------->*255="<<(int)(dft[i]*255)<<" made "<<(int)(dft[i]*255)%255<<std::endl;
-        videoframe.at<cv::Vec3b>(f_y_trans,f_x_trans)[0] = (int)(dft[i]*255)%255;//newval[0];
-        videoframe.at<cv::Vec3b>(f_y_trans,f_x_trans)[1] = (int)(dft[i]*255)%255;//newval[1];
-        videoframe.at<cv::Vec3b>(f_y_trans,f_x_trans)[2] = (int)(dft[i]*255)%255;//newval[2];
+        videoframe.at<cv::Vec3b>(f_y_trans,f_x_trans)[0] = (int)(dft[i]*255)%255;//newval[0]; *0.7
+        videoframe.at<cv::Vec3b>(f_y_trans,f_x_trans)[1] = (int)(dft[i]*255)%255;//newval[1]; *0.3
+        videoframe.at<cv::Vec3b>(f_y_trans,f_x_trans)[2] = (int)(dft[i]*255)%255;//newval[2]; *0.2
     }
     f_x_trans++;
     f_x_trans%=W;

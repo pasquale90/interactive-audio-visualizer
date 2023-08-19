@@ -9,12 +9,14 @@
 
 #define PI 3.14159
 
-class Spetrogram{
+class Spectrogram{
 public:
-    Spetrogram();
-    Spetrogram(int,int,int);
-    ~Spetrogram();
+    Spectrogram();
+    Spectrogram(int,int,int);
+    ~Spectrogram();
     double* computeFFT(double*);
+        void new_approach(double*);
+
     void prepare_spectrogram(int,double*);
     
 private:
@@ -31,6 +33,7 @@ private:
     
     void hamming(int);
 
+    double avg;
 };
 
 #endif

@@ -17,6 +17,7 @@ This project is intented to be demonstrated in the [Researcher's Night Greece 20
 - responceTime => 1000 miliseconds / 173 chunks/second = 5.08 milliseconds 
 
 #### camera:
+- (25 fps) responceTime => 1000 miliseconds / 25 fps = 40 miliseconds
 - (30 fps) responceTime => 1000 miliseconds / 30 fps = ~33.3 miliseconds
 - (60 fps) responceTime => 1000 miliseconds / 60 fps = ~16.7 miliseconds
 
@@ -35,6 +36,20 @@ This project is intented to be demonstrated in the [Researcher's Night Greece 20
 -- frame analysis time = ~ 7 ms
 -- user input proccesing = ??
 -- user interaction visualization = ??
+
+#### fft_analysis
+fft is calculated once per frame and each audio buffer occured up till then is appended to the fft input signal to increase the amount of data.
+-- with fps=25, we get frame updates once in every 7 audio buffers per frame (40 ms /5.08 ms=7.87 buffers/frame)
+-- or simpy 173(chunks/second)/25(frames/second)=~6.92 audio buffers per frame 
+- buffersPerFrame = 7 
+-- ==> audioSamplesPerFrame = 1792                      //----> audioSamplesPerFrame = 7 (buffers) *256 (samples / buffer)
+
+fft spectral analysis
+--- FFTbins = 896                                       //----> 1792 samples / 2 
+--- HzPerBin =~ 24.6 Hz per bin                         // 44100/2 (nyq freq range) / 896 (fftbin)
+-- ==> audioSamplesPerFrame = 1792                      //----> audioSamplesPerFrame = 7 (buffers) *256 (samples / buffer)
+
+
 
 
 

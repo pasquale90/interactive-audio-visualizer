@@ -29,8 +29,8 @@ echo ${sudopass} | sudo -S -k nohup ${startJack_command} &> logs/audioServer.log
 
 sleep 2
 
-# echo ${sudopass} | sudo -S -k ./test ${sample_rate} ${buffer_size} &> logs/audio.log &
-echo ${sudopass} | sudo -S -k ./test ${sample_rate} ${buffer_size} 
+echo ${sudopass} | sudo -S -k ./test ${sample_rate} ${buffer_size} &> logs/audio.log &
+# echo ${sudopass} | sudo -S -k ./test ${sample_rate} ${buffer_size} 
 
 echo "Application is running."
 echo -e "Run \n\t$ bash stop.sh \nto stop it."

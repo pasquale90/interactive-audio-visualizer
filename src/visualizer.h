@@ -50,7 +50,7 @@ private:
     int bufferCount;
     int buffersPerFrame;
 
-    Spetrogram *sp;
+    Spectrogram *sp;
 };
 
 
