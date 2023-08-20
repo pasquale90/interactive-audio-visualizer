@@ -13,7 +13,7 @@
 
 class Visualizer{
 public:
-    Visualizer(int,int,int,int);
+    Visualizer(int,int,int,int,int);
     Visualizer();
     ~Visualizer();
     int stream_frames(double* in,bool isBeat); //
@@ -49,9 +49,10 @@ private:
     void change_BG_color();
     int bufferCount;
     int buffersPerFrame;
-
+    
     Spectrogram *sp;
     int beatCount;
+    
 };
 
 

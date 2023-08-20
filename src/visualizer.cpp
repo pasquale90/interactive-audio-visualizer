@@ -1,10 +1,10 @@
 #include "visualizer.h"
 
-Visualizer::Visualizer(int width,int height,int sampleRate,int bufferSize){
-    W=width;
-    H=height;
+Visualizer::Visualizer(int width,int height,int sampleRate,int bufferSize, int fps) : W(width), H(height), SR(sampleRate), buffer_size(bufferSize), fps(fps){
+    // W=width;
+    // H=height;
     cv::namedWindow("Visualizer",cv::WINDOW_AUTOSIZE);
-    cv::Mat img(height,width, CV_8UC3,cv::Scalar(255,255,255));
+    cv::Mat img(H,W, CV_8UC3,cv::Scalar(255,255,255));
     videoframe = img;
 
     R=0;
@@ -24,19 +24,16 @@ Visualizer::Visualizer(int width,int height,int sampleRate,int bufferSize){
 
     f_x_trans=0; // the x transition for the spectrogram
 
-    fps=30;
     bufferCount=0;
-    buffer_size=bufferSize;
-    SR=sampleRate;
+    // buffer_size=bufferSize;
+    // SR=sampleRate;
     
     dft=new double[H];
     
-    buffersPerFrame=(SR/buffer_size)/fps;
+    buffersPerFrame=std::ceil((SR/buffer_size)/(double)fps);
     std::cout<<"buffersPerFrame "<<buffersPerFrame<<std::endl;
 
-
     sp=new Spectrogram(buffer_size,buffersPerFrame,H);
-    
     beatCount=0;
 }
 

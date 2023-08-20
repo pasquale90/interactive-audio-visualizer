@@ -49,7 +49,7 @@ int main(int argc,char **argv){
     std::cout<<"BUFFER_SIZE = "<<BUFFER_SIZE<<std::endl;
 
     bt = new Beatracker(BUFFER_SIZE);
-    vs=new Visualizer(WIDTH,HEIGHT,SAMPLE_RATE,BUFFER_SIZE);    
+    vs=new Visualizer(WIDTH,HEIGHT,SAMPLE_RATE,BUFFER_SIZE,FPS);    
 
     const char* serverName=NULL;
     const char* clientName="myAudioStream"; 
