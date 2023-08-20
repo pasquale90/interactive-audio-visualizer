@@ -28,7 +28,6 @@ Spectrogram::Spectrogram(int bufferSize, int buffersPerFrame, int fheight) :  bu
   fft_out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * height);
   std::cout<<"Spetrogram initialized with buffer size "<<buffer_size<<" and height "<<height<<std::endl;
 
-  avgw=0;
 }
 
 Spectrogram::~Spectrogram(){
@@ -60,7 +59,6 @@ void Spectrogram::prepare_spectrogram(int buffCount,double *signal){
     // std::cout<<" i "<<i<<" ctr "<<ctr<<std::endl;
     fft_in[i][0]=signal[ctr]*hamming_window[i]; // (0.54 - (0.46 * cos( 2 * PI * (i / ((buffer_size - 1) * 1.0)))));
     fft_in[i][1]=0;
-    avgw+=fft_in[i][0];
     
     ctr++;   
 
