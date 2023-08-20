@@ -1,11 +1,5 @@
 #include "visualizer.h"
 
-// void* Visualizer::visualize(void* args){
-//     static_cast<Visualizer*>(args)->stream_frames();
-//     return NULL;   
-//     // return ((Visualizer *)args)->stream_frames(in);
-// }
-
 Visualizer::Visualizer(int width,int height,int sampleRate,int bufferSize){
     W=width;
     H=height;
@@ -24,9 +18,6 @@ Visualizer::Visualizer(int width,int height,int sampleRate,int bufferSize){
     ascG=true;
     ascB=true;
     
-    dft=new double[H];
-    
-    std::deque<double> wave(width*redxtrans);
     x_trans=0;
     ascX=true;
     redxtrans=1;
@@ -38,8 +29,11 @@ Visualizer::Visualizer(int width,int height,int sampleRate,int bufferSize){
     buffer_size=bufferSize;
     SR=sampleRate;
     
+    dft=new double[H];
+    
     buffersPerFrame=(SR/buffer_size)/fps;
     std::cout<<"buffersPerFrame "<<buffersPerFrame<<std::endl;
+
 
     sp=new Spectrogram(buffer_size,buffersPerFrame,H);
     
@@ -93,7 +87,7 @@ int Visualizer::stream_frames(double* in,bool isBeat){
 
     //start preparing for the next frame
     sp->prepare_spectrogram(bufferCount,in);
-
+    // prepare_waveform(in); --> addressed to the next update
     
     if (isBeat){
         // if (incrR<17) incrR+=7;
@@ -118,12 +112,13 @@ int Visualizer::stream_frames(double* in,bool isBeat){
         // incrB=tincrB;   
     }
     
-    update_wave_frame();
 
     if (bufferCount==buffersPerFrame-1){ // last frame to process before showing 
     //do something special using the last buffer?? --> compute the FFT for the concatenated signal
         // std::cout<<"computes the FFT"<<std::endl;
-        update_spectrogram(in);
+        update_spectrogram();
+        update_wave_frame();
+
     }
 
     bufferCount++;
@@ -212,14 +207,14 @@ void Visualizer::change_BG_color(){
         }
     }
     beatCount++;
-    beatCount%=9;
+    beatCount%=8;
 }
 
 int Visualizer::update_wave_frame(){
-    
-// KEEP ONLY A FEW
+/* addressed for the next update 
+    // KEEP ONLY A FEW
     int ctr=buffer_size; // counter to iterate over buffer
-    int hop=73;// buffer stride
+    int hop=1;// buffer stride
 
     while(ctr>0) {
         int idx=buffer_size-ctr;
@@ -256,26 +251,24 @@ int Visualizer::update_wave_frame(){
         ctr-=hop;
     }
     return 0;
+*/
 }
 
 
-int Visualizer::update_spectrogram(double *in){
+int Visualizer::update_spectrogram(){
     // dft=
     double minf,maxf;
     sp->computeFFT(dft,minf,maxf);
     // sp->new_approach(dft);
     for (int i=0;i<H;i++){
         int f_y_trans=i;
-
         //normalize min max in range [0,1]
         dft[i]=(dft[i]-minf)/(maxf-minf);
-        
+
         // std::cout<<"videoframe[y:"<<f_y_trans<<"][x:"<<f_x_trans<<"]="<<dft[i]<<"-------------->*255="<<(int)(dft[i]*255)<<" made "<<(int)(dft[i]*255)%255<<std::endl;
         // videoframe.at<cv::Vec3b>(f_y_trans,f_x_trans)[0] = (int)(dft[i]*255)%255;//newval[0]; *0.7
         // videoframe.at<cv::Vec3b>(f_y_trans,f_x_trans)[1] = (int)(dft[i]*255)%255;//newval[1]; *0.3
         // videoframe.at<cv::Vec3b>(f_y_trans,f_x_trans)[2] = (int)(dft[i]*255)%255;//newval[2]; *0.2
-        
-        
 
         if (i>H/2-H/6 && i<H/2+H/6)
             videoframe.at<cv::Vec3b>(f_y_trans,f_x_trans)[0] = (int)(dft[i]*255)%255;//newval[0]; *0.7
@@ -287,47 +280,5 @@ int Visualizer::update_spectrogram(double *in){
     }
     f_x_trans++;
     f_x_trans%=W;
-    
-//append to dft
-    // if(bufferCount%buffersPerFrame==1)
-    //     dft=NULL;   
-
-    // if (!dft){
-    //     dft=new float[buffer_size];
-    //     for(int i=0;i<buffer_size;i++)
-    //         // *(dft+i)=(fft[i]/2+0.5) * (MAX-MIN) + MIN; //fft[i]            
-    //         *(dft+i)=fft[i];
-            
-    // }else{
-    //     // realloc
-    //     float* temp = new float[buffer_size];
-    //     std::copy(dft, dft + buffer_size, temp); // Suggested by comments from Nick and Bojan
-    //     delete [] dft;
-    //     dft = temp;
-    // }
-
-// normalize fft in height
-    // float* temp2=dft;
-    // for (int i=0;i<buffer_size;i++){
-    //     // *(temp2+i)=(fft[i]/2+0.5) * (H-0) + 0;
-    //     *(temp2+i)=(fft[i]/2+0.5) * (H-0) + 0;
-    // }
-
-//visualize fft
-    // int numBuffer=bufferCount%buffersPerFrame;
-    // // if(numBuffer!=0){
-    // int y=H/2;
-    // // for (int j=0;j<buffer_size;j++){ //numBuffer*buffer_size
-    // //     y=H/2 ;//fft[j];
-    //     for (int x=0;x<W/5;x++){
-
-    //         std::cout<<"x "<<x<<" y "<<y<<std::endl;
-    //         videoframe.at<cv::Vec3b>(y,x)[0] = 0;//newval[0];
-    //         videoframe.at<cv::Vec3b>(y,x)[1] = 255;//newval[1];
-    //         videoframe.at<cv::Vec3b>(y,x)[2] = 0;//newval[2];
-    //     }
-
-    
     return 1;
-    // std::cout<<"AFTER:dft[0]:"<<dft[0]<<" &dft:"<<&dft<<std::endl;
 }

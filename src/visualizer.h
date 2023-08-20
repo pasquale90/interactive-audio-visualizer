@@ -28,11 +28,11 @@ private:
 
     int update_BG_frame(); // remove this isDownBeat dependency
     int update_wave_frame();
-    int update_spectrogram(double*);
+    int update_spectrogram();
 
     double *dft;
     double *buffer;
-    std::queue<double> wave;
+
     int x_trans;
     int redxtrans; //reduces the time that x transition changes (used for the waveform)
     bool ascX;
