@@ -25,12 +25,14 @@ fi
 echo -e "\nrunning startJack_command >> \n${startJack_command}"
 # start_jackd
 # start_server="jackd --realtime --verbose -t 10000 -d alsa -d hw:K6 -r 16000 -p 512"
-echo ${sudopass} | sudo -S -k nohup ${startJack_command} &> logs/audioServer.log & 
+#echo ${sudopass} | sudo -S -k nohup ${startJack_command} &> logs/audioServer.log & 
+nohup ${startJack_command} &> logs/audioServer.log & 
 
 sleep 2
 
-echo ${sudopass} | sudo -S -k ./test ${sample_rate} ${buffer_size} &> logs/audio.log &
-# echo ${sudopass} | sudo -S -k ./test ${sample_rate} ${buffer_size} 
+#echo ${sudopass} | sudo -S -k ./test ${sample_rate} ${buffer_size} &> logs/audio.log &
+./test ${sample_rate} ${buffer_size} &> logs/audio.log &
+#echo ${sudopass} | sudo -S -k ./test ${sample_rate} ${buffer_size} 
 
 echo "Application is running."
 echo -e "Run \n\t$ bash stop.sh \nto stop it."
