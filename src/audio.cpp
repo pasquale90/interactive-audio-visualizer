@@ -10,16 +10,16 @@ AudioStream::AudioStream(const char* serverName,const char* clientName){
     
     server_name=serverName;
     client_name=clientName;  
-    jack_options_t options = JackSessionID;//(JackSessionID|JackServerName|JackNoStartServer|JackUseExactName|JackNullOption)
+    jack_options_t options = JackNoStartServer;//(JackSessionID|JackServerName|JackNoStartServer|JackUseExactName|JackNullOption)
 	jack_status_t status;
-    
+
     /* open a client connection to the JACK server */
 	client = jack_client_open (client_name, options, &status,server_name);
-
     if (status & JackNameNotUnique) {    //client name not unique, set a client name;
         client_name = jack_get_client_name(client);
         std::cerr<<"\t>>unique name "<<client_name<<" assigned to the client obj."<<std::endl;
     }
+    
 	if (client == NULL) {
         std::cerr<<"\t>>jack_client_open() failed, status = "<<status<<std::endl;
         if (status & JackServerFailed) {
@@ -43,6 +43,7 @@ void AudioStream::AudioRouting(){
             std::cerr<<"\t>>Callback operation failed"<<std::endl;
     }
 
+std::cout<<"DEBUG: jack_set_process_callback"<<std::endl;
     //prevent failure
     jack_on_shutdown(client,&jack_shutdown,0);
 
@@ -50,6 +51,8 @@ void AudioStream::AudioRouting(){
     input_port = jack_port_register(client,"inputPort",JACK_DEFAULT_AUDIO_TYPE,JackPortIsInput, 0);
     output_port_left=jack_port_register (client,"leftPort",JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
     output_port_right=jack_port_register (client,"rightPort",JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
+
+std::cout<<"DEBUG: jack_port_register"<<std::endl;
     
     if ((input_port == NULL)) {
         std::cerr<<jack_port_name(input_port)<<"\t>> ERROR : no more JACK ports available"<<std::endl;
@@ -66,7 +69,7 @@ void AudioStream::AudioRouting(){
         std::cerr<<"\t>>cannot activate client {"<<client_name<<"}"<<std::endl;
         exit (1);
     }
-
+std::cout<<"DEBUG: jack_activate"<<std::endl;
     /*Getting acces to physical source ports*/
     fromdevice = jack_get_ports (client, NULL, NULL,JackPortIsPhysical|JackPortIsOutput);
     if (fromdevice == NULL) {

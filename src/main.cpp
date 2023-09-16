@@ -20,6 +20,7 @@ void audioBufferCallback(double* in){
     
     // updateFrame(in,NULL);
     bool isBeat=bt->isBeat(in);
+    // std::cout<<"isBeat=bt->isBeat(in);"<<std::endl; 
     
 // Onset detection?
     // bool isDownBeat=bt->isDownbeat();
@@ -35,6 +36,7 @@ void audioBufferCallback(double* in){
     // }
 
     vs->stream_frames(in,isBeat);
+    // std::cout<<"vs->stream_frames(in,isBeat);"<<std::endl; 
 }
 
 int main(int argc,char **argv){
@@ -48,12 +50,14 @@ int main(int argc,char **argv){
     std::cout<<"SAMPLE RATE = "<<SAMPLE_RATE<<std::endl;
     std::cout<<"BUFFER_SIZE = "<<BUFFER_SIZE<<std::endl;
 
-    bt = new Beatracker(BUFFER_SIZE);
-    vs=new Visualizer(WIDTH,HEIGHT,SAMPLE_RATE,BUFFER_SIZE,FPS);    
-
     const char* serverName=NULL;
     const char* clientName="myAudioStream"; 
     AudioStream *myAudioStrem = new AudioStream(serverName,clientName); //NULL,"myAudioStream"
+    
+    bt = new Beatracker(BUFFER_SIZE);
+    vs=new Visualizer(WIDTH,HEIGHT,SAMPLE_RATE,BUFFER_SIZE,FPS);    
+
+
 
     std::cout<<"\n\n";
     std::cout<<"Hello Audio Stream"<<std::endl;

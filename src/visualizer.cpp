@@ -31,7 +31,8 @@ Visualizer::Visualizer(int width,int height,int sampleRate,int bufferSize, int f
     dft=new double[H];
     
     buffersPerFrame=std::ceil((SR/buffer_size)/(double)fps);
-    std::cout<<"buffersPerFrame "<<buffersPerFrame<<std::endl;
+    
+    wf=new Waveform(buffer_size,buffersPerFrame,W);
 
     sp=new Spectrogram(buffer_size,buffersPerFrame,H);
     beatCount=0;
@@ -42,10 +43,9 @@ Visualizer::Visualizer(){
 }
 
 Visualizer::~Visualizer(){
-    
-    
     cv::destroyWindow("Visualizer");  
     videoframe.release();
+    wf->~Waveform();
     sp->~Spectrogram();  
     delete[] dft;
 }
@@ -83,8 +83,9 @@ int Visualizer::stream_frames(double* in,bool isBeat){
     }
 
     //start preparing for the next frame
+    // wf->prepare_waveform(bufferCount,in); //--> addressed to the next update
     sp->prepare_spectrogram(bufferCount,in);
-    // prepare_waveform(in); --> addressed to the next update
+    
     
     if (isBeat){
         // if (incrR<17) incrR+=7;
@@ -113,9 +114,8 @@ int Visualizer::stream_frames(double* in,bool isBeat){
     if (bufferCount==buffersPerFrame-1){ // last frame to process before showing 
     //do something special using the last buffer?? --> compute the FFT for the concatenated signal
         // std::cout<<"computes the FFT"<<std::endl;
+        // update_wave_frame();
         update_spectrogram();
-        update_wave_frame();
-
     }
 
     bufferCount++;
@@ -208,6 +208,70 @@ void Visualizer::change_BG_color(){
 }
 
 int Visualizer::update_wave_frame(){
+
+    double minw,maxw;
+    double *wave=wf->getWaveform(minw,maxw);;
+    double Amplification=H/32;
+    // int wavelen=wf->getWaveLen();
+    std::cout<<"minw "<<minw<<" maxw "<<maxw<<std::endl;
+
+    const double mean = maxw-minw;
+    const double stddev = (double)H/5;
+    std::default_random_engine generator;
+    std::normal_distribution<double> dist(mean, stddev);
+
+    // std::cout<<"wavelen "<<wavelen<<", width "<<W<<std::endl;
+    ///*
+    for (int i=1;i<buffersPerFrame;i++){
+        // Define random generator with Gaussian distribution
+        
+        // std::cout<<"wave[i]-minw "<<wave[i]<<"-"<<minw<<"="<<wave[i]-minw<<std::endl;
+        // wave[i]=(double)2.0*(wave[i]-minw)/(maxw-minw)-1;
+        // int y_trans=(H/2)+wave[i]*(H/2)*2;//(wave.front()/2)+0.5*(H/2);
+        // std::cout<<"Visualizer::Frame (x,y) ("<<x_trans<<","<<y_trans<<") == wave["<<i<<"] "<<wave[i]<<std::endl;
+
+        //replacing the above code - calc x y from <buffersPerFrame> mean-waveform samples
+        // double mean=wave[i];
+        
+        // std::cout<<"wave[i] before "<<wave[i]<<" ";
+        wave[i]=(double)2.0*(wave[i]-minw)/(maxw-minw)-1;
+        // std::cout<<" after "<<wave[i]<<std::endl;
+        
+        int y_trans=wave[i]*Amplification + dist(generator);//(wave.front()/2)+0.5*(H/2);
+        std::cout<<"is added?? "<<wave[i]*Amplification<<"!="<<y_trans<<" ??"<<std::endl;
+        // y_trans=abs(y_trans);
+
+        // assert (y_trans < H/2);
+        if (y_trans > H/2) y_trans = H/2-1;
+        if (y_trans < 0) y_trans = 0;
+
+        int start,end;
+        if (y_trans < 0){
+            start=H/2+y_trans;
+            end=H/2-y_trans;
+        }else{
+            start=H/2-y_trans;
+            end=H/2+y_trans;
+        }
+
+        std::cout<<" at x:"<<x_trans << " from H/2:"<<H/2<<" up to y: "<<y_trans<<std::endl;
+        std::cout<<" start "<<start<<" end "<<end<<std::endl;
+        for (int ytr = start; ytr < end ; ytr++ ){
+            std::cout<<" > x,y "<<x_trans<<","<<ytr<<std::endl;
+            videoframe.at<cv::Vec3b>(ytr,x_trans)[0] = 255;//newval[0];
+            videoframe.at<cv::Vec3b>(ytr,x_trans)[1] = 255;//newval[1];
+            videoframe.at<cv::Vec3b>(ytr,x_trans)[2] = 255;//newval[2];
+        }
+        x_trans++;
+        if(x_trans==W) x_trans=0;
+        // videoframe.at<cv::Vec3b>(y2,x_trans)[0] = 255;//newval[0];
+        // videoframe.at<cv::Vec3b>(y2,x_trans)[1] = 255;//newval[1];
+        // videoframe.at<cv::Vec3b>(y2,x_trans)[2] = 255;//newval[2];
+        // x_trans++;
+        // if(x_trans==W) x_trans=0;
+    }
+    //*/
+
 /* addressed for the next update 
     // KEEP ONLY A FEW
     int ctr=buffer_size; // counter to iterate over buffer

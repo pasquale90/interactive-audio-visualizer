@@ -1,13 +1,13 @@
 CC :=g++ -std=c++11 #gcc -std=c99 
 
 OPTIONS :=-g -pedantic -Wall -Wextra -Wno-error
-OBJECTS :=build/onset.o build/btrack.o build/btracker.o build/visualizer.o build/fft.o build/kissfft.o build/audio.o build/main.o
+OBJECTS :=build/onset.o build/btrack.o build/btracker.o build/raw.o build/visualizer.o build/fft.o build/kissfft.o build/audio.o build/main.o
 
 JACK :=-L/usr/lib/x86_64-linux-gnu -ljack -ljackserver # JACK := -L/usr/lib64 -ljack -ljackserver
 FFT :=-lfftw3 -lm
 KISSFFT :=-Ilibs/BTrack/libs/kiss_fft130
 
-LOPENCV =-L/usr/local/lib -lopencv_core -lopencv_highgui -lopencv_videoio -lopencv_video
+LOPENCV =-L/usr/local/lib -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_videoio -lopencv_video
 IOPENCV=-I/usr/local/include/opencv4
 
 LIBSAMPLERATE :=-I/usr/local/include -lsamplerate #-L/usr/lib/x86_64-linux-gnu
@@ -30,6 +30,9 @@ build/kissfft.o: libs/BTrack/libs/kiss_fft130/kiss_fft.cpp #libs/BTrack/libs/kis
 
 build/visualizer.o: src/visualizer.h src/visualizer.cpp /usr/local/include/opencv4/opencv2/opencv.hpp /usr/include/opencv4/opencv2/core/mat.hpp /usr/include/opencv4/opencv2/core.hpp
 	$(CC) $(OPTIONS) -c src/visualizer.cpp -I/usr/local/include $(FFT) $(IOPENCV) -o build/visualizer.o $(LOPENCV)
+
+build/raw.o: src/raw.h src/raw.cpp
+	$(CC) $(OPTIONS) -c src/raw.cpp -o build/raw.o
 
 build/fft.o: src/fft.h src/fft.cpp #/usr/local/include/fftw3.h # /usr/include/jack/jack.h /usr/include/jack/types.h
 	$(CC) $(OPTIONS) -c src/fft.cpp -I/usr/local/include $(FFT) -o build/fft.o  

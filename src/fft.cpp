@@ -10,15 +10,7 @@ Spectrogram::Spectrogram(){
 }
 
 Spectrogram::Spectrogram(int bufferSize, int buffersPerFrame, int fheight) :  buffer_size(bufferSize), buffers_per_frame(buffersPerFrame) ,height(fheight) {
-  
-  // fft_in=new fftw_complex[buffer_size];
-  // fft_out=new fftw_complex[buffer_size];
-  // fftw_complex fft_in[buffer_size];
-  // fftw_complex fft_out[buffer_size];
-
-  // Create a hamming window of appropriate length
-  
-  
+    
   FFTcol = new double[height];
   siglen = buffer_size*buffers_per_frame;
   

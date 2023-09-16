@@ -2,6 +2,7 @@
 #define VISUALIZER_H
 
 // #include "audio_visualizer.h"
+#include "raw.h"
 #include "fft.h"
 #include <opencv2/opencv.hpp> //OpenCV header to use VideoCapture class//
 #include <opencv2/imgproc/imgproc.hpp>
@@ -9,6 +10,7 @@
 #include <opencv2/core/mat.hpp>
 #include "opencv2/highgui/highgui.hpp"
 #include <queue>
+#include <random>
 
 
 class Visualizer{
@@ -50,6 +52,8 @@ private:
     int bufferCount;
     int buffersPerFrame;
     
+    Waveform *wf;
+        
     Spectrogram *sp;
     int beatCount;
     
