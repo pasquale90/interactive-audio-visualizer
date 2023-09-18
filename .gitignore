@@ -4,3 +4,8 @@
 temp
 media
 logs/*
+build/*
+external/*
+libs/*
+test
+./test
