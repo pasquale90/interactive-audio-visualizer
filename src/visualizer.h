@@ -56,7 +56,7 @@ private:
         
     Spectrogram *sp;
     int beatCount;
-    
+
 };
 
 

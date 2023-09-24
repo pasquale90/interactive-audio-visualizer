@@ -27,16 +27,19 @@ void audioBufferCallback(double* in){
     // bt.getFFT();
     // bool isOnset=bt->isOnset(in);
     
-    // std::cout<<"Current tempo estimate "<<bt.getCurrTempoEstimate()<<std::endl;
+    // std::cout<<"Current tempo estimate "<<bt->getCurrTempoEstimate()<<std::endl;
     // if (isBeat)
     // {
     //     // do something on the beat
-    //     std::cout<<temp%4<<" Beat! ---------> "<<isDownBeat<<std::endl;
+    //     std::cout<<temp%4<<" Beat! "<<std::endl;
+    //     // std::cout<<temp%4<<" Beat! ---------> "<<isDownBeat<<std::endl;
     //     temp++;
     // }
 
+    
+    // std::cout<<"streamin frames"<<std::endl;
     vs->stream_frames(in,isBeat);
-    // std::cout<<"vs->stream_frames(in,isBeat);"<<std::endl; 
+    std::cout<<"vs->stream_frames(in,isBeat);"<<std::endl; 
 }
 
 int main(int argc,char **argv){
@@ -73,5 +76,6 @@ int main(int argc,char **argv){
    
     bt->~Beatracker();
     vs->~Visualizer();
+    myAudioStrem->~AudioStream();
     return 0;
 }

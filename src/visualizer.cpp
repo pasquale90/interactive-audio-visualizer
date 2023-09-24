@@ -3,7 +3,8 @@
 Visualizer::Visualizer(int width,int height,int sampleRate,int bufferSize, int fps) : W(width), H(height), SR(sampleRate), buffer_size(bufferSize), fps(fps){
     // W=width;
     // H=height;
-    cv::namedWindow("Visualizer",cv::WINDOW_AUTOSIZE);
+    // cv::setUIBackend("GTK3");
+    cv::namedWindow("Visualizer",cv::WINDOW_AUTOSIZE); //cv::WINDOW_FREERATIO ); //WINDOW_KEEPRATIO); //
     cv::Mat img(H,W, CV_8UC3,cv::Scalar(255,255,255));
     videoframe = img;
 
@@ -36,6 +37,7 @@ Visualizer::Visualizer(int width,int height,int sampleRate,int bufferSize, int f
 
     sp=new Spectrogram(buffer_size,buffersPerFrame,H);
     beatCount=0;
+    // videoframe = cv::imread("/home/devaudio/Pictures/pic.png",cv::IMREAD_GRAYSCALE);
 }
 
 Visualizer::Visualizer(){
@@ -65,6 +67,8 @@ int Visualizer::stream_frames(double* in,bool isBeat){
 
         showFrame();
 
+        // std::cout<<videoframe.at<cv::Vec3b>(0,0)<<std::endl;
+
         //check white pixels
         // int white_pixel_counter=0;
         // for (int i=0;i<W;i++){
@@ -84,7 +88,7 @@ int Visualizer::stream_frames(double* in,bool isBeat){
 
     //start preparing for the next frame
     // wf->prepare_waveform(bufferCount,in); //--> addressed to the next update
-    sp->prepare_spectrogram(bufferCount,in);
+    // sp->prepare_spectrogram(bufferCount,in);
     
     
     if (isBeat){
@@ -121,7 +125,6 @@ int Visualizer::stream_frames(double* in,bool isBeat){
     bufferCount++;
     bufferCount%=buffersPerFrame;
 
-         
     return 1;
 }
 
