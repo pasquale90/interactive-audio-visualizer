@@ -4,32 +4,31 @@ OPTIONS :=-g -pedantic -Wall -Wextra -Wno-error
 OBJECTS :=build/onset.o build/btrack.o build/btracker.o build/raw.o build/visualizer.o build/fft.o build/kissfft.o build/audio.o build/main.o
 
 JACK :=-L/usr/lib/x86_64-linux-gnu -ljack -ljackserver # JACK := -L/usr/lib64 -ljack -ljackserver
-FFT :=-lfftw3 -lm
-KISSFFT :=-Ilibraries/BTrack/libs/kiss_fft130
+FFTW :=-Ilibraries/BTrack/libs/fftw-3.3.10 -lfftw3 -lm
 
-LOPENCV =-L/usr/local/lib -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_videoio -lopencv_video
-IOPENCV=-I/usr/local/include/opencv4
+
+LOPENCV =-L/usr/lib/x86_64-linux-gnu -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_videoio -lopencv_video
+IOPENCV=-I/usr/include/opencv4
 
 LIBSAMPLERATE :=-I/usr/local/include -lsamplerate #-L/usr/lib/x86_64-linux-gnu
 
-BTRACK_kiss :=$(KISSFFT) -DUSE_KISS_FFT
-BTRACK_fftw3 :=$(FFT) -DUSE_FFTW 
+BTRACK_fftw3 :=$(FFTW) -DUSE_FFTW 
 BTRACK :=-Ilibraries/BTrack/src $(LIBSAMPLERATE) $(BTRACK_fftw3) 
 
 test: $(OBJECTS) #runnable
 	$(CC) $(OPTIONS) $(OBJECTS) $(JACK) $(FFT) $(LOPENCV) $(BTRACK) -o test
 
 build/main.o: src/main.cpp # /usr/include/jack/jack.h /usr/include/jack/types.h
-	$(CC) $(OPTIONS) -c src/main.cpp -I/usr/include $(JACK) $(FFT) $(IOPENCV) $(BTRACK) -o build/main.o
+	$(CC) $(OPTIONS) -c src/main.cpp $(JACK) $(FFT) $(IOPENCV) $(BTRACK) -o build/main.o
 
 build/audio.o: src/audio.h src/audio.h #/usr/include/jack/jack.h /usr/include/jack/types.h
-	$(CC) $(OPTIONS) -c src/audio.cpp -I/usr/include $(JACK) -o build/audio.o
+	$(CC) $(OPTIONS) -c src/audio.cpp $(JACK) -o build/audio.o
 
-build/kissfft.o: libraries/BTrack/libs/kiss_fft130/kiss_fft.cpp #libraries/BTrack/libs/kiss_fft130/kiss_fft.h libraries/BTrack/libs/kiss_fft130/kissfft.hh #libraries/BTrack/libs/kiss_fft130/_kiss_fft_guts.h
-	$(CC) $(OPTIONS) -c libraries/BTrack/libs/kiss_fft130/kiss_fft.cpp $(FFT) $(KISSFFT) -o build/kissfft.o
+build/kissfft.o: libraries/BTrack/libs/kiss_fft130/kiss_fft.c #libraries/BTrack/libs/kiss_fft130/kiss_fft.h libraries/BTrack/libs/kiss_fft130/kissfft.hh #libraries/BTrack/libs/kiss_fft130/_kiss_fft_guts.h
+	$(CC) $(OPTIONS) -c libraries/BTrack/libs/kiss_fft130/kiss_fft.c $(FFTW) -o build/kissfft.o
 
-build/visualizer.o: src/visualizer.h src/visualizer.cpp /usr/local/include/opencv4/opencv2/opencv.hpp /usr/include/opencv4/opencv2/core/mat.hpp /usr/include/opencv4/opencv2/core.hpp
-	$(CC) $(OPTIONS) -c src/visualizer.cpp -I/usr/local/include $(FFT) $(IOPENCV) -o build/visualizer.o $(LOPENCV)
+build/visualizer.o: src/visualizer.h src/visualizer.cpp 
+	$(CC) $(OPTIONS) -c src/visualizer.cpp $(FFT) $(IOPENCV) -o build/visualizer.o $(LOPENCV)
 
 build/raw.o: src/raw.h src/raw.cpp
 	$(CC) $(OPTIONS) -c src/raw.cpp -o build/raw.o

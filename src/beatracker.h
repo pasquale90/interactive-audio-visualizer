@@ -28,7 +28,7 @@ public:
     bool isDownbeat();
 
     float getCurrTempoEstimate();
-    void getFFT();
+    // void getFFT();
 };
 
 #endif
