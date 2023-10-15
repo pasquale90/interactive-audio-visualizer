@@ -19,6 +19,9 @@ public:
     void setConfig(int);
     bool get_signal(int&);
 
+    void _simple_definition(int& freq);
+    void _simple_freqRange_palindrome(int& freq);
+    void turn_Image_into_Sound(int& freq);
 
 private:
 
