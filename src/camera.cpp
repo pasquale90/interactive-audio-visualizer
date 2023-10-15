@@ -14,48 +14,8 @@ Camera::Camera(const Config& cfg):
     std::cout<<"fps "<<fps<<std::endl;
     initialize_camera();
 
-    // cv::Mat img(camH,camW, CV_8UC3);
-    // cv::Mat frame(camH,camW, CV_8UC3);
-    // frame=img.clone();
-
-    // frameCount=0;
-
     cv::Mat frame(camH,camW,CV_8UC3);
-    // cv::namedWindow("Window");
-
-    // frameToggle=0;
-    // // frameToggle=1;// (1);
-    // toggle=false;
-    // ftog=false;
-    // ftog = ATOMIC_VAR_INIT(false);
     frameToggle=false;
-}
-
-
-Camera::Camera(int camResW,int camResH, int camfps):
-                                camW(camResW), 
-                                camH(camResH), 
-                                fps(camfps){
-    std::cout<<"camW "<<camW<<std::endl;
-    std::cout<<"camH "<<camH<<std::endl;
-    std::cout<<"fps "<<fps<<std::endl;
-    initialize_camera();
-
-    // cv::Mat img(camH,camW, CV_8UC3);
-    // cv::Mat frame(camH,camW, CV_8UC3);
-    // frame=img.clone();
-
-    // frameCount=0;
-
-    cv::Mat frame(camH,camW,CV_8UC3);
-    cv::namedWindow("Window");
-
-    frameToggle=0;
-    // // frameToggle=1;// (1);
-    // toggle=false;
-    // // ftog=false;
-    // // ftog = ATOMIC_VAR_INIT(false);
-    // frameToggle.store(0);
 }
 
 Camera::Camera(){
@@ -105,7 +65,6 @@ void Camera::initialize_camera(){
     {
         std::cerr << "***Could not initialize capturing...***\n";
     }else std::cout<<"Camera initialized succesfully"<<std::endl;
-
 
 }
 

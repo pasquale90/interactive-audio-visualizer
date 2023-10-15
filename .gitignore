@@ -16,4 +16,7 @@ libraries/BTrack
 src/main copy.cpp
 src/visualizer copy*
 tests/
-src/__*
+src/__scales*
+src/__frequencies*
+src/__wavelengths*
+src/__tracking*

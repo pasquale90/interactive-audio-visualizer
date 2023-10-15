@@ -2,7 +2,7 @@
 
 
 // AudioStream myAudioStream;
-void audioBufferCallback(double *in);
+void audioBufferCallback(double*,int&);
 
 int streamAudio (jack_nframes_t nframes, void *arg){ //, float *in,void (*threading)(float *sig)
     return static_cast<AudioStream*>(arg)->streamBuffer(nframes);
@@ -31,12 +31,11 @@ AudioStream::AudioStream(const char* serverName,const char* clientName){
     if (status & JackServerStarted) {
         std::cout<<"\t>>JACK server started"<<std::endl;
     }
-//FIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX MEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+// //FIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX MEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
     sig = new Signal(512);
 }
 
 AudioStream::~AudioStream(){
-    // delete[] sig;
     sig->~Signal();
     std::cout<<"Audio stream object destructed"<<std::endl;
 
@@ -144,9 +143,9 @@ int AudioStream::streamBuffer(jack_nframes_t nframes){
 
     //out receive values from 
     jack_default_audio_sample_t *left,*right;
-    int FREQUENCY=200;
+    // int FREQUENCY=200;
 
-    // in = (double *)jack_port_get_buffer (input_port, nframes);
+    in = (double *)jack_port_get_buffer (input_port, nframes);
     // for (int i=0;i<nframes;i++){
     //     // std::cout<<in[i]<<" ";
     //     if (ma<in[i]) ma=in[i];
@@ -160,17 +159,23 @@ int AudioStream::streamBuffer(jack_nframes_t nframes){
     right= (jack_default_audio_sample_t *)jack_port_get_buffer(output_port_right, nframes);
 
     // sig->fillBuffer((double*)left,(double*)right);
-    
-    sig->prepareSine(FREQUENCY);
-    for(int i=0; i<nframes; i++ )
-	{
-		left[i] = sig->getSineL();
-		right[i] = sig->getSineL();
-	}
-    // std::memcpy (left, in, sizeof (double) *nframes);
-    // std::memcpy (right, in, sizeof (double) *nframes);
 
-    audioBufferCallback((double *)left);
+    int FREQUENCY;
+    audioBufferCallback((double *)left,FREQUENCY); //(double *)right,
+    std::cout<<"Current frequency "<<FREQUENCY<<std::endl;
+
+    std::memcpy (left, in, sizeof (double) *nframes);
+    std::memcpy (right, in, sizeof (double) *nframes);
+
+    // sig->prepareSine(FREQUENCY);
+    // for(int i=0; i<nframes; i++ )
+	// {
+	// 	left[i] = sig->getSineL();    // here we have to combine two signals : the in and the sine_tone_signal
+	// 	right[i] = sig->getSineL();
+	// }
+
+
+    
 
 //SKILL POINT get that signal from EACH DEVICE------> http://www.vttoth.com/CMS/index.php/technical-notes/68
 

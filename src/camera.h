@@ -12,7 +12,7 @@
 
 class Camera{
 public:
-    Camera(int,int,int);
+    // Camera(int,int,int);
     Camera(const Config&);
     // Camera(const Camera& camera);
     Camera();
@@ -27,18 +27,10 @@ public:
 
 private:
     std::atomic<bool> frameToggle;
-    // std::atomic<int> frameToggle;
-    // static std::atomic<bool> toggle;
-    // bool toggle;
-    
-    // void set_frame(int);
-
 
     int camW,camH,fps;
     cv::VideoCapture cap;
     
-    // int frameCount;
-    // int update_ratio=4;
     int lastframe;
     cv::Mat frame;
 
