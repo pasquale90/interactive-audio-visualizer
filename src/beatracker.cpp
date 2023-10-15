@@ -3,6 +3,8 @@
 #include <typeinfo>
 
 Beatracker::Beatracker(){
+    isdownbeat=false;
+    std::cout<<"Beatracker awaits for buffer_size initialization"<<buffer_size<<std::endl;
 }
 
 Beatracker::Beatracker(int bufferSize) :  buffer_size(bufferSize) { 
@@ -15,6 +17,11 @@ Beatracker::Beatracker(int bufferSize) :  buffer_size(bufferSize) {
 
 Beatracker::~Beatracker(){
     btracker.~BTrack();
+}
+
+void Beatracker::setConfig(const Config& cfg){
+    BTrack btracker(cfg.bufferSize/2, cfg.bufferSize);
+    std::cout<<"Beatracker initialized with buffer size "<<buffer_size<<std::endl;
 }
 
 void Beatracker::check_downbeat(double *buffer){ // assume 4 beats per bar --> actually returns true if it is the maximum energy envelope of the last 4 beats

@@ -2,6 +2,7 @@
 #define VISUALIZER_H
 
 // #include "audio_visualizer.h"
+#include "config.h"
 #include "raw.h"
 #include "fft.h"
 #include <opencv2/opencv.hpp> //OpenCV header to use VideoCapture class//
@@ -15,7 +16,8 @@
 
 class Visualizer{
 public:
-    Visualizer(int,int,int,int,int);
+    // Visualizer(int,int,int,int,int);
+    Visualizer(const Config&);
     Visualizer();
     ~Visualizer();
     int stream_frames(double* in,bool isBeat); //
@@ -23,6 +25,7 @@ public:
 
 
 private:
+    Config conf;
     int W,H;
     cv::Mat videoframe;
     void showFrame();

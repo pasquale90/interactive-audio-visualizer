@@ -2,6 +2,7 @@
 #ifndef BEATRACKER_H
 #define BEATRACKER_H
 
+#include "config.h"
 #include "BTrack.h"
 #include <cstring>
 #include <queue>
@@ -19,9 +20,10 @@ private:
 
 public:
 
-    Beatracker(); 
+    Beatracker();
     Beatracker(int);
     ~Beatracker();
+    void setConfig(const Config&);
     
     bool isBeat(double*);
     bool isOnset(double*);

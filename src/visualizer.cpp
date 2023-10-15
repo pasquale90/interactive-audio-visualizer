@@ -1,9 +1,31 @@
 #include "visualizer.h"
 
-Visualizer::Visualizer(int width,int height,int sampleRate,int bufferSize, int fps) : W(width), H(height), SR(sampleRate), buffer_size(bufferSize), fps(fps){
-    // W=width;
-    // H=height;
-    cv::namedWindow("Visualizer",cv::WINDOW_AUTOSIZE);
+// Visualizer::Visualizer(int width,int height,int sampleRate,int bufferSize, int fps) : W(width), H(height), SR(sampleRate), buffer_size(bufferSize), fps(fps){
+// Visualizer::Visualizer(const Config& config):cfg(config){
+Visualizer::Visualizer(const Config& cfg): 
+                                        W(cfg.displayW), 
+                                        H(cfg.displayH), 
+                                        SR(cfg.sampleRate), 
+                                        buffer_size(cfg.bufferSize), 
+                                        fps(cfg.fps){
+
+    // W=cfg.displayW;
+    // H=cfg.displayH;
+    // SR=cfg.sampleRate;
+    // buffer_size=cfg.bufferSize;
+    // fps=cfg.fps;
+    
+    Config conf(cfg);
+    std::cout<<&cfg<<"\n"<<&conf<<std::endl;
+    conf.display();
+    std::cout<<"Visualizer constructor "<<W<<", "<<H<<", "<<SR<<", "<<buffer_size<<", "<<fps<<std::endl;
+    // W=1024;
+    // H=512;
+    // SR=22050;
+    // buffer_size=512;
+    // fps=25;
+    
+    cv::namedWindow("Interactive Audio Visualizer",cv::WINDOW_AUTOSIZE);
     cv::Mat img(H,W, CV_8UC3,cv::Scalar(255,255,255));
     videoframe = img;
 
@@ -32,6 +54,7 @@ Visualizer::Visualizer(int width,int height,int sampleRate,int bufferSize, int f
     
     buffersPerFrame=std::ceil((SR/buffer_size)/(double)fps);
     
+    std::cout<<"Visualizer buffersPerFrame  "<<buffersPerFrame<<std::endl;
     wf=new Waveform(buffer_size,buffersPerFrame,W);
 
     sp=new Spectrogram(buffer_size,buffersPerFrame,H);
@@ -39,7 +62,8 @@ Visualizer::Visualizer(int width,int height,int sampleRate,int bufferSize, int f
 }
 
 Visualizer::Visualizer(){
-    
+    Config cfg();
+    // requires further variables to be assigned properly ... ----------------------> DO NOT FORGET TO FIX
 }
 
 Visualizer::~Visualizer(){

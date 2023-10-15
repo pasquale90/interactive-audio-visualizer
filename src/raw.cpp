@@ -5,12 +5,13 @@
 // #include <typeinfo>
 
 Waveform::Waveform(int bufferSize, int buffersPerFrame, int wwidth) : buffer_size(bufferSize), buffers_per_frame(buffersPerFrame), width(wwidth){
-    wave=new double[width];
+    // wave=new double[width];
+    double wave[width];
     std::cout<<"Waveform initialized with width "<<width<<std::endl;
 }
 
 Waveform::~Waveform(){
-    delete[] wave;
+    // delete[] wave;
     std::cout<<"Waveform object destroyed"<<std::endl;
 }
 

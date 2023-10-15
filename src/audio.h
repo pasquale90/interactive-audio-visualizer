@@ -1,6 +1,8 @@
 #ifndef AUDIO_H
 #define AUDIO_H
 
+#include "signal.h"
+
 #include <jack/jack.h>
 #include <jack/types.h>
 
@@ -29,13 +31,16 @@ private:
     jack_client_t *client;
 
     double *in;
-    
+    double ma=0.0;
+    double mi=100.0;
     const char *server_name;
     const char *client_name ;
     const char **fromdevice;
     const char **todevice;
 
     static void jack_shutdown (void *arg);
+
+    Signal *sig;
 
 };
 

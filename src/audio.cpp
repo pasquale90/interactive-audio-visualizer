@@ -1,5 +1,6 @@
 #include "audio.h"
 
+
 // AudioStream myAudioStream;
 void audioBufferCallback(double *in);
 
@@ -30,10 +31,12 @@ AudioStream::AudioStream(const char* serverName,const char* clientName){
     if (status & JackServerStarted) {
         std::cout<<"\t>>JACK server started"<<std::endl;
     }
+//FIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX MEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+    sig = new Signal(512);
 }
 
 AudioStream::~AudioStream(){
-
+    delete[] sig;
 }
     
 void AudioStream::AudioRouting(){
@@ -43,7 +46,6 @@ void AudioStream::AudioRouting(){
             std::cerr<<"\t>>Callback operation failed"<<std::endl;
     }
 
-std::cout<<"DEBUG: jack_set_process_callback"<<std::endl;
     //prevent failure
     jack_on_shutdown(client,&jack_shutdown,0);
 
@@ -51,8 +53,6 @@ std::cout<<"DEBUG: jack_set_process_callback"<<std::endl;
     input_port = jack_port_register(client,"inputPort",JACK_DEFAULT_AUDIO_TYPE,JackPortIsInput, 0);
     output_port_left=jack_port_register (client,"leftPort",JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
     output_port_right=jack_port_register (client,"rightPort",JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
-
-std::cout<<"DEBUG: jack_port_register"<<std::endl;
     
     if ((input_port == NULL)) {
         std::cerr<<jack_port_name(input_port)<<"\t>> ERROR : no more JACK ports available"<<std::endl;
@@ -69,22 +69,27 @@ std::cout<<"DEBUG: jack_port_register"<<std::endl;
         std::cerr<<"\t>>cannot activate client {"<<client_name<<"}"<<std::endl;
         exit (1);
     }
-std::cout<<"DEBUG: jack_activate"<<std::endl;
+
     /*Getting acces to physical source ports*/
     fromdevice = jack_get_ports (client, NULL, NULL,JackPortIsPhysical|JackPortIsOutput);
     if (fromdevice == NULL) {
         std::cerr<<"\t>>no physical capture devices"<<std::endl;
         exit (1);
     }
-//SKILL POINT get that signal from EACH DEVICE------> http://www.vttoth.com/CMS/index.php/technical-notes/68
-    const char **temp_device=fromdevice;
-    std::cout<<"Device list Input>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n\n\n\n\n"<<std::endl;
-    int devCount=0;
-    while(*temp_device!=NULL){
-        std::cout<<devCount<<":"<<*temp_device<<" ";
-        *temp_device++;
-        devCount++;
-    }std::cout<<"\n\n\n\n\n"<<std::endl;
+
+    // const char **temp_device=fromdevice;
+    // std::cout<<"Device list Input>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n\n\n\n\n"<<std::endl;
+    // int devCount=0;
+    // while(*temp_device!=NULL){
+    //     std::cout<<devCount<<":"<<*temp_device<<" ";
+    //     *temp_device++;
+    //     devCount++;
+    // }std::cout<<"\n\n\n\n\n"<<std::endl;
+
+    // (K6) prints ...
+
+    // Device list Input>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    // system:capture_1 1:system:capture_2 2:system:capture_3 3:system:capture_4 4:system:capture_5 5:system:capture_6 
 
     /*Getting acces to destination ports*/
     todevice = jack_get_ports (client, NULL, NULL, JackPortIsPhysical|JackPortIsInput);
@@ -133,17 +138,38 @@ void AudioStream::closeStream(){
 }
 
 int AudioStream::streamBuffer(jack_nframes_t nframes){
-        
-    double *left,*right;
-    in = (double *)jack_port_get_buffer (input_port, nframes);
 
-    audioBufferCallback(in);
+    //out receive values from 
+    jack_default_audio_sample_t *left,*right;
+    int FREQUENCY=200;
 
-    left = (double *)jack_port_get_buffer (output_port_left, nframes);
-    right= (double *)jack_port_get_buffer(output_port_right, nframes);
+    // in = (double *)jack_port_get_buffer (input_port, nframes);
+    // for (int i=0;i<nframes;i++){
+    //     // std::cout<<in[i]<<" ";
+    //     if (ma<in[i]) ma=in[i];
+    //     if (mi>in[i]) mi=in[i];
+    // }
+    // std::cout<<std::endl;
+    // std::cout<<"max "<<ma<<" min "<<mi<<std::endl;
 
-    std::memcpy (left, in, sizeof (double) *nframes);
-    std::memcpy (right, in, sizeof (double) *nframes);
+    
+    left = (jack_default_audio_sample_t *)jack_port_get_buffer (output_port_left, nframes);
+    right= (jack_default_audio_sample_t *)jack_port_get_buffer(output_port_right, nframes);
+
+    // sig->fillBuffer((double*)left,(double*)right);
+    
+    sig->prepareSine(FREQUENCY);
+    for(int i=0; i<nframes; i++ )
+	{
+		left[i] = sig->getSineL();
+		right[i] = sig->getSineL();
+	}
+    // std::memcpy (left, in, sizeof (double) *nframes);
+    // std::memcpy (right, in, sizeof (double) *nframes);
+
+    audioBufferCallback((double *)left);
+
+//SKILL POINT get that signal from EACH DEVICE------> http://www.vttoth.com/CMS/index.php/technical-notes/68
 
     return 0;
 }

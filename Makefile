@@ -1,13 +1,13 @@
 CC :=g++ -std=c++11 #gcc -std=c99 
 
 OPTIONS :=-g -pedantic -Wall -Wextra -Wno-error
-OBJECTS :=build/onset.o build/btrack.o build/btracker.o build/raw.o build/visualizer.o build/fft.o build/kissfft.o build/audio.o build/main.o
+OBJECTS :=build/config.o build/signal.o build/camera.o build/onset.o build/btrack.o build/btracker.o build/raw.o build/visualizer.o build/fft.o build/kissfft.o build/audio.o build/main.o
 
-JACK :=-L/usr/lib/x86_64-linux-gnu -ljack -ljackserver # JACK := -L/usr/lib64 -ljack -ljackserver
+JACK :=-L/usr/lib/x86_64-linux-gnu -ljack -ljackserver
 FFTW :=-Ilibraries/BTrack/libs/fftw-3.3.10 -lfftw3 -lm
 
 
-LOPENCV =-L/usr/lib/x86_64-linux-gnu -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_videoio -lopencv_video
+LOPENCV =-L/usr/lib/x86_64-linux-gnu -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_videoio -lopencv_video -lopencv_imgcodecs
 IOPENCV=-I/usr/include/opencv4
 
 LIBSAMPLERATE :=-I/usr/local/include -lsamplerate #-L/usr/lib/x86_64-linux-gnu
@@ -16,10 +16,10 @@ BTRACK_fftw3 :=$(FFTW) -DUSE_FFTW
 BTRACK :=-Ilibraries/BTrack/src $(LIBSAMPLERATE) $(BTRACK_fftw3) 
 
 test: $(OBJECTS) #runnable
-	$(CC) $(OPTIONS) $(OBJECTS) $(JACK) $(FFT) $(LOPENCV) $(BTRACK) -o test
+	$(CC) $(OPTIONS) $(OBJECTS) $(JACK) $(FFT) $(LOPENCV) $(BTRACK) -lpthread -o test
 
 build/main.o: src/main.cpp # /usr/include/jack/jack.h /usr/include/jack/types.h
-	$(CC) $(OPTIONS) -c src/main.cpp $(JACK) $(FFT) $(IOPENCV) $(BTRACK) -o build/main.o
+	$(CC) $(OPTIONS) -c src/main.cpp $(JACK) $(FFT) $(IOPENCV) $(BTRACK) -lpthread -o build/main.o
 
 build/audio.o: src/audio.h src/audio.h #/usr/include/jack/jack.h /usr/include/jack/types.h
 	$(CC) $(OPTIONS) -c src/audio.cpp $(JACK) -o build/audio.o
@@ -44,6 +44,15 @@ build/btrack.o: libraries/BTrack/src/BTrack.cpp libraries/BTrack/src/BTrack.h
 
 build/onset.o: libraries/BTrack/src/OnsetDetectionFunction.cpp libraries/BTrack/src/BTrack.h
 	$(CC) $(OPTIONS) -c libraries/BTrack/src/OnsetDetectionFunction.cpp $(BTRACK) -o build/onset.o
+
+build/camera.o: src/camera.h src/camera.cpp 
+	$(CC) $(OPTIONS) -c src/camera.cpp $(IOPENCV) -o build/camera.o $(LOPENCV)
+	
+build/signal.o: src/signal.h src/signal.cpp
+	$(CC) $(OPTIONS) -c src/signal.cpp -o build/signal.o
+
+build/config.o: src/config.h src/config.cpp
+	$(CC) $(OPTIONS) -c src/config.cpp -o build/config.o
 
 clean:
 	rm -f build/*.o test logs/*
