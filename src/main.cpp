@@ -25,8 +25,10 @@ Camera camera;
 // std::atomic<bool> frameToggle;
 // bool frameToggle;
 Beatracker bt;
-Visualizer *vs;
+Visualizer vs;
+AudioStream *myAudioStream;
 
+bool exit_msg=false;
 // #include <chrono>
 
 
@@ -48,10 +50,11 @@ bool isBeat=bt.isBeat(in);
     if (isBeat)
     {
         // do something on the beat
+        // std::cout<<" Beat! ---------> "<<isDownBeat<<std::endl;
         std::cout<<" Beat! "<<std::endl;
-    }else std::cout<<"Not a Beat .. "<<std::endl;
+    }
 
-// vs->stream_frames(in,isBeat);
+exit_msg=vs.stream_frames(in,isBeat);
     std::cout<<"vs->stream_frames(in,isBeat);"<<std::endl; 
     bool current_atomic=camera.get_frame();
     
@@ -71,6 +74,15 @@ bool isBeat=bt.isBeat(in);
 //     /* Getting number of milliseconds as a double. */
 //     std::chrono::duration<double, std::milli> ms_double = t2 - t1;
 //     std::cout << ms_double.count() << " ms\n";
+
+
+
+    if (exit_msg){
+        camera.~Camera();
+        myAudioStream->~AudioStream();
+        vs.~Visualizer();
+        bt.~Beatracker();
+    }
 }
 
 
@@ -90,10 +102,17 @@ int main(int argc,char **argv){
     Config cfg(SAMPLE_RATE,24,BUFFER_SIZE,FPS,WIDTH,HEIGHT,CAMWIDHT,CAMHEIGHT,CAMFPS);
     cfg.display();
 
+    //static initialization of dft, spectrogram, waveform
+//     double dft[cfg.displayH];
+
+// displayW;
+//     int ;
+
     // Camera *camera = new Camera(cfg);
     // Camera camera(cfg);
     camera.setConfig(cfg);
     bt.setConfig(cfg);
+    vs.setConfig(cfg);
     std::cout<<"memory address of camera after initialization "<<&camera<<std::endl;
 
     std::cout<<"CAMERA CONFIG DEBUG TEST ############################################################################################"<<std::endl;
@@ -103,7 +122,7 @@ int main(int argc,char **argv){
     
     const char* serverName=NULL;
     const char* clientName="myAudioStream"; 
-    AudioStream *myAudioStream = new AudioStream(serverName,clientName);
+    myAudioStream = new AudioStream(serverName,clientName);
 
     // bt = new Beatracker(cfg.bufferSize);
     // vs=new Visualizer(WIDTH,HEIGHT,SAMPLE_RATE,BUFFER_SIZE,FPS);    
@@ -120,17 +139,7 @@ int main(int argc,char **argv){
     std::cout<<"Reached the end of main"<<std::endl;
     std::cout<<"\n\n";
 
-    
-
-    bt.~Beatracker();
-    // vs->~Visualizer();
-
-
-    thread_obj.join();
-
-    camera.~Camera();
-    myAudioStream->~AudioStream();
-
+    thread_obj.join();  
 
     return 0;
 }

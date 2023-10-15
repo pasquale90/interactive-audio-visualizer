@@ -36,7 +36,10 @@ AudioStream::AudioStream(const char* serverName,const char* clientName){
 }
 
 AudioStream::~AudioStream(){
-    delete[] sig;
+    // delete[] sig;
+    sig->~Signal();
+    std::cout<<"Audio stream object destructed"<<std::endl;
+
 }
     
 void AudioStream::AudioRouting(){

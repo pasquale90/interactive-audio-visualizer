@@ -22,13 +22,14 @@ public:
     ~Visualizer();
     int stream_frames(double* in,bool isBeat); //
     // static void* visualize(void*);
+    void setConfig(const Config&);
 
 
 private:
     Config conf;
     int W,H;
     cv::Mat videoframe;
-    void showFrame();
+    bool showFrame();
     int R,G,B;
 
     int update_BG_frame(); // remove this isDownBeat dependency

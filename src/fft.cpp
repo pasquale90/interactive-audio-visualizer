@@ -18,19 +18,27 @@ Spectrogram::Spectrogram(int bufferSize, int buffersPerFrame, int fheight) :  bu
 
   fft_in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * siglen);
   fft_out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * height);
+
+  p = fftw_plan_dft_1d(height, fft_in, fft_out, FFTW_FORWARD, FFTW_MEASURE); //FFTW_ESTIMATE
+
   std::cout<<"Spetrogram initialized with buffer size "<<buffer_size<<" and height "<<height<<std::endl;
 
 }
 
+// void Spectrogram::create(){
+
+// }
+
 Spectrogram::~Spectrogram(){
   // fftw_destroy_plan(p);
-  fftw_destroy_plan(p);
+  delete[] FFTcol;
+  
+  if (p) fftw_destroy_plan(p);
   fftw_cleanup();
   delete[] hamming_window;
-  // delete[] fft_in;
-  // delete[] fft_out;
-  fftw_free(fft_in); fftw_free(fft_out);
-  delete[] FFTcol;
+  fftw_free(fft_in); 
+  fftw_free(fft_out);
+
 
   std::cout<<"Spetrogram object destroyed"<<std::endl;
 }
@@ -67,8 +75,6 @@ void Spectrogram::computeFFT(double *magnitude, double &minf, double &maxf){ //f
 
   int i;
   double rcpVerticalZoom=1.0;
-
-  p = fftw_plan_dft_1d(height, fft_in, fft_out, FFTW_FORWARD, FFTW_MEASURE); //FFTW_ESTIMATE
 
   fftw_execute(p);
 

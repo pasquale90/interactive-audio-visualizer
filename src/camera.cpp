@@ -123,7 +123,8 @@ void Camera::display_config(){
 }
 
 Camera::~Camera(){
-    // cap.release();
+    cap.release();
+    std::cout<<"Camera object destructed"<<std::endl;
 }
 
 // void Camera::set_frame(bool val){

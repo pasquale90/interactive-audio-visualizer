@@ -17,6 +17,7 @@ Beatracker::Beatracker(int bufferSize) :  buffer_size(bufferSize) {
 
 Beatracker::~Beatracker(){
     btracker.~BTrack();
+    std::cout<<"Beatracker object destructed"<<std::endl;
 }
 
 void Beatracker::setConfig(const Config& cfg){

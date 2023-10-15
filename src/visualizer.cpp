@@ -62,32 +62,88 @@ Visualizer::Visualizer(const Config& cfg):
 }
 
 Visualizer::Visualizer(){
-    Config cfg();
-    // requires further variables to be assigned properly ... ----------------------> DO NOT FORGET TO FIX
+
+    R=0;
+    G=0;
+    B=0;
+    
+    incrR=3;
+    incrG=1;
+    incrB=7;
+    ascR=true;
+    ascG=true;
+    ascB=true;
+    
+    x_trans=0;
+    ascX=true;
+    redxtrans=1;
+
+    f_x_trans=0; // the x transition for the spectrogram
+    bufferCount=0;
+    beatCount=0;   
 }
 
 Visualizer::~Visualizer(){
+    delete[] dft;
     cv::destroyWindow("Visualizer");  
     videoframe.release();
     wf->~Waveform();
     sp->~Spectrogram();  
-    delete[] dft;
+    std::cout<<"Visualizer destructed"<<std::endl;
 }
 
-void Visualizer::showFrame(){
+
+void Visualizer::setConfig(const Config& cfg){
+    // Config conf(cfg);
+    // std::cout<<&cfg<<"\n"<<&conf<<std::endl;
+    // conf.display();
+    W=cfg.displayW;
+    H=cfg.displayH;
+    SR=cfg.sampleRate;
+    buffer_size=cfg.bufferSize;
+    fps=cfg.fps;
+    std::cout<<"Visualizer constructor "<<W<<", "<<H<<", "<<SR<<", "<<buffer_size<<", "<<fps<<std::endl;
+    // W=1024;
+    // H=512;
+    // SR=22050;
+    // buffer_size=512;
+    // fps=25;
+    
+    cv::namedWindow("Interactive Audio Visualizer",cv::WINDOW_AUTOSIZE);
+    cv::Mat img(H,W, CV_8UC3,cv::Scalar(255,255,255));
+    videoframe = img;
+    
+    dft=new double[H];
+    // double dft[H];
+    
+    buffersPerFrame=std::ceil((SR/buffer_size)/(double)fps);
+    
+    std::cout<<"Visualizer buffersPerFrame  "<<buffersPerFrame<<std::endl;
+    wf=new Waveform(buffer_size,buffersPerFrame,W);
+    // Waveform wf(buffer_size,buffersPerFrame,W);
+
+    sp=new Spectrogram(buffer_size,buffersPerFrame,H);
+    // Spectrogram sp(buffer_size,buffersPerFrame,H);
+    beatCount=0;
+}
+
+bool Visualizer::showFrame(){
     cv::imshow("Visualizer", videoframe);//Showing the video//
-    cv::waitKey(1); //Allowing 1 milliseconds frame processing time
+    // cv::waitKey(1); //Allowing 1 milliseconds frame processing time
+    if (cv::waitKey(1) == 113) return true;
+    return false;
 }
 
 int Visualizer::stream_frames(double* in,bool isBeat){
     // std::cout<<"bufferCount -->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"<<bufferCount<<" ";
     buffer=in;
+    bool exit_msg=false;
 
     if (bufferCount==0){                                    // is this a legitimate solution? otherwise try threads
 
         // std::cout<<" shows the frame"<<std::endl;
 
-        showFrame();
+        exit_msg = showFrame();
 
         //check white pixels
         // int white_pixel_counter=0;
@@ -108,6 +164,8 @@ int Visualizer::stream_frames(double* in,bool isBeat){
 
     //start preparing for the next frame
     // wf->prepare_waveform(bufferCount,in); //--> addressed to the next update
+
+    /*
     sp->prepare_spectrogram(bufferCount,in);
     
     
@@ -141,12 +199,13 @@ int Visualizer::stream_frames(double* in,bool isBeat){
         // update_wave_frame();
         update_spectrogram();
     }
+    */
 
     bufferCount++;
     bufferCount%=buffersPerFrame;
 
          
-    return 1;
+    return exit_msg;
 }
 
 int Visualizer::update_BG_frame(){
