@@ -166,14 +166,16 @@ int AudioStream::streamBuffer(jack_nframes_t nframes){
     // std::memcpy (left, in, sizeof (double) *nframes);
     // std::memcpy (right, in, sizeof (double) *nframes);
 
-    sig->prepareSine(current_tone_frequency);
-    for(int i=0; i<nframes; i++ )
-	{
-		left[i] = sig->getSineL();    // here we have to combine two signals : the in and the sine_tone_signal
-		right[i] = sig->getSineL();
-	}
+    if (current_tone_frequency!=0){
+        sig->prepareSine(current_tone_frequency);
+        for(int i=0; i<nframes; i++ )
+        {
+            left[i] = sig->getSineL();    // here we have to combine two signals : the in and the sine_tone_signal
+            right[i] = sig->getSineL();
+        }
+    }
     
-    
+
 
 //SKILL POINT get that signal from EACH DEVICE------> http://www.vttoth.com/CMS/index.php/technical-notes/68
 

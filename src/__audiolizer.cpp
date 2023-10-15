@@ -3,33 +3,52 @@
 Audiolizer::Audiolizer(){
     tempFreqcounter=200;
     tempAscenting=false;
-    toggleFrame=true;
+    // toggleFrame=true;
 }
 Audiolizer::~Audiolizer(){
 
-    camera.~Camera();
+    camera_tracker.~Tracking();
 }
-
-// void Audiolizer::setConfig(int buffer_size){
-//     bufferSize=buffer_size;
-// }
 
 void Audiolizer::setConfig(const Config& cfg){
     
-    toggleFrame=true;
-
     // bufferSize=buffer_size;
-    camera.setConfig(cfg);
-    camera.display_config();
+    camera_tracker.setConfig(cfg);
+    camera_tracker.display_config();
 
-    // mThread = std::thread(&Logger::Run, this);
-    // trackingThread = std::thread{&Audiolizer::_capture, this};
-    // trackingThread.join();
+    prev_freq=0;
 }
 
 void Audiolizer::_capture(){
-    camera.capture();
+    camera_tracker._capture();
 }
+
+bool Audiolizer::turn_Image_into_Sound(int& freq){
+   /***
+    * returns boolean if new frame occured
+    * returns by value the calculated frequency by the turn_Image_into_Sound method
+   */
+
+    // just for testing ... 
+    // _simple_definition(freq);
+    // _simple_freqRange_palindrome(freq);
+
+    // get the frame
+    newframeElapsed = _get_frame_elapsed();
+    if (newframeElapsed){
+
+        _simple_freqRange_palindrome(freq);
+        // prev_freq=freq;                          // if previous visual position same as before return previous frequency
+    }else return prev_freq;
+    
+
+    return newframeElapsed;
+}
+
+bool Audiolizer::_get_frame_elapsed(){
+    return camera_tracker.get_frame_elapsed();                                                                            // get_frame --> get_trackingResults()
+}
+
 
 void Audiolizer::_simple_freqRange_palindrome(int& freq){
     freq=tempFreqcounter;
@@ -43,36 +62,4 @@ void Audiolizer::_simple_freqRange_palindrome(int& freq){
 void Audiolizer::_simple_definition(int& freq){
     int FREQUENCY=200;
     freq=FREQUENCY;
-}
-
-bool Audiolizer::get_signal(int& freq){
-   
-    // _simple_definition(freq);
-    _simple_freqRange_palindrome(freq);
-
-    // turn_Image_into_Sound(freq);
-}
-
-bool Audiolizer::_get_frame(){
-    atomicChange=camera.get_frame();
-    std::cout<<"atomicChange - toggleFrame "<<atomicChange<<" - "<<toggleFrame<<std::endl;
-
-    if (atomicChange!=toggleFrame){
-        // process the current input from camera
-        std::cout<<"toggle? "<<"Yes!!"<<std::endl;
-        toggleFrame=atomicChange;
-        return true;
-    }else{
-
-    std::cout<<"toggle? "<<"No :((((((((((((((((((((("<<std::endl;
-        return false;
-    }
-
-}
-
-void Audiolizer::turn_Image_into_Sound(int& freq){
-
-    // conversion code goes here 
-
-
 }

@@ -22,11 +22,13 @@ public:
     
     void capture();
     // void temp_capture(); // delete meeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-    bool get_frame();
+    bool get_frame_elapsed();
     void display_config();
 
 private:
     std::atomic<bool> frameToggle;
+    int toggleFrame;
+    bool atomicChange;
 
     int camW,camH,fps;
     cv::VideoCapture cap;

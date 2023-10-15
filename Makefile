@@ -1,7 +1,7 @@
 CC :=g++ -std=c++11 #gcc -std=c99 
 
 OPTIONS :=-g -pedantic -Wall -Wextra -Wno-error
-OBJECTS :=build/__audiolizer.o build/console.o build/config_defaults.o build/config.o build/signal.o build/camera.o build/onset.o build/btrack.o build/btracker.o build/raw.o build/visualizer.o build/fft.o build/kissfft.o build/audio.o build/main.o
+OBJECTS :=build/__tracking.o build/__audiolizer.o build/console.o build/config_defaults.o build/config.o build/signal.o build/camera.o build/onset.o build/btrack.o build/btracker.o build/raw.o build/visualizer.o build/fft.o build/kissfft.o build/audio.o build/main.o
 
 JACK :=-L/usr/lib/x86_64-linux-gnu -ljack -ljackserver
 FFTW :=-Ilibraries/BTrack/libs/fftw-3.3.10 -lfftw3 -lm
@@ -47,6 +47,9 @@ build/onset.o: libraries/BTrack/src/OnsetDetectionFunction.cpp libraries/BTrack/
 
 build/__audiolizer.o: src/__audiolizer.h src/__audiolizer.cpp
 	$(CC) $(OPTIONS) -c src/__audiolizer.cpp $(IOPENCV) -o build/__audiolizer.o $(LOPENCV)
+
+build/__tracking.o: src/__tracking.h src/__tracking.cpp
+	$(CC) $(OPTIONS) -c src/__tracking.cpp $(IOPENCV) -o build/__tracking.o $(LOPENCV)
 
 build/camera.o: src/camera.h src/camera.cpp 
 	$(CC) $(OPTIONS) -c src/camera.cpp $(IOPENCV) -o build/camera.o $(LOPENCV)

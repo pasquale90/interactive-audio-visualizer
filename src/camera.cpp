@@ -44,6 +44,8 @@ void Camera::setConfig(const Config& cfg){
 
     cv::Mat frame(camH,camW,CV_8UC3);
     // std::cout<<"Camera initialized 2"<<std::endl;
+
+    toggleFrame=false;
 }
 
 
@@ -92,11 +94,19 @@ Camera::~Camera(){
 //     toggle=val;
 // }
 
-bool Camera::get_frame(){
-    // return frameToggle.load();
-    // std::cout<<"get_frame -------------------> "<<this->frameToggle.load()<<" --- "<<std::endl;
-    return frameToggle.load();
-    // toggle = frameToggle.load(std::memory_order_seq_cst);
+bool Camera::get_frame_elapsed(){
+
+    atomicChange = frameToggle.load();
+    // std::cout<<"atomicChange - toggleFrame "<<atomicChange<<" - "<<toggleFrame<<std::endl;
+    if (atomicChange!=toggleFrame){     // process the current input from camera
+        // std::cout<<"toggle? "<<"Yes!!"<<std::endl;
+        toggleFrame=atomicChange;
+        return true;
+    }else{
+        // std::cout<<"toggle? "<<"No :((((((((((((((((((((("<<std::endl;
+        return false;
+    }
+
 }
 
 void Camera::capture(){

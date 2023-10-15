@@ -1,11 +1,11 @@
-#include <iostream>
+// #include <iostream>
 #include <cstdlib>
-#include <string>
+// #include <string>
 #include <chrono>
 #include <thread>
-#include <atomic>
+// #include <atomic>
 // #include "camera.h"
-#include "config.h"
+// #include "config.h"
 #include "audio.h"
 #include "visualizer.h"
 #include "beatracker.h"
@@ -19,8 +19,8 @@ AudioStream *myAudioStream;
 
 bool exit_msg=false;
 
-int toggleFrame=true;
-bool atomicChange;
+// int toggleFrame=true;
+// bool atomicChange;
 bool isBeat;
 void audioBufferCallback(double* in, int& currenTone){
 
@@ -30,13 +30,11 @@ void audioBufferCallback(double* in, int& currenTone){
     // get the input from camera --> a signal
 
     // bool isChanged=al.get_signal(currenTone);
-    atomicChange=al.get_signal(currenTone);
-    std::cout<<"atomicChange - toggleFrame "<<atomicChange<<" - "<<toggleFrame<<std::endl;
+    bool frameElapsed=al.turn_Image_into_Sound(currenTone);
+    // std::cout<<"frameElapsed "<<frameElapsed<<std::endl;
 
-    if (atomicChange!=toggleFrame){
-        // process the current input from camera
+    if (frameElapsed){
         std::cout<<"toggle? "<<"Yes!!"<<std::endl;
-        toggleFrame=atomicChange;
     }else std::cout<<"toggle? "<<"No :((((((((((((((((((((("<<std::endl;
 
 

@@ -6,8 +6,9 @@
 * recieve data from the tracking.get_data() method and return int frequency
 */
 
-#include "camera.h"
+// #include "camera.h"
 // #include <thread>
+#include "__tracking.h"
 
 
 class Audiolizer{
@@ -16,31 +17,24 @@ public:
 
     Audiolizer();
     ~Audiolizer();
-
-
-    // void setConfig(int);
     void setConfig(const Config& cfg);
-    bool get_signal(int&);
 
-    void _simple_definition(int& freq);
-    void _simple_freqRange_palindrome(int& freq);
-    void turn_Image_into_Sound(int& freq);
+    bool turn_Image_into_Sound(int&);
 
     void _capture();
 private:
-    bool _get_frame();
-    
 
-    Camera camera;
-    // std::thread trackingThread;
+    bool _get_frame_elapsed();
     
+    Tracking camera_tracker;
     int bufferSize;
+    bool newframeElapsed;
+    int prev_freq;
+    
     bool tempAscenting;
     int tempFreqcounter;
-
-    int toggleFrame;
-    bool atomicChange;
-
+    void _simple_definition(int& freq);
+    void _simple_freqRange_palindrome(int& freq);    
 };
 
 
