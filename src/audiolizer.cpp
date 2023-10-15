@@ -1,4 +1,4 @@
-#include "__audiolizer.h"
+#include "audiolizer.h"
 
 Audiolizer::Audiolizer(){
     tempFreqcounter=200;
@@ -7,7 +7,7 @@ Audiolizer::Audiolizer(){
 }
 Audiolizer::~Audiolizer(){
 
-    camera_tracker.~Tracking();
+    camera_tracker.~VideoTracker();
 }
 
 void Audiolizer::setConfig(const Config& cfg){

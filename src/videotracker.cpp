@@ -1,14 +1,14 @@
-#include "__tracking.h"
+#include "videotracker.h"
 
 
-Tracking::Tracking(){
+VideoTracker::VideoTracker(){
 }
 
-Tracking::~Tracking(){
+VideoTracker::~VideoTracker(){
 
 }
 
-void Tracking::setConfig(const Config& cfg){
+void VideoTracker::setConfig(const Config& cfg){
     
     // bufferSize=buffer_size;
     camera.setConfig(cfg);
@@ -19,16 +19,16 @@ void Tracking::setConfig(const Config& cfg){
 
 }
 
-void Tracking::_capture(){
+void VideoTracker::_capture(){
     camera.capture();
 }
 
-bool Tracking::get_frame_elapsed(){
+bool VideoTracker::get_frame_elapsed(){
     return camera.get_frame_elapsed();
 }
 
-void Tracking::display_config(){
-    std::cout<<"Tracking Config"<<std::endl;
+void VideoTracker::display_config(){
+    std::cout<<"VideoTracker Config"<<std::endl;
     std::cout<<"ROIoffset "<<ROIoffset<<std::endl;
     std::cout<<"ROIw8sec "<<ROIw8sec<<std::endl;
 }

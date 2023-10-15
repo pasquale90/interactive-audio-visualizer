@@ -9,7 +9,7 @@
 #include "audio.h"
 #include "visualizer.h"
 #include "beatracker.h"
-#include "__audiolizer.h"
+#include "audiolizer.h"
 
 // Camera camera;
 Beatracker bt;

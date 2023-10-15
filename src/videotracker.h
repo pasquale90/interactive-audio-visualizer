@@ -15,11 +15,11 @@
 #include "config.h"
 #include "camera.h"
 
-class Tracking{
+class VideoTracker{
 public:
 
-    Tracking();
-    ~Tracking();
+    VideoTracker();
+    ~VideoTracker();
 
     void setConfig(const Config& cfg);
     void display_config();

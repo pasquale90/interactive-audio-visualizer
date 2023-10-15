@@ -8,7 +8,7 @@
 
 // #include "camera.h"
 // #include <thread>
-#include "__tracking.h"
+#include "videotracker.h"
 
 
 class Audiolizer{
@@ -26,7 +26,7 @@ private:
 
     bool _get_frame_elapsed();
     
-    Tracking camera_tracker;
+    VideoTracker camera_tracker;
     int bufferSize;
     bool newframeElapsed;
     int prev_freq;
