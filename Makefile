@@ -1,13 +1,13 @@
 CC :=g++ -std=c++11 #gcc -std=c99 
 
 OPTIONS :=-g -pedantic -Wall -Wextra -Wno-error
-OBJECTS :=build/config.o build/signal.o build/camera.o build/onset.o build/btrack.o build/btracker.o build/raw.o build/visualizer.o build/fft.o build/kissfft.o build/audio.o build/main.o
+OBJECTS :=build/console.o build/config_defaults.o build/config.o build/signal.o build/camera.o build/onset.o build/btrack.o build/btracker.o build/raw.o build/visualizer.o build/fft.o build/kissfft.o build/audio.o build/main.o
 
 JACK :=-L/usr/lib/x86_64-linux-gnu -ljack -ljackserver
 FFTW :=-Ilibraries/BTrack/libs/fftw-3.3.10 -lfftw3 -lm
 
 
-LOPENCV =-L/usr/lib/x86_64-linux-gnu -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_videoio -lopencv_video -lopencv_imgcodecs
+LOPENCV =-L/usr/lib/x86_64-linux-gnu -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_videoio -lopencv_video -lopencv_imgcodecs -lopencv_features2d -lopencv_tracking
 IOPENCV=-I/usr/include/opencv4
 
 LIBSAMPLERATE :=-I/usr/local/include -lsamplerate #-L/usr/lib/x86_64-linux-gnu
@@ -51,8 +51,14 @@ build/camera.o: src/camera.h src/camera.cpp
 build/signal.o: src/signal.h src/signal.cpp
 	$(CC) $(OPTIONS) -c src/signal.cpp -o build/signal.o
 
-build/config.o: src/config.h src/config.cpp
+build/config.o: src/config.h src/config.cpp src/config_defaults.cpp
 	$(CC) $(OPTIONS) -c src/config.cpp -o build/config.o
+
+build/config_defaults.o: src/config_defaults.cpp
+	$(CC) $(OPTIONS) -c src/config_defaults.cpp -o build/config_defaults.o
+
+build/console.o: src/console.h src/console.cpp
+	$(CC) $(OPTIONS) -c src/console.cpp -o build/console.o
 
 clean:
 	rm -f build/*.o test logs/*

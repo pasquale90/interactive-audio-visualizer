@@ -2,6 +2,8 @@
 #define CONFIG_H
 
 #include <iostream>
+#include "console.h"
+#include "config_defaults.cpp"
 
 struct Config{
     int sampleRate;
@@ -16,9 +18,14 @@ struct Config{
     int camResH;
     int camfps;
     
-    Config(int sr,int qnt, int bfs, int fs, int dresx, int dresy, int cresx, int cresy, int cfs);
+    int roiOffset;
+    int roiSec;
+
+    Config(int argc, char *argv[]);
+    // Config(int sr,int qnt, int bfs, int fs, int dresx, int dresy, int cresx, int cresy, int cfs);
     Config(); // default constructor
     Config(const Config& c); // copy constructor
+    ~Config();
     
     void display();
 };

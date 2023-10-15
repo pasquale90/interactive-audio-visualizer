@@ -12,7 +12,7 @@ Beatracker::Beatracker(int bufferSize) :  buffer_size(bufferSize) {
     
     // std::queue<double> energyEnvelopeList;
     isdownbeat=false;
-    std::cout<<"Beatracker initialized with buffer size "<<buffer_size<<std::endl;
+    std::cout<<"Beatracker initialized with buffer size. Current value of buffer_size = "<<buffer_size<<std::endl;
 }
 
 Beatracker::~Beatracker(){

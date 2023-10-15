@@ -10,13 +10,6 @@
 #include <thread>
 #include <atomic>
 
-#define WIDTH 1024
-#define HEIGHT 512
-#define FPS 25
-#define CAMWIDHT 160 //320 //640 // //
-#define CAMHEIGHT 120 //240 //480 // 240 //
-#define CAMFPS 30
-
 // Camera *camera;
 // Camera camera(CAMWIDHT,CAMHEIGHT,CAMFPS);
 Camera camera;
@@ -75,8 +68,6 @@ exit_msg=vs.stream_frames(in,isBeat);
 //     std::chrono::duration<double, std::milli> ms_double = t2 - t1;
 //     std::cout << ms_double.count() << " ms\n";
 
-
-
     if (exit_msg){
         camera.~Camera();
         myAudioStream->~AudioStream();
@@ -87,19 +78,22 @@ exit_msg=vs.stream_frames(in,isBeat);
 
 
 int main(int argc,char **argv){
+    // std::cout<<"ROIoffset "<<ROIoffset<<" ROIw8sec "<<ROIw8sec<<std::endl;
     std::cout<<"memory address of camera before initialization "<<&camera<<std::endl;
 
     std::cout<<"\n\n";
     std::cout<<"Hello Audio Visualizer"<<std::endl;
     std::cout<<"\n\n";
 
-    int SAMPLE_RATE=std::stoi(argv[1]);
-    int BUFFER_SIZE=std::stoi(argv[2]);
+    // int SAMPLE_RATE=std::stoi(argv[1]);
+    // int BUFFER_SIZE=std::stoi(argv[2]);
     // std::cout<<"SAMPLE RATE = "<<SAMPLE_RATE<<std::endl;
     // std::cout<<"BUFFER_SIZE = "<<BUFFER_SIZE<<std::endl;
 
     // sampleRate, quantization, bufferSize, fps, dispResX, dispResY, camResX , camResY
-    Config cfg(SAMPLE_RATE,24,BUFFER_SIZE,FPS,WIDTH,HEIGHT,CAMWIDHT,CAMHEIGHT,CAMFPS);
+    
+    // Config cfg(SAMPLE_RATE,24,BUFFER_SIZE,FPS,WIDTH,HEIGHT,CAMWIDHT,CAMHEIGHT,CAMFPS);
+    Config cfg(argc,argv);
     cfg.display();
 
     //static initialization of dft, spectrogram, waveform
@@ -141,5 +135,11 @@ int main(int argc,char **argv){
 
     thread_obj.join();  
 
+    // just for testing --> when streaming is discarded in testing phase --> REMOVE LATTER
+    camera.~Camera();
+    myAudioStream->~AudioStream();
+    vs.~Visualizer();
+    bt.~Beatracker();
+    cfg.~Config();
     return 0;
 }

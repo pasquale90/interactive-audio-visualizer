@@ -1,28 +1,121 @@
 #include "config.h"
 
-Config::Config(int sr,int qnt, int bfs, int fs, int dresx, int dresy, int cresx, int cresy, int cfs):
-                                                                                        sampleRate(sr),
-                                                                                        quantization(qnt),
-                                                                                        bufferSize(bfs),
-                                                                                        fps(fs),
-                                                                                        displayW(dresx),
-                                                                                        displayH(dresy),
-                                                                                        camResW(cresx),
-                                                                                        camResH(cresy),
-                                                                                        camfps(cfs)
-                                                                                        {};
 
+Config::Config(int argc, char *argv[]){
+    /* arguments are provided with the following name
+    * sample_rate
+    * buffer_size
+    * bit_quantization
+    * display_frames_per_second
+    * display_width
+    * display_height
+    * camera_resolution_width
+    * camera_resolution_height
+    * camera_frames_per_second
+    */
+
+    InputParser input(argc, argv); // get optional arguments
+    DefaultSettings defaultConfig; // get predefined defaults
+
+    
+    // Initialize sampleRate
+    if (!input.getCmdOption("--sample_rate").empty()){
+        sampleRate=std::stoi(input.getCmdOption("--sample_rate"));
+    }else{
+        sampleRate=defaultConfig.sampleRate;
+    }
+
+    // Initialize quantization
+    if (!input.getCmdOption("--bit_quantization").empty()){
+        quantization=std::stoi(input.getCmdOption("--bit_quantization"));
+    }else{
+        quantization=defaultConfig.quantization;
+    }
+
+    // Initialize bufferSize
+    if (!input.getCmdOption("--buffer_size").empty()){
+        bufferSize=std::stoi(input.getCmdOption("--buffer_size"));
+    }else{
+        bufferSize=defaultConfig.bufferSize;
+    }
+
+
+    // Initialize fps
+    if (!input.getCmdOption("--display_frames_per_second").empty()){
+        fps=std::stoi(input.getCmdOption("--display_frames_per_second"));
+    }else{
+        fps=defaultConfig.fps;
+    }
+
+    // Initialize displayW
+    if (!input.getCmdOption("--display_width").empty()){
+        displayW=std::stoi(input.getCmdOption("--display_width"));
+    }else{
+        displayW=defaultConfig.displayW;
+    }
+
+
+    // Initialize displayH
+    if (!input.getCmdOption("--display_height").empty()){
+        displayH=std::stoi(input.getCmdOption("--display_height"));
+    }else{
+        displayH=defaultConfig.displayH;
+    }
+
+
+    // Initialize camResW
+    if (!input.getCmdOption("--camera_resolution_width").empty()){
+        camResW=std::stoi(input.getCmdOption("--camera_resolution_width"));
+    }else{
+        camResW=defaultConfig.camResW;
+    }
+
+    // Initialize camResH
+    if (!input.getCmdOption("--camera_resolution_height").empty()){
+        camResH=std::stoi(input.getCmdOption("--camera_resolution_height"));
+    }else{
+        camResH=defaultConfig.camResH;
+    }
+
+    
+    // Initialize camfps
+    if (!input.getCmdOption("--camera_frames_per_second").empty()){
+        camfps=std::stoi(input.getCmdOption("--camera_frames_per_second"));
+    }else{
+        camfps=defaultConfig.camfps;
+    }
+
+    // Initialize roiOffset -->  SIZE OF THE ROI BOX
+    if (!input.getCmdOption("--roi_offset").empty()){
+        roiOffset=std::stoi(input.getCmdOption("--roi_offset")); // it gets the number of square pixels directly. If proportional to cameraHeight, provide the result (i.e. cameraHeight*ratio ) directly as an argument.
+    }else{
+        roiOffset=defaultConfig.roiOffset;
+    }
+
+    // Initialize roiSec -->  time to wait for capturing pattern of interest within ROI in seconds
+    if (!input.getCmdOption("--roi_waiting_seconds").empty()){
+        roiSec=std::stoi(input.getCmdOption("--roi_waiting_seconds"));
+    }else{
+        roiSec=defaultConfig.roiSec;
+    }
+
+}
 
 Config::Config(){
-    sampleRate=44100;
-    quantization=24;
-    bufferSize=512;
-    fps=25;
-    displayW=1024;
-    displayH=512;
-    camResW=640;
-    camResH=480;
-    camfps=30;
+    DefaultSettings defaultConfig; // get predefined defaults
+
+    sampleRate=defaultConfig.sampleRate;
+    quantization=defaultConfig.quantization;
+    bufferSize=defaultConfig.bufferSize;
+    fps=defaultConfig.fps;
+    displayW=defaultConfig.displayW;
+    displayH=defaultConfig.displayH;
+    camResW=defaultConfig.camResW;
+    camResH=defaultConfig.camResH;
+    camfps=defaultConfig.camfps;
+    roiOffset=defaultConfig.roiOffset;
+    roiSec=defaultConfig.roiSec;
+
 }
 
 Config::Config(const Config& c):
@@ -34,22 +127,32 @@ Config::Config(const Config& c):
                             displayH(c.displayH),
                             camResW(c.camResW),
                             camResH(c.camResH),
-                            camfps(c.camfps)
+                            camfps(c.camfps),
+                            roiOffset(c.roiOffset),
+                            roiSec(c.roiSec)
                             {};
+
+Config::~Config(){
+    std::cout<<"Config object destructed"<<std::endl;
+}
 
 void Config::display(){
     
-    
     std::cout<<"########## Interactive Audio Visualizer Config ##########\n";
+    std::cout<<"---------------------- audio ----------------------------\n";
     std::cout<<"sampling rate            \t:\t"<<sampleRate<<std::endl;
     std::cout<<"quantization             \t:\t"<<quantization<<std::endl;
     std::cout<<"buffer size              \t:\t"<<bufferSize<<std::endl;
+    std::cout<<"--------------------- visual ----------------------------\n";
     std::cout<<"frames per second        \t:\t"<<fps<<std::endl;
     std::cout<<"display Width            \t:\t"<<displayW<<std::endl;
     std::cout<<"display Height           \t:\t"<<displayH<<std::endl;
+    std::cout<<"--------------------- camera ----------------------------\n";
     std::cout<<"camera resolution width  \t:\t"<<camResW<<std::endl;
     std::cout<<"camera resolution height \t:\t"<<camResH<<std::endl;
     std::cout<<"camera frames per second \t:\t"<<camfps<<std::endl;
+    std::cout<<"roiOffset                \t:\t"<<roiOffset<<std::endl;
+    std::cout<<"roiSec                   \t:\t"<<roiSec<<std::endl;
     std::cout<<"#########################################################\n\n";
 
 }

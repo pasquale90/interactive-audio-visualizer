@@ -15,9 +15,9 @@ Visualizer::Visualizer(const Config& cfg):
     // buffer_size=cfg.bufferSize;
     // fps=cfg.fps;
     
-    Config conf(cfg);
-    std::cout<<&cfg<<"\n"<<&conf<<std::endl;
-    conf.display();
+    // Config conf(cfg);
+    // std::cout<<&cfg<<"\n"<<&conf<<std::endl;
+    // conf.display();
     std::cout<<"Visualizer constructor "<<W<<", "<<H<<", "<<SR<<", "<<buffer_size<<", "<<fps<<std::endl;
     // W=1024;
     // H=512;
@@ -85,7 +85,7 @@ Visualizer::Visualizer(){
 
 Visualizer::~Visualizer(){
     delete[] dft;
-    cv::destroyWindow("Visualizer");  
+    cv::destroyWindow("Interactive Audio Visualizer");  
     videoframe.release();
     wf->~Waveform();
     sp->~Spectrogram();  
