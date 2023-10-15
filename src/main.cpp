@@ -4,15 +4,14 @@
 #include <chrono>
 #include <thread>
 #include <atomic>
-
+// #include "camera.h"
 #include "config.h"
 #include "audio.h"
-#include "camera.h"
 #include "visualizer.h"
 #include "beatracker.h"
 #include "__audiolizer.h"
 
-Camera camera;
+// Camera camera;
 Beatracker bt;
 Visualizer vs;
 Audiolizer al;
@@ -30,18 +29,8 @@ void audioBufferCallback(double* in, int& currenTone){
 
     // get the input from camera --> a signal
 
-    bool isChanged=al.get_signal(currenTone);
-
-
-    isBeat=bt.isBeat(in);
-    if (isBeat)
-    {
-        // do something on the beat
-        std::cout<<" Beat! "<<std::endl;
-    }
-
-    exit_msg=vs.stream_frames(in,isBeat);
-    atomicChange=camera.get_frame();    
+    // bool isChanged=al.get_signal(currenTone);
+    atomicChange=al.get_signal(currenTone);
     std::cout<<"atomicChange - toggleFrame "<<atomicChange<<" - "<<toggleFrame<<std::endl;
 
     if (atomicChange!=toggleFrame){
@@ -50,6 +39,24 @@ void audioBufferCallback(double* in, int& currenTone){
         toggleFrame=atomicChange;
     }else std::cout<<"toggle? "<<"No :((((((((((((((((((((("<<std::endl;
 
+
+    isBeat=bt.isBeat(in);
+    if (isBeat)
+    {
+        // do something on the beat
+        std::cout<<" Beat! "<<std::endl;
+    }
+    exit_msg=vs.stream_frames(in,isBeat);
+
+
+    // atomicChange=camera.get_frame();
+    // std::cout<<"atomicChange - toggleFrame "<<atomicChange<<" - "<<toggleFrame<<std::endl;
+
+    // if (atomicChange!=toggleFrame){
+    //     // process the current input from camera
+    //     std::cout<<"toggle? "<<"Yes!!"<<std::endl;
+    //     toggleFrame=atomicChange;
+    // }else std::cout<<"toggle? "<<"No :((((((((((((((((((((("<<std::endl;
 
     std::cout<<"-------------------------------------------------------------------------------------------------------------------"<<std::endl;
 
@@ -60,7 +67,7 @@ void audioBufferCallback(double* in, int& currenTone){
 
     if (exit_msg){
         myAudioStream->~AudioStream();
-        camera.~Camera();
+        // camera.~Camera();
         vs.~Visualizer();
         bt.~Beatracker();
     }
@@ -76,18 +83,21 @@ int main(int argc,char **argv){
     Config cfg(argc,argv);
     cfg.display();
 
-    camera.setConfig(cfg);
-    camera.display_config();
+    // camera.setConfig(cfg);
+    // camera.display_config();
     
     const char* serverName=NULL;
     const char* clientName="myAudioStream"; 
     myAudioStream = new AudioStream(serverName,clientName);
-    al.setConfig(cfg.bufferSize);
+    // al.setConfig(cfg.bufferSize);
+    al.setConfig(cfg);
     bt.setConfig(cfg);
     vs.setConfig(cfg);
 
+    std::thread trackingThread(&Audiolizer::_capture, &al);
+
     // camera.temp_capture();
-    std::thread thread_obj(&Camera::capture, &camera);
+    // std::thread thread_obj(&Camera::capture, &camera);
     
     
     // bt = new Beatracker(cfg.bufferSize);
@@ -105,10 +115,11 @@ int main(int argc,char **argv){
     std::cout<<"Reached the end of main"<<std::endl;
     std::cout<<"\n\n";
 
-    thread_obj.join();  
+    // thread_obj.join();  
+    trackingThread.join();
 
     // just for testing --> when streaming is discarded in testing phase --> REMOVE LATTER
-    camera.~Camera();
+    // camera.~Camera();
     myAudioStream->~AudioStream();
     vs.~Visualizer();
     bt.~Beatracker();

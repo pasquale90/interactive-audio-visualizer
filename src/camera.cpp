@@ -24,6 +24,7 @@ Camera::Camera(){
     fps=0;
     cv::namedWindow("Window");
     frameToggle=0;
+    // std::cout<<"Camera initialized 1"<<std::endl;
 }
 
 void Camera::setConfig(const Config& cfg){
@@ -42,6 +43,7 @@ void Camera::setConfig(const Config& cfg){
     // frameCount=0;
 
     cv::Mat frame(camH,camW,CV_8UC3);
+    // std::cout<<"Camera initialized 2"<<std::endl;
 }
 
 

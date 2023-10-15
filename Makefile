@@ -45,6 +45,9 @@ build/btrack.o: libraries/BTrack/src/BTrack.cpp libraries/BTrack/src/BTrack.h
 build/onset.o: libraries/BTrack/src/OnsetDetectionFunction.cpp libraries/BTrack/src/BTrack.h
 	$(CC) $(OPTIONS) -c libraries/BTrack/src/OnsetDetectionFunction.cpp $(BTRACK) -o build/onset.o
 
+build/__audiolizer.o: src/__audiolizer.h src/__audiolizer.cpp
+	$(CC) $(OPTIONS) -c src/__audiolizer.cpp $(IOPENCV) -o build/__audiolizer.o $(LOPENCV)
+
 build/camera.o: src/camera.h src/camera.cpp 
 	$(CC) $(OPTIONS) -c src/camera.cpp $(IOPENCV) -o build/camera.o $(LOPENCV)
 
@@ -60,8 +63,6 @@ build/config_defaults.o: src/config_defaults.cpp
 build/console.o: src/console.h src/console.cpp
 	$(CC) $(OPTIONS) -c src/console.cpp -o build/console.o
 
-build/__audiolizer.o: src/__audiolizer.h src/__audiolizer.cpp
-	$(CC) $(OPTIONS) -c src/__audiolizer.cpp -o build/__audiolizer.o
 
 clean:
 	rm -f build/*.o test logs/*
