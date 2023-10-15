@@ -9,3 +9,10 @@ external/*
 libs/*
 test
 ./test
+libraries/
+libraries/YOLO-NAS-onnxruntime/
+libraries/openpose/
+src/main copy.cpp
+src/visualizer copy*
+tests/
+src/__*
