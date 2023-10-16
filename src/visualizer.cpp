@@ -128,7 +128,7 @@ void Visualizer::setConfig(const Config& cfg){
 }
 
 bool Visualizer::showFrame(){
-    cv::imshow("Visualizer", videoframe);//Showing the video//
+    cv::imshow("Interactive Audio Visualizer", videoframe);//Showing the video//
     // cv::waitKey(1); //Allowing 1 milliseconds frame processing time
     if (cv::waitKey(1) == 113) return true;
     return false;
