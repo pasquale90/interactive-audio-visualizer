@@ -19,22 +19,23 @@ public:
     ~Audiolizer();
     void setConfig(const Config& cfg);
 
-    bool turn_Image_into_Sound(int&);
+    bool turn_Image_into_Sound(int&,cv::Mat&);
 
     void _capture();
 private:
-
-    bool _get_frame_elapsed();
     
     VideoTracker camera_tracker;
     int bufferSize;
     bool newframeElapsed;
     int prev_freq;
     
+    std::pair<int,int> ROIcenter;
+
     bool tempAscenting;
     int tempFreqcounter;
     void _simple_definition(int& freq);
-    void _simple_freqRange_palindrome(int& freq);    
+    void _simple_freqRange_palindrome(int& freq);   
+    bool _translate(int&);
 };
 
 

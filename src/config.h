@@ -21,6 +21,7 @@ struct Config{
     int roiOffset;
     int roiSec;
 
+    int trackingAlg;
 
     Config(int argc, char *argv[]);
     // Config(int sr,int qnt, int bfs, int fs, int dresx, int dresy, int cresx, int cresy, int cfs);

@@ -99,6 +99,14 @@ Config::Config(int argc, char *argv[]){
         roiSec=defaultConfig.roiSec;
     }
 
+    if (!input.getCmdOption("--tracking_algorithm").empty()){
+        trackingAlg=std::stoi(input.getCmdOption("--tracking_algorithm"));
+        if (trackingAlg<0 || trackingAlg>3){
+            std::cerr<<"Config::Invalid user input. Tracking algorithm invalid input. Provide one of the following options in bash -- >0:CSRT ,\n 1:KFC, \n2:BOOSTING\n"<<std::endl;}
+    }else{
+        trackingAlg=defaultConfig.trackingAlg;
+    }
+    const std::string trackerTypes[3]={"CSRT", "KCF", "BOOSTING"};
 }
 
 Config::Config(){
@@ -115,7 +123,7 @@ Config::Config(){
     camfps=defaultConfig.camfps;
     roiOffset=defaultConfig.roiOffset;
     roiSec=defaultConfig.roiSec;
-
+    trackingAlg=defaultConfig.trackingAlg;
 }
 
 Config::Config(const Config& c):
@@ -129,7 +137,8 @@ Config::Config(const Config& c):
                             camResH(c.camResH),
                             camfps(c.camfps),
                             roiOffset(c.roiOffset),
-                            roiSec(c.roiSec)
+                            roiSec(c.roiSec),
+                            trackingAlg(c.trackingAlg)
                             {};
 
 Config::~Config(){
@@ -153,6 +162,7 @@ void Config::display(){
     std::cout<<"camera frames per second \t:\t"<<camfps<<std::endl;
     std::cout<<"roiOffset                \t:\t"<<roiOffset<<std::endl;
     std::cout<<"roiSec                   \t:\t"<<roiSec<<std::endl;
+    std::cout<<"tracking algorithm      \t:\t"<<trackingAlg<<std::endl;
     std::cout<<"#########################################################\n\n";
 
 }

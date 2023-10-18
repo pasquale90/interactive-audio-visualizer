@@ -21,16 +21,20 @@ public:
     void setConfig(const Config&);
     
     void capture();
-    // void temp_capture(); // delete meeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
     bool get_frame_elapsed();
     void display_config();
 
+    // void init_ROI(cv::Mat&,int,int,int,int);
+    void get_current_frame(cv::Mat&);
+    int get_fps();
+    int get_actual_fps();
 private:
     std::atomic<bool> frameToggle;
     int toggleFrame;
     bool atomicChange;
 
     int camW,camH,fps;
+    double proper_fps;
     cv::VideoCapture cap;
     
     int lastframe;

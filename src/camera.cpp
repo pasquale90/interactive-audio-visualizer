@@ -22,7 +22,7 @@ Camera::Camera(){
     camW=0;
     camH=0;
     fps=0;
-    cv::namedWindow("Window");
+    // cv::namedWindow("Window");
     frameToggle=0;
     // std::cout<<"Camera initialized 1"<<std::endl;
 }
@@ -58,7 +58,7 @@ void Camera::initialize_camera(){
     cap.set(cv::CAP_PROP_FRAME_WIDTH, camW);
     cap.set(cv::CAP_PROP_FRAME_HEIGHT, camH);
     cap.set(cv::CAP_PROP_FORMAT, CV_8UC3 );
-    double proper_fps = cap.get(cv::CAP_PROP_FPS);
+    proper_fps = cap.get(cv::CAP_PROP_FPS);
     // std::cout<<"Proper fps "<<proper_fps<<std::endl;
     // std::cout<<"Proper w "<<w<<std::endl;
     // std::cout<<"Proper h "<<h<<std::endl;
@@ -86,13 +86,11 @@ void Camera::display_config(){
 }
 
 Camera::~Camera(){
+    frame.release();
     cap.release();
     std::cout<<"Camera object destructed"<<std::endl;
 }
 
-// void Camera::set_frame(bool val){
-//     toggle=val;
-// }
 
 bool Camera::get_frame_elapsed(){
 
@@ -107,6 +105,18 @@ bool Camera::get_frame_elapsed(){
         return false;
     }
 
+}
+
+void Camera::get_current_frame(cv::Mat& f){
+    f=frame;
+}
+
+int Camera::get_fps(){
+    return fps;
+}
+
+int Camera::get_actual_fps(){
+    return (int)proper_fps;
 }
 
 void Camera::capture(){
@@ -136,11 +146,11 @@ void Camera::capture(){
             // toggle=frameToggle.load();
 
 
-            // ftog.fetch_xor(toggle,std::memory_order_seq_cst );
-        int R=(int)frame.at<cv::Vec3b>(0,0)[0];
-        int B=(int)frame.at<cv::Vec3b>(0,0)[1];
-        int G=(int)frame.at<cv::Vec3b>(0,0)[2];
-        std::cout<<"Pixel check at center "<<B<<","<<G<<","<<R<<std::endl; 
+            
+        // int R=(int)frame.at<cv::Vec3b>(0,0)[0];
+        // int B=(int)frame.at<cv::Vec3b>(0,0)[1];
+        // int G=(int)frame.at<cv::Vec3b>(0,0)[2];
+        // std::cout<<"Pixel check at center "<<B<<","<<G<<","<<R<<std::endl; 
         }
 
         // cv::waitKey(1);

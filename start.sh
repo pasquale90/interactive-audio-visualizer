@@ -20,8 +20,9 @@ bit_quantization=24
 camera_resolution_width=640
 camera_resolution_height=480
 camera_frames_per_second=30
-# # roi_offset=$( bc -l <<<"0.1*$display_height" )
-# roi_waiting_seconds=5
+roi_offset=$( bc -l <<<"0.1*$display_height" )                                      #-> broken - fix it
+roi_waiting_seconds=5
+tracking_algorithm=1 # 0:CSRT , 1:KFC, 2:BOOSTING
 ###########################################################################################################################################
 
 # Preparing arguments for main
@@ -37,7 +38,9 @@ if [ ! -z ${8:-${camera_resolution_height}} ]; then args="${args} --camera_resol
 if [ ! -z ${9:-${camera_frames_per_second}} ]; then args="${args} --camera_frames_per_second ${camera_frames_per_second}"; fi
 if [ ! -z ${10:-${roi_offset}} ]; then args="${args} --roi_offset ${roi_offset}"; fi
 if [ ! -z ${11:-${roi_waiting_seconds}} ]; then args="${args} --roi_waiting_seconds ${roi_waiting_seconds}"; fi
+if [ ! -z ${12:-${tracking_algorithm}} ]; then args="${args} --tracking_algorithm ${tracking_algorithm}"; fi
 # if [ ! -z ${10:-${__next_param__}} ]; then args="${args} --__next_param__ ${__next_param__}"; fi
+echo "args --> ${args}"
 
 # Creating command for JACK SERVER
 startJack_command="jackd --realtime --verbose -t 10000 -d alsa"

@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <vector>
+#include <utility>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/video/tracking.hpp>
@@ -26,17 +27,39 @@ public:
     void _capture();
     bool get_frame_elapsed();
 
+    bool update(std::pair<int,int>&, cv::Mat&);
 private:
-
+    
     Camera camera;
 
-    // int W=640;
-    // int H=480;
-    // int fps=30;
-    int ROIoffset;// = H*0.1; // SIZE OF THE BOX
-    // int time2wait = 5; //seconds
-    int ROIw8sec;
+    void _cropROI(bool);                         // change these names
+    void _updateROI();                           // change these names
 
+    cv::Ptr<cv::Tracker> tracker;
+    std::pair<int,int> boxCenter;
+    std::pair<int,int> currboxCenter;
+
+    cv::Rect centerBox;
+    cv::Rect2d boundingBox;
+    int LTRBwhCxCy[8]; // roi coordinates LeftTopRightBottom
+    int thickness=1;
+    int H,W,fps;
+    
+    int ROIoffset; // SIZE OF THE BOX
+    int ROIw8sec;
+    cv::Mat prevROI,ROI;
+    cv::Mat currFrame;
+    cv::Mat BG;
+    bool patternlocked;
+
+    int framecounter;
+
+    bool _w84userInteraction();
+    void _initialize_tracker();
+
+    int similarity_threshold=150; //TEMPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+    bool _check_similarity();
+    void _init_timer(); 
 };
 
 #endif

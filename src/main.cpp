@@ -1,42 +1,30 @@
-// #include <iostream>
 #include <cstdlib>
-// #include <string>
 #include <chrono>
 #include <thread>
-// #include <atomic>
-// #include "camera.h"
-// #include "config.h"
+
 #include "audio.h"
 #include "visualizer.h"
 #include "beatracker.h"
 #include "audiolizer.h"
 
-// Camera camera;
 Beatracker bt;
 Visualizer vs;
 Audiolizer al;
 AudioStream *myAudioStream;
 
+cv::Mat ROI;
 bool exit_msg=false;
-
-// int toggleFrame=true;
-// bool atomicChange;
 bool isBeat;
 void audioBufferCallback(double* in, int& currenTone){
 
-    // auto t1 = std::chrono::high_resolution_clock::now();
-
+    auto t1 = std::chrono::high_resolution_clock::now();
 
     // get the input from camera --> a signal
-
-    // bool isChanged=al.get_signal(currenTone);
-    bool frameElapsed=al.turn_Image_into_Sound(currenTone);
-    // std::cout<<"frameElapsed "<<frameElapsed<<std::endl;
+    bool frameElapsed=al.turn_Image_into_Sound(currenTone,ROI);
 
     if (frameElapsed){
         std::cout<<"toggle? "<<"Yes!!"<<std::endl;
     }else std::cout<<"toggle? "<<"No :((((((((((((((((((((("<<std::endl;
-
 
     isBeat=bt.isBeat(in);
     if (isBeat)
@@ -46,25 +34,15 @@ void audioBufferCallback(double* in, int& currenTone){
     }
     exit_msg=vs.stream_frames(in,isBeat);
 
-
-    // atomicChange=camera.get_frame();
-    // std::cout<<"atomicChange - toggleFrame "<<atomicChange<<" - "<<toggleFrame<<std::endl;
-
-    // if (atomicChange!=toggleFrame){
-    //     // process the current input from camera
-    //     std::cout<<"toggle? "<<"Yes!!"<<std::endl;
-    //     toggleFrame=atomicChange;
-    // }else std::cout<<"toggle? "<<"No :((((((((((((((((((((("<<std::endl;
-
     std::cout<<"-------------------------------------------------------------------------------------------------------------------"<<std::endl;
 
-//     auto t2 = std::chrono::high_resolution_clock::now();
-//     /* Getting number of milliseconds as a double. */
-//     std::chrono::duration<double, std::milli> ms_double = t2 - t1;
-//     std::cout << ms_double.count() << " ms\n";
+    auto t2 = std::chrono::high_resolution_clock::now();
+    /* Getting number of milliseconds as a double. */
+    std::chrono::duration<double, std::milli> ms_double = t2 - t1;
+    std::cout << ms_double.count() << " ms\n";
 
     if (exit_msg){
-        myAudioStream->~AudioStream();
+        myAudioStream->~AudioStream(); // check if jackshutdown is set appropriately
         // camera.~Camera();
         vs.~Visualizer();
         bt.~Beatracker();

@@ -26,8 +26,9 @@ Visualizer::Visualizer(const Config& cfg):
     // fps=25;
     
     cv::namedWindow("Interactive Audio Visualizer",cv::WINDOW_AUTOSIZE);
-    cv::Mat img(H,W, CV_8UC3,cv::Scalar(255,255,255));
+    cv::Mat img(H,W, CV_8UC3,cv::Scalar(0,0,0));
     videoframe = img;
+    img.release();
 
     R=0;
     G=0;

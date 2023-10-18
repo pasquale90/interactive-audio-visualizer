@@ -23,30 +23,30 @@ void Audiolizer::_capture(){
     camera_tracker._capture();
 }
 
-bool Audiolizer::turn_Image_into_Sound(int& freq){
+// bool Audiolizer::turn_Image_into_Sound(int& freq,cv::Mat& roi){
+bool Audiolizer::turn_Image_into_Sound(int& freq,cv::Mat& roi){
+
    /***
     * returns boolean if new frame occured
-    * returns by value the calculated frequency by the turn_Image_into_Sound method
+    * returns by value the frequency that will be streamed on the next audio buffer
    */
 
     // just for testing ... 
     // _simple_definition(freq);
     // _simple_freqRange_palindrome(freq);
 
-    // get the frame
-    newframeElapsed = _get_frame_elapsed();
-    if (newframeElapsed){
+    if (camera_tracker.get_frame_elapsed()){                    // if a new has elapsed
+        // call the tracker to update the roi and roicenter
+        if(camera_tracker.update(ROIcenter,roi)){               // if ROI is updated
+            if(_translate(freq)){       // if previous frequency has the same value as before it returns the previous frequency
+                prev_freq = freq;
+                return true;
+            }
+        }else freq=200;
+            
+    }// else freq=prev_freq; // everything just remain the same
 
-        _simple_freqRange_palindrome(freq);
-        // prev_freq=freq;                          // if previous visual position same as before return previous frequency
-    }else return prev_freq;
-    
-
-    return newframeElapsed;
-}
-
-bool Audiolizer::_get_frame_elapsed(){
-    return camera_tracker.get_frame_elapsed();                                                                            // get_frame --> get_trackingResults()
+    return false;
 }
 
 
@@ -62,4 +62,18 @@ void Audiolizer::_simple_freqRange_palindrome(int& freq){
 void Audiolizer::_simple_definition(int& freq){
     int FREQUENCY=200;
     freq=FREQUENCY;
+}
+
+bool Audiolizer::_translate(int& freq){
+    /***
+     * This is where the magic happens. This is where you do the trick
+     * This function maps the box potition into a certain frequency. Will be updated using more interaction data (i.e. speed)
+    */
+
+    std::cout<<"ROIcenter at ("<<ROIcenter.first<<","<<ROIcenter.second<<")"<<std::endl;
+    
+    //apply translation from x,y to Hz
+    _simple_freqRange_palindrome(freq); // <---------------------------------------------------------delete later
+    return true;
+
 }
