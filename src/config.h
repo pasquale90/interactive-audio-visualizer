@@ -18,7 +18,7 @@ struct Config{
     int camResH;
     int camfps;
     
-    int roiOffset;
+    int radius;
     int roiSec;
 
     int trackingAlg;

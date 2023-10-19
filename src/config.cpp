@@ -85,11 +85,11 @@ Config::Config(int argc, char *argv[]){
         camfps=defaultConfig.camfps;
     }
 
-    // Initialize roiOffset -->  SIZE OF THE ROI BOX
-    if (!input.getCmdOption("--roi_offset").empty()){
-        roiOffset=std::stoi(input.getCmdOption("--roi_offset")); // it gets the number of square pixels directly. If proportional to cameraHeight, provide the result (i.e. cameraHeight*ratio ) directly as an argument.
+    // Initialize radius -->  SIZE OF THE ROI BOX
+    if (!input.getCmdOption("--roi_radius").empty()){
+        radius=std::stoi(input.getCmdOption("--roi_radius")); // it gets the number of square pixels directly. If proportional to cameraHeight, provide the result (i.e. cameraHeight*ratio ) directly as an argument.
     }else{
-        roiOffset=defaultConfig.roiOffset;
+        radius=defaultConfig.radius;
     }
 
     // Initialize roiSec -->  time to wait for capturing pattern of interest within ROI in seconds
@@ -121,7 +121,7 @@ Config::Config(){
     camResW=defaultConfig.camResW;
     camResH=defaultConfig.camResH;
     camfps=defaultConfig.camfps;
-    roiOffset=defaultConfig.roiOffset;
+    radius=defaultConfig.radius;
     roiSec=defaultConfig.roiSec;
     trackingAlg=defaultConfig.trackingAlg;
 }
@@ -136,7 +136,7 @@ Config::Config(const Config& c):
                             camResW(c.camResW),
                             camResH(c.camResH),
                             camfps(c.camfps),
-                            roiOffset(c.roiOffset),
+                            radius(c.radius),
                             roiSec(c.roiSec),
                             trackingAlg(c.trackingAlg)
                             {};
@@ -160,9 +160,9 @@ void Config::display(){
     std::cout<<"camera resolution width  \t:\t"<<camResW<<std::endl;
     std::cout<<"camera resolution height \t:\t"<<camResH<<std::endl;
     std::cout<<"camera frames per second \t:\t"<<camfps<<std::endl;
-    std::cout<<"roiOffset                \t:\t"<<roiOffset<<std::endl;
+    std::cout<<"radius                   \t:\t"<<radius<<std::endl;
     std::cout<<"roiSec                   \t:\t"<<roiSec<<std::endl;
-    std::cout<<"tracking algorithm      \t:\t"<<trackingAlg<<std::endl;
+    std::cout<<"tracking algorithm       \t:\t"<<trackingAlg<<std::endl;
     std::cout<<"#########################################################\n\n";
 
 }

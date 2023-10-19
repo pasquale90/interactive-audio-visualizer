@@ -52,13 +52,9 @@ bool Audiolizer::turn_Image_into_Sound(int& freq,cv::Mat& roi){
     */
 
     
-
     bool tracking_updated = camera_tracker.update(ROIcenter,roi);
-    std::cout<<"turn_Image_into_Sound tracking_updated "<<tracking_updated<<std::endl;
-    std::cout<<"turn_Image_into_Sound current center "<<ROIcenter.first<<", "<<ROIcenter.second<<std::endl;
-    if (roi.empty())
-        std::cout<<"turn_Image_into_Sound ISSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS EMPTY\n\n\n\n\n\n"<<std::endl;
-    else{
+
+    if (!roi.empty()){
         imshow("1", roi);
         std::cout<<"turn_Image_into_Sound ISSSSSSSSSSSSSSSSSS NOT EMPTY\n\n\n\n\n\n"<<std::endl;
     }

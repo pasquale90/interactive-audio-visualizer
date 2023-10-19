@@ -20,7 +20,7 @@ bit_quantization=24
 camera_resolution_width=640
 camera_resolution_height=480
 camera_frames_per_second=30
-roi_offset=$( bc -l <<<"0.1*$display_height" )                                      #-> broken - fix it
+roi_radius=$( bc -l <<<"0.1*$display_height" )                                      #-> broken - fix it
 roi_waiting_seconds=5
 tracking_algorithm=0 # 0:CSRT , 1:KFC, 2:BOOSTING
 ###########################################################################################################################################
@@ -36,7 +36,7 @@ if [ ! -z ${6:-${display_height}} ]; then args="${args} --display_height ${displ
 if [ ! -z ${7:-${camera_resolution_width}} ]; then args="${args} --camera_resolution_width ${camera_resolution_width}"; fi
 if [ ! -z ${8:-${camera_resolution_height}} ]; then args="${args} --camera_resolution_height ${camera_resolution_height}"; fi
 if [ ! -z ${9:-${camera_frames_per_second}} ]; then args="${args} --camera_frames_per_second ${camera_frames_per_second}"; fi
-if [ ! -z ${10:-${roi_offset}} ]; then args="${args} --roi_offset ${roi_offset}"; fi
+if [ ! -z ${10:-${roi_radius}} ]; then args="${args} --roi_radius ${roi_radius}"; fi
 if [ ! -z ${11:-${roi_waiting_seconds}} ]; then args="${args} --roi_waiting_seconds ${roi_waiting_seconds}"; fi
 if [ ! -z ${12:-${tracking_algorithm}} ]; then args="${args} --tracking_algorithm ${tracking_algorithm}"; fi
 # if [ ! -z ${10:-${__next_param__}} ]; then args="${args} --__next_param__ ${__next_param__}"; fi

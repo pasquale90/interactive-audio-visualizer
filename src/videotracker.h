@@ -25,7 +25,6 @@ public:
     void setConfig(const Config& cfg);
     void display_config();
     void _capture();
-    bool get_frame_elapsed();
 
     bool update(std::pair<int,int>&, cv::Mat&);
     bool _tracking_updated();
@@ -34,36 +33,28 @@ private:
     int toggleTrack;
     bool atomicChange;
 
-    
     Camera camera;
-
-    void _cropROI(bool);                         // change these names
-    void _updateROI();                           // change these names
 
     cv::Ptr<cv::Tracker> tracker;
     std::pair<int,int> boxCenter;
     // std::pair<int,int> currboxCenter;
     std::atomic<int> currboxCenter_x,currboxCenter_y;
 
-    cv::Rect centerBox;
-    cv::Rect2d boundingBox;
-    int LTRBwhCxCy[8]; // roi coordinates LeftTopRightBottom
     int thickness=1;
     int H,W,fps;
     
-    int ROIoffset; // SIZE OF THE BOX
+    int radius; // SIZE OF THE BOX
     int ROIw8sec;
-    cv::Mat prevROI,ROI;
-    cv::Mat currFrame;
-    cv::Mat BG;
+    cv::Mat BG,ROI,currFrame;
+    cv::Rect centerBox;
+    cv::Rect2d boundingBox;
+    
     bool patternlocked;
-
     int framecounter;
-
-    bool _w84userInteraction();
-    void _initialize_tracker();
-
+    
     int similarity_threshold=150; //TEMPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+    
+    void _initialize_tracker();
     bool _check_similarity();
     void _init_timer(); 
 };

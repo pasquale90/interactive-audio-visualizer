@@ -3,14 +3,11 @@
 
 VideoTracker::VideoTracker(){
     patternlocked=false;
-    
-//TEMPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
-    cv::namedWindow("2");
+    // cv::namedWindow("2");
 }
 
 VideoTracker::~VideoTracker(){
-//TEMPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
-    cv::destroyWindow("2");
+    // cv::destroyWindow("2");
 }
 
 void VideoTracker::setConfig(const Config& cfg){
@@ -18,8 +15,7 @@ void VideoTracker::setConfig(const Config& cfg){
     camera.setConfig(cfg);
     camera.display_config();
 
-    // bufferSize=cfg.bufferSize;
-    ROIoffset=cfg.roiOffset;
+    radius=cfg.radius;
     ROIw8sec = cfg.roiSec;
     framecounter=ROIw8sec*camera.get_fps();
 
@@ -27,21 +23,12 @@ void VideoTracker::setConfig(const Config& cfg){
     H=cfg.camResH;
     fps = camera.get_fps();
     
-    int l = (W/2)-ROIoffset;
-    int t = (H/2)-ROIoffset;
-    int r = (W/2)+ROIoffset;
-    int b = (H/2)+ROIoffset;
-    int w = r-l;
-    int h = b-t;
-    int LTRBwhCxCy[8] = {l,t,r,b,w,h,W/2,H/2};
-    std::cout<<ROIoffset*2<<"=="<<w<<"=="<<h<<std::endl;
     boxCenter={W/2,H/2};
     // previous_boxCenter=current_boxCenter;
 
-    cv::Rect temp(LTRBwhCxCy[0],LTRBwhCxCy[1],LTRBwhCxCy[4],LTRBwhCxCy[5]);
+    cv::Rect temp((W/2)-radius,(H/2)-radius,radius*2,radius*2);
     centerBox=temp;
     boundingBox=temp;
-    std::cout<<"boxCenter "<<boxCenter.first<<","<<boxCenter.second<<std::endl;
     
     if (cfg.trackingAlg == 0) //"CSRT"
         tracker = cv::TrackerCSRT::create();
@@ -55,7 +42,7 @@ void VideoTracker::setConfig(const Config& cfg){
 
 void VideoTracker::display_config(){
     std::cout<<"VideoTracker Config"<<std::endl;
-    std::cout<<"ROIoffset "<<ROIoffset<<std::endl;
+    std::cout<<"radius "<<radius<<std::endl;
     std::cout<<"ROIw8sec "<<ROIw8sec<<std::endl;
 }
 
@@ -82,10 +69,9 @@ void VideoTracker::_capture(){
         std::cout<<"time counter "<<framecounter<<std::endl;
     
         if (framecounter>0){
-        
             circle( currFrame,
-                    cv::Point((W/2),H/2),
-                    ROIoffset,
+                    cv::Point((W/2),(H/2)),
+                    radius,
                     cv::Scalar( 0, 255, 0 ),
                     thickness=1,
                     cv::LINE_8);
@@ -94,7 +80,7 @@ void VideoTracker::_capture(){
             tempROI.copyTo(ROI); // Copy the data into new matrix
 
             // PREPROCESS
-            // IF FIRST FRAME, WAIT FOR ONE MORE FOR HAVING SOMEONE TO PLAY WITH
+
             if(BG.empty()){ // --------------------------------------------------> that is the first frame
                 ROI.copyTo(BG);
             }else{
@@ -107,9 +93,8 @@ void VideoTracker::_capture(){
                     CV_RGB(118, 185, 0), //font color
                     2);
 
-                imshow("2", currFrame);
-
-                cv::waitKey(1);
+                // imshow("2", currFrame);
+                // cv::waitKey(1);
             }
             framecounter--;
 
@@ -133,7 +118,6 @@ void VideoTracker::_capture(){
         if (framecounter==0){
             std::cout<<"first occurence --> init tracker here"<<framecounter<<std::endl;
             tracker->init(currFrame, boundingBox);
-            // trackerInitialized=true;
         }
 
         ok = tracker->update(currFrame, boundingBox);         
@@ -143,19 +127,17 @@ void VideoTracker::_capture(){
             framecounter=ROIw8sec*fps;
             boundingBox = centerBox;
             
-
-            std::cout<<"Creating a new trackerrrrrrrrrrrrrrrrrrrr"<<std::endl;
+            // Creating a new tracker
             tracker->clear();
             cv::Ptr<cv::TrackerCSRT> trackerNew = cv::TrackerCSRT::create();
             tracker = trackerNew;
-        }//break; //locker=false;
+        }
         else{
 
             if (ok)
             {
-                std::cout<<"\n\nVideo::tracker :: sucessssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss\n\n"<<std::endl;
                 // Tracking success : Draw the tracked object
-                rectangle(currFrame, boundingBox, cv::Scalar( 255, 0, 0 ), 2, 1 );
+                // rectangle(currFrame, boundingBox, cv::Scalar( 255, 0, 0 ), 2, 1 ); // only for testing
                 trackingToggle=!trackingToggle;
 
                 currboxCenter_x.store(boundingBox.x);
@@ -163,30 +145,19 @@ void VideoTracker::_capture(){
             }
             else
             {
-                std::cout<<"Tracking failed --> ok is not true "<<std::endl;
                 // Tracking failure detected.
                 putText(currFrame, "Tracking failure detected", cv::Point(100,80), cv::FONT_HERSHEY_SIMPLEX, 0.75, cv::Scalar(0,0,255),2);
             }
 
-
-            // printf("boundingBox center (%f,%f) with width %f and height %f \n",boundingBox.x,boundingBox.y,boundingBox.width,boundingBox.height);
-
-            // cv::Rect temp(boundingBox.x,boundingBox.y,LTRBwhCxCy[4],LTRBwhCxCy[5]);
+            // keep the initial box width and height
+            // cv::Rect temp(boundingBox.x,boundingBox.y,radius*2,radius*2);
             // cv::Mat tempROI(currFrame, temp);
-            // // Copy the data into new matrix
             // tempROI.copyTo(ROI);
 
-            // imshow("2", currFrame);
-
             cv::Mat tempROI(currFrame, boundingBox);
-            // Copy the data into new matrix
             tempROI.copyTo(ROI);
-
-            imshow("2", currFrame);
-            cv::waitKey(1);
-            // std::cout<<"Start tracking the cropped from frame"<<std::endl;
-
             framecounter--; //++;
+            // imshow("2", currFrame);
         }
             
     }  
@@ -199,10 +170,7 @@ bool VideoTracker::update(std::pair<int,int> &roi_center,cv::Mat& roi){
      * Returns bool - Applies control the return values (i.e. if no changes occured by a visual stimulus
     */
 
-    // imshow("2", currFrame);
-
-    std::cout<<"VideoTracker::update ROI empty "<<ROI.empty()<<" patternlocked="<<patternlocked<<std::endl;
-    ROI.copyTo(roi);
+    currFrame.copyTo(roi);
     if (patternlocked){
         roi_center.first=currboxCenter_x.load();
         roi_center.second=currboxCenter_y.load();
@@ -225,12 +193,6 @@ bool VideoTracker::_check_similarity(){
     }else{                                  // else initialize tracking
         return false;
     }
-}
-
-void VideoTracker::_initialize_tracker(){
-    std::cout<<"Here we initialize the trackerrrrrrrrrrrr"<<std::endl;
-    // cv::Rect centerBox(roiLTRB[0],roiLTRB[0],ROIoffset,ROIoffset); // could be initialized as a member variable to reduce computational load
-    tracker->init(currFrame, boundingBox);
 }
 
 void VideoTracker::_init_timer(){
