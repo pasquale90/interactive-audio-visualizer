@@ -19,7 +19,7 @@ struct DefaultSettings
     int camResW=640;
     int camResH=480;
     int camfps=30;
-    int roiOffset=(int)((double)camResH*0.05);  // SIZE OF THE ROI BOX
+    int roiOffset=(int)((double)camResH*0.1);  // SIZE OF THE ROI BOX
     int roiSec=5;               // time to wait for capturing pattern of interest within ROI in seconds
     int trackingAlg=0;         // default CSRT, available options = {0:CSRT , 1:KFC, 2:BOOSTING}
 //Create checks --> POSTPONED

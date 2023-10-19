@@ -20,8 +20,8 @@ public:
 
     void setConfig(const Config&);
     
-    void capture();
-    bool get_frame_elapsed();
+    bool capture(cv::Mat&);
+    bool _frame_elapsed();
     void display_config();
 
     // void init_ROI(cv::Mat&,int,int,int,int);

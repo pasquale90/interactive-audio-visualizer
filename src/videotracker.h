@@ -28,7 +28,12 @@ public:
     bool get_frame_elapsed();
 
     bool update(std::pair<int,int>&, cv::Mat&);
+    bool _tracking_updated();
 private:
+    std::atomic<bool> trackingToggle;
+    int toggleTrack;
+    bool atomicChange;
+
     
     Camera camera;
 
@@ -37,7 +42,8 @@ private:
 
     cv::Ptr<cv::Tracker> tracker;
     std::pair<int,int> boxCenter;
-    std::pair<int,int> currboxCenter;
+    // std::pair<int,int> currboxCenter;
+    std::atomic<int> currboxCenter_x,currboxCenter_y;
 
     cv::Rect centerBox;
     cv::Rect2d boundingBox;

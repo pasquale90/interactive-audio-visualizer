@@ -22,7 +22,7 @@ camera_resolution_height=480
 camera_frames_per_second=30
 roi_offset=$( bc -l <<<"0.1*$display_height" )                                      #-> broken - fix it
 roi_waiting_seconds=5
-tracking_algorithm=1 # 0:CSRT , 1:KFC, 2:BOOSTING
+tracking_algorithm=0 # 0:CSRT , 1:KFC, 2:BOOSTING
 ###########################################################################################################################################
 
 # Preparing arguments for main

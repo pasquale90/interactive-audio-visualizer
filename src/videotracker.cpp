@@ -5,12 +5,12 @@ VideoTracker::VideoTracker(){
     patternlocked=false;
     
 //TEMPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
-    cv::namedWindow("Window2");
+    cv::namedWindow("2");
 }
 
 VideoTracker::~VideoTracker(){
 //TEMPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
-    cv::destroyWindow("Window2");
+    cv::destroyWindow("2");
 }
 
 void VideoTracker::setConfig(const Config& cfg){
@@ -34,7 +34,7 @@ void VideoTracker::setConfig(const Config& cfg){
     int w = r-l;
     int h = b-t;
     int LTRBwhCxCy[8] = {l,t,r,b,w,h,W/2,H/2};
-    
+    std::cout<<ROIoffset*2<<"=="<<w<<"=="<<h<<std::endl;
     boxCenter={W/2,H/2};
     // previous_boxCenter=current_boxCenter;
 
@@ -49,18 +49,8 @@ void VideoTracker::setConfig(const Config& cfg){
         tracker = cv::TrackerMOSSE::create();
     if (cfg.trackingAlg == 2) //"BOOSTING"
         tracker = cv::TrackerBoosting::create();
-}
 
-void VideoTracker::_capture(){
-    camera.capture();
-}
-
-bool VideoTracker::get_frame_elapsed(){
-    return camera.get_frame_elapsed();
-}
-
-void init_ROI_center(std::pair<int,int>&){
-
+    trackingToggle=0;
 }
 
 void VideoTracker::display_config(){
@@ -70,44 +60,27 @@ void VideoTracker::display_config(){
 }
 
 
-void VideoTracker::_cropROI(bool initBG){
-    // void Camera::cropROI(cv::Mat &ROI, int left, int top, int width, int height){
-    int thickness=1;
-    circle(currFrame,                      
-        cv::Point(boxCenter.first,boxCenter.second),
-        ROIoffset,
-        cv::Scalar( 0, 255, 0 ),
-        thickness=thickness,
-        cv::LINE_8);
+bool VideoTracker::_tracking_updated(){
 
-    // cv::Rect centerBox(roiLTRB[0],roiLTRB[0],ROIoffset,ROIoffset); // could be initialized as a member variable to reduce computational load
-    cv::Mat roi(currFrame, centerBox);
-    
-    // Copy the data into new matrix
-    if (initBG)
-        roi.copyTo(BG);
-    roi.copyTo(ROI);
+    atomicChange = trackingToggle.load();
+    if (atomicChange!=toggleTrack){     
+        toggleTrack=atomicChange;
+        return true;
+    }else{
+        return false;
+    }
 }
 
-void VideoTracker::_updateROI(){
-    cv::Rect temp(boundingBox.x,boundingBox.y,ROIoffset,ROIoffset);
-    cv::Mat detection(currFrame, temp);
-    // Copy the data into new matrix
-    detection.copyTo(ROI);
-}
-
-bool VideoTracker::update(std::pair<int,int> &roi_center,cv::Mat& roi){
+void VideoTracker::_capture(){
     /***
      * Updates the roi and the (global) roi center. 
-     * Returns bool - Applies control the return values (i.e. if no changes occured by a visual stimulus
     */
-
-    camera.get_current_frame(currFrame);
+    bool frameElapsed = camera.capture(currFrame);
 
     if(!patternlocked){
 
         std::cout<<"time counter "<<framecounter<<std::endl;
-        
+    
         if (framecounter>0){
         
             circle( currFrame,
@@ -134,13 +107,13 @@ bool VideoTracker::update(std::pair<int,int> &roi_center,cv::Mat& roi){
                     CV_RGB(118, 185, 0), //font color
                     2);
 
-                imshow("Window", currFrame);
+                imshow("2", currFrame);
 
                 cv::waitKey(1);
             }
             framecounter--;
 
-        }else if(framecounter==0){     // if similarity with the background is high, restart the timer!
+        }else if(framecounter==0){     // if similarity with the background is high, restart the timer! --> disabled
         
             // // Calculate the L2 relative error between current ROI and the BG.
             // double errorL2 = norm( ROI, BG, cv::DIST_L2 );
@@ -161,15 +134,17 @@ bool VideoTracker::update(std::pair<int,int> &roi_center,cv::Mat& roi){
             std::cout<<"first occurence --> init tracker here"<<framecounter<<std::endl;
             tracker->init(currFrame, boundingBox);
             // trackerInitialized=true;
-        }else{
-            ok = tracker->update(currFrame, boundingBox);
-        }         
+        }
+
+        ok = tracker->update(currFrame, boundingBox);         
 
         if (framecounter<=((-10)*fps) || boundingBox.x<=0 || boundingBox.y<=0 || boundingBox.width<=0 || boundingBox.height<=0 || (boundingBox.x+boundingBox.width)>=W || (boundingBox.y+boundingBox.height)>=H ) {
             patternlocked=false;
             framecounter=ROIw8sec*fps;
             boundingBox = centerBox;
             
+
+            std::cout<<"Creating a new trackerrrrrrrrrrrrrrrrrrrr"<<std::endl;
             tracker->clear();
             cv::Ptr<cv::TrackerCSRT> trackerNew = cv::TrackerCSRT::create();
             tracker = trackerNew;
@@ -178,8 +153,13 @@ bool VideoTracker::update(std::pair<int,int> &roi_center,cv::Mat& roi){
 
             if (ok)
             {
+                std::cout<<"\n\nVideo::tracker :: sucessssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss\n\n"<<std::endl;
                 // Tracking success : Draw the tracked object
                 rectangle(currFrame, boundingBox, cv::Scalar( 255, 0, 0 ), 2, 1 );
+                trackingToggle=!trackingToggle;
+
+                currboxCenter_x.store(boundingBox.x);
+                currboxCenter_y.store(boundingBox.y);
             }
             else
             {
@@ -188,117 +168,49 @@ bool VideoTracker::update(std::pair<int,int> &roi_center,cv::Mat& roi){
                 putText(currFrame, "Tracking failure detected", cv::Point(100,80), cv::FONT_HERSHEY_SIMPLEX, 0.75, cv::Scalar(0,0,255),2);
             }
 
-            printf("boundingBox center (%f,%f) with width %f and height %f \n",boundingBox.x,boundingBox.y,boundingBox.width,boundingBox.height);
 
-            
-            cv::Rect temp(boundingBox.x,boundingBox.y,LTRBwhCxCy[4],LTRBwhCxCy[5]);
-            cv::Mat tempROI(currFrame, temp);
+            // printf("boundingBox center (%f,%f) with width %f and height %f \n",boundingBox.x,boundingBox.y,boundingBox.width,boundingBox.height);
+
+            // cv::Rect temp(boundingBox.x,boundingBox.y,LTRBwhCxCy[4],LTRBwhCxCy[5]);
+            // cv::Mat tempROI(currFrame, temp);
+            // // Copy the data into new matrix
+            // tempROI.copyTo(ROI);
+
+            // imshow("2", currFrame);
+
+            cv::Mat tempROI(currFrame, boundingBox);
             // Copy the data into new matrix
             tempROI.copyTo(ROI);
 
-            imshow("Window", currFrame);
+            imshow("2", currFrame);
             cv::waitKey(1);
             // std::cout<<"Start tracking the cropped from frame"<<std::endl;
 
             framecounter--; //++;
         }
             
-    }   
-                                             // if object of interest does not yet exists, and there is no detection yet ...
-    //     if (BG.empty()){                                        // this is the first frame captured
-    //         std::cout<<"Tracker::    ROIis empty -- > Try to get the the ROI as an cv::Mat"   <<std::endl;
-    //         _cropROI(true); // initialize the BG
-    //         BG.copyTo(ROI); // do not leave uninitialized
-    //         BG.copyTo(prevROI); // do not leave uninitialized
-    //         // current and previous roi_centers are initiliazed in the setConfig method - no need to initialize here.
+    }  
 
-    //     }else{  // after the first frame
-
-    //         ROI.copyTo(prevROI);    // store previous ROI
-    //         _cropROI(false);        //update ROI
-                        
-    //         // wait for user to interact with ROI
-    //         patternlocked = _w84userInteraction();
-    //         if (patternlocked){                                // if pattern is locked, run initintialize tracker
-    //             _initialize_tracker();   // initialize tracker
-    //         }
-
-    //     }
-    //     return false;
-    // }else{
-    //     // tracking
-    //     std::cout<<"Now apply tracking!!!!!!!!!!!!"<<std::endl;
-        
-    //     bool ok = tracker->update(currFrame, boundingBox);
-        
-    //     if (ok){ // Tracking success
-            
-    //         std::cout<<"Okkkkkkkkk                                                          kkkkkkkkkkkkkkkkkkkkkkkkkkkkkko"<<std::endl;
-    //         // temporarily draw box on frame -->>> erase
-    //         // rectangle(currFrame, boundingBox, cv::Scalar( 255, 0, 0 ), 2, 1 );
-    //         rectangle(currFrame, boundingBox, cv::Scalar( 255, 0, 0 ), 2, 1 );
-    //         _updateROI();
-            
-    //     }else{
-    //         // _w84immediateResponce(); // todo next --> this will debug empty boundingBox instances from failed trackings
-    //         boundingBox.x= (boundingBox.x>boxCenter.first) ? boundingBox.x-2 : boundingBox.x+2;
-    //         boundingBox.y= (boundingBox.y>boxCenter.second) ? boundingBox.y-2 : boundingBox.y+2;
-    //         rectangle(currFrame, boundingBox, cv::Scalar( 255, 0, 0 ), 2, 1 );
-    //         _updateROI();
-    //     }
-    //     currboxCenter.first=boundingBox.x+ROIoffset;
-    //     currboxCenter.second=boundingBox.y+ROIoffset;
-    //     if (currboxCenter.first == boxCenter.first && currboxCenter.second == boxCenter.second){
-    //         patternlocked=false;
-    //         std::cout<<"Pattern Lock is false again "<<std::endl;
-    //         _init_timer();
-    //         return false;
-    //     }
-        
-    // }
-    // //return by value
-    // roi_center.first=currboxCenter.first;
-    // roi_center.second=currboxCenter.second;
-    // ROI.copyTo(roi);
-
-    // cv::imshow("Window2",currFrame);
-    // return true;
 }
 
-bool VideoTracker::_w84userInteraction(){
+bool VideoTracker::update(std::pair<int,int> &roi_center,cv::Mat& roi){
     /***
-     * Waiting for someone to interact with 
-     * currently only compares bg with the current ROI , only when framecounter equals to 0
-     */
+     * Updates the roi and the (global) roi center. 
+     * Returns bool - Applies control the return values (i.e. if no changes occured by a visual stimulus
+    */
 
+    // imshow("2", currFrame);
 
-
-
-    std::cout<<"framecount "<<framecounter<<std::endl;
-
-    if (framecounter>=0 && !patternlocked){           // time using framecount. We assume ROIw8sec equals to sec*fps
-        
-        cv::putText(currFrame,
-                    std::to_string(framecounter/camera.get_fps()), //text
-                    cv::Point(currboxCenter.first, currboxCenter.second - ROIoffset), // - 15), //slightly ~ 15 pixel above the ROI
-                    cv::FONT_HERSHEY_DUPLEX,
-                    1.0,CV_RGB(0, 0, 0),2);
-        cv::imshow("Window2",currFrame);
-        if (framecounter==0){
-
-            if(_check_similarity()){                            // check the similarity between BG and ROI
-                // _cropROI(true);                                         // update the background
-                _init_timer();
-            }else{
-                framecounter=-1;                                // disable this part of code --> the if (framecounter>=0)
-                return true;                                    // human interaction occured
-            }     
-        }
-        framecounter--;
+    std::cout<<"VideoTracker::update ROI empty "<<ROI.empty()<<" patternlocked="<<patternlocked<<std::endl;
+    ROI.copyTo(roi);
+    if (patternlocked){
+        roi_center.first=currboxCenter_x.load();
+        roi_center.second=currboxCenter_y.load();
     }else{
-        std::cout<<"VideoTracker::_w84userInteraction ERROR --> framecout<0 <-----------------------------------------------------FIX THIS"<<std::endl;
+        roi_center.first=boxCenter.first;
+        roi_center.second=boxCenter.second;
     }
-    return false;
+    return _tracking_updated();
 }
 
 bool VideoTracker::_check_similarity(){

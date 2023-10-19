@@ -91,8 +91,15 @@ Camera::~Camera(){
     std::cout<<"Camera object destructed"<<std::endl;
 }
 
+int Camera::get_fps(){
+    return fps;
+}
 
-bool Camera::get_frame_elapsed(){
+int Camera::get_actual_fps(){
+    return (int)proper_fps;
+}
+
+bool Camera::_frame_elapsed(){
 
     atomicChange = frameToggle.load();
     // std::cout<<"atomicChange - toggleFrame "<<atomicChange<<" - "<<toggleFrame<<std::endl;
@@ -106,53 +113,17 @@ bool Camera::get_frame_elapsed(){
     }
 
 }
-
 void Camera::get_current_frame(cv::Mat& f){
     f=frame;
 }
 
-int Camera::get_fps(){
-    return fps;
-}
+bool Camera::capture(cv::Mat& frame){
 
-int Camera::get_actual_fps(){
-    return (int)proper_fps;
-}
+    cap.read(frame);
 
-void Camera::capture(){
-
-    // cv::namedWindow("Window");
-
-    // cv::Mat frame;
-
-    while(1){
-        cap.read(frame);
-
-        if(!(frame.empty())){
-            // imshow("Window", frame);
-            // frameToggle=!frameToggle;
-            // int toggle=frameToggle.load(std::memory_order_relaxed);
-            // toggle++;
-            // frameToggle=++frameToggle; //.fetch_add(1);//store(toggle,std::memory_order_relaxed); 
-
-            // ftog=!ftog;
-            // std::cout<<"togle togle togle "<<toggle<<"-- "<<frameToggle<<"-- "<<ftog<<std::endl;
-            // bool tog=!frameToggle;
-            frameToggle=!frameToggle;
-            // frameToggle.fetch_add(1);
-            // this->set_frame(frameToggle.load());
-            std::cout<<"************************************************************************captured! ************************************************************************"<<frameToggle.load()<<std::endl;
-
-            // toggle=frameToggle.load();
-
-
-            
-        // int R=(int)frame.at<cv::Vec3b>(0,0)[0];
-        // int B=(int)frame.at<cv::Vec3b>(0,0)[1];
-        // int G=(int)frame.at<cv::Vec3b>(0,0)[2];
-        // std::cout<<"Pixel check at center "<<B<<","<<G<<","<<R<<std::endl; 
-        }
-
-        // cv::waitKey(1);
+    if(!(frame.empty())){
+        frameToggle=!frameToggle;
+        std::cout<<"************************************************************************captured! ************************************************************************"<<frameToggle.load()<<std::endl;
     }
+    return _frame_elapsed();
 }

@@ -4,9 +4,10 @@ Audiolizer::Audiolizer(){
     tempFreqcounter=200;
     tempAscenting=false;
     // toggleFrame=true;
+    cv::namedWindow("1");
 }
 Audiolizer::~Audiolizer(){
-
+     cv::namedWindow("1");
     camera_tracker.~VideoTracker();
 }
 
@@ -20,7 +21,9 @@ void Audiolizer::setConfig(const Config& cfg){
 }
 
 void Audiolizer::_capture(){
-    camera_tracker._capture();
+    while(true){
+        camera_tracker._capture();
+    }
 }
 
 // bool Audiolizer::turn_Image_into_Sound(int& freq,cv::Mat& roi){
@@ -35,6 +38,7 @@ bool Audiolizer::turn_Image_into_Sound(int& freq,cv::Mat& roi){
     // _simple_definition(freq);
     // _simple_freqRange_palindrome(freq);
 
+    /*
     if (camera_tracker.get_frame_elapsed()){                    // if a new has elapsed
         // call the tracker to update the roi and roicenter
         if(camera_tracker.update(ROIcenter,roi)){               // if ROI is updated
@@ -43,9 +47,23 @@ bool Audiolizer::turn_Image_into_Sound(int& freq,cv::Mat& roi){
                 return true;
             }
         }else freq=200;
-            
-    }// else freq=prev_freq; // everything just remain the same
 
+    }// else freq=prev_freq; // everything just remain the same
+    */
+
+    
+
+    bool tracking_updated = camera_tracker.update(ROIcenter,roi);
+    std::cout<<"turn_Image_into_Sound tracking_updated "<<tracking_updated<<std::endl;
+    std::cout<<"turn_Image_into_Sound current center "<<ROIcenter.first<<", "<<ROIcenter.second<<std::endl;
+    if (roi.empty())
+        std::cout<<"turn_Image_into_Sound ISSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS EMPTY\n\n\n\n\n\n"<<std::endl;
+    else{
+        imshow("1", roi);
+        std::cout<<"turn_Image_into_Sound ISSSSSSSSSSSSSSSSSS NOT EMPTY\n\n\n\n\n\n"<<std::endl;
+    }
+        
+    freq=200;
     return false;
 }
 
