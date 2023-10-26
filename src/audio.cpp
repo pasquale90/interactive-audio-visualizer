@@ -32,7 +32,7 @@ AudioStream::AudioStream(const char* serverName,const char* clientName){
         std::cout<<"\t>>JACK server started"<<std::endl;
     }
 // //FIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX MEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
-    sig = new Signal(512);
+    sig = new Signal(512,3520);
 }
 
 AudioStream::~AudioStream(){
@@ -171,7 +171,7 @@ int AudioStream::streamBuffer(jack_nframes_t nframes){
         for(int i=0; i<nframes; i++ )
         {
             left[i] = sig->getSineL();    // here we have to combine two signals : the in and the sine_tone_signal
-            right[i] = sig->getSineL();
+            right[i] = sig->getSineR();
         }
     }
     

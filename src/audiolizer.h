@@ -18,24 +18,32 @@ public:
     Audiolizer();
     ~Audiolizer();
     void setConfig(const Config& cfg);
-
-    bool turn_Image_into_Sound(int&,cv::Mat&);
+    bool turn_Image_into_Sound_____(int&,cv::Mat&);
+    bool turn_Image_into_Sound(bool&,int&,cv::Mat&);
 
     void _capture();
+
+    bool _tickTock();
+
 private:
     
     VideoTracker camera_tracker;
-    int bufferSize;
-    bool newframeElapsed;
-    int prev_freq;
-    
+    int prev_freq,init_frequency, minFreq, maxFreq;
+    double prev_amp, init_amp;
+    int maxW,maxH;
+    double a,b;
+
     std::pair<int,int> ROIcenter;
+
+    // bool _tickTock();
 
     bool tempAscenting;
     int tempFreqcounter;
     void _simple_definition(int& freq);
     void _simple_freqRange_palindrome(int& freq);   
     bool _translate(int&);
+    bool _gradualy_fade(int&);
+    void _init_log_freq_scale(int,int);
 };
 
 

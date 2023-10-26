@@ -21,6 +21,7 @@ public:
     Visualizer();
     ~Visualizer();
     int stream_frames(double* in,bool isBeat); //
+    int and_Sound_into_Image(double*in, cv::Mat, int, bool, bool);
     // static void* visualize(void*);
     void setConfig(const Config&);
 
@@ -53,6 +54,7 @@ private:
     bool ascR,ascG,ascB;
     int MIN{0},MAX{200};
     void change_BG_color();
+    void _change_BG_color(int,bool);
     int bufferCount;
     int buffersPerFrame;
     

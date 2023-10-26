@@ -2,7 +2,8 @@
 
 
 VideoTracker::VideoTracker(){
-    patternlocked=false;
+    trackingToggle.store(false);
+    patternlocked.store(false);
     // cv::namedWindow("2");
 }
 
@@ -36,8 +37,6 @@ void VideoTracker::setConfig(const Config& cfg){
         tracker = cv::TrackerMOSSE::create();
     if (cfg.trackingAlg == 2) //"BOOSTING"
         tracker = cv::TrackerBoosting::create();
-
-    trackingToggle=0;
 }
 
 void VideoTracker::display_config(){
@@ -46,6 +45,13 @@ void VideoTracker::display_config(){
     std::cout<<"ROIw8sec "<<ROIw8sec<<std::endl;
 }
 
+bool VideoTracker::tickTock(){
+    return camera._frame_elapsed();
+}
+
+bool VideoTracker::_pattern_locked(){
+    return patternlocked.load();
+}
 
 bool VideoTracker::_tracking_updated(){
 
@@ -64,7 +70,7 @@ void VideoTracker::_capture(){
     */
     bool frameElapsed = camera.capture(currFrame);
 
-    if(!patternlocked){
+    if(!patternlocked.load()){
 
         std::cout<<"time counter "<<framecounter<<std::endl;
     
@@ -110,7 +116,7 @@ void VideoTracker::_capture(){
             //     framecounter=fps*5;
             // }else patternlocked=true;
 
-            patternlocked=true;
+            patternlocked.store(true);
         }
     }else{
         bool ok;
@@ -123,7 +129,7 @@ void VideoTracker::_capture(){
         ok = tracker->update(currFrame, boundingBox);         
 
         if (framecounter<=((-10)*fps) || boundingBox.x<=0 || boundingBox.y<=0 || boundingBox.width<=0 || boundingBox.height<=0 || (boundingBox.x+boundingBox.width)>=W || (boundingBox.y+boundingBox.height)>=H ) {
-            patternlocked=false;
+            patternlocked.store(false);
             framecounter=ROIw8sec*fps;
             boundingBox = centerBox;
             
@@ -171,7 +177,7 @@ bool VideoTracker::update(std::pair<int,int> &roi_center,cv::Mat& roi){
     */
 
     currFrame.copyTo(roi);
-    if (patternlocked){
+    if (patternlocked.load()){
         roi_center.first=currboxCenter_x.load();
         roi_center.second=currboxCenter_y.load();
     }else{

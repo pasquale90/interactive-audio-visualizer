@@ -10,9 +10,8 @@
 
 class Signal{
 public:
-    Signal(int bufferSize);
+    Signal(int bufferSize, int maxFrequency);
     ~Signal();
-    // void fillBuffer(double*,double*);
     void prepareSine(int);
     double getSineL();
     double getSineR();
@@ -21,7 +20,8 @@ private:
     double *sine;
     int phaseL;
     int phaseR;
-    int maxFrequency=700;
+    double phase;
+    double rads_per_sample;
 };
 
 #endif

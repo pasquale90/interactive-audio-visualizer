@@ -9,6 +9,8 @@ struct DefaultSettings
     int sampleRate=44100;
     int quantization=24;
     int bufferSize=512;
+    int minFrequency=55;    // A1
+    int maxFrequency=3520;  // A7
 
     //visualizer
     int fps=25;

@@ -102,15 +102,12 @@ int Camera::get_actual_fps(){
 bool Camera::_frame_elapsed(){
 
     atomicChange = frameToggle.load();
-    // std::cout<<"atomicChange - toggleFrame "<<atomicChange<<" - "<<toggleFrame<<std::endl;
+    
     if (atomicChange!=toggleFrame){     // process the current input from camera
-        // std::cout<<"toggle? "<<"Yes!!"<<std::endl;
         toggleFrame=atomicChange;
         return true;
-    }else{
-        // std::cout<<"toggle? "<<"No :((((((((((((((((((((("<<std::endl;
+    }else
         return false;
-    }
 
 }
 void Camera::get_current_frame(cv::Mat& f){
@@ -122,8 +119,9 @@ bool Camera::capture(cv::Mat& frame){
     cap.read(frame);
 
     if(!(frame.empty())){
-        frameToggle=!frameToggle;
+        frameToggle.store(!frameToggle.load());
         std::cout<<"************************************************************************captured! ************************************************************************"<<frameToggle.load()<<std::endl;
+        return true;
     }
-    return _frame_elapsed();
+    return false;
 }

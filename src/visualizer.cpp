@@ -135,6 +135,117 @@ bool Visualizer::showFrame(){
     return false;
 }
 
+void Visualizer::_change_BG_color(int tone, bool trackEnabled){    // naive
+
+    // #include wavelengths.h
+
+    if (trackEnabled){
+        double percent;
+
+        if (tone>0 && tone<200){                  // naive conversion
+            percent = (double)tone/200.;
+            for (int i=0;i<W;i++)
+                for (int j=0;j<H;j++){
+                    // std::cout<<"videoframe.at<cv::Vec3b>(j,i)[0] = (int)(255.*percent) "<<(int)(255.*percent)<<std::endl;
+                    videoframe.at<cv::Vec3b>(j,i)[0] = (int)(255.*percent);
+                }
+        }else if (tone >200 && tone <600){
+            percent = (double)tone/(600. - 200.);
+            for (int i=0;i<W;i++)
+                for (int j=0;j<H;j++){
+                    // std::cout<<"videoframe.at<cv::Vec3b>(j,i)[0] = (int)(255.*percent) "<<(int)(255.*percent)<<std::endl;
+                    videoframe.at<cv::Vec3b>(j,i)[1] = (int)(255.*percent);
+                }
+        }else if (tone >600 && tone <4000) {
+            percent = (double)tone/(4000. - 600.);
+            for (int i=0;i<W;i++)
+                for (int j=0;j<H;j++){
+                    // std::cout<<"videoframe.at<cv::Vec3b>(j,i)[0] = (int)(255.*percent) "<<(int)(255.*percent)<<std::endl;
+                    videoframe.at<cv::Vec3b>(j,i)[3] = (int)(255.*percent);
+                }
+        }
+        std::cout<<"Visualizer percent "<<percent<<std::endl;
+    }
+}
+
+int Visualizer::and_Sound_into_Image(double* in,cv::Mat frame, int tone, bool frameElapsed, bool trackEnabled){
+    frame.copyTo(videoframe);
+    // std::cout<<"bufferCount -->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"<<bufferCount<<" ";
+    bool exit_msg=false;
+
+
+    // exit_msg = showFrame();
+
+    if (frameElapsed){                                    // is this a legitimate solution? otherwise try threads
+
+        // std::cout<<" shows the frame"<<std::endl;
+        exit_msg = showFrame();
+
+        //check white pixels
+        // int white_pixel_counter=0;
+        // for (int i=0;i<W;i++){
+        //     for (int j=H/5;j<(H-H/5);j++){
+        //         if(videoframe.at<cv::Vec3b>(j,i)[0]==255) white_pixel_counter++;
+        //     }
+        // }
+//debug ==
+        // std::cout<<white_pixel_counter<<" == "<<wave.size()<<" ??"<<std::endl;
+        // at the end
+        // if(!update_BG_frame()){
+        //     std::cout<<"Visualizer::stream_frames : error update_bg_frame"<<std::endl;
+        // }
+    }else {
+        // std::cout<<" is processing the frame"<<std::endl;
+        // std::cout<<"Visualizer trackEnabled "<<trackEnabled<<std::endl;
+        // _change_BG_color(tone, trackEnabled);
+    }
+
+    //start preparing for the next frame
+    // wf->prepare_waveform(bufferCount,in); //--> addressed to the next update
+
+    /*
+    sp->prepare_spectrogram(bufferCount,in);
+    
+    
+    if (isBeat){
+        // if (incrR<17) incrR+=7;
+        // int tincrR=incrR;
+        // int tincrG=incrG;
+        // int tincrB=incrB;
+
+        // if (incrR<17) incrR+=7;
+        // else incrR=3;
+        // if (incrG>5) incrG+=1;
+        // else incrG=1;
+        // if (incrB>21) incrB+=3; 
+        // else incrB=7;
+        std::cout<<bufferCount<<" " ;
+        if(!update_BG_frame()){
+            std::cout<<"Visualizer::stream_frames : error update_bg_frame"<<std::endl;
+        }
+        showFrame();
+    
+        // incrR=tincrR;
+        // incrG=tincrG;
+        // incrB=tincrB;   
+    }
+    
+
+    if (bufferCount==buffersPerFrame-1){ // last frame to process before showing 
+    //do something special using the last buffer?? --> compute the FFT for the concatenated signal
+        // std::cout<<"computes the FFT"<<std::endl;
+        // update_wave_frame();
+        update_spectrogram();
+    }
+    */
+
+    bufferCount++;
+    bufferCount%=buffersPerFrame;
+
+         
+    return exit_msg;
+}
+
 int Visualizer::stream_frames(double* in,bool isBeat){
     // std::cout<<"bufferCount -->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"<<bufferCount<<" ";
     buffer=in;

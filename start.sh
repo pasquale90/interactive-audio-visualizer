@@ -12,6 +12,8 @@ audio_device=K6
 sample_rate=44100 #16000 #
 buffer_size=512 
 bit_quantization=24
+minimum_frequency=200 #55 # A1
+maximum_frequency= 700 #3520  # A7
 #---------------------------------------------------------------- visual -----------------------------------------------------------------#
 # display_frames_per_second=25
 # display_width=1024
@@ -39,7 +41,9 @@ if [ ! -z ${9:-${camera_frames_per_second}} ]; then args="${args} --camera_frame
 if [ ! -z ${10:-${roi_radius}} ]; then args="${args} --roi_radius ${roi_radius}"; fi
 if [ ! -z ${11:-${roi_waiting_seconds}} ]; then args="${args} --roi_waiting_seconds ${roi_waiting_seconds}"; fi
 if [ ! -z ${12:-${tracking_algorithm}} ]; then args="${args} --tracking_algorithm ${tracking_algorithm}"; fi
-# if [ ! -z ${10:-${__next_param__}} ]; then args="${args} --__next_param__ ${__next_param__}"; fi
+if [ ! -z ${13:-${minimum_frequency}} ]; then args="${args} --minimum_frequency ${minimum_frequency}"; fi
+if [ ! -z ${14:-${maximum_frequency}} ]; then args="${args} --maximum_frequency ${maximum_frequency}"; fi
+# if [ ! -z ${15:-${__next_param__}} ]; then args="${args} --__next_param__ ${__next_param__}"; fi
 echo "args --> ${args}"
 
 # Creating command for JACK SERVER

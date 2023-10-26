@@ -28,8 +28,12 @@ public:
 
     bool update(std::pair<int,int>&, cv::Mat&);
     bool _tracking_updated();
+    bool _pattern_locked();
+
+    bool tickTock();
 private:
     std::atomic<bool> trackingToggle;
+    std::atomic<bool> frameTick;
     int toggleTrack;
     bool atomicChange;
 
@@ -49,7 +53,7 @@ private:
     cv::Rect centerBox;
     cv::Rect2d boundingBox;
     
-    bool patternlocked;
+    std::atomic<bool> patternlocked;
     int framecounter;
     
     int similarity_threshold=150; //TEMPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP

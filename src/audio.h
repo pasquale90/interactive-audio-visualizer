@@ -31,7 +31,7 @@ private:
     jack_client_t *client;
 
     double *in;
-    int current_tone_frequency;
+    int current_tone_frequency=0;
     double ma=0.0;
     double mi=100.0;
     const char *server_name;

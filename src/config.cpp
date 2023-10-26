@@ -107,6 +107,20 @@ Config::Config(int argc, char *argv[]){
         trackingAlg=defaultConfig.trackingAlg;
     }
     const std::string trackerTypes[3]={"CSRT", "KCF", "BOOSTING"};
+
+    // Initialize minFrequency -->  defines the minimum frequency
+    if (!input.getCmdOption("--minimum_frequency").empty()){
+        minFrequency=std::stoi(input.getCmdOption("--minimum_frequency"));
+    }else{
+        minFrequency=defaultConfig.minFrequency;
+    }
+
+    // Initialize maxFrequency -->  defines the maximum frequency
+    if (!input.getCmdOption("--maximum_frequency").empty()){
+        maxFrequency=std::stoi(input.getCmdOption("--maximum_frequency"));
+    }else{
+        maxFrequency=defaultConfig.maxFrequency;
+    }
 }
 
 Config::Config(){
@@ -115,6 +129,8 @@ Config::Config(){
     sampleRate=defaultConfig.sampleRate;
     quantization=defaultConfig.quantization;
     bufferSize=defaultConfig.bufferSize;
+    minFrequency=defaultConfig.minFrequency;
+    maxFrequency=defaultConfig.maxFrequency;
     fps=defaultConfig.fps;
     displayW=defaultConfig.displayW;
     displayH=defaultConfig.displayH;
@@ -130,6 +146,8 @@ Config::Config(const Config& c):
                             sampleRate(c.sampleRate),
                             quantization(c.quantization),
                             bufferSize(c.bufferSize),
+                            minFrequency(c.minFrequency),
+                            maxFrequency(c.maxFrequency),
                             fps(c.fps),
                             displayW(c.displayW),
                             displayH(c.displayH),
@@ -152,6 +170,8 @@ void Config::display(){
     std::cout<<"sampling rate            \t:\t"<<sampleRate<<std::endl;
     std::cout<<"quantization             \t:\t"<<quantization<<std::endl;
     std::cout<<"buffer size              \t:\t"<<bufferSize<<std::endl;
+    std::cout<<"mininum frequency        \t:\t"<<minFrequency<<std::endl;
+    std::cout<<"maxinum frequency        \t:\t"<<maxFrequency<<std::endl;
     std::cout<<"--------------------- visual ----------------------------\n";
     std::cout<<"frames per second        \t:\t"<<fps<<std::endl;
     std::cout<<"display Width            \t:\t"<<displayW<<std::endl;

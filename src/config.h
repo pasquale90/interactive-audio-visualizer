@@ -10,6 +10,9 @@ struct Config{
     int quantization;
     int bufferSize;
     
+    int minFrequency;
+    int maxFrequency;
+
     int fps;
     int displayW;
     int displayH;

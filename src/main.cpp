@@ -15,24 +15,27 @@ AudioStream *myAudioStream;
 cv::Mat ROI;
 bool exit_msg=false;
 bool isBeat;
+bool trackEnabled;
+
 void audioBufferCallback(double* in, int& currenTone){
 
     auto t1 = std::chrono::high_resolution_clock::now();
 
     // get the input from camera --> a signal
-    bool frameElapsed=al.turn_Image_into_Sound(currenTone,ROI);
+    bool frameElapsed=al.turn_Image_into_Sound(trackEnabled,currenTone,ROI);
 
     if (frameElapsed){
-        std::cout<<"toggle? "<<"Yes!!"<<std::endl;
+        std::cout<<"frameElapsed toggle? "<<"Yes!!"<<std::endl;
     }else std::cout<<"toggle? "<<"No :((((((((((((((((((((("<<std::endl;
 
-    isBeat=bt.isBeat(in);
-    if (isBeat)
-    {
-        // do something on the beat
-        std::cout<<" Beat! "<<std::endl;
-    }
-    exit_msg=vs.stream_frames(in,isBeat);
+    // isBeat=bt.isBeat(in);
+    // if (isBeat)
+    // {
+    //     // do something on the beat
+    //     std::cout<<" Beat! "<<std::endl;
+    // }
+
+    exit_msg=vs.and_Sound_into_Image(in,ROI,currenTone,frameElapsed,trackEnabled);
 
     std::cout<<"-------------------------------------------------------------------------------------------------------------------"<<std::endl;
 
@@ -43,7 +46,6 @@ void audioBufferCallback(double* in, int& currenTone){
 
     if (exit_msg){
         myAudioStream->~AudioStream(); // check if jackshutdown is set appropriately
-        // camera.~Camera();
         vs.~Visualizer();
         bt.~Beatracker();
     }
@@ -71,11 +73,7 @@ int main(int argc,char **argv){
     vs.setConfig(cfg);
 
     std::thread trackingThread(&Audiolizer::_capture, &al);
-
-    // camera.temp_capture();
-    // std::thread thread_obj(&Camera::capture, &camera);
-    
-    
+        
     // bt = new Beatracker(cfg.bufferSize);
     // vs=new Visualizer(WIDTH,HEIGHT,SAMPLE_RATE,BUFFER_SIZE,FPS);    
     // vs=new Visualizer(cfg);
