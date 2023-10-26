@@ -21,7 +21,7 @@ public:
     Visualizer();
     ~Visualizer();
     int stream_frames(double* in,bool isBeat); //
-    int and_Sound_into_Image(double*in, cv::Mat, int, bool, bool);
+    int and_Sound_into_Image(double*in, cv::Mat, bool, bool, int);
     // static void* visualize(void*);
     void setConfig(const Config&);
 
@@ -29,8 +29,8 @@ public:
 private:
     Config conf;
     int W,H;
-    cv::Mat videoframe;
-    bool showFrame();
+    cv::Mat visualFrame,cameraFrame;
+    bool _showFrame(bool);
     int R,G,B;
 
     int update_BG_frame(); // remove this isDownBeat dependency
@@ -54,7 +54,7 @@ private:
     bool ascR,ascG,ascB;
     int MIN{0},MAX{200};
     void change_BG_color();
-    void _change_BG_color(int,bool);
+    void _set_BG_manually(int,bool);
     int bufferCount;
     int buffersPerFrame;
     

@@ -27,7 +27,7 @@ Visualizer::Visualizer(const Config& cfg):
     
     cv::namedWindow("Interactive Audio Visualizer",cv::WINDOW_AUTOSIZE);
     cv::Mat img(H,W, CV_8UC3,cv::Scalar(0,0,0));
-    videoframe = img;
+    visualFrame = img;
     img.release();
 
     R=0;
@@ -87,7 +87,7 @@ Visualizer::Visualizer(){
 Visualizer::~Visualizer(){
     delete[] dft;
     cv::destroyWindow("Interactive Audio Visualizer");  
-    videoframe.release();
+    visualFrame.release();
     wf->~Waveform();
     sp->~Spectrogram();  
     std::cout<<"Visualizer destructed"<<std::endl;
@@ -112,7 +112,7 @@ void Visualizer::setConfig(const Config& cfg){
     
     cv::namedWindow("Interactive Audio Visualizer",cv::WINDOW_AUTOSIZE);
     cv::Mat img(H,W, CV_8UC3,cv::Scalar(255,255,255));
-    videoframe = img;
+    visualFrame = img;
     
     dft=new double[H];
     // double dft[H];
@@ -128,77 +128,72 @@ void Visualizer::setConfig(const Config& cfg){
     beatCount=0;
 }
 
-bool Visualizer::showFrame(){
-    cv::imshow("Interactive Audio Visualizer", videoframe);//Showing the video//
-    // cv::waitKey(1); //Allowing 1 milliseconds frame processing time
-    if (cv::waitKey(1) == 113) return true;
-    return false;
+bool Visualizer::_showFrame(bool nativeWindow){
+    if (nativeWindow){
+        std::cout<<"Visualizer : is VISUAL Frame"<<std::endl;
+        cv::imshow("Interactive Audio Visualizer", visualFrame);//Showing the video//
+        // cv::waitKey(1); //Allowing 1 milliseconds frame processing time
+        if (cv::waitKey(1) == 113) return true;
+        return false;
+    }
+    else {
+        std::cout<<"Visualizer : is CAMERA Frame"<<std::endl;
+        cv::imshow("Interactive Audio Visualizer", cameraFrame);//Showing the video//
+        // cv::waitKey(1); //Allowing 1 milliseconds frame processing time
+        if (cv::waitKey(1) == 113) return true;
+        return false;
+
+    }
+
 }
 
-void Visualizer::_change_BG_color(int tone, bool trackEnabled){    // naive
+void Visualizer::_set_BG_manually(int tone, bool trackEnabled){    // naive
 
     // #include wavelengths.h
+    double percent;
 
-    if (trackEnabled){
-        double percent;
-
-        if (tone>0 && tone<200){                  // naive conversion
-            percent = (double)tone/200.;
-            for (int i=0;i<W;i++)
-                for (int j=0;j<H;j++){
-                    // std::cout<<"videoframe.at<cv::Vec3b>(j,i)[0] = (int)(255.*percent) "<<(int)(255.*percent)<<std::endl;
-                    videoframe.at<cv::Vec3b>(j,i)[0] = (int)(255.*percent);
-                }
-        }else if (tone >200 && tone <600){
-            percent = (double)tone/(600. - 200.);
-            for (int i=0;i<W;i++)
-                for (int j=0;j<H;j++){
-                    // std::cout<<"videoframe.at<cv::Vec3b>(j,i)[0] = (int)(255.*percent) "<<(int)(255.*percent)<<std::endl;
-                    videoframe.at<cv::Vec3b>(j,i)[1] = (int)(255.*percent);
-                }
-        }else if (tone >600 && tone <4000) {
-            percent = (double)tone/(4000. - 600.);
-            for (int i=0;i<W;i++)
-                for (int j=0;j<H;j++){
-                    // std::cout<<"videoframe.at<cv::Vec3b>(j,i)[0] = (int)(255.*percent) "<<(int)(255.*percent)<<std::endl;
-                    videoframe.at<cv::Vec3b>(j,i)[3] = (int)(255.*percent);
-                }
-        }
-        std::cout<<"Visualizer percent "<<percent<<std::endl;
+    if (tone>0 && tone<200){                  // naive conversion
+        percent = (double)tone/200.;
+        for (int i=0;i<W;i++)
+            for (int j=0;j<H;j++){
+                // std::cout<<"visualFrame.at<cv::Vec3b>(j,i)[0] = (int)(255.*percent) "<<(int)(255.*percent)<<std::endl;
+                visualFrame.at<cv::Vec3b>(j,i)[0] = (int)(255.*percent);
+            }
+    }else if (tone >200 && tone <600){
+        percent = (double)tone/(600. - 200.);
+        for (int i=0;i<W;i++)
+            for (int j=0;j<H;j++){
+                // std::cout<<"visualFrame.at<cv::Vec3b>(j,i)[0] = (int)(255.*percent) "<<(int)(255.*percent)<<std::endl;
+                visualFrame.at<cv::Vec3b>(j,i)[1] = (int)(255.*percent);
+            }
+    }else if (tone >600 && tone <4000) {
+        percent = (double)tone/(4000. - 600.);
+        for (int i=0;i<W;i++)
+            for (int j=0;j<H;j++){
+                // std::cout<<"visualFrame.at<cv::Vec3b>(j,i)[0] = (int)(255.*percent) "<<(int)(255.*percent)<<std::endl;
+                visualFrame.at<cv::Vec3b>(j,i)[3] = (int)(255.*percent);
+            }
     }
+    std::cout<<"Visualizer percent "<<percent<<std::endl;
+
 }
-
-int Visualizer::and_Sound_into_Image(double* in,cv::Mat frame, int tone, bool frameElapsed, bool trackEnabled){
-    frame.copyTo(videoframe);
-    // std::cout<<"bufferCount -->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"<<bufferCount<<" ";
+int Visualizer::and_Sound_into_Image(double* in,cv::Mat videoframe, bool frameElapsed, bool trackEnabled, int tone){
+    
     bool exit_msg=false;
-
 
     // exit_msg = showFrame();
 
     if (frameElapsed){                                    // is this a legitimate solution? otherwise try threads
+        videoframe.copyTo(cameraFrame);
+        exit_msg = _showFrame(false);   // shows the video captured from camera --> where should it depict the visualFrame?
 
-        // std::cout<<" shows the frame"<<std::endl;
-        exit_msg = showFrame();
-
-        //check white pixels
-        // int white_pixel_counter=0;
-        // for (int i=0;i<W;i++){
-        //     for (int j=H/5;j<(H-H/5);j++){
-        //         if(videoframe.at<cv::Vec3b>(j,i)[0]==255) white_pixel_counter++;
-        //     }
-        // }
-//debug ==
-        // std::cout<<white_pixel_counter<<" == "<<wave.size()<<" ??"<<std::endl;
-        // at the end
-        // if(!update_BG_frame()){
-        //     std::cout<<"Visualizer::stream_frames : error update_bg_frame"<<std::endl;
-        // }
-    }else {
-        // std::cout<<" is processing the frame"<<std::endl;
-        // std::cout<<"Visualizer trackEnabled "<<trackEnabled<<std::endl;
-        // _change_BG_color(tone, trackEnabled);
     }
+    
+    if (trackEnabled){ // preprocess visual_frame -->   does nt depict the frame, it just edits it so it does not require a new frame to be captured by the camera.
+        // update the current visualframe according to the changing of the tracking stimulus
+        _set_BG_manually(tone, trackEnabled);
+    }
+
 
     //start preparing for the next frame
     // wf->prepare_waveform(bufferCount,in); //--> addressed to the next update
@@ -255,13 +250,13 @@ int Visualizer::stream_frames(double* in,bool isBeat){
 
         // std::cout<<" shows the frame"<<std::endl;
 
-        exit_msg = showFrame();
+        exit_msg = _showFrame(true); 
 
         //check white pixels
         // int white_pixel_counter=0;
         // for (int i=0;i<W;i++){
         //     for (int j=H/5;j<(H-H/5);j++){
-        //         if(videoframe.at<cv::Vec3b>(j,i)[0]==255) white_pixel_counter++;
+        //         if(visualFrame.at<cv::Vec3b>(j,i)[0]==255) white_pixel_counter++;
         //     }
         // }
 //debug ==
@@ -321,7 +316,7 @@ int Visualizer::stream_frames(double* in,bool isBeat){
 }
 
 int Visualizer::update_BG_frame(){
-    if (videoframe.empty()) 
+    if (visualFrame.empty()) 
     {
         std::cout << "\n Image not created. You have done something wrong. \n";
         return 0;    // Unsuccessful.
@@ -372,15 +367,15 @@ void Visualizer::change_BG_color(){
         }else fB=-incrB;
     }
     cv::Scalar color(B,R,G);
-    // videoframe.setTo(color);
+    // visualFrame.setTo(color);
 
 // first way to change the color
     if (beatCount%9==0){
         for (int i=0;i<W-f_x_trans;i++){
             for (int j=0;j<H;j++){
-                videoframe.at<cv::Vec3b>(j,i)[0] += fB;//newval[0];
-                videoframe.at<cv::Vec3b>(j,i)[1] += fR;//newval[1];
-                videoframe.at<cv::Vec3b>(j,i)[2] += fG;//newval[2];
+                visualFrame.at<cv::Vec3b>(j,i)[0] += fB;//newval[0];
+                visualFrame.at<cv::Vec3b>(j,i)[1] += fR;//newval[1];
+                visualFrame.at<cv::Vec3b>(j,i)[2] += fG;//newval[2];
             }
         }
     }
@@ -390,11 +385,11 @@ void Visualizer::change_BG_color(){
         for (int i=0;i<W-f_x_trans;i++){
             for (int j=0;j<H;j++){
                 if (i>H/2-H/6 && i<H/2+H/6)
-                    videoframe.at<cv::Vec3b>(j,i)[0] += fB;//newval[0];
+                    visualFrame.at<cv::Vec3b>(j,i)[0] += fB;//newval[0];
                 else if (i<H/6 || i>H-H/6)
-                    videoframe.at<cv::Vec3b>(j,i)[1] += fR;//newval[1];
+                    visualFrame.at<cv::Vec3b>(j,i)[1] += fR;//newval[1];
                 else
-                    videoframe.at<cv::Vec3b>(j,i)[2] += fG;//newval[2];
+                    visualFrame.at<cv::Vec3b>(j,i)[2] += fG;//newval[2];
             }
         }
     }
@@ -453,15 +448,15 @@ int Visualizer::update_wave_frame(){
         std::cout<<" start "<<start<<" end "<<end<<std::endl;
         for (int ytr = start; ytr < end ; ytr++ ){
             std::cout<<" > x,y "<<x_trans<<","<<ytr<<std::endl;
-            videoframe.at<cv::Vec3b>(ytr,x_trans)[0] = 255;//newval[0];
-            videoframe.at<cv::Vec3b>(ytr,x_trans)[1] = 255;//newval[1];
-            videoframe.at<cv::Vec3b>(ytr,x_trans)[2] = 255;//newval[2];
+            visualFrame.at<cv::Vec3b>(ytr,x_trans)[0] = 255;//newval[0];
+            visualFrame.at<cv::Vec3b>(ytr,x_trans)[1] = 255;//newval[1];
+            visualFrame.at<cv::Vec3b>(ytr,x_trans)[2] = 255;//newval[2];
         }
         x_trans++;
         if(x_trans==W) x_trans=0;
-        // videoframe.at<cv::Vec3b>(y2,x_trans)[0] = 255;//newval[0];
-        // videoframe.at<cv::Vec3b>(y2,x_trans)[1] = 255;//newval[1];
-        // videoframe.at<cv::Vec3b>(y2,x_trans)[2] = 255;//newval[2];
+        // visualFrame.at<cv::Vec3b>(y2,x_trans)[0] = 255;//newval[0];
+        // visualFrame.at<cv::Vec3b>(y2,x_trans)[1] = 255;//newval[1];
+        // visualFrame.at<cv::Vec3b>(y2,x_trans)[2] = 255;//newval[2];
         // x_trans++;
         // if(x_trans==W) x_trans=0;
     }
@@ -500,9 +495,9 @@ int Visualizer::update_wave_frame(){
         }
         // std::cout<<"filling canvas with in position y "<<y_trans<<std::endl;
         // std::cout<<"filling canvas with in position x "<<x_trans<<std::endl;
-        videoframe.at<cv::Vec3b>(y_trans,x_trans)[0] = 255;//newval[0];
-        videoframe.at<cv::Vec3b>(y_trans,x_trans)[1] = 255;//newval[1];
-        videoframe.at<cv::Vec3b>(y_trans,x_trans)[2] = 255;//newval[2];
+        visualFrame.at<cv::Vec3b>(y_trans,x_trans)[0] = 255;//newval[0];
+        visualFrame.at<cv::Vec3b>(y_trans,x_trans)[1] = 255;//newval[1];
+        visualFrame.at<cv::Vec3b>(y_trans,x_trans)[2] = 255;//newval[2];
 
         ctr-=hop;
     }
@@ -521,17 +516,17 @@ int Visualizer::update_spectrogram(){
         //normalize min max in range [0,1]
         dft[i]=(dft[i]-minf)/(maxf-minf);
 
-        // std::cout<<"videoframe[y:"<<f_y_trans<<"][x:"<<f_x_trans<<"]="<<dft[i]<<"-------------->*255="<<(int)(dft[i]*255)<<" made "<<(int)(dft[i]*255)%255<<std::endl;
-        // videoframe.at<cv::Vec3b>(f_y_trans,f_x_trans)[0] = (int)(dft[i]*255)%255;//newval[0]; *0.7
-        // videoframe.at<cv::Vec3b>(f_y_trans,f_x_trans)[1] = (int)(dft[i]*255)%255;//newval[1]; *0.3
-        // videoframe.at<cv::Vec3b>(f_y_trans,f_x_trans)[2] = (int)(dft[i]*255)%255;//newval[2]; *0.2
+        // std::cout<<"visualFrame[y:"<<f_y_trans<<"][x:"<<f_x_trans<<"]="<<dft[i]<<"-------------->*255="<<(int)(dft[i]*255)<<" made "<<(int)(dft[i]*255)%255<<std::endl;
+        // visualFrame.at<cv::Vec3b>(f_y_trans,f_x_trans)[0] = (int)(dft[i]*255)%255;//newval[0]; *0.7
+        // visualFrame.at<cv::Vec3b>(f_y_trans,f_x_trans)[1] = (int)(dft[i]*255)%255;//newval[1]; *0.3
+        // visualFrame.at<cv::Vec3b>(f_y_trans,f_x_trans)[2] = (int)(dft[i]*255)%255;//newval[2]; *0.2
 
         if (i>H/2-H/6 && i<H/2+H/6)
-            videoframe.at<cv::Vec3b>(f_y_trans,f_x_trans)[0] = (int)(dft[i]*255)%255;//newval[0]; *0.7
+            visualFrame.at<cv::Vec3b>(f_y_trans,f_x_trans)[0] = (int)(dft[i]*255)%255;//newval[0]; *0.7
         else if (i<H/6 || i>H-H/6)
-            videoframe.at<cv::Vec3b>(f_y_trans,f_x_trans)[1] = (int)(dft[i]*255)%255;//newval[1]; *0.3
+            visualFrame.at<cv::Vec3b>(f_y_trans,f_x_trans)[1] = (int)(dft[i]*255)%255;//newval[1]; *0.3
         else
-            videoframe.at<cv::Vec3b>(f_y_trans,f_x_trans)[2] = (int)(dft[i]*255)%255;//newval[2]; *0.2
+            visualFrame.at<cv::Vec3b>(f_y_trans,f_x_trans)[2] = (int)(dft[i]*255)%255;//newval[2]; *0.2
 
     }
     f_x_trans++;

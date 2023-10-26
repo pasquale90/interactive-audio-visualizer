@@ -10,6 +10,12 @@
 // #include <thread>
 #include "videotracker.h"
 
+struct RegionOfInterest{
+    int centerX;
+    int centerY;
+    int volumeW;
+    int volumeH;
+};
 
 class Audiolizer{
 
@@ -19,7 +25,7 @@ public:
     ~Audiolizer();
     void setConfig(const Config& cfg);
     bool turn_Image_into_Sound_____(int&,cv::Mat&);
-    bool turn_Image_into_Sound(bool&,int&,cv::Mat&);
+    bool turn_Image_into_Sound(bool&,int&,cv::Mat&,RegionOfInterest);
 
     void _capture();
 

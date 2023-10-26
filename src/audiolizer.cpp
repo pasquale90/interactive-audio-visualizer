@@ -52,7 +52,7 @@ bool Audiolizer::_tickTock(){
     return camera_tracker.tickTock();
 }
 
-bool Audiolizer::turn_Image_into_Sound(bool &ispattern, int& freq, cv::Mat& roi){
+bool Audiolizer::turn_Image_into_Sound(bool &ispattern, int& freq, cv::Mat& frame,RegionOfInterest roi){
 
    /***
     * returns boolean if new frame occured
@@ -63,11 +63,11 @@ bool Audiolizer::turn_Image_into_Sound(bool &ispattern, int& freq, cv::Mat& roi)
     // _simple_definition(freq);
     // _simple_freqRange_palindrome(freq);
 
-    bool tracking_updated = camera_tracker.update(ROIcenter,roi);
+    bool tracking_updated = camera_tracker.update(ROIcenter,frame);
     bool pattern_locked =  camera_tracker._pattern_locked();
     std::cout<<"Audiolizer::turn_Image_into_Sound :: Pattern locked --> "<<camera_tracker._pattern_locked()<<", Tracking updated --> "<<tracking_updated<<std::endl;
-    // if (!roi.empty()){
-    //     imshow("1", roi);
+    // if (!frame.empty()){
+    //     imshow("1", frame);
     //     std::cout<<"turn_Image_into_Sound ISSSSSSSSSSSSSSSSSS NOT EMPTY\n\n\n\n\n\n"<<std::endl;
     // }
 
@@ -93,7 +93,7 @@ bool Audiolizer::turn_Image_into_Sound(bool &ispattern, int& freq, cv::Mat& roi)
     return _tickTock();
 }
 
-bool Audiolizer::turn_Image_into_Sound_____(int& freq,cv::Mat& roi){
+bool Audiolizer::turn_Image_into_Sound_____(int& freq,cv::Mat& frame){
 
    /***
     * returns boolean if new frame occured
@@ -104,11 +104,11 @@ bool Audiolizer::turn_Image_into_Sound_____(int& freq,cv::Mat& roi){
     // _simple_definition(freq);
     // _simple_freqRange_palindrome(freq);
 
-    bool tracking_updated = camera_tracker.update(ROIcenter,roi);
+    bool tracking_updated = camera_tracker.update(ROIcenter,frame);
     bool pattern_locked =  camera_tracker._pattern_locked();
     std::cout<<"Audiolizer::turn_Image_into_Sound :: Pattern locked --> "<<camera_tracker._pattern_locked()<<", Tracking updated --> "<<tracking_updated<<std::endl;
-    if (!roi.empty()){
-        imshow("1", roi);
+    if (!frame.empty()){
+        imshow("1", frame);
         std::cout<<"turn_Image_into_Sound ISSSSSSSSSSSSSSSSSS NOT EMPTY\n\n\n\n\n\n"<<std::endl;
     }
 

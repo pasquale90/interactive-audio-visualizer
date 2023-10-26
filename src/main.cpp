@@ -12,17 +12,25 @@ Visualizer vs;
 Audiolizer al;
 AudioStream *myAudioStream;
 
-cv::Mat ROI;
+RegionOfInterest ROI;
+cv::Mat visualFrame;
 bool exit_msg=false;
 bool isBeat;
 bool trackEnabled;
 
-void audioBufferCallback(double* in, int& currenTone){
-
+void audioBufferCallback(double* mix, int& currenTone){
+    /*** fill latter
+     * frameElapsed : a new frame has been elapsed (enables visualization)
+     * trackEnabled : ROI's tracking signal (updates visualization)
+     * currenTone : audiolizer's generated frequency responce                                   // currently controls the color changing --> in other project, the mix should do it.
+     * visualFrame : the whole frame of the camera when passed through ```turn_Image_into_Sound()``` and the visual output when passed through ```and_Sound_into_Image()``` 
+     * ROI : region of interest.Center(x,y), and volume(width, height) 
+     * // @TODO is to 
+    */
     auto t1 = std::chrono::high_resolution_clock::now();
 
     // get the input from camera --> a signal
-    bool frameElapsed=al.turn_Image_into_Sound(trackEnabled,currenTone,ROI);
+    bool frameElapsed=al.turn_Image_into_Sound(trackEnabled,currenTone,visualFrame,ROI);
 
     if (frameElapsed){
         std::cout<<"frameElapsed toggle? "<<"Yes!!"<<std::endl;
@@ -35,7 +43,7 @@ void audioBufferCallback(double* in, int& currenTone){
     //     std::cout<<" Beat! "<<std::endl;
     // }
 
-    exit_msg=vs.and_Sound_into_Image(in,ROI,currenTone,frameElapsed,trackEnabled);
+    exit_msg=vs.and_Sound_into_Image(mix,visualFrame,frameElapsed,trackEnabled,currenTone);
 
     std::cout<<"-------------------------------------------------------------------------------------------------------------------"<<std::endl;
 
