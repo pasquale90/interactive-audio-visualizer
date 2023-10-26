@@ -52,7 +52,7 @@ bool Audiolizer::_tickTock(){
     return camera_tracker.tickTock();
 }
 
-bool Audiolizer::turn_Image_into_Sound(bool &pattern, int& freq, cv::Mat& roi){
+bool Audiolizer::turn_Image_into_Sound(bool &ispattern, int& freq, cv::Mat& roi){
 
    /***
     * returns boolean if new frame occured
@@ -79,7 +79,7 @@ bool Audiolizer::turn_Image_into_Sound(bool &pattern, int& freq, cv::Mat& roi){
             freq=prev_freq;
             // return false;
         } 
-        pattern=true;
+        ispattern=true;
     }else{                            // gradualy fade frequency to zero --> if frequency > 0 , slowly decline
         if (freq>0){ 
             // return _gradualy_fade(freq);    // gradualy fade frequency to zero --> if frequency > 0 , slowly decline
@@ -88,7 +88,7 @@ bool Audiolizer::turn_Image_into_Sound(bool &pattern, int& freq, cv::Mat& roi){
             freq=0;
             // return false;
         }
-        pattern=false;
+        ispattern=false;
     }
     return _tickTock();
 }
