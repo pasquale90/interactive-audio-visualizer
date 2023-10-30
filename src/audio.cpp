@@ -7,7 +7,7 @@ void audioBufferCallback(double*,int&);
 int streamAudio (jack_nframes_t nframes, void *arg){ //, float *in,void (*threading)(float *sig)
     return static_cast<AudioStream*>(arg)->streamBuffer(nframes);
 }
-AudioStream::AudioStream(const char* serverName,const char* clientName){
+AudioStream::AudioStream(const Config &cfg, const char* serverName,const char* clientName){
     
     server_name=serverName;
     client_name=clientName;  
@@ -32,7 +32,7 @@ AudioStream::AudioStream(const char* serverName,const char* clientName){
         std::cout<<"\t>>JACK server started"<<std::endl;
     }
 // //FIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX MEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
-    sig = new Signal(512,3520);
+    sig = new Signal(cfg.sampleRate,cfg.bufferSize);
 }
 
 AudioStream::~AudioStream(){

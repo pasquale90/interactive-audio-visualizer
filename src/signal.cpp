@@ -1,13 +1,15 @@
 
 #include "signal.h"
 
-Signal::Signal(int bufferSize, int maxFrequency){
+Signal::Signal(int sample_rate, int buffer_size){
+	sampleRate=sample_rate;
+	bufferSize=buffer_size;
     prevfreq=0;
-    sine=new double[512];
+    sine=new double[bufferSize];
     phaseL=0;
     phaseR=0;
 	phase=0.0;
-
+	amplitude = 0.1;				// not even heuristic
 }
 
 Signal::~Signal(){
@@ -22,13 +24,13 @@ void Signal::prepareSine(int frequency){
 	 * eq2 radians_step = (circles/buffer) * 2PI / buffer_size (for each sample we divide with buffer size)
 	*/
 	if (frequency != prevfreq){	// reduce number of calculations
-		rads_per_sample = ((double)frequency * 2.*M_PI) / (double)44100; //radians traspotition per time unit
+		rads_per_sample = ((double)frequency * 2.*M_PI) / (double)sampleRate; //radians traspotition per time unit
 		prevfreq = frequency;	
 		}
 
-	for (int i=0;i<512;i++){
+	for (int i=0;i<bufferSize;i++){
 
-		sine[i] = 0.1*(double)sin(phase);
+		sine[i] = amplitude*(double)sin(phase);
 		phase+=rads_per_sample;					// shift phase by amount of rads_per_sample
 		if (phase >= 2*M_PI) phase=0;			// if phase reaches 2pi , zero it down.
 	}
@@ -38,13 +40,13 @@ void Signal::prepareSine(int frequency){
 double Signal::getSineL(){
 	double sampleL=sine[phaseL];
 	phaseL += 1;
-	if( phaseL >= 512 ) phaseL = 0;
+	if( phaseL >= bufferSize ) phaseL = 0;
 	return sampleL;
 }
 
 double Signal::getSineR(){
 	double sampleR=sine[phaseR];
 	phaseR += 1;	// phase shift in stereo
-	if( phaseR >= 512 ) phaseR = 0;
+	if( phaseR >= bufferSize ) phaseR = 0;
 	return sampleR;
 }

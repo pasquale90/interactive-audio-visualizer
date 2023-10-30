@@ -74,7 +74,7 @@ int main(int argc,char **argv){
     
     const char* serverName=NULL;
     const char* clientName="myAudioStream"; 
-    myAudioStream = new AudioStream(serverName,clientName);
+    myAudioStream = new AudioStream(cfg,serverName,clientName);
     // al.setConfig(cfg.bufferSize);
     al.setConfig(cfg);
     bt.setConfig(cfg);

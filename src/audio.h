@@ -2,6 +2,7 @@
 #define AUDIO_H
 
 #include "signal.h"
+#include "config.h"
 
 #include <jack/jack.h>
 #include <jack/types.h>
@@ -13,7 +14,7 @@
 class AudioStream{
 public:
 
-    AudioStream(const char* serverName,const char* clientName); //const char*,const char*
+    AudioStream(const Config&, const char*,const char*); //const char*,const char*
     ~AudioStream();
 
     void AudioRouting();
