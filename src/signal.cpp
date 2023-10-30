@@ -28,7 +28,7 @@ void Signal::prepareSine(int frequency){
 
 	for (int i=0;i<512;i++){
 
-		sine[i] = 1.0*(double)sin(phase);
+		sine[i] = 0.1*(double)sin(phase);
 		phase+=rads_per_sample;					// shift phase by amount of rads_per_sample
 		if (phase >= 2*M_PI) phase=0;			// if phase reaches 2pi , zero it down.
 	}
@@ -44,7 +44,7 @@ double Signal::getSineL(){
 
 double Signal::getSineR(){
 	double sampleR=sine[phaseR];
-	phaseR += 3;	// phase shift in stereo
+	phaseR += 1;	// phase shift in stereo
 	if( phaseR >= 512 ) phaseR = 0;
 	return sampleR;
 }
