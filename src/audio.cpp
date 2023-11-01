@@ -31,7 +31,7 @@ AudioStream::AudioStream(const Config &cfg, const char* serverName,const char* c
     if (status & JackServerStarted) {
         std::cout<<"\t>>JACK server started"<<std::endl;
     }
-// //FIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX MEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+
     sig = new Signal(cfg.sampleRate,cfg.bufferSize);
 }
 

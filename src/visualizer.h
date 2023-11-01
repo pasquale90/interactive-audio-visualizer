@@ -12,7 +12,7 @@
 #include "opencv2/highgui/highgui.hpp"
 #include <queue>
 #include <random>
-
+#include <vector>
 
 class Visualizer{
 public:
@@ -55,6 +55,9 @@ private:
     int MIN{0},MAX{200};
     void change_BG_color();
     void _set_BG_manually(int,bool);
+    void _setToCamera(cv::Mat);
+    void _create_camMask(int,int);
+
     int bufferCount;
     int buffersPerFrame;
     
@@ -63,6 +66,11 @@ private:
     Spectrogram *sp;
     int beatCount;
     
+    // std::pair<int,int> *pixepixelBank;
+    cv::Mat camBinaryMask;
+    // int *camBinaryMask;
+    // int pixel_counter;
+    std::vector<std::pair<int,int>> circleMask;
 };
 
 

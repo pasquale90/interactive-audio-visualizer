@@ -25,7 +25,7 @@ public:
     ~Audiolizer();
     void setConfig(const Config& cfg);
     bool turn_Image_into_Sound_____(int&,cv::Mat&);
-    bool turn_Image_into_Sound(bool&,int&,cv::Mat&,RegionOfInterest);
+    bool turn_Image_into_Sound(bool&,int&,cv::Mat&,RegionOfInterest&);
 
     void _capture();
 

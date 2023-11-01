@@ -32,6 +32,7 @@ void audioBufferCallback(double* mix, int& currenTone){
     // get the input from camera --> a signal
     bool frameElapsed=al.turn_Image_into_Sound(trackEnabled,currenTone,visualFrame,ROI);
 
+    // std::cout<<"MAIN :: Current Roi center "<<ROI.centerX<<","<<ROI.centerY<<std::endl;
     if (frameElapsed){
         std::cout<<"frameElapsed toggle? "<<"Yes!!"<<std::endl;
     }else std::cout<<"toggle? "<<"No :((((((((((((((((((((("<<std::endl;
@@ -68,14 +69,11 @@ int main(int argc,char **argv){
 
     Config cfg(argc,argv);
     cfg.display();
-
-    // camera.setConfig(cfg);
-    // camera.display_config();
     
     const char* serverName=NULL;
     const char* clientName="myAudioStream"; 
     myAudioStream = new AudioStream(cfg,serverName,clientName);
-    // al.setConfig(cfg.bufferSize);
+
     al.setConfig(cfg);
     bt.setConfig(cfg);
     vs.setConfig(cfg);

@@ -18,7 +18,7 @@ Visualizer::Visualizer(const Config& cfg):
     // Config conf(cfg);
     // std::cout<<&cfg<<"\n"<<&conf<<std::endl;
     // conf.display();
-    std::cout<<"Visualizer constructor "<<W<<", "<<H<<", "<<SR<<", "<<buffer_size<<", "<<fps<<std::endl;
+    // std::cout<<"Visualizer constructor "<<W<<", "<<H<<", "<<SR<<", "<<buffer_size<<", "<<fps<<std::endl;
     // W=1024;
     // H=512;
     // SR=22050;
@@ -111,7 +111,10 @@ void Visualizer::setConfig(const Config& cfg){
     // fps=25;
     
     cv::namedWindow("Interactive Audio Visualizer",cv::WINDOW_AUTOSIZE);
-    cv::Mat img(H,W, CV_8UC3,cv::Scalar(255,255,255));
+    cv::namedWindow("Mask",cv::WINDOW_NORMAL);
+    cv::resizeWindow("Mask",cfg.camResW,cfg.camResH);
+
+    cv::Mat img(H,W, CV_8UC3,cv::Scalar(0,0,0));
     visualFrame = img;
     
     dft=new double[H];
@@ -126,24 +129,210 @@ void Visualizer::setConfig(const Config& cfg){
     sp=new Spectrogram(buffer_size,buffersPerFrame,H);
     // Spectrogram sp(buffer_size,buffersPerFrame,H);
     beatCount=0;
+    
+    _create_camMask(cfg.camResW,cfg.camResH);
+}
+
+void Visualizer::_create_camMask(int cameraW,int cameraH){
+
+
+    // int thickness=1;
+    // circle( cameraFrame,
+    //     cv::Point((cameraW/2),(cameraH/2)),
+    //     radius,
+    //     cv::Scalar( 0, 255, 0 ),
+    //     thickness=1,
+    //     cv::LINE_8);
+
+
+    // calculate areas
+    int r = (cameraW>cameraH) ? cameraH/2 : cameraW/2;
+    
+    int outArea = pow( 2*r, 2 ) - (M_PI * pow(r,2)); // pow( 2*r, 2 ) is the area of the box (same center, 2*r both edges) which is subtracted by the circle area πr^2
+    outArea+= (abs(cameraW-cameraH) * r); // abs(cameraW-cameraH) = rest area outside the camera frame
+    int center_x = cameraW/2;
+    int center_y = cameraH/2;
+
+    
+    cv::Mat m1 = cv::Mat(cameraH,cameraW, CV_64F, cv::Scalar(0)); // CV_32F
+    // // camBinaryMask=m1.clone();
+    camBinaryMask=m1;
+    // m1.copyTo(camBinaryMask);
+    // m1.release();
+    // cv::resize(frame, new_mg, cv::Size(new_cols, new_rows));
+
+    int thickness=1;
+    circle( camBinaryMask,
+        cv::Point(center_x,center_y),
+        r,
+        cv::Scalar( 0, 255, 0 ),
+        thickness=1,
+        cv::LINE_8);
+    
+    
+    int verifier = 0;
+    for (int i=0;i<cameraW;i++){
+        for (int j=0;j<cameraH;j++){
+            
+            float center_dist = (float) sqrt ( pow((i-center_x),2) + pow((j-center_y),2) );
+            bool condition = center_dist > (float)r ;
+            
+            camBinaryMask.at<double>(j,i) = 0.5;
+
+            //(x - a)**2 + (y - b)**2 == r**2;
+            // bool condition2 = (pow((i - cameraW/2),2) + pow((j - cameraH/2),2)) >= pow(r,2);
+
+            if (condition){
+                camBinaryMask.at<double>(j,i) = 1;
+                ++verifier;
+            }
+            // if (condition2){
+            //     // std::cout<<"cond for i,j "<<i<<","<<j<<" is "<<condition2<<std::endl;
+            //     camBinaryMask.at<double>(j,i) = 0;
+            //     m1.at<double>(j,i) = 0;
+            // }
+        }
+    }
+    // camBinaryMask=m1.clone();
+    std::cout<<"outArea == verifier "<< outArea << "=="<< verifier <<" ?"<<std::endl;
+
+// not necessary implementation ... Masking is being done on the camera frame, not in the visual frame..
+    // top left of the visualFrame is ...
+    // int L = (W - cameraW)/2;
+    // int T = (H - cameraH)/2;
+    // int r = (cameraW>cameraH) ? cameraH/2 : cameraW/2;
+    // int d = 2*r;
+
+    // https://math.stackexchange.com/a/888576/1190945 
+// --> constantly results to zero
+    // float num_points = 0.; //+ 4* ()
+    // for (int y=0;y>r;y++){
+    //     num_points += (0.5 + 0.5 * sqrt( pow(d,2) - pow((2*y-1),2) ) );
+    // }
+    // num_points *= 4;
+    // std::cout<<"Calculated number of pixels in circle = "<<num_points<<std::endl;
+
+//  --> cannot set the camBinaryMask to m1 --> retried but wrong results in counter 
+//     std::cout<<"Before"<<std::endl;
+//     // int pixel_counter;
+//     // camBinaryMask = cv::Mat::zeros(1, 1, CV_64F);
+//     // cv::Mat m1 = cv::Mat::zeros(cameraH,cameraW, CV_64F); // CV_32F
+//     cv::Mat m1 = cv::Mat(cameraH,cameraW, CV_64F, cv::Scalar(1)); // CV_32F
+//     // m1.release();
+//     // camBinaryMask=m1.clone();
+//     // camBinaryMask=m1;
+//     m1.copyTo(camBinaryMask);
+//     // m1.release();
+//     // cvtColor(camBinaryMask, m1);
+//     // camBinaryMask=cv::Mat::create(cameraH,cameraW, CV_64F);
+//     std::cout<<"After"<<std::endl;
+//     for (int i=0;i<cameraW;i++){
+//         for (int j=0;j<cameraH;j++){
+//             //(x - a)**2 + (y - b)**2 == r**2;
+//             bool condition = (pow((i - cameraW/2),2) + pow((j - cameraH/2),2)) >= pow(r,2);
+//             // condition = true;
+//             // bool condition = ((cameraW/2 + r < i) && (cameraH/2 + r < j)) || ((cameraW/2 - r > i) && (cameraH/2 - r > j));
+//             if (condition){
+//                 // std::cout<<"cond for i,j "<<i<<","<<j<<" is "<<condition<<std::endl;
+//                 camBinaryMask.at<double>(j,i) = 0.5;
+//                 m1.at<double>(j,i) = 0.5;
+//                 circleMask.push_back({i,j});
+//                 // std::cout<<"after cond for i,j "<<i<<","<<j<<" is "<<condition<<std::endl;
+//                 // cameraFrame.at<cv::Vec3b>(j,i)[1] = 70;
+//                 // cameraFrame.at<cv::Vec3b>(j,i)[2] = 70;
+//                 // pixel_counter++;
+//             }
+//         }
+//     }
+// cv::imshow("Mask2", m1);//Showing the video//
+
+// naive --> also it produces segmentatio fault
+    // pixel_counter = 0;
+    // for (int i=0;i<cameraW;i++){
+    //     for (int j=0;j<cameraH;j++){
+    //         //(x - a)**2 + (y - b)**2 == r**2;
+    //         bool condition = (pow((i - cameraW/2),2) + pow((j - cameraH/2),2)) >= pow(r,2);
+    //         // condition = true;
+    //         // bool condition = ((cameraW/2 + r < i) && (cameraH/2 + r < j)) || ((cameraW/2 - r > i) && (cameraH/2 - r > j));
+    //         if (condition){
+    //             pixel_counter++;
+    //         }
+    //     }
+    // }
+    // camBinaryMask = new int[2*pixel_counter];
+    // pixel_counter=0;
+    // for (int i=0;i<cameraW;i++){
+    //     for (int j=0;j<cameraH;j++){
+    //         //(x - a)**2 + (y - b)**2 == r**2;
+    //         bool condition = (pow((i - cameraW/2),2) + pow((j - cameraH/2),2)) >= pow(r,2);
+    //         // condition = true;
+    //         // bool condition = ((cameraW/2 + r < i) && (cameraH/2 + r < j)) || ((cameraW/2 - r > i) && (cameraH/2 - r > j));
+    //         if (condition){
+    //             // camBinaryMask++;
+    //             camBinaryMask[pixel_counter]=i;
+    //             pixel_counter++;
+    //             camBinaryMask[pixel_counter]=j;
+    //             pixel_counter++;
+    //         }
+    //     }
+    // }
+    // int num_points = 0; //+ 4* ()
+    // for (int y=0;y>r;y++){
+    //     num_points += (0.5 + 0.5 * sqrt( pow(d,2) - pow((2*y-1),2) ) );
+    // }
+    // num_points *= 4;
+    // std::cout<<"Calculated number of pixels in circle = "<<num_points<<std::endl;
+
+// old attempt
+    // std::pair<int,int> *iter = pixepixelBank;
+    // cv::Mat img(H,W, CV_8UC1,0);
+    // camBinaryMask=img;
+    // for (int i=0;i<cameraW;i++){
+    //     for (int j=0;j<cameraH;j++){
+    //         // (x - a)**2 + (y - b)**2 == r**2;
+    //         bool isOutside = (pow((i - W/2),2) + pow((j - H/2),2)) >= pow(r,2);
+    //         if (isOutside){
+    //             // std::pair<int,int> xy(i,j);
+    //             // iter->first=i;
+    //             // iter->second=j;
+    //             // std::cout<<"storing pixel "<<iter->first<<","<<iter->second<<std::endl;
+    //             // iter++;          
+    //         }
+    //     }
+    // }
+
+
+// SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT
 }
 
 bool Visualizer::_showFrame(bool nativeWindow){
+    // if (nativeWindow){
+    //     std::cout<<"Visualizer : is VISUAL Frame"<<std::endl;
+    //     cv::imshow("Interactive Audio Visualizer", visualFrame);//Showing the video//
+    //     // cv::waitKey(1); //Allowing 1 milliseconds frame processing time
+    //     if (cv::waitKey(1) == 113) return true;
+    //     return false;
+    // }
+    // else {
+    //     std::cout<<"Visualizer : is CAMERA Frame"<<std::endl;
+    //     cv::imshow("Interactive Audio Visualizer", cameraFrame);//Showing the video//
+    //     // cv::waitKey(1); //Allowing 1 milliseconds frame processing time
+    //     if (cv::waitKey(1) == 113) return true;
+    //     return false;
+
+    // }
+
     if (nativeWindow){
         std::cout<<"Visualizer : is VISUAL Frame"<<std::endl;
-        cv::imshow("Interactive Audio Visualizer", visualFrame);//Showing the video//
-        // cv::waitKey(1); //Allowing 1 milliseconds frame processing time
-        if (cv::waitKey(1) == 113) return true;
-        return false;
     }
     else {
         std::cout<<"Visualizer : is CAMERA Frame"<<std::endl;
-        cv::imshow("Interactive Audio Visualizer", cameraFrame);//Showing the video//
-        // cv::waitKey(1); //Allowing 1 milliseconds frame processing time
-        if (cv::waitKey(1) == 113) return true;
-        return false;
-
     }
+    cv::imshow("Mask", camBinaryMask);//Showing the video//
+    cv::imshow("Interactive Audio Visualizer", visualFrame);//Showing the video//
+    // cv::waitKey(1); //Allowing 1 milliseconds frame processing time
+    if (cv::waitKey(1) == 113) return true;
+    return false;
 
 }
 
@@ -177,15 +366,76 @@ void Visualizer::_set_BG_manually(int tone, bool trackEnabled){    // naive
     std::cout<<"Visualizer percent "<<percent<<std::endl;
 
 }
+
+void Visualizer::_setToCamera(cv::Mat cameraFrame){
+
+    int cameraW=cameraFrame.cols;
+    int cameraH=cameraFrame.rows;
+
+    // top left of the visualFrame is ...
+    int L = (visualFrame.cols - cameraW)/2;
+    int T = (visualFrame.rows - cameraH)/2;
+    
+    // int radius = (cameraW>cameraH) ? cameraH/2 : cameraW/2;    
+    int r = (cameraW>cameraH) ? cameraH/2 : cameraW/2;
+
+    /***
+     * produces clicks and pops
+     * solution 1 : store the mask during construction and iterate over certain pixel values and relief buffer from visualizer's redundant latency
+     *      requires pixel calculation of circle || area outside circle --> a binary mask
+     * solution 2 : run in separate thread
+     */
+    
+    // for (int i=0;i<cameraW;i++){
+    //     for (int j=0;j<cameraH;j++){
+
+            
+    //         // if (center_x + radius < f_endX) and (center_y + radius < f_endY) and (center_x - radius > f_startX) and (center_y - radius >  f_startY)
+    //         // bool cond2 = (cameraW/2 + r < i) && (cameraH/2 + r < j) && (cameraW/2 - r > i) && (cameraH/2 - r > j);
+
+    //         //(x - a)**2 + (y - b)**2 == r**2;
+    //         bool condition = (pow((i - cameraW/2),2) + pow((j - cameraH/2),2)) >= pow(r,2);
+    //         // bool condition = ((cameraW/2 + r < i) && (cameraH/2 + r < j)) || ((ameraW/2 - r > i) && (cameraH/2 - r > j));
+    //         if (condition){
+    //             // std::cout<<"cond for i,j "<<i<<","<<j<<" is "<<cond2<<std::endl;
+    //             cameraFrame.at<cv::Vec3b>(j,i)[0] = 70;
+    //             cameraFrame.at<cv::Vec3b>(j,i)[1] = 70;
+    //             cameraFrame.at<cv::Vec3b>(j,i)[2] = 70;
+    //         }
+    //     }
+    // }
+
+    std::cout<<"circleMask "<<circleMask.size()<<std::endl;
+
+    // for (auto m : circleMask){
+    //     // cameraFrame.at<cv::Vec3b>(m.second,m.first)[0] = 70;
+    //     // cameraFrame.at<cv::Vec3b>(m.second,m.first)[1] = 70;
+    //     // cameraFrame.at<cv::Vec3b>(m.second,m.first)[1] = 70;
+    //     std::cout<<"circleMask "<<m.first<<","<<m.second<<std::endl;
+    // }
+    // cv::Rect rect(0,0,cameraFrame.cols, cameraFrame.rows);
+    // cv::Mat extractedImage2 = videoframe(rect);
+    // cameraFrame.copyTo(videoframe(rect1));
+    std::cout<<"hello there"<<std::endl;
+    cameraFrame.copyTo(visualFrame(cv::Rect(L,T,cameraFrame.cols, cameraFrame.rows)));
+
+
+}
+
 int Visualizer::and_Sound_into_Image(double* in,cv::Mat videoframe, bool frameElapsed, bool trackEnabled, int tone){
     
     bool exit_msg=false;
 
     // exit_msg = showFrame();
 
+    sp->prepare_spectrogram(bufferCount,in);
+    
     if (frameElapsed){                                    // is this a legitimate solution? otherwise try threads
-        videoframe.copyTo(cameraFrame);
-        exit_msg = _showFrame(false);   // shows the video captured from camera --> where should it depict the visualFrame?
+        // videoframe.copyTo(cameraFrame);
+        // cameraFrame.copyTo(videoframe);
+
+        _setToCamera(videoframe);
+        exit_msg = _showFrame(true);   // shows the video captured from camera --> where should it depict the visualFrame?
 
     }
     
