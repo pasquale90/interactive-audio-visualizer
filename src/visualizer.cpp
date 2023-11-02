@@ -88,6 +88,7 @@ Visualizer::~Visualizer(){
     delete[] dft;
     cv::destroyWindow("Interactive Audio Visualizer");  
     visualFrame.release();
+    camBinaryMask.release();
     wf->~Waveform();
     sp->~Spectrogram();  
     std::cout<<"Visualizer destructed"<<std::endl;
@@ -174,16 +175,19 @@ void Visualizer::_create_camMask(int cameraW,int cameraH){
     for (int i=0;i<cameraW;i++){
         for (int j=0;j<cameraH;j++){
             
-            float center_dist = (float) sqrt ( pow((i-center_x),2) + pow((j-center_y),2) );
-            bool condition = center_dist > (float)r ;
+            double center_dist = (double) sqrt ( pow((i-center_x),2) + pow((j-center_y),2) );
+            bool condition = center_dist > (double)r ;
             
-            camBinaryMask.at<double>(j,i) = 0.5;
+            // camBinaryMask.at<double>(j,i) = 0.5;
 
             //(x - a)**2 + (y - b)**2 == r**2;
             // bool condition2 = (pow((i - cameraW/2),2) + pow((j - cameraH/2),2)) >= pow(r,2);
 
             if (condition){
-                camBinaryMask.at<double>(j,i) = 1;
+
+                double transparency = (center_dist-(double)r)/ (double)abs(cameraW-cameraH);
+                // std::cout<<transparency <<" = "<<center_dist<<"-"<<r<<"("<<center_dist-r<<") / "<<abs(cameraW-cameraH)<<std::endl;
+                camBinaryMask.at<double>(j,i) = transparency;
                 ++verifier;
             }
             // if (condition2){
@@ -405,7 +409,7 @@ void Visualizer::_setToCamera(cv::Mat cameraFrame){
     //     }
     // }
 
-    std::cout<<"circleMask "<<circleMask.size()<<std::endl;
+    // std::cout<<"circleMask "<<circleMask.size()<<std::endl;
 
     // for (auto m : circleMask){
     //     // cameraFrame.at<cv::Vec3b>(m.second,m.first)[0] = 70;
@@ -416,6 +420,30 @@ void Visualizer::_setToCamera(cv::Mat cameraFrame){
     // cv::Rect rect(0,0,cameraFrame.cols, cameraFrame.rows);
     // cv::Mat extractedImage2 = videoframe(rect);
     // cameraFrame.copyTo(videoframe(rect1));
+
+
+    for (int i=0;i<cameraW;i++){
+        for (int j=0;j<cameraH;j++){
+            
+            
+            // std::cout<<"cameraFrame.at<cv::Vec3b>(j,i)[0] == "<<cameraFrame.at<cv::Vec3b>(j,i)[0]<<std::endl;
+            // cameraFrame.at<cv::Vec3b>(j,i)[0] = cameraFrame.at<cv::Vec3b>(j,i)[0]*(1.-ratio) + (ratio*visualFrame.at<cv::Vec3b>(T+j,L+i)[0]);
+            // cameraFrame.at<cv::Vec3b>(j,i)[1] = cameraFrame.at<cv::Vec3b>(j,i)[1]*(1.-ratio) + (ratio*visualFrame.at<cv::Vec3b>(T+j,L+i)[1]);
+            // cameraFrame.at<cv::Vec3b>(j,i)[2] = cameraFrame.at<cv::Vec3b>(j,i)[2]*(1.-ratio) + (ratio*visualFrame.at<cv::Vec3b>(T+j,L+i)[2]);
+            if (camBinaryMask.at<double>(j,i)>0.){
+                double ratio = camBinaryMask.at<double>(j,i);
+                // works
+                // cameraFrame.at<cv::Vec3b>(j,i)[0] = ((double)cameraFrame.at<cv::Vec3b>(j,i)[0]*(1.-ratio)) + (ratio*(double)visualFrame.at<cv::Vec3b>(T+j,L+i)[0]);
+                // cameraFrame.at<cv::Vec3b>(j,i)[1] = ((double)cameraFrame.at<cv::Vec3b>(j,i)[1]*(1.-ratio)) +(ratio*(double)visualFrame.at<cv::Vec3b>(T+j,L+i)[1]);
+                // cameraFrame.at<cv::Vec3b>(j,i)[2] = ((double)cameraFrame.at<cv::Vec3b>(j,i)[2]*(1.-ratio)) + (ratio*(double)visualFrame.at<cv::Vec3b>(T+j,L+i)[2]);
+                cameraFrame.at<cv::Vec3b>(j,i)[0] = (ratio*(double)visualFrame.at<cv::Vec3b>(T+j,L+i)[0]);
+                cameraFrame.at<cv::Vec3b>(j,i)[1] = (ratio*(double)visualFrame.at<cv::Vec3b>(T+j,L+i)[1]);
+                cameraFrame.at<cv::Vec3b>(j,i)[2] = (ratio*(double)visualFrame.at<cv::Vec3b>(T+j,L+i)[2]);
+            }
+            
+        }
+    }
+
     std::cout<<"hello there"<<std::endl;
     cameraFrame.copyTo(visualFrame(cv::Rect(L,T,cameraFrame.cols, cameraFrame.rows)));
 
