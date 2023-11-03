@@ -87,6 +87,7 @@ Visualizer::Visualizer(){
 Visualizer::~Visualizer(){
     delete[] dft;
     cv::destroyWindow("Interactive Audio Visualizer");  
+    // cv::destroyWindow("Mask");  
     visualFrame.release();
     camBinaryMask.release();
     wf->~Waveform();
@@ -104,6 +105,9 @@ void Visualizer::setConfig(const Config& cfg){
     SR=cfg.sampleRate;
     buffer_size=cfg.bufferSize;
     fps=cfg.fps;
+
+    fmin = cfg.minFrequency;
+    fmax = cfg.maxFrequency;
     std::cout<<"Visualizer constructor "<<W<<", "<<H<<", "<<SR<<", "<<buffer_size<<", "<<fps<<std::endl;
     // W=1024;
     // H=512;
@@ -112,8 +116,8 @@ void Visualizer::setConfig(const Config& cfg){
     // fps=25;
     
     cv::namedWindow("Interactive Audio Visualizer",cv::WINDOW_AUTOSIZE);
-    cv::namedWindow("Mask",cv::WINDOW_NORMAL);
-    cv::resizeWindow("Mask",cfg.camResW,cfg.camResH);
+    // cv::namedWindow("Mask",cv::WINDOW_NORMAL);
+    // cv::resizeWindow("Mask",cfg.camResW,cfg.camResH);
 
     cv::Mat img(H,W, CV_8UC3,cv::Scalar(0,0,0));
     visualFrame = img;
@@ -176,6 +180,12 @@ void Visualizer::_create_camMask(int cameraW,int cameraH){
         for (int j=0;j<cameraH;j++){
             
             double center_dist = (double) sqrt ( pow((i-center_x),2) + pow((j-center_y),2) );
+            
+            // https://stackoverflow.com/a/839931/15842840
+            // Get the max distance for each point to normalize the distance between square and circles perimeter
+            // x = cx + r * cos(a)
+            // y = cy + r * sin(a)
+            // double max_dist = (double) sqrt ( pow((i-center_x),2) + pow((j-center_y),2) );
             bool condition = center_dist > (double)r ;
             
             // camBinaryMask.at<double>(j,i) = 0.5;
@@ -185,7 +195,8 @@ void Visualizer::_create_camMask(int cameraW,int cameraH){
 
             if (condition){
 
-                double transparency = (center_dist-(double)r)/ (double)abs(cameraW-cameraH);
+                // double transparency = (center_dist-(double)r)/ (double)abs(cameraW-cameraH);
+                double transparency = (center_dist-(double)r)/ (double)sqrt(pow(cameraW-cameraH,2));
                 // std::cout<<transparency <<" = "<<center_dist<<"-"<<r<<"("<<center_dist-r<<") / "<<abs(cameraW-cameraH)<<std::endl;
                 camBinaryMask.at<double>(j,i) = transparency;
                 ++verifier;
@@ -332,7 +343,7 @@ bool Visualizer::_showFrame(bool nativeWindow){
     else {
         std::cout<<"Visualizer : is CAMERA Frame"<<std::endl;
     }
-    cv::imshow("Mask", camBinaryMask);//Showing the video//
+    // cv::imshow("Mask", camBinaryMask);//Showing the video//
     cv::imshow("Interactive Audio Visualizer", visualFrame);//Showing the video//
     // cv::waitKey(1); //Allowing 1 milliseconds frame processing time
     if (cv::waitKey(1) == 113) return true;
@@ -345,30 +356,87 @@ void Visualizer::_set_BG_manually(int tone, bool trackEnabled){    // naive
     // #include wavelengths.h
     double percent;
 
-    if (tone>0 && tone<200){                  // naive conversion
-        percent = (double)tone/200.;
-        for (int i=0;i<W;i++)
-            for (int j=0;j<H;j++){
-                // std::cout<<"visualFrame.at<cv::Vec3b>(j,i)[0] = (int)(255.*percent) "<<(int)(255.*percent)<<std::endl;
-                visualFrame.at<cv::Vec3b>(j,i)[0] = (int)(255.*percent);
-            }
-    }else if (tone >200 && tone <600){
-        percent = (double)tone/(600. - 200.);
-        for (int i=0;i<W;i++)
-            for (int j=0;j<H;j++){
-                // std::cout<<"visualFrame.at<cv::Vec3b>(j,i)[0] = (int)(255.*percent) "<<(int)(255.*percent)<<std::endl;
-                visualFrame.at<cv::Vec3b>(j,i)[1] = (int)(255.*percent);
-            }
-    }else if (tone >600 && tone <4000) {
-        percent = (double)tone/(4000. - 600.);
-        for (int i=0;i<W;i++)
-            for (int j=0;j<H;j++){
-                // std::cout<<"visualFrame.at<cv::Vec3b>(j,i)[0] = (int)(255.*percent) "<<(int)(255.*percent)<<std::endl;
-                visualFrame.at<cv::Vec3b>(j,i)[3] = (int)(255.*percent);
-            }
-    }
-    std::cout<<"Visualizer percent "<<percent<<std::endl;
+// naive conversion
+    // if (tone>0 && tone<200){                  
+    //     percent = (double)tone/200.;
+    //     for (int i=0;i<W;i++)
+    //         for (int j=0;j<H;j++){
+    //             // std::cout<<"visualFrame.at<cv::Vec3b>(j,i)[0] = (int)(255.*percent) "<<(int)(255.*percent)<<std::endl;
+    //             visualFrame.at<cv::Vec3b>(j,i)[0] = (int)(255.*percent);
+    //         }
+    // }else if (tone >200 && tone <600){
+    //     percent = (double)tone/(600. - 200.);
+    //     for (int i=0;i<W;i++)
+    //         for (int j=0;j<H;j++){
+    //             // std::cout<<"visualFrame.at<cv::Vec3b>(j,i)[0] = (int)(255.*percent) "<<(int)(255.*percent)<<std::endl;
+    //             visualFrame.at<cv::Vec3b>(j,i)[1] = (int)(255.*percent);
+    //         }
+    // }else if (tone >600 && tone <4000) {
+    //     percent = (double)tone/(4000. - 600.);
+    //     for (int i=0;i<W;i++)
+    //         for (int j=0;j<H;j++){
+    //             // std::cout<<"visualFrame.at<cv::Vec3b>(j,i)[0] = (int)(255.*percent) "<<(int)(255.*percent)<<std::endl;
+    //             visualFrame.at<cv::Vec3b>(j,i)[3] = (int)(255.*percent);
+    //         }
+    // }
+    // std::cout<<"Visualizer percent "<<percent<<std::endl;
 
+// works but boring 
+        // int B = visualFrame.at<cv::Vec3b>(0,0)[0];
+        // int G = visualFrame.at<cv::Vec3b>(0,0)[1];
+        // int R = visualFrame.at<cv::Vec3b>(0,0)[2];
+        // if (tone>0 && tone<200){                // keep blue             
+        //     B = 255;
+        //     percent = (double)tone/600.;    // low trans
+        //     G = (int)(255.*percent);
+        //     percent = (double)tone/200.;  // high trans
+        //     R = (int)(255.*percent);
+        // }
+        // else if (tone >200 && tone <600){       // keep green
+        //     percent = (double)tone/(600. - 200.); // low trans
+        //     B = (int)(255.*percent);
+        //     G = 255;
+        //     percent = (double)tone/(600. - 200.);
+        //     R = (int)(255.*percent);
+        // }
+        // else if (tone >600 && tone <4000) {
+        //     percent = (double)tone/(4000. - 600.);
+        //     B = (int)(255.*percent);
+        //     percent = (double)tone/(4000. - 600.);
+        //     G = (int)(255.*percent);
+        //     R = 255;
+        // }
+        // visualFrame.setTo( ( B, G, R ) );
+        // std::cout<<"Visualizer percent "<<percent<<std::endl;
+
+        // int B = visualFrame.at<cv::Vec3b>(0,0)[0];
+        // int G = visualFrame.at<cv::Vec3b>(0,0)[1];
+        // int R = visualFrame.at<cv::Vec3b>(0,0)[2];
+        int B,G,R;
+        if (tone>fmin && tone<=300){                // keep blue             
+            percent = (double)tone/300.;  // high trans
+            B = 255;
+            G = (255.*percent);
+            R = (255.*(1.-percent));
+        }
+        else if (tone >300 && tone <=700){       // keep green
+            percent = (double)tone/700.; // low trans
+            B = (255.*percent);
+            G = 255;
+            R = (255.*(1.-percent));
+        }
+        else if (tone >700 && tone <=fmax) {
+            percent = (double)tone/(double)fmax;            
+            B = (255.*percent);
+            G = (255.*(1.-percent));
+            R = 255;
+        }
+        std::cout<<"tone freq "<<tone<< " percent "<<percent<<std::endl;
+        visualFrame.setTo( cv::Scalar( B, G, R ) );
+}
+
+void Visualizer::_set_FG_manually(){
+// SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT 
 }
 
 void Visualizer::_setToCamera(cv::Mat cameraFrame){
@@ -421,6 +489,9 @@ void Visualizer::_setToCamera(cv::Mat cameraFrame){
     // cv::Mat extractedImage2 = videoframe(rect);
     // cameraFrame.copyTo(videoframe(rect1));
 
+    double vB = (double)visualFrame.at<cv::Vec3b>(0,0)[0];
+    double vG = (double)visualFrame.at<cv::Vec3b>(0,0)[1];
+    double vR = (double)visualFrame.at<cv::Vec3b>(0,0)[2];
 
     for (int i=0;i<cameraW;i++){
         for (int j=0;j<cameraH;j++){
@@ -432,19 +503,40 @@ void Visualizer::_setToCamera(cv::Mat cameraFrame){
             // cameraFrame.at<cv::Vec3b>(j,i)[2] = cameraFrame.at<cv::Vec3b>(j,i)[2]*(1.-ratio) + (ratio*visualFrame.at<cv::Vec3b>(T+j,L+i)[2]);
             if (camBinaryMask.at<double>(j,i)>0.){
                 double ratio = camBinaryMask.at<double>(j,i);
+                // ratio = 1.0-ratio;
                 // works
                 // cameraFrame.at<cv::Vec3b>(j,i)[0] = ((double)cameraFrame.at<cv::Vec3b>(j,i)[0]*(1.-ratio)) + (ratio*(double)visualFrame.at<cv::Vec3b>(T+j,L+i)[0]);
                 // cameraFrame.at<cv::Vec3b>(j,i)[1] = ((double)cameraFrame.at<cv::Vec3b>(j,i)[1]*(1.-ratio)) +(ratio*(double)visualFrame.at<cv::Vec3b>(T+j,L+i)[1]);
                 // cameraFrame.at<cv::Vec3b>(j,i)[2] = ((double)cameraFrame.at<cv::Vec3b>(j,i)[2]*(1.-ratio)) + (ratio*(double)visualFrame.at<cv::Vec3b>(T+j,L+i)[2]);
-                cameraFrame.at<cv::Vec3b>(j,i)[0] = (ratio*(double)visualFrame.at<cv::Vec3b>(T+j,L+i)[0]);
-                cameraFrame.at<cv::Vec3b>(j,i)[1] = (ratio*(double)visualFrame.at<cv::Vec3b>(T+j,L+i)[1]);
-                cameraFrame.at<cv::Vec3b>(j,i)[2] = (ratio*(double)visualFrame.at<cv::Vec3b>(T+j,L+i)[2]);
+                
+
+                // cameraFrame.at<cv::Vec3b>(j,i)[0] = (ratio*(double)visualFrame.at<cv::Vec3b>(T+j,L+i)[0]);
+                // cameraFrame.at<cv::Vec3b>(j,i)[1] = (ratio*(double)visualFrame.at<cv::Vec3b>(T+j,L+i)[1]);
+                // cameraFrame.at<cv::Vec3b>(j,i)[2] = (ratio*(double)visualFrame.at<cv::Vec3b>(T+j,L+i)[2]);
+                
+                // double ratio2 = 1.0-ratio;
+                // std::cout<<(double)visualFrame.at<cv::Vec3b>(T+j,L+i)[0]<<"*"<<ratio2<<"=="<<(double)visualFrame.at<cv::Vec3b>(T+j,L+i)[0]*ratio2<<std::endl;
+                // std::cout<<(double)cameraFrame.at<cv::Vec3b>(j,i)[0]<<"*"<<ratio<<"=="<<(double)cameraFrame.at<cv::Vec3b>(j,i)[0]*ratio<<std::endl;
+                
+                // cameraFrame.at<cv::Vec3b>(j,i)[0] = ratio*255.;
+                // cameraFrame.at<cv::Vec3b>(j,i)[1] = ratio*255.;
+                // cameraFrame.at<cv::Vec3b>(j,i)[2] = ratio*255.;
+                
+                //works -> gives grey scale result
+                // cameraFrame.at<cv::Vec3b>(j,i)[0] = ((ratio*(double)visualFrame.at<cv::Vec3b>(T+j,L+i)[0]) + (1.-ratio)*(double)cameraFrame.at<cv::Vec3b>(j,i)[0])/2.;
+                // cameraFrame.at<cv::Vec3b>(j,i)[1] = ((ratio*(double)visualFrame.at<cv::Vec3b>(T+j,L+i)[1]) + (1.-ratio)*(double)cameraFrame.at<cv::Vec3b>(j,i)[1])/2.;
+                // cameraFrame.at<cv::Vec3b>(j,i)[2] = ((ratio*(double)visualFrame.at<cv::Vec3b>(T+j,L+i)[2]) + (1.-ratio)*(double)cameraFrame.at<cv::Vec3b>(j,i)[2])/2.;
+                
+                cameraFrame.at<cv::Vec3b>(j,i)[0] = ((ratio*vB) + (1.-ratio)*(double)cameraFrame.at<cv::Vec3b>(j,i)[0])/2.;
+                cameraFrame.at<cv::Vec3b>(j,i)[1] = ((ratio*vG) + (1.-ratio)*(double)cameraFrame.at<cv::Vec3b>(j,i)[1])/2.;
+                cameraFrame.at<cv::Vec3b>(j,i)[2] = ((ratio*vR) + (1.-ratio)*(double)cameraFrame.at<cv::Vec3b>(j,i)[2])/2.;
+                
             }
             
         }
     }
 
-    std::cout<<"hello there"<<std::endl;
+    // std::cout<<"hello there"<<std::endl;
     cameraFrame.copyTo(visualFrame(cv::Rect(L,T,cameraFrame.cols, cameraFrame.rows)));
 
 
@@ -462,16 +554,19 @@ int Visualizer::and_Sound_into_Image(double* in,cv::Mat videoframe, bool frameEl
         // videoframe.copyTo(cameraFrame);
         // cameraFrame.copyTo(videoframe);
 
-        _setToCamera(videoframe);
+    
+        if (trackEnabled){ // preprocess visual_frame -->   does nt depict the frame, it just edits it so it does not require a new frame to be captured by the camera.
+            // update the current visualframe according to the changing of the tracking stimulus
+            _set_BG_manually(tone, trackEnabled);
+            _set_FG_manually();
+        }else{
+            _setToCamera(videoframe);
+        }
+
         exit_msg = _showFrame(true);   // shows the video captured from camera --> where should it depict the visualFrame?
 
-    }
-    
-    if (trackEnabled){ // preprocess visual_frame -->   does nt depict the frame, it just edits it so it does not require a new frame to be captured by the camera.
-        // update the current visualframe according to the changing of the tracking stimulus
-        _set_BG_manually(tone, trackEnabled);
-    }
 
+    }
 
     //start preparing for the next frame
     // wf->prepare_waveform(bufferCount,in); //--> addressed to the next update
@@ -512,8 +607,8 @@ int Visualizer::and_Sound_into_Image(double* in,cv::Mat videoframe, bool frameEl
     }
     */
 
-    bufferCount++;
-    bufferCount%=buffersPerFrame;
+    // bufferCount++;
+    // bufferCount%=buffersPerFrame;
 
          
     return exit_msg;

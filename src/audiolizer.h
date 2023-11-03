@@ -32,7 +32,7 @@ public:
     bool _tickTock();
 
 private:
-    
+
     VideoTracker camera_tracker;
     int prev_freq,init_frequency, minFreq, maxFreq;
     double prev_amp, init_amp;
@@ -50,6 +50,7 @@ private:
     bool _translate(int&);
     bool _gradualy_fade(int&);
     void _init_log_freq_scale(int,int);
+    void _int2log_freq(int&);
 };
 
 

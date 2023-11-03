@@ -50,11 +50,14 @@ private:
     int SR;
     int buffer_size;
 
+    int fmin, fmax;
+
     int incrR,incrG,incrB;
     bool ascR,ascG,ascB;
     int MIN{0},MAX{200};
     void change_BG_color();
     void _set_BG_manually(int,bool);
+    void _set_FG_manually();
     void _setToCamera(cv::Mat);
     void _create_camMask(int,int);
 

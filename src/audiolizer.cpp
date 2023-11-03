@@ -35,11 +35,16 @@ void Audiolizer::setConfig(const Config& cfg){
 void Audiolizer::_init_log_freq_scale(int minfreq, int maxfreq){
     
     // b = log (y2/y1) / (x2-x1) ---> where x1 (minW ==0), x2 (maxW), y1 (minFreq) and y2 (maxFreq)
-    double b = log ((double)maxfreq / (double)minFreq) / (double)(maxW - 0);
+    b = log ((double)maxfreq / (double)minFreq) / (double)(maxW - 0);
     // a = y2 / exp bx2
-    double a = (double)maxFreq / (exp(b*(double)maxW));
+    a = (double)maxFreq / (exp(b*(double)maxW));
     
     // given x, find log freq by solving : y = a exp bx
+}
+
+void Audiolizer::_int2log_freq(int &freq){
+    // given x, find log freq by solving : y = a exp bx
+    freq = a * exp(b * (double)freq);
 }
 
 void Audiolizer::_capture(){
@@ -164,6 +169,8 @@ bool Audiolizer::_translate(int& freq){
     // freq = minFreq + (int) (spatial_percent* (double)(maxFreq-minFreq));
     freq = 55 + (int) (spatial_percent* (double)(3520-55));
     std::cout<<"spatial_percent "<<spatial_percent<<" produces frequency "<<freq<<std::endl;
+    
+    // _int2log_freq(freq);
 
     // given x, find log freq by solving : y = a exp bx
     // freq = (int)(a * exp(b*(double)ROIcenter.first));
@@ -191,6 +198,19 @@ bool Audiolizer::_gradualy_fade(int& freq){
     }
     */
     // freq=0; // FOR NOW JUST MAKE IT ZERO -- > FIX LATER        
-    freq-=3;
-    return true;
+    // freq-=3;
+    
+// implementation attempt folows ...
+    // here it goes ..
+    // if (freq<minFreq+1){
+    if (freq<200){
+        if (freq>0) freq -= log(freq);
+        else if (freq<0) freq=0;
+    }
+    else{
+        freq -= (freq*log(freq));
+    } 
+    // sometimes it produces low intensity buzzes when reducing high frequencies ... It also does not fade slowly though as intented.
+    
+    // return true;
 }

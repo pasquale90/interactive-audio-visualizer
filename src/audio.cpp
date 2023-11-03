@@ -166,12 +166,18 @@ int AudioStream::streamBuffer(jack_nframes_t nframes){
     // std::memcpy (left, in, sizeof (double) *nframes);
     // std::memcpy (right, in, sizeof (double) *nframes);
 
-    if (current_tone_frequency!=0){
+    if (current_tone_frequency>0){
         sig->prepareSine(current_tone_frequency);
         for(int i=0; i<nframes; i++ )
         {
             left[i] = sig->getSineL();    // here we have to combine two signals : the in and the sine_tone_signal
             right[i] = sig->getSineR();
+        }
+    }else {
+        for(int i=0; i<nframes; i++ )
+        {
+            left[i] = 0.;
+            right[i] = 0.;
         }
     }
     
