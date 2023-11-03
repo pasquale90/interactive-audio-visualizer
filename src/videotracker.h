@@ -15,6 +15,7 @@
 
 #include "config.h"
 #include "camera.h"
+#include "roi.cpp"
 
 class VideoTracker{
 public:
@@ -26,7 +27,7 @@ public:
     void display_config();
     void _capture();
 
-    bool update(std::pair<int,int>&, cv::Mat&);
+    bool update(RegionOfInterest&, cv::Mat&);
     bool _tracking_updated();
     bool _pattern_locked();
 
@@ -40,9 +41,10 @@ private:
     Camera camera;
 
     cv::Ptr<cv::Tracker> tracker;
-    std::pair<int,int> boxCenter;
+    // std::pair<int,int> boxCenter;
+    RegionOfInterest boxCenter;
     // std::pair<int,int> currboxCenter;
-    std::atomic<int> currboxCenter_x,currboxCenter_y;
+    std::atomic<int> currboxCenter_x,currboxCenter_y,currboxCenter_w,currboxCenter_h;
 
     int thickness=1;
     int H,W,fps;

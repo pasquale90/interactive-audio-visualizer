@@ -24,7 +24,12 @@ void VideoTracker::setConfig(const Config& cfg){
     H=cfg.camResH;
     fps = camera.get_fps();
     
-    boxCenter={W/2,H/2};
+    // boxCenter={W/2,H/2};
+    boxCenter.centerX==W/2;
+    boxCenter.centerY=H/2;
+    boxCenter.volumeW=cfg.radius*2;
+    boxCenter.volumeH=cfg.radius*2;
+
     // previous_boxCenter=current_boxCenter;
 
     cv::Rect temp((W/2)-radius,(H/2)-radius,radius*2,radius*2);
@@ -148,6 +153,8 @@ void VideoTracker::_capture(){
 
                 currboxCenter_x.store(boundingBox.x);
                 currboxCenter_y.store(boundingBox.y);
+                currboxCenter_w.store(boundingBox.width);
+                currboxCenter_h.store(boundingBox.height);
             }
             else
             {
@@ -170,7 +177,7 @@ void VideoTracker::_capture(){
 
 }
 
-bool VideoTracker::update(std::pair<int,int> &roi_center,cv::Mat& roi){
+bool VideoTracker::update(RegionOfInterest &roi_center,cv::Mat& roi){
     /***
      * Updates the roi and the (global) roi center. 
      * Returns bool - Applies control the return values (i.e. if no changes occured by a visual stimulus
@@ -178,11 +185,16 @@ bool VideoTracker::update(std::pair<int,int> &roi_center,cv::Mat& roi){
 
     currFrame.copyTo(roi);
     if (patternlocked.load()){
-        roi_center.first=currboxCenter_x.load();
-        roi_center.second=currboxCenter_y.load();
+        roi_center.centerX=currboxCenter_x.load();
+        roi_center.centerY=currboxCenter_y.load();
+        roi_center.volumeW=currboxCenter_w.load();
+        roi_center.volumeH=currboxCenter_h.load();
     }else{
-        roi_center.first=boxCenter.first;
-        roi_center.second=boxCenter.second;
+        roi_center = boxCenter;
+        // roi_center.first=boxCenter.centerX;
+        // roi_center.second=boxCenter.centerY;
+        // roi_center.first=boxCenter.volumeW;
+        // roi_center.second=boxCenter.volumeH;
     }
     return _tracking_updated();
 }

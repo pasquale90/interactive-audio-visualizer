@@ -1,7 +1,7 @@
 CC :=g++ -std=c++11 #gcc -std=c99 
 
 OPTIONS :=-g -pedantic -Wall -Wextra -Wno-error
-OBJECTS :=build/videotracker.o build/audiolizer.o build/console.o build/config_defaults.o build/config.o build/signal.o build/camera.o build/onset.o build/btrack.o build/btracker.o build/raw.o build/visualizer.o build/fft.o build/kissfft.o build/audio.o build/main.o
+OBJECTS :=build/roi_.o build/videotracker.o build/audiolizer.o build/console.o build/config_defaults.o build/config.o build/signal.o build/camera.o build/onset.o build/btrack.o build/btracker.o build/raw.o build/visualizer.o build/fft.o build/kissfft.o build/audio.o build/main.o
 
 JACK :=-L/usr/lib/x86_64-linux-gnu -ljack -ljackserver
 FFTW :=-Ilibraries/BTrack/libs/fftw-3.3.10 -lfftw3 -lm
@@ -57,6 +57,9 @@ build/camera.o: src/camera.h src/camera.cpp
 build/signal.o: src/signal.h src/signal.cpp
 	$(CC) $(OPTIONS) -c src/signal.cpp -o build/signal.o
 
+build/roi_.o: src/roi.cpp
+	$(CC) $(OPTIONS) -c src/roi.cpp -o build/roi_.o
+	
 build/config.o: src/config.h src/config.cpp src/config_defaults.cpp
 	$(CC) $(OPTIONS) -c src/config.cpp -o build/config.o
 

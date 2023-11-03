@@ -68,7 +68,7 @@ bool Audiolizer::turn_Image_into_Sound(bool &ispattern, int& freq, cv::Mat& fram
     // _simple_definition(freq);
     // _simple_freqRange_palindrome(freq);
 
-    bool tracking_updated = camera_tracker.update(ROIcenter,frame);
+    bool tracking_updated = camera_tracker.update(roi,frame);
     bool pattern_locked =  camera_tracker._pattern_locked();
     std::cout<<"Audiolizer::turn_Image_into_Sound :: Pattern locked --> "<<camera_tracker._pattern_locked()<<", Tracking updated --> "<<tracking_updated<<std::endl;
     // if (!frame.empty()){
@@ -79,7 +79,7 @@ bool Audiolizer::turn_Image_into_Sound(bool &ispattern, int& freq, cv::Mat& fram
     if (pattern_locked){
         if (tracking_updated)          // if tracking updated --> new x,y --> new freq
             // return _translate(freq);        // if previous frequency has the same value as before it returns the previous frequency
-            _translate(freq);
+            _translate(roi, freq);
         else{                          // else --> previous frequency
             freq=prev_freq;
             // return false;
@@ -95,51 +95,52 @@ bool Audiolizer::turn_Image_into_Sound(bool &ispattern, int& freq, cv::Mat& fram
         }
         ispattern=false;
     }
-    roi.centerX=ROIcenter.first;
-    roi.centerY=ROIcenter.second;
-    roi.volumeW=0;
-    roi.volumeH=0;
+    // roi.centerX=ROIcenter.first;
+    // roi.centerY=ROIcenter.second;
+    // roi.volumeW=0;
+    // roi.volumeH=0;
+    // roi = ROIcenter;
 
     return _tickTock();
 }
 
-bool Audiolizer::turn_Image_into_Sound_____(int& freq,cv::Mat& frame){
+// bool Audiolizer::turn_Image_into_Sound_____(int& freq,cv::Mat& frame){
 
-   /***
-    * returns boolean if new frame occured
-    * returns by value the frequency that will be streamed on the next audio buffer
-   */
+//    /***
+//     * returns boolean if new frame occured
+//     * returns by value the frequency that will be streamed on the next audio buffer
+//    */
 
-    // just for testing ... 
-    // _simple_definition(freq);
-    // _simple_freqRange_palindrome(freq);
+//     // just for testing ... 
+//     // _simple_definition(freq);
+//     // _simple_freqRange_palindrome(freq);
 
-    bool tracking_updated = camera_tracker.update(ROIcenter,frame);
-    bool pattern_locked =  camera_tracker._pattern_locked();
-    std::cout<<"Audiolizer::turn_Image_into_Sound :: Pattern locked --> "<<camera_tracker._pattern_locked()<<", Tracking updated --> "<<tracking_updated<<std::endl;
-    if (!frame.empty()){
-        imshow("1", frame);
-        std::cout<<"turn_Image_into_Sound ISSSSSSSSSSSSSSSSSS NOT EMPTY\n\n\n\n\n\n"<<std::endl;
-    }
+//     bool tracking_updated = camera_tracker.update(ROIcenter,frame);
+//     bool pattern_locked =  camera_tracker._pattern_locked();
+//     std::cout<<"Audiolizer::turn_Image_into_Sound :: Pattern locked --> "<<camera_tracker._pattern_locked()<<", Tracking updated --> "<<tracking_updated<<std::endl;
+//     if (!frame.empty()){
+//         imshow("1", frame);
+//         std::cout<<"turn_Image_into_Sound ISSSSSSSSSSSSSSSSSS NOT EMPTY\n\n\n\n\n\n"<<std::endl;
+//     }
 
-    if (pattern_locked){
-        _translate(freq);
-        return true;
-        // if (tracking_updated)          // if tracking updated --> new x,y --> new freq
-        //     return         // if previous frequency has the same value as before it returns the previous frequency
-        // else{                          // else --> previous frequency
-        //     freq=prev_freq;
-        //     return false;
-        // } 
-    }else{                            // gradualy fade frequency to zero --> if frequency > 0 , slowly decline
-        if (freq>0){ 
-            return _gradualy_fade(freq);    
-        }else{
-            freq=0;
-            return false;
-        }
-    }
-}
+//     if (pattern_locked){
+//         _translate(freq);
+//         return true;
+//         // if (tracking_updated)          // if tracking updated --> new x,y --> new freq
+//         //     return         // if previous frequency has the same value as before it returns the previous frequency
+//         // else{                          // else --> previous frequency
+//         //     freq=prev_freq;
+//         //     return false;
+//         // } 
+//     }else{                            // gradualy fade frequency to zero --> if frequency > 0 , slowly decline
+//         if (freq>0){ 
+//             return _gradualy_fade(freq);    
+//         }else{
+//             freq=0;
+//             return false;
+//         }
+//     }
+// }
 
 
 void Audiolizer::_simple_freqRange_palindrome(int& freq){
@@ -156,15 +157,15 @@ void Audiolizer::_simple_definition(int& freq){
     freq=FREQUENCY;
 }
 
-bool Audiolizer::_translate(int& freq){
+bool Audiolizer::_translate(RegionOfInterest ROIcenter, int& freq){
     /***
      * This is where the magic happens. This is where you do the trick
      * This function maps the box potition into a certain frequency. Will be updated using more interaction data (i.e. speed)
     */
 
-    std::cout<<"ROIcenter at ("<<ROIcenter.first<<","<<ROIcenter.second<<")"<<std::endl;
+    std::cout<<"ROIcenter at ("<<ROIcenter.centerX<<","<<ROIcenter.centerY<<")"<<std::endl;
     // normalize x, y position 
-    double spatial_percent = (double)ROIcenter.first / (double)maxW;
+    double spatial_percent = (double)ROIcenter.centerX / (double)maxW;
     //apply translation from x,y to Hz
     // freq = minFreq + (int) (spatial_percent* (double)(maxFreq-minFreq));
     freq = 55 + (int) (spatial_percent* (double)(3520-55));

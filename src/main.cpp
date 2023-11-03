@@ -44,7 +44,7 @@ void audioBufferCallback(double* mix, int& currenTone){
     //     std::cout<<" Beat! "<<std::endl;
     // }
 
-    exit_msg=vs.and_Sound_into_Image(mix,visualFrame,frameElapsed,trackEnabled,currenTone);
+    exit_msg=vs.and_Sound_into_Image(mix,visualFrame,frameElapsed,trackEnabled,currenTone,ROI);
 
     std::cout<<"-------------------------------------------------------------------------------------------------------------------"<<std::endl;
 

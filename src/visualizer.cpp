@@ -140,7 +140,6 @@ void Visualizer::setConfig(const Config& cfg){
 
 void Visualizer::_create_camMask(int cameraW,int cameraH){
 
-
     // int thickness=1;
     // circle( cameraFrame,
     //     cv::Point((cameraW/2),(cameraH/2)),
@@ -148,7 +147,6 @@ void Visualizer::_create_camMask(int cameraW,int cameraH){
     //     cv::Scalar( 0, 255, 0 ),
     //     thickness=1,
     //     cv::LINE_8);
-
 
     // calculate areas
     int r = (cameraW>cameraH) ? cameraH/2 : cameraW/2;
@@ -173,7 +171,6 @@ void Visualizer::_create_camMask(int cameraW,int cameraH){
         cv::Scalar( 0, 255, 0 ),
         thickness=1,
         cv::LINE_8);
-    
     
     int verifier = 0;
     for (int i=0;i<cameraW;i++){
@@ -343,9 +340,9 @@ bool Visualizer::_showFrame(bool nativeWindow){
     else {
         std::cout<<"Visualizer : is CAMERA Frame"<<std::endl;
     }
-    // cv::imshow("Mask", camBinaryMask);//Showing the video//
-    cv::imshow("Interactive Audio Visualizer", visualFrame);//Showing the video//
-    // cv::waitKey(1); //Allowing 1 milliseconds frame processing time
+    // cv::imshow("Mask", camBinaryMask);                       //Showing the video//
+    cv::imshow("Interactive Audio Visualizer", visualFrame);    //Showing the video//
+    // cv::waitKey(1);                                          //Allowing 1 milliseconds frame processing time
     if (cv::waitKey(1) == 113) return true;
     return false;
 
@@ -435,8 +432,26 @@ void Visualizer::_set_BG_manually(int tone, bool trackEnabled){    // naive
         visualFrame.setTo( cv::Scalar( B, G, R ) );
 }
 
-void Visualizer::_set_FG_manually(){
+void Visualizer::_set_FG_manually(cv::Mat cameraFrame , RegionOfInterest roi){
 // SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT 
+    // int L = roi.centerX - roi.volumeW/2;
+    // int T = roi.centerY - roi.volumeH/2;
+    // cameraFrame.copyTo(visualFrame(cv::Rect(L,T,roi.volumeW, roi.volumeH))); // cols, rows
+// cameraFrame.cols
+// cameraFrame.rows
+    
+    int L = (visualFrame.cols - cameraFrame.cols)/2;
+    int T = (visualFrame.rows - cameraFrame.rows)/2;
+
+    int centerX = L + roi.centerX;
+    int centerY = T + roi.centerY;
+    
+
+    cv::Point center(centerX, centerY);//Declaring the center point
+    int radius = roi.volumeW > roi.volumeH ? roi.volumeW/2 : roi.volumeH/2; //Declaring the radius
+    cv::Scalar line_Color(0, 0, 0);//Color of the circle
+    int thickness = 2;//thickens of the line
+    circle(visualFrame, center,radius, line_Color, thickness);//Using circle()functi
 }
 
 void Visualizer::_setToCamera(cv::Mat cameraFrame){
@@ -539,10 +554,9 @@ void Visualizer::_setToCamera(cv::Mat cameraFrame){
     // std::cout<<"hello there"<<std::endl;
     cameraFrame.copyTo(visualFrame(cv::Rect(L,T,cameraFrame.cols, cameraFrame.rows)));
 
-
 }
 
-int Visualizer::and_Sound_into_Image(double* in,cv::Mat videoframe, bool frameElapsed, bool trackEnabled, int tone){
+int Visualizer::and_Sound_into_Image(double* in,cv::Mat videoframe, bool frameElapsed, bool trackEnabled, int tone,RegionOfInterest roi){
     
     bool exit_msg=false;
 
@@ -553,18 +567,16 @@ int Visualizer::and_Sound_into_Image(double* in,cv::Mat videoframe, bool frameEl
     if (frameElapsed){                                    // is this a legitimate solution? otherwise try threads
         // videoframe.copyTo(cameraFrame);
         // cameraFrame.copyTo(videoframe);
-
     
         if (trackEnabled){ // preprocess visual_frame -->   does nt depict the frame, it just edits it so it does not require a new frame to be captured by the camera.
             // update the current visualframe according to the changing of the tracking stimulus
             _set_BG_manually(tone, trackEnabled);
-            _set_FG_manually();
+            _set_FG_manually(videoframe,roi);
         }else{
             _setToCamera(videoframe);
         }
 
         exit_msg = _showFrame(true);   // shows the video captured from camera --> where should it depict the visualFrame?
-
 
     }
 

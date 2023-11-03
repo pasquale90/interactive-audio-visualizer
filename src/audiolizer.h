@@ -10,13 +10,6 @@
 // #include <thread>
 #include "videotracker.h"
 
-struct RegionOfInterest{
-    int centerX;
-    int centerY;
-    int volumeW;
-    int volumeH;
-};
-
 class Audiolizer{
 
 public:
@@ -39,7 +32,7 @@ private:
     int maxW,maxH;
     double a,b;
 
-    std::pair<int,int> ROIcenter;
+    // RegionOfInterest ROIcenter;
 
     // bool _tickTock();
 
@@ -47,11 +40,10 @@ private:
     int tempFreqcounter;
     void _simple_definition(int& freq);
     void _simple_freqRange_palindrome(int& freq);   
-    bool _translate(int&);
+    bool _translate(RegionOfInterest,int&);
     bool _gradualy_fade(int&);
     void _init_log_freq_scale(int,int);
     void _int2log_freq(int&);
 };
-
 
 #endif

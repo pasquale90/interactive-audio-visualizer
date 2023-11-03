@@ -5,6 +5,7 @@
 #include "config.h"
 #include "raw.h"
 #include "fft.h"
+#include "roi.cpp"
 #include <opencv2/opencv.hpp> //OpenCV header to use VideoCapture class//
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/core/core.hpp>
@@ -21,7 +22,7 @@ public:
     Visualizer();
     ~Visualizer();
     int stream_frames(double* in,bool isBeat); //
-    int and_Sound_into_Image(double*in, cv::Mat, bool, bool, int);
+    int and_Sound_into_Image(double*in, cv::Mat, bool, bool, int, RegionOfInterest);
     // static void* visualize(void*);
     void setConfig(const Config&);
 
@@ -57,7 +58,7 @@ private:
     int MIN{0},MAX{200};
     void change_BG_color();
     void _set_BG_manually(int,bool);
-    void _set_FG_manually();
+    void _set_FG_manually(cv::Mat, RegionOfInterest);
     void _setToCamera(cv::Mat);
     void _create_camMask(int,int);
 
