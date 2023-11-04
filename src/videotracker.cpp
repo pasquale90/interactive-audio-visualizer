@@ -25,7 +25,7 @@ void VideoTracker::setConfig(const Config& cfg){
     fps = camera.get_fps();
     
     // boxCenter={W/2,H/2};
-    boxCenter.centerX==W/2;
+    boxCenter.centerX=W/2;
     boxCenter.centerY=H/2;
     boxCenter.volumeW=cfg.radius*2;
     boxCenter.volumeH=cfg.radius*2;
@@ -151,15 +151,23 @@ void VideoTracker::_capture(){
                 // rectangle(currFrame, boundingBox, cv::Scalar( 255, 0, 0 ), 2, 1 ); // only for testing
                 trackingToggle=!trackingToggle;
 
-                currboxCenter_x.store(boundingBox.x);
-                currboxCenter_y.store(boundingBox.y);
+                currboxCenter_x.store(boundingBox.x + boundingBox.width/2);
+                currboxCenter_y.store(boundingBox.y + boundingBox.height/2);
                 currboxCenter_w.store(boundingBox.width);
                 currboxCenter_h.store(boundingBox.height);
-            }
+                // std::cout<<"boundingBox <<"<<boundingBox.x<<"=="<<currboxCenter_x.load()<<std::endl;
+                // std::cout<<"boundingBox <<"<<boundingBox.y<<"=="<<currboxCenter_y.load()<<std::endl;
+                // std::cout<<"boundingBox <<"<<boundingBox.width<<"=="<<currboxCenter_w.load()<<std::endl;
+                // std::cout<<"boundingBox <<"<<boundingBox.height<<"=="<<currboxCenter_h.load()<<std::endl;
+            }   
             else
             {
+                // currboxCenter_x.store(boxCenter.centerX);
+                // currboxCenter_y.store(boxCenter.centerY);
+                // currboxCenter_w.store(boxCenter.volumeW);
+                // currboxCenter_h.store(boxCenter.volumeH);
                 // Tracking failure detected.
-                putText(currFrame, "Tracking failure detected", cv::Point(100,80), cv::FONT_HERSHEY_SIMPLEX, 0.75, cv::Scalar(0,0,255),2);
+                // putText(currFrame, "Tracking failure detected", cv::Point(100,80), cv::FONT_HERSHEY_SIMPLEX, 0.75, cv::Scalar(0,0,255),2);
             }
 
             // keep the initial box width and height
@@ -189,13 +197,19 @@ bool VideoTracker::update(RegionOfInterest &roi_center,cv::Mat& roi){
         roi_center.centerY=currboxCenter_y.load();
         roi_center.volumeW=currboxCenter_w.load();
         roi_center.volumeH=currboxCenter_h.load();
+        // printf("\n\n currboxCenter  (%d,%d,%d,%d)  \n\n",currboxCenter_x.load(),currboxCenter_y.load(),currboxCenter_w.load(),currboxCenter_h.load());
     }else{
         roi_center = boxCenter;
         // roi_center.first=boxCenter.centerX;
         // roi_center.second=boxCenter.centerY;
         // roi_center.first=boxCenter.volumeW;
         // roi_center.second=boxCenter.volumeH;
+        // printf("\n\n boxCenter  (%d,%d,%d,%d)  \n\n",boxCenter.centerX,boxCenter.centerY,boxCenter.volumeW,boxCenter.volumeH);
     }
+    
+    // std::cout<<"\n\n roi center "<<roi_center.centerX<<""<<" \n\n"<<std::endl;
+    // printf("\n\n roi center       (%d,%d,%d,%d)  \n\n",roi_center.centerX,roi_center.centerY,roi_center.volumeW,roi_center.volumeH);
+
     return _tracking_updated();
 }
 

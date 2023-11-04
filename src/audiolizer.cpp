@@ -163,7 +163,7 @@ bool Audiolizer::_translate(RegionOfInterest ROIcenter, int& freq){
      * This function maps the box potition into a certain frequency. Will be updated using more interaction data (i.e. speed)
     */
 
-    std::cout<<"ROIcenter at ("<<ROIcenter.centerX<<","<<ROIcenter.centerY<<")"<<std::endl;
+    std::cout<<"ROIcenter at ("<<ROIcenter.centerX<<","<<ROIcenter.centerY<<","<<ROIcenter.volumeW<<","<<ROIcenter.volumeH<<")"<<std::endl;
     // normalize x, y position 
     double spatial_percent = (double)ROIcenter.centerX / (double)maxW;
     //apply translation from x,y to Hz

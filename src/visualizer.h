@@ -41,6 +41,9 @@ private:
     double *dft;
     double *buffer;
 
+    // int framecounter = 0;
+    // int showCtimelimit = 1;
+
     int x_trans;
     int redxtrans; //reduces the time that x transition changes (used for the waveform)
     bool ascX;

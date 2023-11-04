@@ -409,6 +409,7 @@ void Visualizer::_set_BG_manually(int tone, bool trackEnabled){    // naive
         // int B = visualFrame.at<cv::Vec3b>(0,0)[0];
         // int G = visualFrame.at<cv::Vec3b>(0,0)[1];
         // int R = visualFrame.at<cv::Vec3b>(0,0)[2];
+        
         int B,G,R;
         if (tone>fmin && tone<=300){                // keep blue             
             percent = (double)tone/300.;  // high trans
@@ -440,18 +441,91 @@ void Visualizer::_set_FG_manually(cv::Mat cameraFrame , RegionOfInterest roi){
 // cameraFrame.cols
 // cameraFrame.rows
     
-    int L = (visualFrame.cols - cameraFrame.cols)/2;
-    int T = (visualFrame.rows - cameraFrame.rows)/2;
+// wrong center
+    // int L = (W - cameraFrame.cols)/2;
+    // int T = (H - cameraFrame.rows)/2;
+    // int centerX = L + roi.centerX;
+    // int centerY = T + roi.centerY;
+    // cv::Point center(centerX, centerY);//Declaring the center point
+    // int radius = roi.volumeW > roi.volumeH ? roi.volumeW/2 : roi.volumeH/2; //Declaring the radius
+    // cv::Scalar line_Color(0, 0, 0);//Color of the circle
+    // int thickness = 2;//thickens of the line
+    // circle(visualFrame, center,radius, line_Color, thickness);//Using circle()functi
 
-    int centerX = L + roi.centerX;
-    int centerY = T + roi.centerY;
-    
+// Simple Debugged
+    // int LR = W - cameraFrame.cols;
+    // int TB = H - cameraFrame.rows;
+    // int center_x = LR/2 + roi.centerX; //  
+    // int center_y = TB/2 + roi.centerY; // H/2;
+    // cv::Point center(center_x, center_y);//Declaring the center point
+    // int radius = roi.volumeW > roi.volumeH ? roi.volumeW/2 : roi.volumeH/2; //Declaring the radius
+    // cv::Scalar line_Color(0, 0, 0);//Color of the circle
+    // int thickness = 2;//thickens of the line
+    // circle(visualFrame, center,radius, line_Color, thickness);//Using circle()functi
 
-    cv::Point center(centerX, centerY);//Declaring the center point
+
+// 
+    float transpose_ratio_x = (float)W / (float)cameraFrame.cols / 2.;
+    float transpose_ratio_y = (float)H / (float)cameraFrame.rows / 2.;
+
+    int LR = W - cameraFrame.cols;
+    int TB = H - cameraFrame.rows;
+    int center_x = LR/2 + roi.centerX; //  
+    int center_y = TB/2 + roi.centerY; // H/2;
+
+    if ( center_x < W/2 ) //-W*2/3)
+        center_x -= transpose_ratio_x*(W/2 - center_x);
+    else if ( center_x > W/2) //*2/3)
+        center_x += transpose_ratio_x*(center_x - W/2);
+    if ( center_y < H/2 )
+        center_y -= transpose_ratio_y*(H/2 - center_y);
+    else if ( center_y > H/2 )
+        center_y += transpose_ratio_y*(center_y - H/2);
+
+
+    cv::Point center(center_x, center_y);//Declaring the center point
     int radius = roi.volumeW > roi.volumeH ? roi.volumeW/2 : roi.volumeH/2; //Declaring the radius
     cv::Scalar line_Color(0, 0, 0);//Color of the circle
     int thickness = 2;//thickens of the line
     circle(visualFrame, center,radius, line_Color, thickness);//Using circle()functi
+
+
+    // int L = (W - cameraFrame.cols)/2;
+    // int T = (H - cameraFrame.rows)/2;
+    // int centerX = L + roi.centerX;
+    // int centerY = T + roi.centerY;
+    // int centerX = roi.centerX;
+    // int centerY = roi.centerY;
+    // float transpose_ratio_x = (float)W / (float)cameraFrame.cols / 2.;
+    // float transpose_ratio_y = (float)H / (float)cameraFrame.rows / 2.;
+    // if (framecounter < )
+    // if (centerX < W/2 - 4*roi.volumeW ) //-W*2/3)
+    //     centerX -= transpose_ratio_x*(W/2 - centerX);
+    // else if (centerX < W/2 + 4*roi.volumeW ) //*2/3)
+    //     centerX += transpose_ratio_x*(centerX - W/2);
+    // if (centerY < H/2 - 4 * roi.volumeH )
+    //     centerY -= transpose_ratio_y*(H/2 - centerY);
+    // else if (centerY > H/2 + 4 * roi.volumeH )
+    //     centerY += transpose_ratio_y*(centerY - H/2);
+    // cv::Point center(centerX, centerY);//Declaring the center point
+    // int radius = roi.volumeW > roi.volumeH ? roi.volumeW/2 : roi.volumeH/2; //Declaring the radius
+    // cv::Scalar line_Color(0, 0, 0);//Color of the circle
+    // int thickness = 2;//thickens of the line
+    // circle(visualFrame, center,radius, line_Color, thickness);//Using circle()functi
+
+
+    // cv::Point center(centerX, centerY);//Declaring the center point
+    // int radius = roi.volumeW > roi.volumeH ? roi.volumeW/2 : roi.volumeH/2; //Declaring the radius
+    // cv::Scalar line_Color(0, 0, 0);//Color of the circle
+    // int thickness = 2;//thickens of the line
+    // circle(visualFrame, center,radius, line_Color, thickness);//Using circle()functi
+
+
+
+
+
+
+
 }
 
 void Visualizer::_setToCamera(cv::Mat cameraFrame){
