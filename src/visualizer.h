@@ -22,7 +22,7 @@ public:
     Visualizer();
     ~Visualizer();
     int stream_frames(double* in,bool isBeat); //
-    int and_Sound_into_Image(double*in, cv::Mat, bool, bool, int, RegionOfInterest);
+    int and_Sound_into_Image(float*, float*, cv::Mat, bool, bool, int, RegionOfInterest);
     // static void* visualize(void*);
     void setConfig(const Config&);
 
@@ -35,7 +35,7 @@ private:
     int R,G,B;
 
     int update_BG_frame(); // remove this isDownBeat dependency
-    int update_wave_frame();
+    int update_wave_frame(int&,int&);
     int update_spectrogram();
 
     double *dft;
@@ -68,7 +68,8 @@ private:
     int bufferCount;
     int buffersPerFrame;
     
-    Waveform *wf;
+    Waveform wf;
+    int *wave;
         
     Spectrogram *sp;
     int beatCount;

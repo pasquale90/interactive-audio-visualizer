@@ -30,8 +30,8 @@ build/kissfft.o: libraries/BTrack/libs/kiss_fft130/kiss_fft.c #libraries/BTrack/
 build/visualizer.o: src/visualizer.h src/visualizer.cpp 
 	$(CC) $(OPTIONS) -c src/visualizer.cpp $(FFT) $(IOPENCV) -o build/visualizer.o $(LOPENCV)
 
-build/raw.o: src/raw.h src/raw.cpp
-	$(CC) $(OPTIONS) -c src/raw.cpp -o build/raw.o
+build/raw.o: src/raw.h src/raw.cpp									# erase OPENCV FROM IMPORTS --> USED ONLY FOR FIXING WAVEFORM
+	$(CC) $(OPTIONS) -c src/raw.cpp $(IOPENCV) -o build/raw.o $(LOPENCV)					
 
 build/fft.o: src/fft.h src/fft.cpp #/usr/local/include/fftw3.h # /usr/include/jack/jack.h /usr/include/jack/types.h
 	$(CC) $(OPTIONS) -c src/fft.cpp -I/usr/local/include $(FFT) -o build/fft.o  
@@ -46,7 +46,7 @@ build/onset.o: libraries/BTrack/src/OnsetDetectionFunction.cpp libraries/BTrack/
 	$(CC) $(OPTIONS) -c libraries/BTrack/src/OnsetDetectionFunction.cpp $(BTRACK) -o build/onset.o
 
 build/audiolizer.o: src/audiolizer.h src/audiolizer.cpp
-	$(CC) $(OPTIONS) -c src/audiolizer.cpp $(IOPENCV) -o build/audiolizer.o $(LOPENCV)
+	$(CC) $(OPTIONS) -c src/audiolizer.cpp $(IOPENCV) $(JACK) -o build/audiolizer.o $(LOPENCV)
 
 build/videotracker.o: src/videotracker.h src/videotracker.cpp
 	$(CC) $(OPTIONS) -c src/videotracker.cpp $(IOPENCV) -o build/videotracker.o $(LOPENCV)

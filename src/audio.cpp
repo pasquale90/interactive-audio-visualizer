@@ -2,7 +2,7 @@
 
 
 // AudioStream myAudioStream;
-void audioBufferCallback(double*,int&);
+void audioBufferCallback(jack_default_audio_sample_t*,jack_default_audio_sample_t*);
 
 int streamAudio (jack_nframes_t nframes, void *arg){ //, float *in,void (*threading)(float *sig)
     return static_cast<AudioStream*>(arg)->streamBuffer(nframes);
@@ -31,14 +31,10 @@ AudioStream::AudioStream(const Config &cfg, const char* serverName,const char* c
     if (status & JackServerStarted) {
         std::cout<<"\t>>JACK server started"<<std::endl;
     }
-
-    sig = new Signal(cfg.sampleRate,cfg.bufferSize);
 }
 
 AudioStream::~AudioStream(){
-    sig->~Signal();
     std::cout<<"Audio stream object destructed"<<std::endl;
-
 }
     
 void AudioStream::AudioRouting(){
@@ -78,7 +74,7 @@ void AudioStream::AudioRouting(){
         std::cerr<<"\t>>no physical capture devices"<<std::endl;
         exit (1);
     }
-
+// register all input device channels
     // const char **temp_device=fromdevice;
     // std::cout<<"Device list Input>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n\n\n\n\n"<<std::endl;
     // int devCount=0;
@@ -143,48 +139,23 @@ int AudioStream::streamBuffer(jack_nframes_t nframes){
 
     //out receive values from 
     jack_default_audio_sample_t *left,*right;
-    // int FREQUENCY=200;
 
     in = (double *)jack_port_get_buffer (input_port, nframes);
-    // for (int i=0;i<nframes;i++){
-    //     // std::cout<<in[i]<<" ";
-    //     if (ma<in[i]) ma=in[i];
-    //     if (mi>in[i]) mi=in[i];
-    // }
-    // std::cout<<std::endl;
-    // std::cout<<"max "<<ma<<" min "<<mi<<std::endl;
-
     
+//SKILL POINT get that signal from EACH DEVICE------> http://www.vttoth.com/CMS/index.php/technical-notes/68
+
     left = (jack_default_audio_sample_t *)jack_port_get_buffer (output_port_left, nframes);
     right= (jack_default_audio_sample_t *)jack_port_get_buffer(output_port_right, nframes);
 
-    // sig->fillBuffer((double*)left,(double*)right);
+    // audioBufferCallback((double *)left,(double *)right); //(double *)right,
+    audioBufferCallback(left,right);
 
-    audioBufferCallback((double *)left,current_tone_frequency); //(double *)right,
-    std::cout<<"Current frequency "<<current_tone_frequency<<std::endl;
-
+    // left = (jack_default_audio_sample_t *)left;
+    // right = (jack_default_audio_sample_t *)right;
+    // here apply the mixing. Note that left and right hold the sine signal returned by audioBufferCallback, so the mix should operate in place.
     // std::memcpy (left, in, sizeof (double) *nframes);
     // std::memcpy (right, in, sizeof (double) *nframes);
-
-    if (current_tone_frequency>0){
-        sig->prepareSine(current_tone_frequency);
-        for(int i=0; i<nframes; i++ )
-        {
-            left[i] = sig->getSineL();    // here we have to combine two signals : the in and the sine_tone_signal
-            right[i] = sig->getSineR();
-        }
-    }else {
-        for(int i=0; i<nframes; i++ )
-        {
-            left[i] = 0.;
-            right[i] = 0.;
-        }
-    }
-    
-
-
-//SKILL POINT get that signal from EACH DEVICE------> http://www.vttoth.com/CMS/index.php/technical-notes/68
-
+    std::cout<<"Audio:: left [0] "<<(double)left[0]<<"-"<<(jack_default_audio_sample_t)left[0]<<" right[0] "<<right[0]<<std::endl;
     return 0;
 }
 

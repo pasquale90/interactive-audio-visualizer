@@ -56,7 +56,7 @@ Visualizer::Visualizer(const Config& cfg):
     buffersPerFrame=std::ceil((SR/buffer_size)/(double)fps);
     
     std::cout<<"Visualizer buffersPerFrame  "<<buffersPerFrame<<std::endl;
-    wf=new Waveform(buffer_size,buffersPerFrame,W);
+    // wf=new Waveform(buffer_size,cfg.radius,W);
 
     sp=new Spectrogram(buffer_size,buffersPerFrame,H);
     beatCount=0;
@@ -90,7 +90,7 @@ Visualizer::~Visualizer(){
     // cv::destroyWindow("Mask");  
     visualFrame.release();
     camBinaryMask.release();
-    wf->~Waveform();
+    wf.~Waveform();
     sp->~Spectrogram();  
     std::cout<<"Visualizer destructed"<<std::endl;
 }
@@ -128,7 +128,8 @@ void Visualizer::setConfig(const Config& cfg){
     buffersPerFrame=std::ceil((SR/buffer_size)/(double)fps);
     
     std::cout<<"Visualizer buffersPerFrame  "<<buffersPerFrame<<std::endl;
-    wf=new Waveform(buffer_size,buffersPerFrame,W);
+    // wf=new Waveform(buffer_size,buffersPerFrame,W);
+    wf.set_config(cfg);
     // Waveform wf(buffer_size,buffersPerFrame,W);
 
     sp=new Spectrogram(buffer_size,buffersPerFrame,H);
@@ -521,11 +522,44 @@ void Visualizer::_set_FG_manually(cv::Mat cameraFrame , RegionOfInterest roi){
     // circle(visualFrame, center,radius, line_Color, thickness);//Using circle()functi
 
 
+    float min,max;
+    int numSamples;
+    float *wave = wf.getWaveform(min,max,numSamples);
+    std::cout<<"Visualizer::_set_FG_manually --> min:"<<min<<" max:"<<max<<" numSamples:"<<numSamples<<" wave[0]:"<<wave[0]<<std::endl;
+// depict waveform
+    // double min,max;
+    // int numSamples;
+    // // update_wave_frame(start,end);
+    // double *wave=wf.getWaveform(min,max,numSamples);
+    int start=0;
+    int end=W;
 
+    if (numSamples<W){
+        end=numSamples;
+    }else end = W;
 
+    // if (min!=0 && max!=0){
+        int counter=0;
+        for (int x_trans = start; x_trans < end ; x_trans++ ){
+            
+            
 
+            // double percent = (wave[counter] - min / max - min);
+            // int ytr = H/2 + (double)H/3*percent;
 
+            // normalize in -1 1
+            float percent = 2* ( (wave[counter]-min) / (max-min) ) -1;
+            int ytr = H/2 + 3.0*percent;
 
+            // int ytr = (double)H/2. + (double)H*100.*wave[counter];
+            // std::cout<<" > x,y "<<x_trans<<","<<wave[counter]<<"--> normalized value = "<<ytr<< "with percent = "<<percent<<" , minmax=("<<min<<","<<max<<")"<<std::endl;
+            // std::cout<<"filling foreground in ("<<x_trans<<","<<ytr<<")"<<std::endl;
+            visualFrame.at<cv::Vec3b>(ytr,x_trans)[0] = 255;//newval[0];
+            visualFrame.at<cv::Vec3b>(ytr,x_trans)[1] = 255;//newval[1];
+            visualFrame.at<cv::Vec3b>(ytr,x_trans)[2] = 255;//newval[2];
+            counter++;
+        }
+    // }
 }
 
 void Visualizer::_setToCamera(cv::Mat cameraFrame){
@@ -630,14 +664,18 @@ void Visualizer::_setToCamera(cv::Mat cameraFrame){
 
 }
 
-int Visualizer::and_Sound_into_Image(double* in,cv::Mat videoframe, bool frameElapsed, bool trackEnabled, int tone,RegionOfInterest roi){
+int Visualizer::and_Sound_into_Image(float* left, float* right,cv::Mat videoframe, bool frameElapsed, bool trackEnabled, int tone,RegionOfInterest roi){
     
     bool exit_msg=false;
 
     // exit_msg = showFrame();
 
-    sp->prepare_spectrogram(bufferCount,in);
-    
+    // sp->prepare_spectrogram(bufferCount,in);
+    if (trackEnabled) {  //                                                            <-- only for DEBUG, REMOVE IF YOU WAN T TO PROCESS BG MUSIC - apart from sine waves
+        std::cout<<"trackEnabled "<<trackEnabled<< " left 0,511:"<<left[0]<<","<<left[511]<<" right 0,511:"<<right[0]<<","<<right[511]<<std::endl;
+        wf.prepare_waveform(left,right); //--> addressed to the next update
+    }
+
     if (frameElapsed){                                    // is this a legitimate solution? otherwise try threads
         // videoframe.copyTo(cameraFrame);
         // cameraFrame.copyTo(videoframe);
@@ -645,6 +683,7 @@ int Visualizer::and_Sound_into_Image(double* in,cv::Mat videoframe, bool frameEl
         if (trackEnabled){ // preprocess visual_frame -->   does nt depict the frame, it just edits it so it does not require a new frame to be captured by the camera.
             // update the current visualframe according to the changing of the tracking stimulus
             _set_BG_manually(tone, trackEnabled);
+            // update_spectrogram();
             _set_FG_manually(videoframe,roi);
         }else{
             _setToCamera(videoframe);
@@ -856,113 +895,107 @@ void Visualizer::change_BG_color(){
     beatCount%=8;
 }
 
-int Visualizer::update_wave_frame(){
 
-    double minw,maxw;
-    double *wave=wf->getWaveform(minw,maxw);;
-    double Amplification=H/32;
-    // int wavelen=wf->getWaveLen();
-    std::cout<<"minw "<<minw<<" maxw "<<maxw<<std::endl;
+// int Visualizer::update_wave_frame(int minw,int maxw){
 
-    const double mean = maxw-minw;
-    const double stddev = (double)H/5;
-    std::default_random_engine generator;
-    std::normal_distribution<double> dist(mean, stddev);
+//     // double minw,maxw;
+//     double *wave=wf.getWaveform(minw,maxw);;
+//     double Amplification=H/32;
+//     // int wavelen=wf->getWaveLen();
+//     std::cout<<"minw "<<minw<<" maxw "<<maxw<<std::endl;
 
-    // std::cout<<"wavelen "<<wavelen<<", width "<<W<<std::endl;
-    ///*
-    for (int i=1;i<buffersPerFrame;i++){
-        // Define random generator with Gaussian distribution
+//     for (int i=1;i<buffersPerFrame;i++){
+//         // Define random generator with Gaussian distribution
         
-        // std::cout<<"wave[i]-minw "<<wave[i]<<"-"<<minw<<"="<<wave[i]-minw<<std::endl;
-        // wave[i]=(double)2.0*(wave[i]-minw)/(maxw-minw)-1;
-        // int y_trans=(H/2)+wave[i]*(H/2)*2;//(wave.front()/2)+0.5*(H/2);
-        // std::cout<<"Visualizer::Frame (x,y) ("<<x_trans<<","<<y_trans<<") == wave["<<i<<"] "<<wave[i]<<std::endl;
+//         // std::cout<<"wave[i]-minw "<<wave[i]<<"-"<<minw<<"="<<wave[i]-minw<<std::endl;
+//         // wave[i]=(double)2.0*(wave[i]-minw)/(maxw-minw)-1;
+//         // int y_trans=(H/2)+wave[i]*(H/2)*2;//(wave.front()/2)+0.5*(H/2);
+//         // std::cout<<"Visualizer::Frame (x,y) ("<<x_trans<<","<<y_trans<<") == wave["<<i<<"] "<<wave[i]<<std::endl;
 
-        //replacing the above code - calc x y from <buffersPerFrame> mean-waveform samples
-        // double mean=wave[i];
+//         //replacing the above code - calc x y from <buffersPerFrame> mean-waveform samples
+//         // double mean=wave[i];
         
-        // std::cout<<"wave[i] before "<<wave[i]<<" ";
-        wave[i]=(double)2.0*(wave[i]-minw)/(maxw-minw)-1;
-        // std::cout<<" after "<<wave[i]<<std::endl;
+//         // std::cout<<"wave[i] before "<<wave[i]<<" ";
+//         wave[i]=(double)2.0*(wave[i]-minw)/(maxw-minw)-1;
+//         // std::cout<<" after "<<wave[i]<<std::endl;
         
-        int y_trans=wave[i]*Amplification + dist(generator);//(wave.front()/2)+0.5*(H/2);
-        std::cout<<"is added?? "<<wave[i]*Amplification<<"!="<<y_trans<<" ??"<<std::endl;
-        // y_trans=abs(y_trans);
+//         int y_trans=wave[i]*Amplification + dist(generator);//(wave.front()/2)+0.5*(H/2);
+//         std::cout<<"is added?? "<<wave[i]*Amplification<<"!="<<y_trans<<" ??"<<std::endl;
+//         // y_trans=abs(y_trans);
 
-        // assert (y_trans < H/2);
-        if (y_trans > H/2) y_trans = H/2-1;
-        if (y_trans < 0) y_trans = 0;
+//         // assert (y_trans < H/2);
+//         if (y_trans > H/2) y_trans = H/2-1;
+//         if (y_trans < 0) y_trans = 0;
 
-        int start,end;
-        if (y_trans < 0){
-            start=H/2+y_trans;
-            end=H/2-y_trans;
-        }else{
-            start=H/2-y_trans;
-            end=H/2+y_trans;
-        }
+//         int start,end;
+//         if (y_trans < 0){
+//             start=H/2+y_trans;
+//             end=H/2-y_trans;
+//         }else{
+//             start=H/2-y_trans;
+//             end=H/2+y_trans;
+//         }
 
-        std::cout<<" at x:"<<x_trans << " from H/2:"<<H/2<<" up to y: "<<y_trans<<std::endl;
-        std::cout<<" start "<<start<<" end "<<end<<std::endl;
-        for (int ytr = start; ytr < end ; ytr++ ){
-            std::cout<<" > x,y "<<x_trans<<","<<ytr<<std::endl;
-            visualFrame.at<cv::Vec3b>(ytr,x_trans)[0] = 255;//newval[0];
-            visualFrame.at<cv::Vec3b>(ytr,x_trans)[1] = 255;//newval[1];
-            visualFrame.at<cv::Vec3b>(ytr,x_trans)[2] = 255;//newval[2];
-        }
-        x_trans++;
-        if(x_trans==W) x_trans=0;
-        // visualFrame.at<cv::Vec3b>(y2,x_trans)[0] = 255;//newval[0];
-        // visualFrame.at<cv::Vec3b>(y2,x_trans)[1] = 255;//newval[1];
-        // visualFrame.at<cv::Vec3b>(y2,x_trans)[2] = 255;//newval[2];
-        // x_trans++;
-        // if(x_trans==W) x_trans=0;
-    }
-    //*/
+//         std::cout<<" at x:"<<x_trans << " from H/2:"<<H/2<<" up to y: "<<y_trans<<std::endl;
+//         std::cout<<" start "<<start<<" end "<<end<<std::endl;
+//         for (int ytr = start; ytr < end ; ytr++ ){
+//             std::cout<<" > x,y "<<x_trans<<","<<ytr<<std::endl;
+//             visualFrame.at<cv::Vec3b>(ytr,x_trans)[0] = 255;//newval[0];
+//             visualFrame.at<cv::Vec3b>(ytr,x_trans)[1] = 255;//newval[1];
+//             visualFrame.at<cv::Vec3b>(ytr,x_trans)[2] = 255;//newval[2];
+//         }
+//         x_trans++;
+//         if(x_trans==W) x_trans=0;
+//         // visualFrame.at<cv::Vec3b>(y2,x_trans)[0] = 255;//newval[0];
+//         // visualFrame.at<cv::Vec3b>(y2,x_trans)[1] = 255;//newval[1];
+//         // visualFrame.at<cv::Vec3b>(y2,x_trans)[2] = 255;//newval[2];
+//         // x_trans++;
+//         // if(x_trans==W) x_trans=0;
+//     }
+//     //*/
 
-/* addressed for the next update 
-    // KEEP ONLY A FEW
-    int ctr=buffer_size; // counter to iterate over buffer
-    int hop=1;// buffer stride
+// /* addressed for the next update 
+//     // KEEP ONLY A FEW
+//     int ctr=buffer_size; // counter to iterate over buffer
+//     int hop=1;// buffer stride
 
-    while(ctr>0) {
-        int idx=buffer_size-ctr;
-        if ((wave.size()+buffer_size)<(W*redxtrans)){
-            wave.push(buffer[idx]); //buffer[idx]
-            // std::cout<<"filling sample "<<idx<<" with value "<< buffer[idx]<<" and normalized value "<<norm<<" --> wave size "<<wave.size()<<std::endl; //
-            // std::cout<<" head "<<wave.front()<<" tail "<<wave.back()<<std::endl;
-        }else{
-            wave.pop();
-            wave.push(buffer[idx]);
-            // std::cout<<"updating wav with len "<<wave.size()<<" head "<<wave.front()<<" tail "<<wave.back()<<std::endl;
-        }
+//     while(ctr>0) {
+//         int idx=buffer_size-ctr;
+//         if ((wave.size()+buffer_size)<(W*redxtrans)){
+//             wave.push(buffer[idx]); //buffer[idx]
+//             // std::cout<<"filling sample "<<idx<<" with value "<< buffer[idx]<<" and normalized value "<<norm<<" --> wave size "<<wave.size()<<std::endl; //
+//             // std::cout<<" head "<<wave.front()<<" tail "<<wave.back()<<std::endl;
+//         }else{
+//             wave.pop();
+//             wave.push(buffer[idx]);
+//             // std::cout<<"updating wav with len "<<wave.size()<<" head "<<wave.front()<<" tail "<<wave.back()<<std::endl;
+//         }
 
-        int y_trans=(H/2)+wave.front()*(H/2);//(wave.front()/2)+0.5*(H/2);
+//         int y_trans=(H/2)+wave.front()*(H/2);//(wave.front()/2)+0.5*(H/2);
 
-        if (ascX){
-            if (x_trans>=W) {
-                ascX=false;
-                if (ctr%redxtrans==0) x_trans--;
-            }else x_trans++;
+//         if (ascX){
+//             if (x_trans>=W) {
+//                 ascX=false;
+//                 if (ctr%redxtrans==0) x_trans--;
+//             }else x_trans++;
 
-        }else{
-            if(x_trans<=0){
-                ascX=true;
-                x_trans++;
-            }else {if (ctr%redxtrans==0) x_trans--;}
-        }
-        // std::cout<<"filling canvas with in position y "<<y_trans<<std::endl;
-        // std::cout<<"filling canvas with in position x "<<x_trans<<std::endl;
-        visualFrame.at<cv::Vec3b>(y_trans,x_trans)[0] = 255;//newval[0];
-        visualFrame.at<cv::Vec3b>(y_trans,x_trans)[1] = 255;//newval[1];
-        visualFrame.at<cv::Vec3b>(y_trans,x_trans)[2] = 255;//newval[2];
+//         }else{
+//             if(x_trans<=0){
+//                 ascX=true;
+//                 x_trans++;
+//             }else {if (ctr%redxtrans==0) x_trans--;}
+//         }
+//         // std::cout<<"filling canvas with in position y "<<y_trans<<std::endl;
+//         // std::cout<<"filling canvas with in position x "<<x_trans<<std::endl;
+//         visualFrame.at<cv::Vec3b>(y_trans,x_trans)[0] = 255;//newval[0];
+//         visualFrame.at<cv::Vec3b>(y_trans,x_trans)[1] = 255;//newval[1];
+//         visualFrame.at<cv::Vec3b>(y_trans,x_trans)[2] = 255;//newval[2];
 
-        ctr-=hop;
-    }
-    return 0;
-*/
-}
+//         ctr-=hop;
+//     }
+//     return 0;
+// */
+// }
 
 
 int Visualizer::update_spectrogram(){

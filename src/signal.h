@@ -1,6 +1,7 @@
 #ifndef SIGNAL_H
 #define SIGNAL_H
 
+#include "config.h"
 #include <math.h>
 
 #ifndef M_PI
@@ -10,8 +11,12 @@
 
 class Signal{
 public:
+    Signal();
     Signal(int, int);
     ~Signal();
+    void set_config(const Config&);
+
+    void mix(double*,double*,double*,int);
     void prepareSine(int);
     double getSineL();
     double getSineR();

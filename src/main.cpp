@@ -2,6 +2,7 @@
 #include <chrono>
 #include <thread>
 
+
 #include "audio.h"
 #include "visualizer.h"
 #include "beatracker.h"
@@ -17,8 +18,9 @@ cv::Mat visualFrame;
 bool exit_msg=false;
 bool isBeat;
 bool trackEnabled;
+int currenTone;
 
-void audioBufferCallback(double* mix, int& currenTone){
+void audioBufferCallback(jack_default_audio_sample_t* left, jack_default_audio_sample_t *right){ // --> jack_default_audio_sample_t* === float*
     /*** fill latter
      * frameElapsed : a new frame has been elapsed (enables visualization)
      * trackEnabled : ROI's tracking signal (updates visualization)
@@ -30,12 +32,12 @@ void audioBufferCallback(double* mix, int& currenTone){
     auto t1 = std::chrono::high_resolution_clock::now();
 
     // get the input from camera --> a signal
-    bool frameElapsed=al.turn_Image_into_Sound(trackEnabled,currenTone,visualFrame,ROI);
+    bool frameElapsed=al.turn_Image_into_Sound(trackEnabled,currenTone,visualFrame,ROI, (float *)left ,  (float *)right); // rename frameElapsed with the var name "imClock"
 
     // std::cout<<"MAIN :: Current Roi center "<<ROI.centerX<<","<<ROI.centerY<<std::endl;
-    if (frameElapsed){
-        std::cout<<"frameElapsed toggle? "<<"Yes!!"<<std::endl;
-    }else std::cout<<"toggle? "<<"No :((((((((((((((((((((("<<std::endl;
+    // if (frameElapsed){
+    //     std::cout<<"frameElapsed toggle? "<<"Yes!!"<<std::endl;
+    // }else std::cout<<"toggle? "<<"No :((((((((((((((((((((("<<std::endl;
 
     // isBeat=bt.isBeat(in);
     // if (isBeat)
@@ -43,8 +45,8 @@ void audioBufferCallback(double* mix, int& currenTone){
     //     // do something on the beat
     //     std::cout<<" Beat! "<<std::endl;
     // }
-
-    exit_msg=vs.and_Sound_into_Image(mix,visualFrame,frameElapsed,trackEnabled,currenTone,ROI);
+    
+    exit_msg=vs.and_Sound_into_Image((float *)left, (float *)right, visualFrame, frameElapsed, trackEnabled, currenTone, ROI);
 
     std::cout<<"-------------------------------------------------------------------------------------------------------------------"<<std::endl;
 

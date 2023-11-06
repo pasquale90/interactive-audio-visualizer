@@ -8,6 +8,7 @@
 
 // #include "camera.h"
 // #include <thread>
+#include "signal.h"
 #include "videotracker.h"
 
 class Audiolizer{
@@ -18,13 +19,15 @@ public:
     ~Audiolizer();
     void setConfig(const Config& cfg);
     bool turn_Image_into_Sound_____(int&,cv::Mat&);
-    bool turn_Image_into_Sound(bool&,int&,cv::Mat&,RegionOfInterest&);
+    bool turn_Image_into_Sound(bool&,int&,cv::Mat&,RegionOfInterest&, float*, float*);
+
 
     void _capture();
 
     bool _tickTock();
 
 private:
+    Signal sig;
 
     VideoTracker camera_tracker;
     int prev_freq,init_frequency, minFreq, maxFreq;
@@ -32,6 +35,7 @@ private:
     int maxW,maxH;
     double a,b;
 
+    int bufferSize;
     // RegionOfInterest ROIcenter;
 
     // bool _tickTock();
@@ -44,6 +48,8 @@ private:
     bool _gradualy_fade(int&);
     void _init_log_freq_scale(int,int);
     void _int2log_freq(int&);
+
+    void _make_sound(float* , float* , int);
 };
 
 #endif

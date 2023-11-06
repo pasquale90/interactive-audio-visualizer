@@ -1,12 +1,9 @@
 #ifndef AUDIO_H
 #define AUDIO_H
 
-#include "signal.h"
 #include "config.h"
-
 #include <jack/jack.h>
 #include <jack/types.h>
-
 #include <iostream>
 #include <cstring>
 #include <unistd.h>
@@ -19,7 +16,6 @@ public:
 
     void AudioRouting();
 
-    
     void closeStream();
     int streamBuffer(jack_nframes_t nframes);
 
@@ -32,9 +28,6 @@ private:
     jack_client_t *client;
 
     double *in;
-    int current_tone_frequency=0;
-    double ma=0.0;
-    double mi=100.0;
     const char *server_name;
     const char *client_name ;
     const char **fromdevice;
@@ -42,8 +35,7 @@ private:
 
     static void jack_shutdown (void *arg);
 
-    Signal *sig;
-
+    // make a mix() function to mix (inplace) the left and right outs with all the input signals received from all the input channels supported by the audio device
 };
 
 

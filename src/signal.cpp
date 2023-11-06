@@ -12,6 +12,20 @@ Signal::Signal(int sample_rate, int buffer_size){
 	amplitude = 0.1;				// not even heuristic
 }
 
+Signal::Signal(){
+    prevfreq=0;
+    phaseL=0;
+    phaseR=0;
+	phase=0.0;
+	amplitude = 0.1;				// not even heuristic
+}
+
+void Signal::set_config(const Config& cfg){
+	sampleRate=cfg.sampleRate;
+	bufferSize=cfg.bufferSize;
+    sine=new double[bufferSize];
+}
+
 Signal::~Signal(){
     delete[] sine;
 }

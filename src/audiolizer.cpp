@@ -20,6 +20,7 @@ void Audiolizer::setConfig(const Config& cfg){
     // store 
     maxW = cfg.camResW;
     maxH = cfg.camResH;
+    bufferSize = cfg.bufferSize;
 
     _init_log_freq_scale(cfg.minFrequency,cfg.maxFrequency);
     // minFreq=cfg.minFrequency;
@@ -30,6 +31,9 @@ void Audiolizer::setConfig(const Config& cfg){
     init_frequency=maxFreq-minFreq;
     prev_amp=.0;
     init_amp=0.5;
+
+    sig.set_config(cfg);
+    
 }
 
 void Audiolizer::_init_log_freq_scale(int minfreq, int maxfreq){
@@ -57,7 +61,7 @@ bool Audiolizer::_tickTock(){
     return camera_tracker.tickTock();
 }
 
-bool Audiolizer::turn_Image_into_Sound(bool &ispattern, int& freq, cv::Mat& frame,RegionOfInterest &roi){
+bool Audiolizer::turn_Image_into_Sound(bool &ispattern, int& freq, cv::Mat& frame,RegionOfInterest &roi, float *left , float *right){
 
    /***
     * returns boolean if new frame occured
@@ -101,7 +105,32 @@ bool Audiolizer::turn_Image_into_Sound(bool &ispattern, int& freq, cv::Mat& fram
     // roi.volumeH=0;
     // roi = ROIcenter;
 
+    _make_sound(left , right, freq);
+
+    std::cout<<"Audiolizer:: left [511] "<<left[511]<<" right[511] "<<right[511]<<std::endl;
     return _tickTock();
+}
+
+
+void Audiolizer::_make_sound(float* left, float* right, int tone){
+
+	if (tone>0){
+		sig.prepareSine(tone);
+		for(int i=0; i<bufferSize; i++ )
+		{
+			// for a more generic app, that makes use of the input sig from a USB audio interface or the OS sys ...
+			// .. we ought to combine the two signals : the in and the sine tone.
+			// In case that more than 1 input sources are connected, access the number of input sources (in particular, the #input_sources that are contributing info to the aggregated *in buffer)
+			left[i] = sig.getSineL();
+            right[i] = sig.getSineR();
+		}
+    }else {
+        for(int i=0; i<bufferSize; i++ )
+        {
+            left[i] = 0.;
+            right[i] = 0.;
+        }
+    }
 }
 
 // bool Audiolizer::turn_Image_into_Sound_____(int& freq,cv::Mat& frame){
