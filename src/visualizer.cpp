@@ -522,11 +522,33 @@ void Visualizer::_set_BG_manually(int tone, bool trackEnabled){    // naive
         visualFrame.setTo( cv::Scalar( B, G, R ) );
 }
 
-void Visualizer::drawSmallcircle(){
+void Visualizer::drawSmallcircle(int cameraW, int cameraH, int roicenterX, int roicenterY, int roiVolumeW, int roiVolumeH){
+
+    int LR = W - cameraW;
+    int TB = H - cameraH;
+    int center_x = LR/2 + roicenterX; //  
+    int center_y = TB/2 + roicenterY; // H/2;
+    float transpose_ratio_x = (float)W / (float)cameraW / 2.;
+    float transpose_ratio_y = (float)H / (float)cameraH / 2.;
+
+    if ( center_x < W/2 ) //-W*2/3)
+        center_x -= transpose_ratio_x*(W/2 - center_x);
+    else if ( center_x > W/2) //*2/3)
+        center_x += transpose_ratio_x*(center_x - W/2);
+    if ( center_y < H/2 )
+        center_y -= transpose_ratio_y*(H/2 - center_y);
+    else if ( center_y > H/2 )
+        center_y += transpose_ratio_y*(center_y - H/2);
+
+    cv::Point center(center_x, center_y);//Declaring the center point
+    int radius = roiVolumeW > roiVolumeH ? roiVolumeW/2 : roiVolumeH/2; //Declaring the radius
+    cv::Scalar line_Color(0, 0, 0);//Color of the circle
+    int thickness = 2;//thickens of the line
+    circle(visualFrame, center,radius, line_Color, thickness);//Using circle()functi
 
 }
 
-void Visualizer::draWaveform(int a,int b , int c){
+void Visualizer::draWaveform(int center_x,int center_b , int c){
 
 }
 
@@ -563,30 +585,10 @@ void Visualizer::_set_FG_manually(cv::Mat cameraFrame , RegionOfInterest roi){
 
 // 
 
-
-    int LR = W - cameraFrame.cols;
-    int TB = H - cameraFrame.rows;
-    int center_x = LR/2 + roi.centerX; //  
-    int center_y = TB/2 + roi.centerY; // H/2;
-
-    float transpose_ratio_x = (float)W / (float)cameraFrame.cols / 2.;
-    float transpose_ratio_y = (float)H / (float)cameraFrame.rows / 2.;
-
-    if ( center_x < W/2 ) //-W*2/3)
-        center_x -= transpose_ratio_x*(W/2 - center_x);
-    else if ( center_x > W/2) //*2/3)
-        center_x += transpose_ratio_x*(center_x - W/2);
-    if ( center_y < H/2 )
-        center_y -= transpose_ratio_y*(H/2 - center_y);
-    else if ( center_y > H/2 )
-        center_y += transpose_ratio_y*(center_y - H/2);
+    drawSmallcircle(cameraFrame.cols,cameraFrame.rows,roi.centerX,roi.centerY,roi.volumeW,roi.volumeH);
 
 
-    cv::Point center(center_x, center_y);//Declaring the center point
-    int radius = roi.volumeW > roi.volumeH ? roi.volumeW/2 : roi.volumeH/2; //Declaring the radius
-    cv::Scalar line_Color(0, 0, 0);//Color of the circle
-    int thickness = 2;//thickens of the line
-    circle(visualFrame, center,radius, line_Color, thickness);//Using circle()functi
+
 
 
     // int L = (W - cameraFrame.cols)/2;

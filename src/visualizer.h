@@ -81,7 +81,7 @@ private:
     std::vector<std::pair<int,int>> circleMask;
     void midPointCircleDraw(int x_centre, int y_centre, int r);
     void draWaveform(int,int,int);
-    void drawSmallcircle();
+    void drawSmallcircle(int,int,int,int,int,int);
 };
 
 
