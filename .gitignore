@@ -9,3 +9,13 @@ external/*
 libs/*
 test
 ./test
+libraries/*
+src/__*
+libraries/YOLO-NAS-onnxruntime/
+libraries/install_onnx_notes
+libraries/openpose/
+src/__frequencies.h
+src/__scales.cpp
+src/__scales.h
+src/__wavelengths.h
+tests/
