@@ -22,11 +22,11 @@ void Waveform::set_config(const Config &cfg){ // : buffer_size(bufferSize), wave
     
     buffer_size=cfg.bufferSize;
     int radius = cfg.radius;
-    cv::namedWindow("Waveform",cv::WINDOW_NORMAL);
-    cv::resizeWindow("Waveform",cfg.camResW,cfg.camResH);
-    cv::Mat img(cfg.camResH,cfg.camResW, CV_8UC3,cv::Scalar(0,0,0));
-    tempWaveFrame = img;
-    img.release();
+    // cv::namedWindow("Waveform",cv::WINDOW_NORMAL);
+    // cv::resizeWindow("Waveform",cfg.camResW,cfg.camResH);
+    // cv::Mat img(cfg.camResH,cfg.camResW, CV_8UC3,cv::Scalar(0,0,0));
+    // tempWaveFrame = img;
+    // img.release();
     W = cfg.displayW;
     H = cfg.displayH;
     // sr / buffers = buffers per second
@@ -97,29 +97,29 @@ float* Waveform::getWaveform(float &minf, float &maxf, int &num_samples){
         end=sample_counter;
     }else end = W;
 
-    // if (minf!=0 && maxf!=0){
-    int counter=0;
-    for (int x_trans = 0; x_trans < end ; x_trans++ ){
+    // // if (minf!=0 && maxf!=0){
+    // int counter=0;
+    // for (int x_trans = 0; x_trans < end ; x_trans++ ){
         
         
 
-        // double percent = (wave[counter] - min / max - min);
-        // int ytr = H/2 + (double)H/3*percent;
+    //     // double percent = (wave[counter] - min / max - min);
+    //     // int ytr = H/2 + (double)H/3*percent;
 
-        // normalize in -1 1
-        float percent = 2* ( (wave[counter]-minf) / (maxf-minf) ) -1;
-        int ytr = H/2 + 3.0*percent;
+    //     // normalize in -1 1
+    //     float percent = 2* ( (wave[counter]-minf) / (maxf-minf) ) -1;
+    //     int ytr = H/2 + 3.0*percent;
 
-        // int ytr = (double)H/2. + (double)H*100.*wave[counter];
-        // std::cout<<" > x,y "<<x_trans<<","<<wave[counter]<<"--> normalized value = "<<ytr<< "with percent = "<<percent<<" , minmax=("<<min<<","<<max<<")"<<std::endl;
-        // std::cout<<"filling foreground in ("<<x_trans<<","<<ytr<<")"<<std::endl;
-        tempWaveFrame.at<cv::Vec3b>(ytr,x_trans)[0] = 255;//newval[0];
-        tempWaveFrame.at<cv::Vec3b>(ytr,x_trans)[1] = 255;//newval[1];
-        tempWaveFrame.at<cv::Vec3b>(ytr,x_trans)[2] = 255;//newval[2];
-        counter++;
-    }
+    //     // int ytr = (double)H/2. + (double)H*100.*wave[counter];
+    //     // std::cout<<" > x,y "<<x_trans<<","<<wave[counter]<<"--> normalized value = "<<ytr<< "with percent = "<<percent<<" , minmax=("<<min<<","<<max<<")"<<std::endl;
+    //     // std::cout<<"filling foreground in ("<<x_trans<<","<<ytr<<")"<<std::endl;
+    //     tempWaveFrame.at<cv::Vec3b>(ytr,x_trans)[0] = 255;//newval[0];
+    //     tempWaveFrame.at<cv::Vec3b>(ytr,x_trans)[1] = 255;//newval[1];
+    //     tempWaveFrame.at<cv::Vec3b>(ytr,x_trans)[2] = 255;//newval[2];
+    //     counter++;
+    // }
 
-    cv::imshow("Waveform",tempWaveFrame );                       //Showing the video//
+    // cv::imshow("Waveform",tempWaveFrame );                       //Showing the video//
 
     sample_counter=0;
 

@@ -31,7 +31,7 @@ private:
     Config conf;
     int W,H;
     cv::Mat visualFrame,cameraFrame;
-    bool _showFrame(bool);
+    bool _showFrame();
     int R,G,B;
 
     int update_BG_frame(); // remove this isDownBeat dependency
@@ -79,6 +79,9 @@ private:
     // int *camBinaryMask;
     // int pixel_counter;
     std::vector<std::pair<int,int>> circleMask;
+    void midPointCircleDraw(int x_centre, int y_centre, int r);
+    void draWaveform(int,int,int);
+    void drawSmallcircle();
 };
 
 

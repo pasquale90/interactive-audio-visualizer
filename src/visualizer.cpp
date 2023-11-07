@@ -134,13 +134,100 @@ void Visualizer::setConfig(const Config& cfg){
 
     sp=new Spectrogram(buffer_size,buffersPerFrame,H);
     // Spectrogram sp(buffer_size,buffersPerFrame,H);
+
     beatCount=0;
     
     _create_camMask(cfg.camResW,cfg.camResH);
 }
 
-void Visualizer::_create_camMask(int cameraW,int cameraH){
+// https://www.geeksforgeeks.org/mid-point-circle-drawing-algorithm/
+void Visualizer::midPointCircleDraw(int x_centre, int y_centre, int r)
+{
+    int x = r, y = 0;
+     
+    // Printing the initial point on the axes 
+    // after translation
+    // cout << "(" << x + x_centre << ", " << y + y_centre << ") ";
+     
+    // When radius is zero only a single
+    // point will be printed
+    if (r > 0)
+    {
+        // cout << "(" << x + x_centre << ", " << -y + y_centre << ") ";
+        // cout << "(" << y + x_centre << ", " << x + y_centre << ") ";
+        // cout << "(" << -y + x_centre << ", " << x + y_centre << ")\n";
 
+        circleMask.push_back({ x + x_centre ,-y + y_centre});
+        circleMask.push_back({ y + x_centre , x + y_centre });
+        circleMask.push_back({-y + x_centre , x + y_centre});
+
+        visualFrame.at<cv::Vec3b>(-y + y_centre , x + x_centre )[0] = 137;
+        visualFrame.at<cv::Vec3b>( x + y_centre , y + x_centre )[1] = 137;
+        visualFrame.at<cv::Vec3b>( x + y_centre ,-y + x_centre )[2] = 137;
+    }
+     
+    // Initialising the value of P
+    int P = 1 - r;
+    while (x > y)
+    { 
+        y++;
+         
+        // Mid-point is inside or on the perimeter
+        if (P <= 0)
+            P = P + 2*y + 1;
+        // Mid-point is outside the perimeter
+        else
+        {
+            x--;
+            P = P + 2*y - 2*x + 1;
+        }
+         
+        // All the perimeter points have already been printed
+        if (x < y)
+            break;
+         
+        // Printing the generated point and its reflection
+        // in the other octants after translation
+        // cout << "(" << x + x_centre << ", " << y + y_centre << ") ";
+        // cout << "(" << -x + x_centre << ", " << y + y_centre << ") ";
+        // cout << "(" << x + x_centre << ", " << -y + y_centre << ") ";
+        // cout << "(" << -x + x_centre << ", " << -y + y_centre << ")\n";
+
+        circleMask.push_back({ x + x_centre , y + y_centre});
+        circleMask.push_back({-x + x_centre , y + y_centre});
+        circleMask.push_back({ x + x_centre ,-y + y_centre });
+        circleMask.push_back({-x + x_centre ,-y + y_centre});
+
+        visualFrame.at<cv::Vec3b>( y + y_centre , x + x_centre )[0] = 137;
+        visualFrame.at<cv::Vec3b>( y + y_centre ,-x + x_centre )[1] = 137;
+        visualFrame.at<cv::Vec3b>(-y + y_centre , x + x_centre )[2] = 137;
+        visualFrame.at<cv::Vec3b>(-y + y_centre ,-x + x_centre )[2] = 137;
+
+         
+        // If the generated point is on the line x = y then 
+        // the perimeter points have already been printed
+        if (x != y)
+        {
+            // cout << "(" << y + x_centre << ", " << x + y_centre << ") ";
+            // cout << "(" << -y + x_centre << ", " << x + y_centre << ") ";
+            // cout << "(" << y + x_centre << ", " << -x + y_centre << ") ";
+            // cout << "(" << -y + x_centre << ", " << -x + y_centre << ")\n";
+
+            circleMask.push_back({ y + x_centre , x + y_centre});
+            circleMask.push_back({-y + x_centre , x + y_centre});
+            circleMask.push_back({ y + x_centre ,-x + y_centre });
+            circleMask.push_back({-y + x_centre ,-x + y_centre});
+
+            visualFrame.at<cv::Vec3b>( x + y_centre , y + x_centre )[0] = 137;
+            visualFrame.at<cv::Vec3b>( x + y_centre ,-y + x_centre )[1] = 137;
+            visualFrame.at<cv::Vec3b>(-x + y_centre , y + x_centre )[2] = 137;
+            visualFrame.at<cv::Vec3b>(-x + y_centre ,-y + x_centre )[2] = 137;
+        }
+    }
+    std::cout<<"Vector length "<< circleMask.size()<<std::endl;
+}
+
+void Visualizer::_create_camMask(int cameraW,int cameraH){
     // int thickness=1;
     // circle( cameraFrame,
     //     cv::Point((cameraW/2),(cameraH/2)),
@@ -157,7 +244,8 @@ void Visualizer::_create_camMask(int cameraW,int cameraH){
     int center_x = cameraW/2;
     int center_y = cameraH/2;
 
-    
+    midPointCircleDraw(center_x,center_y,r);
+
     cv::Mat m1 = cv::Mat(cameraH,cameraW, CV_64F, cv::Scalar(0)); // CV_32F
     // // camBinaryMask=m1.clone();
     camBinaryMask=m1;
@@ -183,13 +271,16 @@ void Visualizer::_create_camMask(int cameraW,int cameraH){
             // Get the max distance for each point to normalize the distance between square and circles perimeter
             // x = cx + r * cos(a)
             // y = cy + r * sin(a)
-            // double max_dist = (double) sqrt ( pow((i-center_x),2) + pow((j-center_y),2) );
+            double max_dist = (double) sqrt ( pow((i-center_x),2) + pow((j-center_y),2) );
             bool condition = center_dist > (double)r ;
             
             // camBinaryMask.at<double>(j,i) = 0.5;
 
             //(x - a)**2 + (y - b)**2 == r**2;
-            // bool condition2 = (pow((i - cameraW/2),2) + pow((j - cameraH/2),2)) >= pow(r,2);
+            // double term1 = (pow((i - cameraW/2),2) + pow((j - cameraH/2),2));
+            // double term2 = pow(r,2);
+            // bool condition2 = term1 >= term2;
+            // bool condition2 = (pow((i - cameraW/2),2) + pow((j - cameraH/2),2)) >= 
 
             if (condition){
 
@@ -197,6 +288,18 @@ void Visualizer::_create_camMask(int cameraW,int cameraH){
                 double transparency = (center_dist-(double)r)/ (double)sqrt(pow(cameraW-cameraH,2));
                 // std::cout<<transparency <<" = "<<center_dist<<"-"<<r<<"("<<center_dist-r<<") / "<<abs(cameraW-cameraH)<<std::endl;
                 camBinaryMask.at<double>(j,i) = transparency;
+
+                if (max_dist == r+4 || center_dist == r+3 || center_dist == r+1 || center_dist == r+2 || center_dist == r){
+                    int T = (H - cameraH)/2;
+                    int L = (W - cameraW)/2;
+                    int x = L + i;
+                    int y = T + j;
+                    // x = i;
+                    // y=j;
+                    visualFrame.at<cv::Vec3b>(y,x)[0] = 137;
+                    visualFrame.at<cv::Vec3b>(y,x)[1] = 137;
+                    visualFrame.at<cv::Vec3b>(y,x)[2] = 137;
+                }
                 ++verifier;
             }
             // if (condition2){
@@ -318,29 +421,14 @@ void Visualizer::_create_camMask(int cameraW,int cameraH){
 // SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT
 }
 
-bool Visualizer::_showFrame(bool nativeWindow){
+bool Visualizer::_showFrame(){ //bool nativeWindow
+
     // if (nativeWindow){
     //     std::cout<<"Visualizer : is VISUAL Frame"<<std::endl;
-    //     cv::imshow("Interactive Audio Visualizer", visualFrame);//Showing the video//
-    //     // cv::waitKey(1); //Allowing 1 milliseconds frame processing time
-    //     if (cv::waitKey(1) == 113) return true;
-    //     return false;
     // }
     // else {
     //     std::cout<<"Visualizer : is CAMERA Frame"<<std::endl;
-    //     cv::imshow("Interactive Audio Visualizer", cameraFrame);//Showing the video//
-    //     // cv::waitKey(1); //Allowing 1 milliseconds frame processing time
-    //     if (cv::waitKey(1) == 113) return true;
-    //     return false;
-
     // }
-
-    if (nativeWindow){
-        std::cout<<"Visualizer : is VISUAL Frame"<<std::endl;
-    }
-    else {
-        std::cout<<"Visualizer : is CAMERA Frame"<<std::endl;
-    }
     // cv::imshow("Mask", camBinaryMask);                       //Showing the video//
     cv::imshow("Interactive Audio Visualizer", visualFrame);    //Showing the video//
     // cv::waitKey(1);                                          //Allowing 1 milliseconds frame processing time
@@ -434,6 +522,14 @@ void Visualizer::_set_BG_manually(int tone, bool trackEnabled){    // naive
         visualFrame.setTo( cv::Scalar( B, G, R ) );
 }
 
+void Visualizer::drawSmallcircle(){
+
+}
+
+void Visualizer::draWaveform(int a,int b , int c){
+
+}
+
 void Visualizer::_set_FG_manually(cv::Mat cameraFrame , RegionOfInterest roi){
 // SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT 
     // int L = roi.centerX - roi.volumeW/2;
@@ -466,13 +562,15 @@ void Visualizer::_set_FG_manually(cv::Mat cameraFrame , RegionOfInterest roi){
 
 
 // 
-    float transpose_ratio_x = (float)W / (float)cameraFrame.cols / 2.;
-    float transpose_ratio_y = (float)H / (float)cameraFrame.rows / 2.;
+
 
     int LR = W - cameraFrame.cols;
     int TB = H - cameraFrame.rows;
     int center_x = LR/2 + roi.centerX; //  
     int center_y = TB/2 + roi.centerY; // H/2;
+
+    float transpose_ratio_x = (float)W / (float)cameraFrame.cols / 2.;
+    float transpose_ratio_y = (float)H / (float)cameraFrame.rows / 2.;
 
     if ( center_x < W/2 ) //-W*2/3)
         center_x -= transpose_ratio_x*(W/2 - center_x);
@@ -542,8 +640,6 @@ void Visualizer::_set_FG_manually(cv::Mat cameraFrame , RegionOfInterest roi){
         int counter=0;
         for (int x_trans = start; x_trans < end ; x_trans++ ){
             
-            
-
             // double percent = (wave[counter] - min / max - min);
             // int ytr = H/2 + (double)H/3*percent;
 
@@ -668,12 +764,11 @@ int Visualizer::and_Sound_into_Image(float* left, float* right,cv::Mat videofram
     
     bool exit_msg=false;
 
-    // exit_msg = showFrame();
-
-    // sp->prepare_spectrogram(bufferCount,in);
-    if (trackEnabled) {  //                                                            <-- only for DEBUG, REMOVE IF YOU WAN T TO PROCESS BG MUSIC - apart from sine waves
-        std::cout<<"trackEnabled "<<trackEnabled<< " left 0,511:"<<left[0]<<","<<left[511]<<" right 0,511:"<<right[0]<<","<<right[511]<<std::endl;
+    if (trackEnabled) {  //                                    <-- only for DEBUG, REMOVE IF YOU WAN T TO PROCESS BG MUSIC - apart from sine waves
+        // std::cout<<"trackEnabled "<<trackEnabled<< " left 0,511:"<<left[0]<<","<<left[511]<<" right 0,511:"<<right[0]<<","<<right[511]<<std::endl;
         wf.prepare_waveform(left,right); //--> addressed to the next update
+        // sp->prepare_spectrogram(bufferCount,in);
+
     }
 
     if (frameElapsed){                                    // is this a legitimate solution? otherwise try threads
@@ -689,127 +784,10 @@ int Visualizer::and_Sound_into_Image(float* left, float* right,cv::Mat videofram
             _setToCamera(videoframe);
         }
 
-        exit_msg = _showFrame(true);   // shows the video captured from camera --> where should it depict the visualFrame?
+        exit_msg = _showFrame();   // shows the video captured from camera --> where should it depict the visualFrame?
 
     }
 
-    //start preparing for the next frame
-    // wf->prepare_waveform(bufferCount,in); //--> addressed to the next update
-
-    /*
-    sp->prepare_spectrogram(bufferCount,in);
-    
-    
-    if (isBeat){
-        // if (incrR<17) incrR+=7;
-        // int tincrR=incrR;
-        // int tincrG=incrG;
-        // int tincrB=incrB;
-
-        // if (incrR<17) incrR+=7;
-        // else incrR=3;
-        // if (incrG>5) incrG+=1;
-        // else incrG=1;
-        // if (incrB>21) incrB+=3; 
-        // else incrB=7;
-        std::cout<<bufferCount<<" " ;
-        if(!update_BG_frame()){
-            std::cout<<"Visualizer::stream_frames : error update_bg_frame"<<std::endl;
-        }
-        showFrame();
-    
-        // incrR=tincrR;
-        // incrG=tincrG;
-        // incrB=tincrB;   
-    }
-    
-
-    if (bufferCount==buffersPerFrame-1){ // last frame to process before showing 
-    //do something special using the last buffer?? --> compute the FFT for the concatenated signal
-        // std::cout<<"computes the FFT"<<std::endl;
-        // update_wave_frame();
-        update_spectrogram();
-    }
-    */
-
-    // bufferCount++;
-    // bufferCount%=buffersPerFrame;
-
-         
-    return exit_msg;
-}
-
-int Visualizer::stream_frames(double* in,bool isBeat){
-    // std::cout<<"bufferCount -->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"<<bufferCount<<" ";
-    buffer=in;
-    bool exit_msg=false;
-
-    if (bufferCount==0){                                    // is this a legitimate solution? otherwise try threads
-
-        // std::cout<<" shows the frame"<<std::endl;
-
-        exit_msg = _showFrame(true); 
-
-        //check white pixels
-        // int white_pixel_counter=0;
-        // for (int i=0;i<W;i++){
-        //     for (int j=H/5;j<(H-H/5);j++){
-        //         if(visualFrame.at<cv::Vec3b>(j,i)[0]==255) white_pixel_counter++;
-        //     }
-        // }
-//debug ==
-        // std::cout<<white_pixel_counter<<" == "<<wave.size()<<" ??"<<std::endl;
-        // at the end
-        // if(!update_BG_frame()){
-        //     std::cout<<"Visualizer::stream_frames : error update_bg_frame"<<std::endl;
-        // }
-    }else {
-        // std::cout<<" is processing the frame"<<std::endl;
-    }
-
-    //start preparing for the next frame
-    // wf->prepare_waveform(bufferCount,in); //--> addressed to the next update
-
-    /*
-    sp->prepare_spectrogram(bufferCount,in);
-    
-    
-    if (isBeat){
-        // if (incrR<17) incrR+=7;
-        // int tincrR=incrR;
-        // int tincrG=incrG;
-        // int tincrB=incrB;
-
-        // if (incrR<17) incrR+=7;
-        // else incrR=3;
-        // if (incrG>5) incrG+=1;
-        // else incrG=1;
-        // if (incrB>21) incrB+=3; 
-        // else incrB=7;
-        std::cout<<bufferCount<<" " ;
-        if(!update_BG_frame()){
-            std::cout<<"Visualizer::stream_frames : error update_bg_frame"<<std::endl;
-        }
-        showFrame();
-    
-        // incrR=tincrR;
-        // incrG=tincrG;
-        // incrB=tincrB;   
-    }
-    
-
-    if (bufferCount==buffersPerFrame-1){ // last frame to process before showing 
-    //do something special using the last buffer?? --> compute the FFT for the concatenated signal
-        // std::cout<<"computes the FFT"<<std::endl;
-        // update_wave_frame();
-        update_spectrogram();
-    }
-    */
-
-    bufferCount++;
-    bufferCount%=buffersPerFrame;
-
-         
     return exit_msg;
 }
 

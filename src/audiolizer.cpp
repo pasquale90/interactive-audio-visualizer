@@ -107,7 +107,6 @@ bool Audiolizer::turn_Image_into_Sound(bool &ispattern, int& freq, cv::Mat& fram
 
     _make_sound(left , right, freq);
 
-    std::cout<<"Audiolizer:: left [511] "<<left[511]<<" right[511] "<<right[511]<<std::endl;
     return _tickTock();
 }
 
