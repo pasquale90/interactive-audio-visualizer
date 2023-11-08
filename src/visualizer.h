@@ -14,6 +14,7 @@
 #include <queue>
 #include <random>
 #include <vector>
+#include <string>
 
 class Visualizer{
 public:
@@ -80,8 +81,11 @@ private:
     // int pixel_counter;
     std::vector<std::pair<int,int>> circleMask;
     void midPointCircleDraw(int x_centre, int y_centre, int r);
-    void draWaveform(int,int,int);
+    void draWaveform(int,int);
     void drawSmallcircle(int,int,int,int,int,int);
+    int LR,TB;
+    int static_counter=0;
+    int numberofpixels;
 };
 
 

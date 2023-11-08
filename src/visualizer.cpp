@@ -138,6 +138,9 @@ void Visualizer::setConfig(const Config& cfg){
     beatCount=0;
     
     _create_camMask(cfg.camResW,cfg.camResH);
+
+
+
 }
 
 // https://www.geeksforgeeks.org/mid-point-circle-drawing-algorithm/
@@ -224,7 +227,7 @@ void Visualizer::midPointCircleDraw(int x_centre, int y_centre, int r)
             visualFrame.at<cv::Vec3b>(-x + y_centre ,-y + x_centre )[2] = 137;
         }
     }
-    std::cout<<"Vector length "<< circleMask.size()<<std::endl;
+    std::cout<<"Vector length "<< circleMask.size()<<" numberofpixels "<<numberofpixels<<std::endl;
 }
 
 void Visualizer::_create_camMask(int cameraW,int cameraH){
@@ -244,7 +247,8 @@ void Visualizer::_create_camMask(int cameraW,int cameraH){
     int center_x = cameraW/2;
     int center_y = cameraH/2;
 
-    midPointCircleDraw(center_x,center_y,r);
+    numberofpixels = floor((sqrt(2)*(r-1)+4)/2)*8;  // https://stackoverflow.com/a/14995443/15842840
+    // midPointCircleDraw(center_x,center_y,r);
 
     cv::Mat m1 = cv::Mat(cameraH,cameraW, CV_64F, cv::Scalar(0)); // CV_32F
     // // camBinaryMask=m1.clone();
@@ -524,8 +528,9 @@ void Visualizer::_set_BG_manually(int tone, bool trackEnabled){    // naive
 
 void Visualizer::drawSmallcircle(int cameraW, int cameraH, int roicenterX, int roicenterY, int roiVolumeW, int roiVolumeH){
 
-    int LR = W - cameraW;
-    int TB = H - cameraH;
+    LR = W - cameraW;
+    TB = H - cameraH;
+
     int center_x = LR/2 + roicenterX; //  
     int center_y = TB/2 + roicenterY; // H/2;
     float transpose_ratio_x = (float)W / (float)cameraW / 2.;
@@ -548,9 +553,213 @@ void Visualizer::drawSmallcircle(int cameraW, int cameraH, int roicenterX, int r
 
 }
 
-void Visualizer::draWaveform(int center_x,int center_b , int c){
+void Visualizer::draWaveform(int cameraW,int cameraH){
 
+    int x_centre = W/2; 
+    int y_centre = H/2; // H/2;
+    int r = (cameraW>cameraH) ? cameraH/2 : cameraW/2;
+
+    float min,max;
+    int numSamples;
+    float *wave = wf.getWaveform(min,max,numSamples);
+    std::cout<<"Visualizer::_set_FG_manually --> min:"<<min<<" max:"<<max<<" numSamples:"<<numSamples<<" wave[0]:"<<wave[0]<<std::endl;
+// depict waveform
+    // double min,max;
+    // int numSamples;
+    // // update_wave_frame(start,end);
+    // double *wave=wf.getWaveform(min,max,numSamples);
+
+// works but no circular waveform - keep for debugging
+    // int start=0;
+    // int end=W;
+    // std::cout<<"numSamples "<<numSamples<<" circleMask.size() "<<circleMask.size()<<std::endl;
+    // if (numSamples<W){
+    //     end=numSamples;
+    // }else end = W;
+    // int counter=0;
+    // for (int x_trans = start; x_trans < end ; x_trans++ ){
+    //     // double percent = (wave[counter] - min / max - min);
+    //     // int ytr = H/2 + (double)H/3*percent;
+    //     // normalize in -1 1
+    //     float percent = 2* ( (wave[counter]-min) / (max-min) ) -1;
+    //     int ytr = H/2 + 3.0*percent;
+    //     // int ytr = (double)H/2. + (double)H*100.*wave[counter];
+    //     // std::cout<<" > x,y "<<x_trans<<","<<wave[counter]<<"--> normalized value = "<<ytr<< "with percent = "<<percent<<" , minmax=("<<min<<","<<max<<")"<<std::endl;
+    //     // std::cout<<"filling foreground in ("<<x_trans<<","<<ytr<<")"<<std::endl;
+    //     visualFrame.at<cv::Vec3b>(ytr,x_trans)[0] = 255;//newval[0];
+    //     visualFrame.at<cv::Vec3b>(ytr,x_trans)[1] = 255;//newval[1];
+    //     visualFrame.at<cv::Vec3b>(ytr,x_trans)[2] = 255;//newval[2];
+    //     counter++;
+    // }
+
+// start working here ........................................................................................................................
+//     int start=0;
+//     int end;
+//     if (numSamples<circleMask.size()){
+//         end=numSamples;
+//     }else end = circleMask.size();
+//     int x = r, y = 0;
+//     // Printing the initial point on the axes 
+//     // after translation
+//     // cout << "(" << x + x_centre << ", " << y + y_centre << ") ";
+//     // When radius is zero only a single
+//     // point will be printed
+//     if (r > 0)
+//     {
+// // -y + y_centre , x + x_centre 
+// //  x + y_centre , y + x_centre 
+// //  x + y_centre ,-y + x_centre 
+//         visualFrame.at<cv::Vec3b>(-y + y_centre , x + x_centre )[0] = 0;
+//         visualFrame.at<cv::Vec3b>( x + y_centre , y + x_centre )[1] = 0;
+//         visualFrame.at<cv::Vec3b>( x + y_centre ,-y + x_centre )[2] = 0;
+//         cv::putText(visualFrame, "1", cv::Point( x + x_centre ,-y + y_centre) ,cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 0, 255), 1, cv::LINE_AA); //  ,font_Color, font_weight);
+//         cv::putText(visualFrame, "1", cv::Point( y + x_centre , x + y_centre ) ,cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 0, 255), 1, cv::LINE_AA);
+//         cv::putText(visualFrame, "1", cv::Point(-y + x_centre , x + y_centre ) ,cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 0, 255), 1, cv::LINE_AA);
+//     }
+//     // Initialising the value of P
+//     int P = 1 - r;
+//     while (x > y)
+//     { 
+//         y++; 
+//         // Mid-point is inside or on the perimeter
+//         if (P <= 0)
+//             P = P + 2*y + 1;
+//         // Mid-point is outside the perimeter
+//         else
+//         {
+//             x--;
+//             P = P + 2*y - 2*x + 1;
+//         }
+//         // All the perimeter points have already been printed
+//         if (x < y)
+//             break;
+//         // Printing the generated point and its reflection
+//         // in the other octants after translation
+//         visualFrame.at<cv::Vec3b>( y + y_centre , x + x_centre )[0] = 137;
+//         visualFrame.at<cv::Vec3b>( y + y_centre ,-x + x_centre )[1] = 137;
+//         visualFrame.at<cv::Vec3b>(-y + y_centre , x + x_centre )[2] = 137;
+//         visualFrame.at<cv::Vec3b>(-y + y_centre ,-x + x_centre )[2] = 137;
+//         // cv::putText(visualFrame, "2", cv::Point( x + x_centre , y + y_centre ) ,cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(255, 0, 0), 1, cv::LINE_AA);
+//         // cv::putText(visualFrame, "2", cv::Point(-x + x_centre , y + y_centre ) ,cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(255, 0, 0), 1, cv::LINE_AA);
+//         // cv::putText(visualFrame, "2", cv::Point( x + x_centre ,-y + y_centre ) ,cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(255, 0, 0), 1, cv::LINE_AA);
+//         // cv::putText(visualFrame, "2", cv::Point(-x + x_centre ,-y + y_centre ) ,cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(255, 0, 0), 1, cv::LINE_AA);
+//         // If the generated point is on the line x = y then 
+//         // the perimeter points have already been printed
+//         if (x != y)
+//         {
+//             visualFrame.at<cv::Vec3b>( x + y_centre , y + x_centre )[0] = 137;
+//             visualFrame.at<cv::Vec3b>( x + y_centre ,-y + x_centre )[1] = 137;
+//             visualFrame.at<cv::Vec3b>(-x + y_centre , y + x_centre )[2] = 137;
+//             visualFrame.at<cv::Vec3b>(-x + y_centre ,-y + x_centre )[2] = 137;
+//             // cv::putText(visualFrame, "3", cv::Point( y + x_centre , x + y_centre ) ,cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 255, 0), 1, cv::LINE_AA);
+//             // cv::putText(visualFrame, "3", cv::Point(-y + x_centre , x + y_centre ) ,cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 255, 0), 1, cv::LINE_AA);
+//             // cv::putText(visualFrame, "3", cv::Point( y + x_centre ,-x + y_centre ) ,cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 255, 0), 1, cv::LINE_AA);
+//             // cv::putText(visualFrame, "3", cv::Point(-y + x_centre ,-x + y_centre ) ,cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 255, 0), 1, cv::LINE_AA);
+//         }
+//         if (static_counter<=10){
+//             std::string test =std::to_string(static_counter);
+//             std::string impath = "/home/blackhawk/interactive-audio-visualizer/src/"+test+".jpg";
+//             std::cout<<"impath "<<impath<<std::endl;
+//             imwrite(impath, visualFrame); // A JPG FILE IS BEING SAVED
+//             static_counter++;
+//         }
+//     }
+//     std::cout<<"Vector length "<< circleMask.size()<<std::endl;
+
+// directly to solution 2
+    int start=0;
+    int end=numberofpixels;
+    double waveSamplingRatio = (double)numSamples / (double)numberofpixels;
+    double curRadians=0.0;
+    double radianStep=2*M_PI / (double)numberofpixels;
+
+    // if (numSamples<numberofpixels){
+    //     end=numSamples;
+    // }else end = numberofpixels;
+
+    // std::cout<<"numberofpixels "<<numberofpixels<<" numSamplesWaveform "<<numSamples<<std::endl;
+    int counter = 0;
+    int x_trans,ytr;
+    int thickness=1;
+    for (int i=start; i<end ; i++){
+        // pixels are calculated given the following equations
+        // x = cx + r * cos(a)
+        // y = cy + r * sin(a)
+        int x = (float)r * std::cos(curRadians) + (float)x_centre;
+        int y = (float)r * std::sin(curRadians) + (float)y_centre;
+        // std::cout<<"x,y------------------------------------------->"<<x<<","<<y<<std::endl;
+
+
+        
+    // for (int x_trans = start; x_trans < end ; x_trans++ ){
+        // normalize in -1 1
+        float percent = 2* ( (wave[counter]-min) / (max-min) ) -1;
+        ytr = H/2 + 3.0*percent;
+
+        // trasport x and y
+        // x_trans = x + 
+        float new_radius = r+((float)H/40.*percent);
+        int x2 = new_radius * std::cos(curRadians) + (float)x_centre;
+        int y2 = new_radius * std::sin(curRadians) + (float)y_centre;
+        cv::Point p1(x, y), p2(x2, y2); 
+        cv::line(visualFrame, p1, p2, cv::Scalar(255, 0, 0), thickness, cv::LINE_8); 
+
+        // int ytr = (double)H/2. + (double)H*100.*wave[counter];
+        // std::cout<<" > x,y "<<x_trans<<","<<wave[counter]<<"--> normalized value = "<<ytr<< "with percent = "<<percent<<" , minmax=("<<min<<","<<max<<")"<<std::endl;
+        // std::cout<<"filling foreground in ("<<x_trans<<","<<ytr<<")"<<std::endl;
+        // visualFrame.at<cv::Vec3b>(ytr,x_trans)[0] = 255;//newval[0];
+        // visualFrame.at<cv::Vec3b>(ytr,x_trans)[1] = 255;//newval[1];
+        // visualFrame.at<cv::Vec3b>(ytr,x_trans)[2] = 255;//newval[2];
+        counter++;
+        if (counter>numSamples) counter=0;
+    // }
+
+
+
+        visualFrame.at<cv::Vec3b>( y , x )[0] = 137;
+        visualFrame.at<cv::Vec3b>( y , x )[1] = 137;
+        visualFrame.at<cv::Vec3b>( y , x )[2] = 137;
+        curRadians+=radianStep;
+    }
+    
 }
+
+// works but no circular waveform - keep for backup
+// void Visualizer::__draWaveform(){
+//     int center_x = W/2; 
+//     int center_y = H/2; // H/2;
+//     float min,max;
+//     int numSamples;
+//     float *wave = wf.getWaveform(min,max,numSamples);
+//     std::cout<<"Visualizer::_set_FG_manually --> min:"<<min<<" max:"<<max<<" numSamples:"<<numSamples<<" wave[0]:"<<wave[0]<<std::endl;
+// // depict waveform
+//     // double min,max;
+//     // int numSamples;
+//     // // update_wave_frame(start,end);
+//     // double *wave=wf.getWaveform(min,max,numSamples);
+//     int start=0;
+//     int end=W;
+//     if (numSamples<W){
+//         end=numSamples;
+//     }else end = W;
+//     // if (min!=0 && max!=0){
+//         int counter=0;
+//         for (int x_trans = start; x_trans < end ; x_trans++ ){
+//             // double percent = (wave[counter] - min / max - min);
+//             // int ytr = H/2 + (double)H/3*percent;
+//             // normalize in -1 1
+//             float percent = 2* ( (wave[counter]-min) / (max-min) ) -1;
+//             int ytr = H/2 + 3.0*percent;
+//             // int ytr = (double)H/2. + (double)H*100.*wave[counter];
+//             // std::cout<<" > x,y "<<x_trans<<","<<wave[counter]<<"--> normalized value = "<<ytr<< "with percent = "<<percent<<" , minmax=("<<min<<","<<max<<")"<<std::endl;
+//             // std::cout<<"filling foreground in ("<<x_trans<<","<<ytr<<")"<<std::endl;
+//             visualFrame.at<cv::Vec3b>(ytr,x_trans)[0] = 255;//newval[0];
+//             visualFrame.at<cv::Vec3b>(ytr,x_trans)[1] = 255;//newval[1];
+//             visualFrame.at<cv::Vec3b>(ytr,x_trans)[2] = 255;//newval[2];
+//             counter++;
+//         }
+//     // }
+// }
 
 void Visualizer::_set_FG_manually(cv::Mat cameraFrame , RegionOfInterest roi){
 // SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT SKILLPOINT 
@@ -621,43 +830,8 @@ void Visualizer::_set_FG_manually(cv::Mat cameraFrame , RegionOfInterest roi){
     // int thickness = 2;//thickens of the line
     // circle(visualFrame, center,radius, line_Color, thickness);//Using circle()functi
 
-
-    float min,max;
-    int numSamples;
-    float *wave = wf.getWaveform(min,max,numSamples);
-    std::cout<<"Visualizer::_set_FG_manually --> min:"<<min<<" max:"<<max<<" numSamples:"<<numSamples<<" wave[0]:"<<wave[0]<<std::endl;
-// depict waveform
-    // double min,max;
-    // int numSamples;
-    // // update_wave_frame(start,end);
-    // double *wave=wf.getWaveform(min,max,numSamples);
-    int start=0;
-    int end=W;
-
-    if (numSamples<W){
-        end=numSamples;
-    }else end = W;
-
-    // if (min!=0 && max!=0){
-        int counter=0;
-        for (int x_trans = start; x_trans < end ; x_trans++ ){
-            
-            // double percent = (wave[counter] - min / max - min);
-            // int ytr = H/2 + (double)H/3*percent;
-
-            // normalize in -1 1
-            float percent = 2* ( (wave[counter]-min) / (max-min) ) -1;
-            int ytr = H/2 + 3.0*percent;
-
-            // int ytr = (double)H/2. + (double)H*100.*wave[counter];
-            // std::cout<<" > x,y "<<x_trans<<","<<wave[counter]<<"--> normalized value = "<<ytr<< "with percent = "<<percent<<" , minmax=("<<min<<","<<max<<")"<<std::endl;
-            // std::cout<<"filling foreground in ("<<x_trans<<","<<ytr<<")"<<std::endl;
-            visualFrame.at<cv::Vec3b>(ytr,x_trans)[0] = 255;//newval[0];
-            visualFrame.at<cv::Vec3b>(ytr,x_trans)[1] = 255;//newval[1];
-            visualFrame.at<cv::Vec3b>(ytr,x_trans)[2] = 255;//newval[2];
-            counter++;
-        }
-    // }
+    draWaveform(cameraFrame.cols,cameraFrame.rows);
+    
 }
 
 void Visualizer::_setToCamera(cv::Mat cameraFrame){
