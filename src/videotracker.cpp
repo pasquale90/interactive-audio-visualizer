@@ -69,6 +69,68 @@ bool VideoTracker::_tracking_updated(){
     }
 }
 
+void VideoTracker::_show_timer(){
+    std::string strtime = std::to_string(framecounter/fps);
+    //----------------------------------------------------------- left
+    int y = boxCenter.centerY + boxCenter.volumeH/2;
+    int x = boxCenter.centerX - 2*boxCenter.volumeW;
+    int b = 255 - currFrame.at<cv::Vec3b>( y , x )[0];
+    int g = 255 - currFrame.at<cv::Vec3b>( y , x )[1];
+    int r = 255 - currFrame.at<cv::Vec3b>( y , x )[2];
+    cv::putText(currFrame, //target image
+        strtime, //text
+        cv::Point( x , y ), //almost center position
+        cv::FONT_HERSHEY_DUPLEX,
+        1.0,
+        CV_RGB(r, g, b), //font color
+        1);
+    //----------------------------------------------------------- right
+    y = currFrame.rows/2;                                   
+    x = boxCenter.centerX + 2*boxCenter.volumeW;
+    b = 255 - currFrame.at<cv::Vec3b>( y , x )[0];
+    g = 255 - currFrame.at<cv::Vec3b>( y , x )[1];
+    r = 255 - currFrame.at<cv::Vec3b>( y , x )[2];
+    cv::putText(currFrame, //                                                                       
+        strtime, //text
+        cv::Point( x , y ), //almost center position
+        cv::FONT_HERSHEY_DUPLEX,
+        1.0,
+        CV_RGB(r, g, b), //font color
+        1);
+        cv::putText(currFrame, //target image
+        strtime, //text
+        cv::Point( x , y ), //almost center position
+        cv::FONT_HERSHEY_DUPLEX,
+        1.0,
+        CV_RGB(r, g, b), //font color
+        1);
+    //----------------------------------------------------------- top
+    y = boxCenter.centerY - 2*boxCenter.volumeH;
+    x = currFrame.cols/2;
+    b = 255 - currFrame.at<cv::Vec3b>( y , x )[0];
+    g = 255 - currFrame.at<cv::Vec3b>( y , x )[1];
+    r = 255 - currFrame.at<cv::Vec3b>( y , x )[2];
+    cv::putText(currFrame, //target image
+        strtime, //text
+        cv::Point( x , y ), //almost center position
+        cv::FONT_HERSHEY_DUPLEX,
+        1.0,
+        CV_RGB(r, g, b), //font color
+        1);
+    //----------------------------------------------------------- bottom
+    y = boxCenter.centerY + 2*boxCenter.volumeH;
+    x = currFrame.cols/2;
+    b = 255 - currFrame.at<cv::Vec3b>( y , x )[0];
+    g = 255 - currFrame.at<cv::Vec3b>( y , x )[1];
+    r = 255 - currFrame.at<cv::Vec3b>( y , x )[2];
+    cv::putText(currFrame, //target image
+        strtime, //text
+        cv::Point( x , y ), //almost center position
+        cv::FONT_HERSHEY_DUPLEX,
+        1.0,
+        CV_RGB(r, g, b), //font color
+        1);
+}
 void VideoTracker::_capture(){
     /***
      * Updates the roi and the (global) roi center. 
@@ -91,18 +153,13 @@ void VideoTracker::_capture(){
             tempROI.copyTo(ROI); // Copy the data into new matrix
 
             // PREPROCESS
+            // ...
 
             if(BG.empty()){ // --------------------------------------------------> that is the first frame
                 ROI.copyTo(BG);
             }else{
-
-                cv::putText(currFrame, //target image
-                    std::to_string(framecounter/fps), //text
-                    cv::Point(10, currFrame.rows / 2), //top-left position
-                    cv::FONT_HERSHEY_DUPLEX,
-                    1.0,
-                    CV_RGB(118, 185, 0), //font color
-                    2);
+                
+                _show_timer();
 
                 // imshow("2", currFrame);
                 // cv::waitKey(1);

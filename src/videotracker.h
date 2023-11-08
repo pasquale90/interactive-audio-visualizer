@@ -63,6 +63,7 @@ private:
     void _initialize_tracker();
     bool _check_similarity();
     void _init_timer(); 
+    void _show_timer();
 };
 
 #endif
