@@ -4,11 +4,9 @@
 VideoTracker::VideoTracker(){
     trackingToggle.store(false);
     patternlocked.store(false);
-    // cv::namedWindow("2");
 }
 
 VideoTracker::~VideoTracker(){
-    // cv::destroyWindow("2");
 }
 
 void VideoTracker::setConfig(const Config& cfg){
@@ -24,7 +22,6 @@ void VideoTracker::setConfig(const Config& cfg){
     H=cfg.camResH;
     fps = camera.get_fps();
     
-    // boxCenter={W/2,H/2};
     boxCenter.centerX=W/2;
     boxCenter.centerY=H/2;
     boxCenter.volumeW=cfg.radius*2;
@@ -45,16 +42,15 @@ void VideoTracker::setConfig(const Config& cfg){
 }
 
 void VideoTracker::display_config(){
-    std::cout<<"VideoTracker Config"<<std::endl;
-    std::cout<<"radius "<<radius<<std::endl;
-    std::cout<<"ROIw8sec "<<ROIw8sec<<std::endl;
+    std::cout<<"VideoTracker config :: radius "<<radius<<std::endl;
+    std::cout<<"VideoTracker config :: ROIw8sec "<<ROIw8sec<<std::endl;
 }
 
 bool VideoTracker::tickTock(){
-    return camera._frame_elapsed();
+    return camera.frame_elapsed();
 }
 
-bool VideoTracker::_pattern_locked(){
+bool VideoTracker::pattern_locked(){
     return patternlocked.load();
 }
 
@@ -77,12 +73,12 @@ void VideoTracker::_show_timer(){
     int b = 255 - currFrame.at<cv::Vec3b>( y , x )[0];
     int g = 255 - currFrame.at<cv::Vec3b>( y , x )[1];
     int r = 255 - currFrame.at<cv::Vec3b>( y , x )[2];
-    cv::putText(currFrame, //target image
+    cv::putText(currFrame, 
         strtime, //text
-        cv::Point( x , y ), //almost center position
+        cv::Point( x , y ),
         cv::FONT_HERSHEY_DUPLEX,
         1.0,
-        CV_RGB(r, g, b), //font color
+        CV_RGB(r, g, b),
         1);
     //----------------------------------------------------------- right
     y = currFrame.rows/2;                                   
@@ -90,19 +86,19 @@ void VideoTracker::_show_timer(){
     b = 255 - currFrame.at<cv::Vec3b>( y , x )[0];
     g = 255 - currFrame.at<cv::Vec3b>( y , x )[1];
     r = 255 - currFrame.at<cv::Vec3b>( y , x )[2];
-    cv::putText(currFrame, //                                                                       
-        strtime, //text
-        cv::Point( x , y ), //almost center position
+    cv::putText(currFrame,                                                                        
+        strtime, 
+        cv::Point( x , y ),
         cv::FONT_HERSHEY_DUPLEX,
         1.0,
-        CV_RGB(r, g, b), //font color
+        CV_RGB(r, g, b),
         1);
-        cv::putText(currFrame, //target image
+        cv::putText(currFrame,
         strtime, //text
-        cv::Point( x , y ), //almost center position
+        cv::Point( x , y ),
         cv::FONT_HERSHEY_DUPLEX,
         1.0,
-        CV_RGB(r, g, b), //font color
+        CV_RGB(r, g, b),
         1);
     //----------------------------------------------------------- top
     y = boxCenter.centerY - 2*boxCenter.volumeH;
@@ -110,12 +106,12 @@ void VideoTracker::_show_timer(){
     b = 255 - currFrame.at<cv::Vec3b>( y , x )[0];
     g = 255 - currFrame.at<cv::Vec3b>( y , x )[1];
     r = 255 - currFrame.at<cv::Vec3b>( y , x )[2];
-    cv::putText(currFrame, //target image
+    cv::putText(currFrame, 
         strtime, //text
-        cv::Point( x , y ), //almost center position
+        cv::Point( x , y ),
         cv::FONT_HERSHEY_DUPLEX,
         1.0,
-        CV_RGB(r, g, b), //font color
+        CV_RGB(r, g, b),
         1);
     //----------------------------------------------------------- bottom
     y = boxCenter.centerY + 2*boxCenter.volumeH;
@@ -123,15 +119,15 @@ void VideoTracker::_show_timer(){
     b = 255 - currFrame.at<cv::Vec3b>( y , x )[0];
     g = 255 - currFrame.at<cv::Vec3b>( y , x )[1];
     r = 255 - currFrame.at<cv::Vec3b>( y , x )[2];
-    cv::putText(currFrame, //target image
+    cv::putText(currFrame,
         strtime, //text
-        cv::Point( x , y ), //almost center position
+        cv::Point( x , y ),
         cv::FONT_HERSHEY_DUPLEX,
         1.0,
-        CV_RGB(r, g, b), //font color
+        CV_RGB(r, g, b),
         1);
 }
-void VideoTracker::_capture(){
+void VideoTracker::capture(){
     /***
      * Updates the roi and the (global) roi center. 
     */
@@ -139,8 +135,10 @@ void VideoTracker::_capture(){
 
     if(!patternlocked.load()){
 
-        std::cout<<"time counter "<<framecounter<<std::endl;
-    
+        // std::cout<<"time counter "<<framecounter<<std::endl;
+
+        int thickness=1;
+
         if (framecounter>0){
             circle( currFrame,
                     cv::Point((W/2),(H/2)),
@@ -160,7 +158,6 @@ void VideoTracker::_capture(){
             }else{
                 
                 _show_timer();
-
                 // imshow("2", currFrame);
                 // cv::waitKey(1);
             }
@@ -206,16 +203,13 @@ void VideoTracker::_capture(){
             {
                 // Tracking success : Draw the tracked object
                 // rectangle(currFrame, boundingBox, cv::Scalar( 255, 0, 0 ), 2, 1 ); // only for testing
+
                 trackingToggle=!trackingToggle;
 
                 currboxCenter_x.store(boundingBox.x + boundingBox.width/2);
                 currboxCenter_y.store(boundingBox.y + boundingBox.height/2);
                 currboxCenter_w.store(boundingBox.width);
                 currboxCenter_h.store(boundingBox.height);
-                // std::cout<<"boundingBox <<"<<boundingBox.x<<"=="<<currboxCenter_x.load()<<std::endl;
-                // std::cout<<"boundingBox <<"<<boundingBox.y<<"=="<<currboxCenter_y.load()<<std::endl;
-                // std::cout<<"boundingBox <<"<<boundingBox.width<<"=="<<currboxCenter_w.load()<<std::endl;
-                // std::cout<<"boundingBox <<"<<boundingBox.height<<"=="<<currboxCenter_h.load()<<std::endl;
             }   
             else
             {
@@ -234,7 +228,7 @@ void VideoTracker::_capture(){
 
             cv::Mat tempROI(currFrame, boundingBox);
             tempROI.copyTo(ROI);
-            framecounter--; //++;
+            framecounter--;
             // imshow("2", currFrame);
         }
             
@@ -254,18 +248,9 @@ bool VideoTracker::update(RegionOfInterest &roi_center,cv::Mat& roi){
         roi_center.centerY=currboxCenter_y.load();
         roi_center.volumeW=currboxCenter_w.load();
         roi_center.volumeH=currboxCenter_h.load();
-        // printf("\n\n currboxCenter  (%d,%d,%d,%d)  \n\n",currboxCenter_x.load(),currboxCenter_y.load(),currboxCenter_w.load(),currboxCenter_h.load());
     }else{
         roi_center = boxCenter;
-        // roi_center.first=boxCenter.centerX;
-        // roi_center.second=boxCenter.centerY;
-        // roi_center.first=boxCenter.volumeW;
-        // roi_center.second=boxCenter.volumeH;
-        // printf("\n\n boxCenter  (%d,%d,%d,%d)  \n\n",boxCenter.centerX,boxCenter.centerY,boxCenter.volumeW,boxCenter.volumeH);
     }
-    
-    // std::cout<<"\n\n roi center "<<roi_center.centerX<<""<<" \n\n"<<std::endl;
-    // printf("\n\n roi center       (%d,%d,%d,%d)  \n\n",roi_center.centerX,roi_center.centerY,roi_center.volumeW,roi_center.volumeH);
 
     return _tracking_updated();
 }

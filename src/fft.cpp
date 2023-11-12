@@ -1,10 +1,5 @@
 #include "fft.h"
 
-// #include <typeinfo>
-// class audioVisualizer{
-// };
-
-
 Spectrogram::Spectrogram(){
   std::cout<<"Spetrogram object created"<<std::endl;
 }
@@ -27,7 +22,7 @@ Spectrogram::Spectrogram(int bufferSize, int buffersPerFrame, int fheight) :  bu
 
 void Spectrogram::set_config(const Config& cfg){
   buffer_size=cfg.bufferSize;
-  buffers_per_frame = 5;
+  buffers_per_frame = 5; // discard this variable. A frame elapsed trigger will zero-down a sample counter dft index
   height=cfg.displayH;
 
   FFTcol = new double[height];
@@ -40,21 +35,16 @@ void Spectrogram::set_config(const Config& cfg){
 
   p = fftw_plan_dft_1d(height, fft_in, fft_out, FFTW_FORWARD, FFTW_MEASURE); //FFTW_ESTIMATE
 
-  std::cout<<"Spetrogram initialized with buffer size "<<buffer_size<<" and height "<<height<<std::endl;
 }
 
 Spectrogram::~Spectrogram(){
   // fftw_destroy_plan(p);
   delete[] FFTcol;
-  
   if (p) fftw_destroy_plan(p);
   fftw_cleanup();
   delete[] hamming_window;
   fftw_free(fft_in); 
   fftw_free(fft_out);
-
-
-  std::cout<<"Spetrogram object destroyed"<<std::endl;
 }
 
 void Spectrogram::hamming(int wsize){

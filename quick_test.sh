@@ -1,5 +1,4 @@
 #!bin/bash
-make clean
 make
 
 ################################################################ ARGUMENTS ################################################################
@@ -43,34 +42,11 @@ if [ ! -z ${14:-${maximum_frequency}} ]; then args="${args} --maximum_frequency 
 # if [ ! -z ${15:-${__next_param__}} ]; then args="${args} --__next_param__ ${__next_param__}"; fi
 echo "args --> ${args}"
 
-# Creating command for JACK SERVER
-startJack_command="jackd --realtime --verbose -t 10000 -d alsa"
-startJack_command="${startJack_command} -d hw:${audio_device}"
-startJack_command="${startJack_command} -r ${sample_rate}"
-startJack_command="${startJack_command} -p ${buffer_size}"
-echo -e "\nrunning startJack_command >> \n${startJack_command}"
-
-# Applying sudo priviledges
-# # RUN SUDO INSTRUCTIONS - DEACTIVATED
-# export HISTIGNORE='*sudo -S*'
-# sudopass=${1}
-# if [ -z "$1" ]; then
-#     >&2 echo "No password provided"
-#     exit 1
-# fi
-
-# start_jackd
-# start_server="jackd --realtime --verbose -t 10000 -d alsa -d hw:K6 -r 16000 -p 512"
-# echo ${sudopass} | sudo -S -k nohup ${startJack_command} &> logs/audioServer.log & 
-nohup ${startJack_command} &> logs/audioServer.log &
-
-sleep 1
-
 clear
 bash welcome
 
-# echo ${sudopass} | sudo -S -k ./demo ${sample_rate} ${buffer_size} &> logs/audio.log &
-./demo ${args} &> logs/audio.log &
+# echo ${sudopass} | sudo -S -k ./test ${sample_rate} ${buffer_size} &> logs/audio.log &
+./test ${args} &> logs/audio.log &
 
 echo -e "Application is running... Run $ \033[32;1;4mbash\033[0m \033[32;1;4mstop.sh\033[0m to stop it. (|| for dev -->  press Q on the visual window ) "
-echo -e "Run manually with :\n./demo ${args}"
+echo -e "Run manually with :\n./test ${args}"

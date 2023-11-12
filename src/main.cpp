@@ -5,10 +5,10 @@
 
 #include "audio.h"
 #include "visualizer.h"
-#include "beatracker.h"
 #include "audiolizer.h"
+// #include "beatracker.h"
 
-Beatracker bt;
+// Beatracker bt;
 Visualizer vs;
 Audiolizer al;
 AudioStream *myAudioStream;
@@ -29,45 +29,34 @@ void audioBufferCallback(jack_default_audio_sample_t* left, jack_default_audio_s
      * ROI : region of interest.Center(x,y), and volume(width, height) 
      * // @TODO is to 
     */
-    auto t1 = std::chrono::high_resolution_clock::now();
+    
+// auto t1 = std::chrono::high_resolution_clock::now();
 
     // get the input from camera --> a signal
     bool frameElapsed=al.turn_Image_into_Sound(trackEnabled,currenTone,visualFrame,ROI, (float *)left ,  (float *)right); // rename frameElapsed with the var name "imClock"
 
-    // std::cout<<"MAIN :: Current Roi center "<<ROI.centerX<<","<<ROI.centerY<<std::endl;
-    // if (frameElapsed){
-    //     std::cout<<"frameElapsed toggle? "<<"Yes!!"<<std::endl;
-    // }else std::cout<<"toggle? "<<"No :((((((((((((((((((((("<<std::endl;
-
-    // isBeat=bt.isBeat(in);
-    // if (isBeat)
-    // {
-    //     // do something on the beat
-    //     std::cout<<" Beat! "<<std::endl;
-    // }
+    // if (bt.isBeat((double *)in))
+    //     std::cout<<" Beat! "<<std::endl;      // do something on the beat
     
     exit_msg=vs.and_Sound_into_Image((float *)left, (float *)right, visualFrame, frameElapsed, trackEnabled, currenTone, ROI);
 
-    std::cout<<"-------------------------------------------------------------------------------------------------------------------"<<std::endl;
+/* Getting number of milliseconds as a double. */
+// auto t2 = std::chrono::high_resolution_clock::now();
+// std::chrono::duration<double, std::milli> ms_double = t2 - t1;
+// std::cout << ms_double.count() << " ms\n";
 
-    auto t2 = std::chrono::high_resolution_clock::now();
-    /* Getting number of milliseconds as a double. */
-    std::chrono::duration<double, std::milli> ms_double = t2 - t1;
-    std::cout << ms_double.count() << " ms\n";
+    // std::cout<<"----------------------------------------------------------------------------------------------------------------------------------------------------------"<<std::endl;
+    
 
     if (exit_msg){
         myAudioStream->~AudioStream(); // check if jackshutdown is set appropriately
         vs.~Visualizer();
-        bt.~Beatracker();
+        // bt.~Beatracker();
     }
 }
 
 
 int main(int argc,char **argv){
-
-    std::cout<<"\n\n";
-    std::cout<<"Hello Audio Visualizer"<<std::endl;
-    std::cout<<"\n\n";
 
     Config cfg(argc,argv);
     cfg.display();
@@ -77,34 +66,15 @@ int main(int argc,char **argv){
     myAudioStream = new AudioStream(cfg,serverName,clientName);
 
     al.setConfig(cfg);
-    bt.setConfig(cfg);
+    // bt.setConfig(cfg);
     vs.setConfig(cfg);
 
-    std::thread trackingThread(&Audiolizer::_capture, &al);
-        
-    // bt = new Beatracker(cfg.bufferSize);
-    // vs=new Visualizer(WIDTH,HEIGHT,SAMPLE_RATE,BUFFER_SIZE,FPS);    
-    // vs=new Visualizer(cfg);
+    std::thread trackingThread(&Audiolizer::capture, &al);
 
-    std::cout<<"\n\n";
-    std::cout<<"Hello Audio Stream"<<std::endl;
-    std::cout<<"\n\n";
     myAudioStream->AudioRouting();
-    // std::thread thread_obj2(&AudioStream::AudioRouting,&myAudioStream);
     myAudioStream->closeStream();
 
-    std::cout<<"\n\n";
-    std::cout<<"Reached the end of main"<<std::endl;
-    std::cout<<"\n\n";
-
-    // thread_obj.join();  
     trackingThread.join();
 
-    // just for testing --> when streaming is discarded in testing phase --> REMOVE LATTER
-    // camera.~Camera();
-    myAudioStream->~AudioStream();
-    vs.~Visualizer();
-    bt.~Beatracker();
-    cfg.~Config();
     return 0;
 }

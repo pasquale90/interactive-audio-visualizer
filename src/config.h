@@ -1,7 +1,6 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include <iostream>
 #include "console.h"
 #include "config_defaults.cpp"
 
@@ -27,7 +26,6 @@ struct Config{
     int trackingAlg;
 
     Config(int argc, char *argv[]);
-    // Config(int sr,int qnt, int bfs, int fs, int dresx, int dresy, int cresx, int cresy, int cfs);
     Config(); // default constructor
     Config(const Config& c); // copy constructor
     ~Config();

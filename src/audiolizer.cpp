@@ -3,37 +3,29 @@
 Audiolizer::Audiolizer(){
     tempFreqcounter=200;
     tempAscenting=false;
-    // toggleFrame=true;
-    // cv::namedWindow("1");
+    
+    /***
+     *  Not defined .... 
+    */
 }
+
 Audiolizer::~Audiolizer(){
-    //  cv::destroyWindow("1");
     camera_tracker.~VideoTracker();
 }
 
 void Audiolizer::setConfig(const Config& cfg){
     
-    // bufferSize=buffer_size;
+    //initialize all settings    
     camera_tracker.setConfig(cfg);
+    sig.set_config(cfg);
     camera_tracker.display_config();
-
-    // store 
     maxW = cfg.camResW;
     maxH = cfg.camResH;
     bufferSize = cfg.bufferSize;
-
-    _init_log_freq_scale(cfg.minFrequency,cfg.maxFrequency);
+    _init_log_freq_scale(cfg.minFrequency,cfg.maxFrequency); // currently not used. Use _int2log_freq (currently not used either) is affected by this method..
     minFreq=cfg.minFrequency;
     maxFreq=cfg.maxFrequency;
-
-    //initialize settings
     prev_freq=0;
-    // init_frequency=maxFreq-minFreq;
-    prev_amp=.0;
-    init_amp=0.5;
-
-    sig.set_config(cfg);
-    
 }
 
 void Audiolizer::_init_log_freq_scale(int minfreq, int maxfreq){
@@ -44,6 +36,7 @@ void Audiolizer::_init_log_freq_scale(int minfreq, int maxfreq){
     a = (double)maxFreq / (exp(b*(double)maxW));
     
     // given x, find log freq by solving : y = a exp bx
+    // ...  (    definition in this->_int2log_freq()     )
 }
 
 void Audiolizer::_int2log_freq(int &freq){
@@ -51,9 +44,9 @@ void Audiolizer::_int2log_freq(int &freq){
     freq = a * exp(b * (double)freq);
 }
 
-void Audiolizer::_capture(){
+void Audiolizer::capture(){
     while(true){
-        camera_tracker._capture();
+        camera_tracker.capture();
     }
 }
 
@@ -73,44 +66,28 @@ bool Audiolizer::turn_Image_into_Sound(bool &ispattern, int& freq, cv::Mat& fram
     // _simple_freqRange_palindrome(freq);
 
     bool tracking_updated = camera_tracker.update(roi,frame);
-    bool pattern_locked =  camera_tracker._pattern_locked();
-    std::cout<<"Audiolizer::turn_Image_into_Sound :: Pattern locked --> "<<camera_tracker._pattern_locked()<<", Tracking updated --> "<<tracking_updated<<std::endl;
-    // if (!frame.empty()){
-    //     imshow("1", frame);
-    //     std::cout<<"turn_Image_into_Sound ISSSSSSSSSSSSSSSSSS NOT EMPTY\n\n\n\n\n\n"<<std::endl;
-    // }
+    bool pattern_locked =  camera_tracker.pattern_locked();
 
     if (pattern_locked){
         if (tracking_updated)          // if tracking updated --> new x,y --> new freq
-            // return _translate(freq);        // if previous frequency has the same value as before it returns the previous frequency
-            _translate(roi, freq);
+            _translate(roi, freq);      
         else{                          // else --> previous frequency
             freq=prev_freq;
-            // return false;
         } 
         ispattern=true;
     }else{                            // gradualy fade frequency to zero --> if frequency > 0 , slowly decline
         if (freq>0){ 
-            // return _gradualy_fade(freq);    // gradualy fade frequency to zero --> if frequency > 0 , slowly decline
-            _gradualy_fade(freq);
+            _gradualy_fade(freq); // gradualy fade frequency to zero --> if frequency > 0 , slowly decline
         }else{
             freq=0;
-            // return false;
         }
         ispattern=false;
     }
-    // roi.centerX=ROIcenter.first;
-    // roi.centerY=ROIcenter.second;
-    // roi.volumeW=0;
-    // roi.volumeH=0;
-    // roi = ROIcenter;
 
-    std::cout<<"Frequency generated = "<<freq<<std::endl;
     _make_sound(left , right, freq);
 
     return _tickTock();
 }
-
 
 void Audiolizer::_make_sound(float* left, float* right, int tone){
 
@@ -118,9 +95,6 @@ void Audiolizer::_make_sound(float* left, float* right, int tone){
 		sig.prepareSine(tone);
 		for(int i=0; i<bufferSize; i++ )
 		{
-			// for a more generic app, that makes use of the input sig from a USB audio interface or the OS sys ...
-			// .. we ought to combine the two signals : the in and the sine tone.
-			// In case that more than 1 input sources are connected, access the number of input sources (in particular, the #input_sources that are contributing info to the aggregated *in buffer)
 			left[i] = sig.getSineL();
             right[i] = sig.getSineR();
 		}
@@ -132,45 +106,6 @@ void Audiolizer::_make_sound(float* left, float* right, int tone){
         }
     }
 }
-
-// bool Audiolizer::turn_Image_into_Sound_____(int& freq,cv::Mat& frame){
-
-//    /***
-//     * returns boolean if new frame occured
-//     * returns by value the frequency that will be streamed on the next audio buffer
-//    */
-
-//     // just for testing ... 
-//     // _simple_definition(freq);
-//     // _simple_freqRange_palindrome(freq);
-
-//     bool tracking_updated = camera_tracker.update(ROIcenter,frame);
-//     bool pattern_locked =  camera_tracker._pattern_locked();
-//     std::cout<<"Audiolizer::turn_Image_into_Sound :: Pattern locked --> "<<camera_tracker._pattern_locked()<<", Tracking updated --> "<<tracking_updated<<std::endl;
-//     if (!frame.empty()){
-//         imshow("1", frame);
-//         std::cout<<"turn_Image_into_Sound ISSSSSSSSSSSSSSSSSS NOT EMPTY\n\n\n\n\n\n"<<std::endl;
-//     }
-
-//     if (pattern_locked){
-//         _translate(freq);
-//         return true;
-//         // if (tracking_updated)          // if tracking updated --> new x,y --> new freq
-//         //     return         // if previous frequency has the same value as before it returns the previous frequency
-//         // else{                          // else --> previous frequency
-//         //     freq=prev_freq;
-//         //     return false;
-//         // } 
-//     }else{                            // gradualy fade frequency to zero --> if frequency > 0 , slowly decline
-//         if (freq>0){ 
-//             return _gradualy_fade(freq);    
-//         }else{
-//             freq=0;
-//             return false;
-//         }
-//     }
-// }
-
 
 void Audiolizer::_simple_freqRange_palindrome(int& freq){
     freq=tempFreqcounter;
@@ -190,22 +125,18 @@ bool Audiolizer::_translate(RegionOfInterest ROIcenter, int& freq){
     /***
      * This is where the magic happens. This is where you do the trick
      * This function maps the box potition into a certain frequency. Will be updated using more interaction data (i.e. speed)
+     * @returns true if inputs are updated
     */
 
-    std::cout<<"ROIcenter at ("<<ROIcenter.centerX<<","<<ROIcenter.centerY<<","<<ROIcenter.volumeW<<","<<ROIcenter.volumeH<<")"<<std::endl;
     // normalize x, y position 
     double spatial_percent = (double)ROIcenter.centerX / (double)maxW;
+    
     //apply translation from x,y to Hz
-    // freq = minFreq + (int) (spatial_percent* (double)(maxFreq-minFreq));
     freq = minFreq + (int) (spatial_percent* (double)(maxFreq-minFreq));
-    std::cout<<"spatial_percent "<<spatial_percent<<" produces frequency "<<freq<<std::endl;
     
-    // _int2log_freq(freq);
-
-    // given x, find log freq by solving : y = a exp bx
-    // freq = (int)(a * exp(b*(double)ROIcenter.first));
+    // _int2log_freq(freq); // define here the logarthmic tranformation of the input freq
     
-    if (freq!=prev_freq){
+    if (freq!=prev_freq){ // if previous frequency has the same value as before it returns the previous frequency
         prev_freq = freq;
         return true;
     }else
@@ -214,21 +145,6 @@ bool Audiolizer::_translate(RegionOfInterest ROIcenter, int& freq){
 
 bool Audiolizer::_gradualy_fade(int& freq){
     // gradualy fade frequency to zero --> if frequency > 0 , slowly decline
-    std::cout<<"Gradually fade frequency"<<std::endl;
-
-    /*
-    if (freq>0){ 
-        freq-=3;
-        return true;
-    }
-    // else if (freq==0) 
-    else{
-        freq=0;
-        return false;
-    }
-    */
-    // freq=0; // FOR NOW JUST MAKE IT ZERO -- > FIX LATER        
-    // freq-=3;
     
 // implementation attempt folows ...
     // here it goes ..
@@ -242,5 +158,5 @@ bool Audiolizer::_gradualy_fade(int& freq){
     } 
     // sometimes it produces low intensity buzzes when reducing high frequencies ... It also does not fade slowly though as intented.
     
-    // return true;
+    return true; // currently not used
 }

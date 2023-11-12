@@ -18,9 +18,7 @@ public:
 
     void closeStream();
     int streamBuffer(jack_nframes_t nframes);
-
-    bool trigger_chunk;
-
+    
 private:
     jack_port_t *input_port;
     jack_port_t *output_port_left;

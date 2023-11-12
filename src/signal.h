@@ -10,22 +10,28 @@
 
 
 class Signal{
+
 public:
+
     Signal();
     Signal(int, int);
     ~Signal();
-    void set_config(const Config&);
 
-    void mix(double*,double*,double*,int);
+    void set_config(const Config&);
     void prepareSine(int);
     double getSineL();
     double getSineR();
+
 private:
-    int sampleRate, bufferSize;
-    int prevfreq;
+
     double *sine;
+    int sampleRate, bufferSize;
+
+    int prevfreq;
+
     int phaseL;
     int phaseR;
+
     double phase;
     double rads_per_sample;
     double amplitude;

@@ -1,7 +1,5 @@
 #include "audio.h"
 
-
-// AudioStream myAudioStream;
 void audioBufferCallback(jack_default_audio_sample_t*,jack_default_audio_sample_t*);
 
 int streamAudio (jack_nframes_t nframes, void *arg){ //, float *in,void (*threading)(float *sig)
@@ -83,11 +81,9 @@ void AudioStream::AudioRouting(){
     //     *temp_device++;
     //     devCount++;
     // }std::cout<<"\n\n\n\n\n"<<std::endl;
-
-    // (K6) prints ...
-
-    // Device list Input>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    // system:capture_1 1:system:capture_2 2:system:capture_3 3:system:capture_4 4:system:capture_5 5:system:capture_6 
+    // // (K6) output prints ...
+    // //Device list Input>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    // //system:capture_1 1:system:capture_2 2:system:capture_3 3:system:capture_4 4:system:capture_5 5:system:capture_6 
 
     /*Getting acces to destination ports*/
     todevice = jack_get_ports (client, NULL, NULL, JackPortIsPhysical|JackPortIsInput);
@@ -111,17 +107,6 @@ void AudioStream::AudioRouting(){
 
     free (fromdevice);
     free (todevice);
-    
-    // std::cout<<"Press: \n R for rec \n S for save \n Ctl+C to quit. "<<std::endl;
-    // std::string input;
-    // while(std::cin>>input){
-    //     if (input=="R"){
-    //         std::cout<<"Storing buffer in active development"<<std::endl;
-    //     }
-    //     if (input=="S"){
-    //         std::cout<<"Saving record in active development"<<std::endl;
-    //     }
-    // }
 }
 
 void AudioStream::closeStream(){
@@ -142,22 +127,27 @@ int AudioStream::streamBuffer(jack_nframes_t nframes){
 
     in = (double *)jack_port_get_buffer (input_port, nframes);
     
-//SKILL POINT get that signal from EACH DEVICE------> http://www.vttoth.com/CMS/index.php/technical-notes/68
+//TODO get that signal from EACH DEVICE------> http://www.vttoth.com/CMS/index.php/technical-notes/68
 
     left = (jack_default_audio_sample_t *)jack_port_get_buffer (output_port_left, nframes);
     right= (jack_default_audio_sample_t *)jack_port_get_buffer(output_port_right, nframes);
 
-    // audioBufferCallback((double *)left,(double *)right); //(double *)right,
     audioBufferCallback(left,right);
 
-    // left = (jack_default_audio_sample_t *)left;
-    // right = (jack_default_audio_sample_t *)right;
+    // float *toneL = float[nframes];
+    // float *toneR = float[nframes];
     // here apply the mixing. Note that left and right hold the sine signal returned by audioBufferCallback, so the mix should operate in place.
     // std::memcpy (left, in, sizeof (double) *nframes);
     // std::memcpy (right, in, sizeof (double) *nframes);
-    std::cout<<"Audio:: left [0] "<<(double)left[0]<<"-"<<(jack_default_audio_sample_t)left[0]<<" right[0] "<<right[0]<<std::endl;
+
     return 0;
 }
+
+// void AudioStream::mix(){
+//     // for a more generic app, that makes use of the input sig from a USB audio interface or the OS sys ...
+//     // .. we ought to combine the two signals : the input from the channel(s) and the sine tone.
+//     // In case that more than 1 input sources are connected, access the number of input sources (in particular, the #input_sources that are contributing info to the aggregated *in buffer)
+// }
 
 void AudioStream::jack_shutdown (void *arg)
 {

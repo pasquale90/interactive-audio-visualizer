@@ -13,9 +13,9 @@ Camera::Camera(const Config& cfg):
     std::cout<<"camH "<<camH<<std::endl;
     std::cout<<"fps "<<fps<<std::endl;
     initialize_camera();
-
     cv::Mat frame(camH,camW,CV_8UC3);
-    frameToggle=false;
+    frameToggle.store(false);
+    toggleFrame=false;
 }
 
 Camera::Camera(){
@@ -23,7 +23,7 @@ Camera::Camera(){
     camH=0;
     fps=0;
     // cv::namedWindow("Window");
-    frameToggle=0;
+    frameToggle.store(false);
     // std::cout<<"Camera initialized 1"<<std::endl;
 }
 
@@ -31,20 +31,8 @@ void Camera::setConfig(const Config& cfg){
     camW=cfg.camResW; 
     camH=cfg.camResH;
     fps=cfg.camfps;
-    std::cout<<"camW "<<camW<<std::endl;
-    std::cout<<"camH "<<camH<<std::endl;
-    std::cout<<"fps "<<fps<<std::endl;
     initialize_camera();
-
-    // cv::Mat img(camH,camW, CV_8UC3);
-    // cv::Mat frame(camH,camW, CV_8UC3);
-    // frame=img.clone();
-
-    // frameCount=0;
-
     cv::Mat frame(camH,camW,CV_8UC3);
-    // std::cout<<"Camera initialized 2"<<std::endl;
-
     toggleFrame=false;
 }
 
@@ -62,9 +50,7 @@ void Camera::initialize_camera(){
     // std::cout<<"Proper fps "<<proper_fps<<std::endl;
     // std::cout<<"Proper w "<<w<<std::endl;
     // std::cout<<"Proper h "<<h<<std::endl;
-
     cap.set(cv::CAP_PROP_FPS, fps);
-    
     if( !cap.isOpened() )
     {
         std::cerr << "***Could not initialize capturing...***\n";
@@ -72,17 +58,10 @@ void Camera::initialize_camera(){
 
 }
 
-// Camera::Camera(){
-//     Config cfg;
-//     camW=cfg.camResW;
-//     camH=cfg.camResH; 
-//     fps=cfg.fps;
-// }
-
 void Camera::display_config(){
-    std::cout<<"camW "<<camW<<std::endl;
-    std::cout<<"camH "<<camH<<std::endl;
-    std::cout<<"fps "<<fps<<std::endl;
+    std::cout<<"Camera config :: camW "<<camW<<std::endl;
+    std::cout<<"Camera config :: camH "<<camH<<std::endl;
+    std::cout<<"Camera config :: fps "<<fps<<std::endl;
 }
 
 Camera::~Camera(){
@@ -99,11 +78,11 @@ int Camera::get_actual_fps(){
     return (int)proper_fps;
 }
 
-bool Camera::_frame_elapsed(){
+bool Camera::frame_elapsed(){
 
     atomicChange = frameToggle.load();
     
-    if (atomicChange!=toggleFrame){     // process the current input from camera
+    if (frameToggle.load()!=toggleFrame){     // process the current input from camera
         toggleFrame=atomicChange;
         return true;
     }else
@@ -120,7 +99,7 @@ bool Camera::capture(cv::Mat& frame){
 
     if(!(frame.empty())){
         frameToggle.store(!frameToggle.load());
-        std::cout<<"************************************************************************captured! ************************************************************************"<<frameToggle.load()<<std::endl;
+        // std::cout<<"************************************************************************captured! ************************************************************************"<<frameToggle.load()<<std::endl;
         return true;
     }
     return false;
