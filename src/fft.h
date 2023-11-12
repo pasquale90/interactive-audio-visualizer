@@ -2,6 +2,7 @@
 #define FFT_H
 
 // #include <iostream>
+#include "config.h"
 #include <stdlib.h>
 #include <math.h>
 #include <fftw3.h>
@@ -14,8 +15,10 @@ public:
     Spectrogram();
     Spectrogram(int,int,int);
     ~Spectrogram();
+
+    void set_config(const Config&);
     void computeFFT(double*,double&,double&);
-    void prepare_spectrogram(int,double*);
+    void prepare_spectrogram(double*,double*);
     
 private:
     int buffer_size;

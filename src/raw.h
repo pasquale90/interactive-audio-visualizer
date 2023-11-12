@@ -32,14 +32,18 @@ public:
 private:
     float *wave;
     int waveLen;
-    int buffCount, currIndex;
+    
+    // int buffCount;
+    //int currIndex;
+
     int buffer_size; 
     int buffers_per_frame;
-    int width;
+    // int width;
 
     void get_ring_xy(double*,int);
 
-    int sample_counter,bpf;
+    int sample_counter;
+    // int bpf;
     cv::Mat tempWaveFrame;
     int W,H;
 };

@@ -25,9 +25,23 @@ Spectrogram::Spectrogram(int bufferSize, int buffersPerFrame, int fheight) :  bu
 
 }
 
-// void Spectrogram::create(){
+void Spectrogram::set_config(const Config& cfg){
+  buffer_size=cfg.bufferSize;
+  buffers_per_frame = 5;
+  height=cfg.displayH;
 
-// }
+  FFTcol = new double[height];
+  siglen = buffer_size*buffers_per_frame;
+  
+  hamming(siglen);
+
+  fft_in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * siglen);
+  fft_out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * height);
+
+  p = fftw_plan_dft_1d(height, fft_in, fft_out, FFTW_FORWARD, FFTW_MEASURE); //FFTW_ESTIMATE
+
+  std::cout<<"Spetrogram initialized with buffer size "<<buffer_size<<" and height "<<height<<std::endl;
+}
 
 Spectrogram::~Spectrogram(){
   // fftw_destroy_plan(p);
@@ -50,21 +64,21 @@ void Spectrogram::hamming(int wsize){
 }
 
 // fft is calculated once per frame and each audio buffer occured up till then is appended to the fft input signal to increase the amount of data.
-void Spectrogram::prepare_spectrogram(int buffCount,double *signal){
+void Spectrogram::prepare_spectrogram(double *left,double *right){
 
   // prepare signal
   int ctr=0;
-  for (int i=buffer_size*buffCount; i < (buffer_size*(buffCount+1)) ; ++i){
+  // for (int i=0; i < buffer_size; ++i){
 
-    // std::cout<<" i "<<i<<" ctr "<<ctr<<std::endl;
-    fft_in[i][0]=signal[ctr]*hamming_window[i]; // (0.54 - (0.46 * cos( 2 * PI * (i / ((buffer_size - 1) * 1.0)))));
-    fft_in[i][1]=0;
+  //   // std::cout<<" i "<<i<<" ctr "<<ctr<<std::endl;
+  //   fft_in[i][0]=left[ctr]*hamming_window[i]; // (0.54 - (0.46 * cos( 2 * PI * (i / ((buffer_size - 1) * 1.0)))));
+  //   fft_in[i][1]=0;
     
-    ctr++;   
+  //   ctr++;   
 
-    // std::cout<<" fft_in[i][0] "<< fft_in[i][0]<<std::endl;
-    // std::cout<<" fft_in[i][1] "<< fft_in[i][1]<<std::endl;
-  }
+  //   // std::cout<<" fft_in[i][0] "<< fft_in[i][0]<<std::endl;
+  //   // std::cout<<" fft_in[i][1] "<< fft_in[i][1]<<std::endl;
+  // }
   // std::cout<<" fft_in[buffer_size*buffCount][0] == signal[0] "<< fft_in[buffer_size*buffCount][0]<<"=="<<signal[0]*hamming_window[buffer_size*buffCount]<<std::endl;
   // std::cout<<" fft_in[(buffer_size*(buffCount+1))-1][0] == signal[ctr-1] "<< fft_in[(buffer_size*(buffCount+1))-1][0]<<"=="<<signal[ctr-1]*hamming_window[(buffer_size*(buffCount+1))-1]<<std::endl;
 
@@ -73,21 +87,21 @@ void Spectrogram::prepare_spectrogram(int buffCount,double *signal){
 
 void Spectrogram::computeFFT(double *magnitude, double &minf, double &maxf){ //float*
 
-  int i;
-  double rcpVerticalZoom=1.0;
+  // int i;
+  // double rcpVerticalZoom=1.0;
 
-  fftw_execute(p);
+  // fftw_execute(p);
 
-  minf=(20*log10f( sqrtf( fft_out[0][0]*fft_out[0][0]+ fft_out[0][1]*fft_out[i][1] ) * rcpVerticalZoom ) + 1.0f) * 0.5f;
-  maxf=minf;
+  // minf=(20*log10f( sqrtf( fft_out[0][0]*fft_out[0][0]+ fft_out[0][1]*fft_out[i][1] ) * rcpVerticalZoom ) + 1.0f) * 0.5f;
+  // maxf=minf;
   
-  //log magnitude
-  for (i = 0; i < height; i++) {
+  // //log magnitude
+  // for (i = 0; i < height; i++) {
 
-    magnitude[i]=(20*log10f( sqrtf( fft_out[i][0]*fft_out[i][0]+ fft_out[i][1]*fft_out[i][1] ) * rcpVerticalZoom ) + 1.0f) * 0.5f;
+  //   magnitude[i]=(20*log10f( sqrtf( fft_out[i][0]*fft_out[i][0]+ fft_out[i][1]*fft_out[i][1] ) * rcpVerticalZoom ) + 1.0f) * 0.5f;
 
-    if (magnitude[i] < minf) minf=magnitude[i];
-    if (magnitude[i] > maxf) maxf=magnitude[i];
+  //   if (magnitude[i] < minf) minf=magnitude[i];
+  //   if (magnitude[i] > maxf) maxf=magnitude[i];
 
-  }
+  // }
 }

@@ -4,9 +4,8 @@
 
 // #include <typeinfo>
 
-Waveform::Waveform(int bufferSize, int radius, int wwidth) : buffer_size(bufferSize), width(wwidth){
-    // wave=new double[width];
-    std::cout<<"Waveform initialized with width "<<width<<std::endl;
+Waveform::Waveform(int bufferSize, int radius, int wwidth) : buffer_size(bufferSize), W(wwidth){
+    wave=new float[W];
 }
 
 Waveform::Waveform(){
@@ -17,34 +16,22 @@ Waveform::~Waveform(){
     std::cout<<"Waveform object destroyed"<<std::endl;
 }
 
-// void Waveform::set_config(int bufferSize, int radius, int wwidth){ // : buffer_size(bufferSize), waveLen(radius*2*M_PI), width(wwidth){
-void Waveform::set_config(const Config &cfg){ // : buffer_size(bufferSize), waveLen(radius*2*M_PI), width(wwidth){
+void Waveform::set_config(const Config &cfg){
     
     buffer_size=cfg.bufferSize;
     int radius = cfg.radius;
-    // cv::namedWindow("Waveform",cv::WINDOW_NORMAL);
-    // cv::resizeWindow("Waveform",cfg.camResW,cfg.camResH);
-    // cv::Mat img(cfg.camResH,cfg.camResW, CV_8UC3,cv::Scalar(0,0,0));
-    // tempWaveFrame = img;
-    // img.release();
+    
     W = cfg.displayW;
     H = cfg.displayH;
+    
     // sr / buffers = buffers per second
     // buffers per second / fps = buffers per frame
-    
-    
     float bps = float(cfg.sampleRate) / (float)buffer_size;
     int bpf = std::ceil(bps / (float)cfg.fps) + 1; // add an extra buffer to ensure that there will be no extra audio buffers per frame
-    std::cout<<"bpf "<<bpf<<std::endl;
+    // std::cout<<"bpf "<<bpf<<std::endl;
     waveLen = bpf*buffer_size;
-    // int waveLen2 = float(cfg.sampleRate) / (float)cfg.fps ; // this gives the minimum amount of audio samples per frame , but using a theoritical analysis, not a practical analysis
-    // std::cout<<"Wavelen 1 "<<waveLen<<" waveLen 2 "<<waveLen2<<std::endl;
     sample_counter = 0; // sample counter to reach number of samples added in the waveform stack
-
     wave=new float[waveLen]; // 2 buffers extra to be sure that there will be no extra buffers in between frames
-    buffCount = 0;
-    currIndex = 0;
-    // std::cout<<"Waveform initialized with width "<<width<<std::endl;
 }
 
 void Waveform::prepare_waveform(float *left, float *right){ // exploit right
@@ -93,9 +80,9 @@ float* Waveform::getWaveform(float &minf, float &maxf, int &num_samples){
 
     // TEMP SHOW WAVEFORM
 
-    if (sample_counter<W){
-        end=sample_counter;
-    }else end = W;
+    // if (sample_counter<W){
+    //     end=sample_counter;
+    // }else end = W;
 
     // // if (minf!=0 && maxf!=0){
     // int counter=0;

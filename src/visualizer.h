@@ -39,8 +39,7 @@ private:
     int update_wave_frame(int&,int&);
     int update_spectrogram();
 
-    double *dft;
-    double *buffer;
+    // double *buffer;
 
     // int framecounter = 0;
     // int showCtimelimit = 1;
@@ -72,15 +71,16 @@ private:
     Waveform wf;
     int *wave;
         
-    Spectrogram *sp;
+    Spectrogram sp;
+    double *dft;
     int beatCount;
     
     // std::pair<int,int> *pixepixelBank;
     cv::Mat camBinaryMask;
     // int *camBinaryMask;
     // int pixel_counter;
-    std::vector<std::pair<int,int>> circleMask;
-    void midPointCircleDraw(int x_centre, int y_centre, int r);
+    // std::vector<std::pair<int,int>> circleMask;
+    // void midPointCircleDraw(int x_centre, int y_centre, int r);
     void draWaveform(int,int);
     void drawSmallcircle(int,int,int,int,int,int);
     int LR,TB;
