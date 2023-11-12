@@ -13,7 +13,7 @@ sample_rate=44100 #16000 #
 buffer_size=512 
 bit_quantization=24
 minimum_frequency=200 #55 # A1
-maximum_frequency= 700 #3520  # A7
+maximum_frequency=700 #3520  # A7
 #---------------------------------------------------------------- visual -----------------------------------------------------------------#
 # display_frames_per_second=25
 # display_width=1024
@@ -76,3 +76,4 @@ bash welcome
 ./test ${args} &> logs/audio.log &
 
 echo -e "Application is running... Run $ \033[32;1;4mbash\033[0m \033[32;1;4mstop.sh\033[0m to stop it. (|| for dev -->  press Q on the visual window ) "
+echo -e "Run manually with :\n./test ${args}"

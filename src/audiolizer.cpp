@@ -23,12 +23,12 @@ void Audiolizer::setConfig(const Config& cfg){
     bufferSize = cfg.bufferSize;
 
     _init_log_freq_scale(cfg.minFrequency,cfg.maxFrequency);
-    // minFreq=cfg.minFrequency;
-    // maxFreq=cfg.maxFrequency;
+    minFreq=cfg.minFrequency;
+    maxFreq=cfg.maxFrequency;
 
     //initialize settings
     prev_freq=0;
-    init_frequency=maxFreq-minFreq;
+    // init_frequency=maxFreq-minFreq;
     prev_amp=.0;
     init_amp=0.5;
 
@@ -105,6 +105,7 @@ bool Audiolizer::turn_Image_into_Sound(bool &ispattern, int& freq, cv::Mat& fram
     // roi.volumeH=0;
     // roi = ROIcenter;
 
+    std::cout<<"Frequency generated = "<<freq<<std::endl;
     _make_sound(left , right, freq);
 
     return _tickTock();
@@ -196,7 +197,7 @@ bool Audiolizer::_translate(RegionOfInterest ROIcenter, int& freq){
     double spatial_percent = (double)ROIcenter.centerX / (double)maxW;
     //apply translation from x,y to Hz
     // freq = minFreq + (int) (spatial_percent* (double)(maxFreq-minFreq));
-    freq = 55 + (int) (spatial_percent* (double)(3520-55));
+    freq = minFreq + (int) (spatial_percent* (double)(maxFreq-minFreq));
     std::cout<<"spatial_percent "<<spatial_percent<<" produces frequency "<<freq<<std::endl;
     
     // _int2log_freq(freq);

@@ -1,0 +1,8 @@
+# Arguments
+#---------------------------------------------------------------- visual -----------------------------------------------------------------#
+# display_width=1024                                    # broken
+# display_height=${buffer_size}                         # broken
+#---------------------------------------------------------------- camera -----------------------------------------------------------------#
+camera_resolution_width=640                            # checks for when cam_ > disp_
+camera_resolution_height=480                           # checks for when cam_ > disp_
+roi_radius=100 #$( bc -l <<<"0.1*$display_height" )    # do not work for large rois
