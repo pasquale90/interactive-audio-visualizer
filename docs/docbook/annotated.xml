@@ -1,4 +1,0 @@
-<?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_annotated">
-<title>Class List</title>
-Here are the classes, structs, unions and interfaces with brief descriptions:<link linkend="_classAudiolizer">Audiolizer</link><link linkend="_classAudioStream">AudioStream</link><link linkend="_classBeatracker">Beatracker</link><link linkend="_classCamera">Camera</link><link linkend="_structConfig">Config</link><link linkend="_classInputParser">InputParser</link><link linkend="_structRegionOfInterest">RegionOfInterest</link><link linkend="_classSignal">Signal</link><link linkend="_classSpectrogram">Spectrogram</link><link linkend="_classVideoTracker">VideoTracker</link><link linkend="_classVisualizer">Visualizer</link><link linkend="_classWaveform">Waveform</link></section>
