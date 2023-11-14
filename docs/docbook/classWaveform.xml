@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_classWaveform">
+<title>Waveform Class Reference</title>
+<indexterm><primary>Waveform</primary></indexterm>
+<para>
+<computeroutput>#include &lt;raw.h&gt;</computeroutput>
+</para>
+<simplesect>
+    <title>Public Member Functions    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_classWaveform_1a4a10db706dde8126a190a650f0b639fb">Waveform</link> ()</para>
+
+<para>Default constructor. </para>
+</listitem>
+            <listitem><para><link linkend="_classWaveform_1af4f2ae8b1749306657602b53a8ab90df">~Waveform</link> ()</para>
+
+<para>Class destructor. </para>
+</listitem>
+            <listitem><para>void <link linkend="_classWaveform_1a6949ecedf4f1cb6fb3a05cf6fe2db100">set_config</link> (const <link linkend="_structConfig">Config</link> &amp;)</para>
+
+<para>Implicit constructor. </para>
+</listitem>
+            <listitem><para>void <link linkend="_classWaveform_1a7da374d3faea3740f83bce0d39528296">prepare_waveform</link> (float *, float *)</para>
+
+<para>It fills an unknown size (buffer_size * (?)BuffersElapsed) of data obtained from each buffer, while next visualization frame is not currently changing. </para>
+</listitem>
+            <listitem><para>float * <link linkend="_classWaveform_1af09161ce6c2a88f8a3b29bc067d6427c">getWaveform</link> (float &amp;, float &amp;, int &amp;)</para>
+
+<para>It returns data collected from all buffers occured on the meantime, and sends them all to the <link linkend="_classVisualizer">Visualizer</link> for further processing and visualization. </para>
+</listitem>
+            <listitem><para>int <link linkend="_classWaveform_1aa233c6fff1928bfb37b74fb883cdb970">getWaveLen</link> ()</para>
+
+<para>Returns the current length of the signal. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Detailed Description</title>
+<para>
+Definition at line 9 of file raw.h.</para>
+</section>
+<section>
+<title>Constructor &amp; Destructor Documentation</title>
+<anchor xml:id="_classWaveform_1a4a10db706dde8126a190a650f0b639fb"/>    <section>
+    <title>Waveform()</title>
+<indexterm><primary>Waveform</primary><secondary>Waveform</secondary></indexterm>
+<indexterm><primary>Waveform</primary><secondary>Waveform</secondary></indexterm>
+<para><computeroutput>Waveform::Waveform ( )</computeroutput></para><para>
+
+<para>Default constructor. </para>
+</para>
+    </section><anchor xml:id="_classWaveform_1af4f2ae8b1749306657602b53a8ab90df"/>    <section>
+    <title>~Waveform()</title>
+<indexterm><primary>~Waveform</primary><secondary>Waveform</secondary></indexterm>
+<indexterm><primary>Waveform</primary><secondary>~Waveform</secondary></indexterm>
+<para><computeroutput>Waveform::~Waveform ( )</computeroutput></para><para>
+
+<para>Class destructor. </para>
+</para>
+</section>
+</section>
+<section>
+<title>Member Function Documentation</title>
+<anchor xml:id="_classWaveform_1af09161ce6c2a88f8a3b29bc067d6427c"/>    <section>
+    <title>getWaveform()</title>
+<indexterm><primary>getWaveform</primary><secondary>Waveform</secondary></indexterm>
+<indexterm><primary>Waveform</primary><secondary>getWaveform</secondary></indexterm>
+<para><computeroutput>float* Waveform::getWaveform (float &amp; , float &amp; , int &amp; )</computeroutput></para><para>
+
+<para>It returns data collected from all buffers occured on the meantime, and sends them all to the <link linkend="_classVisualizer">Visualizer</link> for further processing and visualization. </para>
+</para>
+    </section><anchor xml:id="_classWaveform_1aa233c6fff1928bfb37b74fb883cdb970"/>    <section>
+    <title>getWaveLen()</title>
+<indexterm><primary>getWaveLen</primary><secondary>Waveform</secondary></indexterm>
+<indexterm><primary>Waveform</primary><secondary>getWaveLen</secondary></indexterm>
+<para><computeroutput>int Waveform::getWaveLen ( )</computeroutput></para><para>
+
+<para>Returns the current length of the signal. </para>
+</para>
+    </section><anchor xml:id="_classWaveform_1a7da374d3faea3740f83bce0d39528296"/>    <section>
+    <title>prepare_waveform()</title>
+<indexterm><primary>prepare_waveform</primary><secondary>Waveform</secondary></indexterm>
+<indexterm><primary>Waveform</primary><secondary>prepare_waveform</secondary></indexterm>
+<para><computeroutput>void Waveform::prepare_waveform (float * , float * )</computeroutput></para><para>
+
+<para>It fills an unknown size (buffer_size * (?)BuffersElapsed) of data obtained from each buffer, while next visualization frame is not currently changing. </para>
+</para>
+    </section><anchor xml:id="_classWaveform_1a6949ecedf4f1cb6fb3a05cf6fe2db100"/>    <section>
+    <title>set_config()</title>
+<indexterm><primary>set_config</primary><secondary>Waveform</secondary></indexterm>
+<indexterm><primary>Waveform</primary><secondary>set_config</secondary></indexterm>
+<para><computeroutput>void Waveform::set_config (const <link linkend="_structConfig">Config</link> &amp; )</computeroutput></para><para>
+
+<para>Implicit constructor. </para>
+</para>
+</section>
+<para>
+The documentation for this class was generated from the following file:</para>
+src/<link linkend="_raw_8h">raw.h</link></section>
+</section>

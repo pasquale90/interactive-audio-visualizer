@@ -1,0 +1,361 @@
+\hypertarget{classVideoTracker}{}\doxysection{Video\+Tracker Class Reference}
+\label{classVideoTracker}\index{VideoTracker@{VideoTracker}}
+
+
+{\ttfamily \#include $<$videotracker.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classVideoTracker_a8a4eb43cf75ecaec34b1b54b99d7e701}{Video\+Tracker}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classVideoTracker_ac20788504b98efbae977d3d55459b443}{$\sim$\+Video\+Tracker}} ()
+\begin{DoxyCompactList}\small\item\em Class destructor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classVideoTracker_a1bf38a464e67e51318d2184f0936d977}{set\+Config}} (const \mbox{\hyperlink{structConfig}{Config}} \&cfg)
+\begin{DoxyCompactList}\small\item\em Implicit constructor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classVideoTracker_a137ac7ebd98671668b3d4ff2787ff61f}{display\+\_\+config}} ()
+\begin{DoxyCompactList}\small\item\em Displays initialized member variables. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classVideoTracker_a1e8a70a417d6310df26387d80997c20c}{capture}} ()
+\begin{DoxyCompactList}\small\item\em Threaded function -\/ check the \mbox{\hyperlink{classCamera_abf92424200235ed48ec2d7135f02127e}{Camera\+::capture()}} / \mbox{\hyperlink{classAudiolizer_abb539248226943ca7a4c886992f39e45}{Audiolizer\+::capture()}} for more details. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classVideoTracker_a8f2c83a6b22f426565bbfaf74d671735}{update}} (\mbox{\hyperlink{structRegionOfInterest}{Region\+Of\+Interest}} \&, cv\+::\+Mat \&)
+\begin{DoxyCompactList}\small\item\em Updates the tracking results. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classVideoTracker_aaaf958e2704bcb0395852314ce95a7e6}{pattern\+\_\+locked}} ()
+\begin{DoxyCompactList}\small\item\em Pulses whether a new tracking update has been emerged. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classVideoTracker_a49cf51c741ce0e8b19047cbab593cd8b}{tick\+Tock}} ()
+\begin{DoxyCompactList}\small\item\em Pulses whether a new camera frame has been captured. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 15 of file videotracker.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classVideoTracker_a8a4eb43cf75ecaec34b1b54b99d7e701}\label{classVideoTracker_a8a4eb43cf75ecaec34b1b54b99d7e701}} 
+\index{VideoTracker@{VideoTracker}!VideoTracker@{VideoTracker}}
+\index{VideoTracker@{VideoTracker}!VideoTracker@{VideoTracker}}
+\doxysubsubsection{\texorpdfstring{VideoTracker()}{VideoTracker()}}
+{\footnotesize\ttfamily Video\+Tracker\+::\+Video\+Tracker (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Default constructor. 
+
+
+
+Definition at line 4 of file videotracker.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{4                           \{}
+\DoxyCodeLine{5     trackingToggle.store(\textcolor{keyword}{false});}
+\DoxyCodeLine{6     patternlocked.store(\textcolor{keyword}{false});}
+\DoxyCodeLine{7 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classVideoTracker_ac20788504b98efbae977d3d55459b443}\label{classVideoTracker_ac20788504b98efbae977d3d55459b443}} 
+\index{VideoTracker@{VideoTracker}!````~VideoTracker@{$\sim$VideoTracker}}
+\index{````~VideoTracker@{$\sim$VideoTracker}!VideoTracker@{VideoTracker}}
+\doxysubsubsection{\texorpdfstring{$\sim$VideoTracker()}{~VideoTracker()}}
+{\footnotesize\ttfamily Video\+Tracker\+::$\sim$\+Video\+Tracker (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Class destructor. 
+
+
+
+Definition at line 9 of file videotracker.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{9                            \{}
+\DoxyCodeLine{10 \}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classVideoTracker_a1e8a70a417d6310df26387d80997c20c}\label{classVideoTracker_a1e8a70a417d6310df26387d80997c20c}} 
+\index{VideoTracker@{VideoTracker}!capture@{capture}}
+\index{capture@{capture}!VideoTracker@{VideoTracker}}
+\doxysubsubsection{\texorpdfstring{capture()}{capture()}}
+{\footnotesize\ttfamily void Video\+Tracker\+::capture (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Threaded function -\/ check the \mbox{\hyperlink{classCamera_abf92424200235ed48ec2d7135f02127e}{Camera\+::capture()}} / \mbox{\hyperlink{classAudiolizer_abb539248226943ca7a4c886992f39e45}{Audiolizer\+::capture()}} for more details. 
+
+
+
+Definition at line 130 of file videotracker.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{130                           \{}
+\DoxyCodeLine{131 \textcolor{comment}{    /***}}
+\DoxyCodeLine{132 \textcolor{comment}{     * Updates the roi and the (global) roi center. }}
+\DoxyCodeLine{133 \textcolor{comment}{    */}}
+\DoxyCodeLine{134     \textcolor{keywordtype}{bool} frameElapsed = camera.\mbox{\hyperlink{classCamera_abf92424200235ed48ec2d7135f02127e}{capture}}(currFrame);}
+\DoxyCodeLine{135 }
+\DoxyCodeLine{136     \textcolor{keywordflow}{if}(!patternlocked.load())\{}
+\DoxyCodeLine{137 }
+\DoxyCodeLine{138         \textcolor{comment}{// std::cout<<"time counter "<<framecounter<<std::endl;}}
+\DoxyCodeLine{139 }
+\DoxyCodeLine{140         \textcolor{keywordtype}{int} thickness=1;}
+\DoxyCodeLine{141 }
+\DoxyCodeLine{142         \textcolor{keywordflow}{if} (framecounter>0)\{}
+\DoxyCodeLine{143             circle( currFrame,}
+\DoxyCodeLine{144                     cv::Point((W/2),(H/2)),}
+\DoxyCodeLine{145                     radius,}
+\DoxyCodeLine{146                     cv::Scalar( 0, 255, 0 ),}
+\DoxyCodeLine{147                     thickness=1,}
+\DoxyCodeLine{148                     cv::LINE\_8);}
+\DoxyCodeLine{149 }
+\DoxyCodeLine{150             cv::Mat tempROI(currFrame, centerBox); \textcolor{comment}{// access box information                }}
+\DoxyCodeLine{151             tempROI.copyTo(ROI); \textcolor{comment}{// Copy the data into new matrix}}
+\DoxyCodeLine{152 }
+\DoxyCodeLine{153             \textcolor{comment}{// PREPROCESS}}
+\DoxyCodeLine{154             \textcolor{comment}{// ...}}
+\DoxyCodeLine{155 }
+\DoxyCodeLine{156             \textcolor{keywordflow}{if}(BG.empty())\{ \textcolor{comment}{// -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/> that is the first frame}}
+\DoxyCodeLine{157                 ROI.copyTo(BG);}
+\DoxyCodeLine{158             \}\textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{159                 }
+\DoxyCodeLine{160                 \_show\_timer();}
+\DoxyCodeLine{161                 \textcolor{comment}{// imshow("2", currFrame);}}
+\DoxyCodeLine{162                 \textcolor{comment}{// cv::waitKey(1);}}
+\DoxyCodeLine{163             \}}
+\DoxyCodeLine{164             framecounter-\/-\/;}
+\DoxyCodeLine{165 }
+\DoxyCodeLine{166         \}\textcolor{keywordflow}{else} \textcolor{keywordflow}{if}(framecounter==0)\{     \textcolor{comment}{// if similarity with the background is high, restart the timer! -\/-\/> disabled}}
+\DoxyCodeLine{167         }
+\DoxyCodeLine{168             \textcolor{comment}{// // Calculate the L2 relative error between current ROI and the BG.}}
+\DoxyCodeLine{169             \textcolor{comment}{// double errorL2 = norm( ROI, BG, cv::DIST\_L2 );}}
+\DoxyCodeLine{170             \textcolor{comment}{// // Convert to a reasonable scale, since L2 error is summed across all pixels of the image.}}
+\DoxyCodeLine{171             \textcolor{comment}{// double L2difference = errorL2 / (double)( ROI.rows * ROI.cols );}}
+\DoxyCodeLine{172             \textcolor{comment}{// std::cout<<"similarity difference "<<L2difference<<" similarity\_threshold "<<similarity\_threshold<<std::endl;}}
+\DoxyCodeLine{173 }
+\DoxyCodeLine{174             \textcolor{comment}{// if (L2difference < similarity\_threshold)\{ // if current roi is similar to BG -\/-\/> low L2}}
+\DoxyCodeLine{175             \textcolor{comment}{//     framecounter=fps*5;}}
+\DoxyCodeLine{176             \textcolor{comment}{// \}else patternlocked=true;}}
+\DoxyCodeLine{177 }
+\DoxyCodeLine{178             patternlocked.store(\textcolor{keyword}{true});}
+\DoxyCodeLine{179         \}}
+\DoxyCodeLine{180     \}\textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{181         \textcolor{keywordtype}{bool} ok;}
+\DoxyCodeLine{182 }
+\DoxyCodeLine{183         \textcolor{keywordflow}{if} (framecounter==0)\{}
+\DoxyCodeLine{184             std::cout<<\textcolor{stringliteral}{"first occurence -\/-\/> init tracker here"}<<framecounter<<std::endl;}
+\DoxyCodeLine{185             tracker-\/>init(currFrame, boundingBox);}
+\DoxyCodeLine{186         \}}
+\DoxyCodeLine{187 }
+\DoxyCodeLine{188         ok = tracker-\/>update(currFrame, boundingBox);         }
+\DoxyCodeLine{189 }
+\DoxyCodeLine{190         \textcolor{keywordflow}{if} (framecounter<=((-\/10)*fps) || boundingBox.x<=0 || boundingBox.y<=0 || boundingBox.width<=0 || boundingBox.height<=0 || (boundingBox.x+boundingBox.width)>=W || (boundingBox.y+boundingBox.height)>=H ) \{}
+\DoxyCodeLine{191             patternlocked.store(\textcolor{keyword}{false});}
+\DoxyCodeLine{192             framecounter=ROIw8sec*fps;}
+\DoxyCodeLine{193             boundingBox = centerBox;}
+\DoxyCodeLine{194             }
+\DoxyCodeLine{195             \textcolor{comment}{// Creating a new tracker}}
+\DoxyCodeLine{196             tracker-\/>clear();}
+\DoxyCodeLine{197             cv::Ptr<cv::TrackerCSRT> trackerNew = cv::TrackerCSRT::create();}
+\DoxyCodeLine{198             tracker = trackerNew;}
+\DoxyCodeLine{199         \}}
+\DoxyCodeLine{200         \textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{201 }
+\DoxyCodeLine{202             \textcolor{keywordflow}{if} (ok)}
+\DoxyCodeLine{203             \{}
+\DoxyCodeLine{204                 \textcolor{comment}{// Tracking success : Draw the tracked object}}
+\DoxyCodeLine{205                 \textcolor{comment}{// rectangle(currFrame, boundingBox, cv::Scalar( 255, 0, 0 ), 2, 1 ); // only for testing}}
+\DoxyCodeLine{206 }
+\DoxyCodeLine{207                 trackingToggle=!trackingToggle;}
+\DoxyCodeLine{208 }
+\DoxyCodeLine{209                 currboxCenter\_x.store(boundingBox.x + boundingBox.width/2);}
+\DoxyCodeLine{210                 currboxCenter\_y.store(boundingBox.y + boundingBox.height/2);}
+\DoxyCodeLine{211                 currboxCenter\_w.store(boundingBox.width);}
+\DoxyCodeLine{212                 currboxCenter\_h.store(boundingBox.height);}
+\DoxyCodeLine{213             \}   }
+\DoxyCodeLine{214             \textcolor{keywordflow}{else}}
+\DoxyCodeLine{215             \{}
+\DoxyCodeLine{216                 \textcolor{comment}{// currboxCenter\_x.store(boxCenter.centerX);}}
+\DoxyCodeLine{217                 \textcolor{comment}{// currboxCenter\_y.store(boxCenter.centerY);}}
+\DoxyCodeLine{218                 \textcolor{comment}{// currboxCenter\_w.store(boxCenter.volumeW);}}
+\DoxyCodeLine{219                 \textcolor{comment}{// currboxCenter\_h.store(boxCenter.volumeH);}}
+\DoxyCodeLine{220                 \textcolor{comment}{// Tracking failure detected.}}
+\DoxyCodeLine{221                 \textcolor{comment}{// putText(currFrame, "Tracking failure detected", cv::Point(100,80), cv::FONT\_HERSHEY\_SIMPLEX, 0.75, cv::Scalar(0,0,255),2);}}
+\DoxyCodeLine{222             \}}
+\DoxyCodeLine{223 }
+\DoxyCodeLine{224             \textcolor{comment}{// keep the initial box width and height}}
+\DoxyCodeLine{225             \textcolor{comment}{// cv::Rect temp(boundingBox.x,boundingBox.y,radius*2,radius*2);}}
+\DoxyCodeLine{226             \textcolor{comment}{// cv::Mat tempROI(currFrame, temp);}}
+\DoxyCodeLine{227             \textcolor{comment}{// tempROI.copyTo(ROI);}}
+\DoxyCodeLine{228 }
+\DoxyCodeLine{229             cv::Mat tempROI(currFrame, boundingBox);}
+\DoxyCodeLine{230             tempROI.copyTo(ROI);}
+\DoxyCodeLine{231             framecounter-\/-\/;}
+\DoxyCodeLine{232             \textcolor{comment}{// imshow("2", currFrame);}}
+\DoxyCodeLine{233         \}}
+\DoxyCodeLine{234             }
+\DoxyCodeLine{235     \}  }
+\DoxyCodeLine{236 }
+\DoxyCodeLine{237 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classVideoTracker_a137ac7ebd98671668b3d4ff2787ff61f}\label{classVideoTracker_a137ac7ebd98671668b3d4ff2787ff61f}} 
+\index{VideoTracker@{VideoTracker}!display\_config@{display\_config}}
+\index{display\_config@{display\_config}!VideoTracker@{VideoTracker}}
+\doxysubsubsection{\texorpdfstring{display\_config()}{display\_config()}}
+{\footnotesize\ttfamily void Video\+Tracker\+::display\+\_\+config (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Displays initialized member variables. 
+
+
+
+Definition at line 44 of file videotracker.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{44                                  \{}
+\DoxyCodeLine{45     std::cout<<\textcolor{stringliteral}{"VideoTracker config :: radius "}<<radius<<std::endl;}
+\DoxyCodeLine{46     std::cout<<\textcolor{stringliteral}{"VideoTracker config :: ROIw8sec "}<<ROIw8sec<<std::endl;}
+\DoxyCodeLine{47 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classVideoTracker_aaaf958e2704bcb0395852314ce95a7e6}\label{classVideoTracker_aaaf958e2704bcb0395852314ce95a7e6}} 
+\index{VideoTracker@{VideoTracker}!pattern\_locked@{pattern\_locked}}
+\index{pattern\_locked@{pattern\_locked}!VideoTracker@{VideoTracker}}
+\doxysubsubsection{\texorpdfstring{pattern\_locked()}{pattern\_locked()}}
+{\footnotesize\ttfamily bool Video\+Tracker\+::pattern\+\_\+locked (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Pulses whether a new tracking update has been emerged. 
+
+
+
+Definition at line 53 of file videotracker.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{53                                  \{}
+\DoxyCodeLine{54     \textcolor{keywordflow}{return} patternlocked.load();}
+\DoxyCodeLine{55 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classVideoTracker_a1bf38a464e67e51318d2184f0936d977}\label{classVideoTracker_a1bf38a464e67e51318d2184f0936d977}} 
+\index{VideoTracker@{VideoTracker}!setConfig@{setConfig}}
+\index{setConfig@{setConfig}!VideoTracker@{VideoTracker}}
+\doxysubsubsection{\texorpdfstring{setConfig()}{setConfig()}}
+{\footnotesize\ttfamily void Video\+Tracker\+::set\+Config (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structConfig}{Config}} \&}]{cfg }\end{DoxyParamCaption})}
+
+
+
+Implicit constructor. 
+
+
+
+Definition at line 12 of file videotracker.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{12                                              \{}
+\DoxyCodeLine{13     }
+\DoxyCodeLine{14     camera.\mbox{\hyperlink{classCamera_aac1401746621765e67ee6d48c615704f}{setConfig}}(cfg);}
+\DoxyCodeLine{15     camera.\mbox{\hyperlink{classCamera_ac1fecf974797af37cdc225fd5058d58a}{display\_config}}();}
+\DoxyCodeLine{16 }
+\DoxyCodeLine{17     radius=cfg.\mbox{\hyperlink{structConfig_ab7715bd284d9f1c2cbaff357ac7b8a02}{radius}};}
+\DoxyCodeLine{18     ROIw8sec = cfg.\mbox{\hyperlink{structConfig_a795806a552a1d6f41b041e96af2decd0}{roiSec}};}
+\DoxyCodeLine{19     framecounter=ROIw8sec*camera.\mbox{\hyperlink{classCamera_aa3d65d169260075ef438eea63c0f5ddf}{get\_fps}}();}
+\DoxyCodeLine{20 }
+\DoxyCodeLine{21     W=cfg.\mbox{\hyperlink{structConfig_a2b252e84e61b7f7a956ee5b60d95e14c}{camResW}};}
+\DoxyCodeLine{22     H=cfg.\mbox{\hyperlink{structConfig_a7fa19a6d23b6abea005bed2195a26862}{camResH}};}
+\DoxyCodeLine{23     fps = camera.\mbox{\hyperlink{classCamera_aa3d65d169260075ef438eea63c0f5ddf}{get\_fps}}();}
+\DoxyCodeLine{24     }
+\DoxyCodeLine{25     boxCenter.\mbox{\hyperlink{structRegionOfInterest_a2aa354292437b33997ad927c3811a2f8}{centerX}}=W/2;}
+\DoxyCodeLine{26     boxCenter.\mbox{\hyperlink{structRegionOfInterest_a775e7dad2ea2fe86d3deb63eb07c1958}{centerY}}=H/2;}
+\DoxyCodeLine{27     boxCenter.\mbox{\hyperlink{structRegionOfInterest_aaaf191910097ff4690cb4ea2e285ddec}{volumeW}}=cfg.\mbox{\hyperlink{structConfig_ab7715bd284d9f1c2cbaff357ac7b8a02}{radius}}*2;}
+\DoxyCodeLine{28     boxCenter.\mbox{\hyperlink{structRegionOfInterest_a5db6d3f60b981a41158af59325856905}{volumeH}}=cfg.\mbox{\hyperlink{structConfig_ab7715bd284d9f1c2cbaff357ac7b8a02}{radius}}*2;}
+\DoxyCodeLine{29 }
+\DoxyCodeLine{30     \textcolor{comment}{// previous\_boxCenter=current\_boxCenter;}}
+\DoxyCodeLine{31 }
+\DoxyCodeLine{32     cv::Rect temp((W/2)-\/radius,(H/2)-\/radius,radius*2,radius*2);}
+\DoxyCodeLine{33     centerBox=temp;}
+\DoxyCodeLine{34     boundingBox=temp;}
+\DoxyCodeLine{35     }
+\DoxyCodeLine{36     \textcolor{keywordflow}{if} (cfg.\mbox{\hyperlink{structConfig_acd67afb023cf0f4bcdd6e43017d56f9a}{trackingAlg}} == 0) \textcolor{comment}{//"CSRT"}}
+\DoxyCodeLine{37         tracker = cv::TrackerCSRT::create();}
+\DoxyCodeLine{38     \textcolor{keywordflow}{if} (cfg.\mbox{\hyperlink{structConfig_acd67afb023cf0f4bcdd6e43017d56f9a}{trackingAlg}} == 1) \textcolor{comment}{//"MOSSE"}}
+\DoxyCodeLine{39         tracker = cv::TrackerMOSSE::create();}
+\DoxyCodeLine{40     \textcolor{keywordflow}{if} (cfg.\mbox{\hyperlink{structConfig_acd67afb023cf0f4bcdd6e43017d56f9a}{trackingAlg}} == 2) \textcolor{comment}{//"BOOSTING"}}
+\DoxyCodeLine{41         tracker = cv::TrackerBoosting::create();}
+\DoxyCodeLine{42 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classVideoTracker_a49cf51c741ce0e8b19047cbab593cd8b}\label{classVideoTracker_a49cf51c741ce0e8b19047cbab593cd8b}} 
+\index{VideoTracker@{VideoTracker}!tickTock@{tickTock}}
+\index{tickTock@{tickTock}!VideoTracker@{VideoTracker}}
+\doxysubsubsection{\texorpdfstring{tickTock()}{tickTock()}}
+{\footnotesize\ttfamily bool Video\+Tracker\+::tick\+Tock (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Pulses whether a new camera frame has been captured. 
+
+
+
+Definition at line 49 of file videotracker.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{49                            \{}
+\DoxyCodeLine{50     \textcolor{keywordflow}{return} camera.\mbox{\hyperlink{classCamera_ab1640e09af17f9b84c6635a94be9d5c0}{frame\_elapsed}}();}
+\DoxyCodeLine{51 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classVideoTracker_a8f2c83a6b22f426565bbfaf74d671735}\label{classVideoTracker_a8f2c83a6b22f426565bbfaf74d671735}} 
+\index{VideoTracker@{VideoTracker}!update@{update}}
+\index{update@{update}!VideoTracker@{VideoTracker}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily bool Video\+Tracker\+::update (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structRegionOfInterest}{Region\+Of\+Interest}} \&}]{roi\+\_\+center,  }\item[{cv\+::\+Mat \&}]{roi }\end{DoxyParamCaption})}
+
+
+
+Updates the tracking results. 
+
+
+
+Definition at line 239 of file videotracker.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{239                                                                 \{}
+\DoxyCodeLine{240 \textcolor{comment}{    /***}}
+\DoxyCodeLine{241 \textcolor{comment}{     * Updates the roi and the (global) roi center. }}
+\DoxyCodeLine{242 \textcolor{comment}{     * Returns bool -\/ Applies control the return values (i.e. if no changes occured by a visual stimulus}}
+\DoxyCodeLine{243 \textcolor{comment}{    */}}
+\DoxyCodeLine{244 }
+\DoxyCodeLine{245     currFrame.copyTo(roi);}
+\DoxyCodeLine{246     \textcolor{keywordflow}{if} (patternlocked.load())\{}
+\DoxyCodeLine{247         roi\_center.\mbox{\hyperlink{structRegionOfInterest_a2aa354292437b33997ad927c3811a2f8}{centerX}}=currboxCenter\_x.load();}
+\DoxyCodeLine{248         roi\_center.\mbox{\hyperlink{structRegionOfInterest_a775e7dad2ea2fe86d3deb63eb07c1958}{centerY}}=currboxCenter\_y.load();}
+\DoxyCodeLine{249         roi\_center.\mbox{\hyperlink{structRegionOfInterest_aaaf191910097ff4690cb4ea2e285ddec}{volumeW}}=currboxCenter\_w.load();}
+\DoxyCodeLine{250         roi\_center.\mbox{\hyperlink{structRegionOfInterest_a5db6d3f60b981a41158af59325856905}{volumeH}}=currboxCenter\_h.load();}
+\DoxyCodeLine{251     \}\textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{252         roi\_center = boxCenter;}
+\DoxyCodeLine{253     \}}
+\DoxyCodeLine{254 }
+\DoxyCodeLine{255     \textcolor{keywordflow}{return} \_tracking\_updated();}
+\DoxyCodeLine{256 \}}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/\mbox{\hyperlink{videotracker_8h}{videotracker.\+h}}\item 
+src/\mbox{\hyperlink{videotracker_8cpp}{videotracker.\+cpp}}\end{DoxyCompactItemize}

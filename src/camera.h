@@ -11,20 +11,32 @@
 
 class Camera{
 public:
-    // Camera(int,int,int);
-    Camera(const Config&);
-    // Camera(const Camera& camera);
+    
+    /*! @brief Default constructor.*/
     Camera();
+
+    /*! @brief Class destructor.*/
     ~Camera();
 
+    /*! @brief Class implicit constructor*/
     void setConfig(const Config&);
-    
+
+    /*! @brief Method for capturing frames received from the camera. It is called by Audiolizer*/
     bool capture(cv::Mat&);
+
+    /*! @brief Method that make use of std::atomic variable frameToggle to indicate whether a new frame elapsed.*/
     bool frame_elapsed();
+
+    /*! @brief displays config variables*/
     void display_config();
 
+    /*! @brief Method for returning the captured camera frame.*/
     void get_current_frame(cv::Mat&);
+
+    /*! @brief Method for returning the value of frames per second*/
     int get_fps();
+
+    /*! @brief Method for returning the value of actual frames per second, based on hardware capacity*/
     int get_actual_fps();
 private:
     std::atomic<bool> frameToggle;

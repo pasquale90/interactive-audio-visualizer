@@ -84,12 +84,12 @@ bool Audiolizer::turn_Image_into_Sound(bool &ispattern, int& freq, cv::Mat& fram
         ispattern=false;
     }
 
-    _make_sound(left , right, freq);
+    _make_sound(freq, left , right);
 
     return _tickTock();
 }
 
-void Audiolizer::_make_sound(float* left, float* right, int tone){
+void Audiolizer::_make_sound(int tone, float* left, float* right){
 
 	if (tone>0){
 		sig.prepareSine(tone);
@@ -122,11 +122,6 @@ void Audiolizer::_simple_definition(int& freq){
 }
 
 bool Audiolizer::_translate(RegionOfInterest ROIcenter, int& freq){
-    /***
-     * This is where the magic happens. This is where you do the trick
-     * This function maps the box potition into a certain frequency. Will be updated using more interaction data (i.e. speed)
-     * @returns true if inputs are updated
-    */
 
     // normalize x, y position 
     double spatial_percent = (double)ROIcenter.centerX / (double)maxW;
@@ -144,19 +139,9 @@ bool Audiolizer::_translate(RegionOfInterest ROIcenter, int& freq){
 }
 
 bool Audiolizer::_gradualy_fade(int& freq){
-    // gradualy fade frequency to zero --> if frequency > 0 , slowly decline
-    
-// implementation attempt folows ...
-    // here it goes ..
-    // if (freq<minFreq+1){
-    if (freq<200){
-        if (freq>0) freq -= log(freq);
-        else if (freq<0) freq=0;
-    }
-    else{
-        freq -= (freq*log(freq));
-    } 
-    // sometimes it produces low intensity buzzes when reducing high frequencies ... It also does not fade slowly though as intented.
+    if (freq>(maxFreq-minFreq)/2) freq -= 2*log(freq);
+    else if (freq<(maxFreq-minFreq)/2) freq -= log(freq);
+    else if (freq<0) freq=0;
     
     return true; // currently not used
 }

@@ -13,13 +13,25 @@ class Signal{
 
 public:
 
-    Signal();
+    /*! @brief Class constructor */
     Signal(int, int);
+    
+    /*! @brief Default constructor */
+    Signal();
+
+    /*! @brief Class destructor.  */
     ~Signal();
 
+    /*! @brief Class implicit constructor.  */
     void set_config(const Config&);
+
+    /*! @brief Method for that generates a phase-shifted tone to fill the current buffer*/
     void prepareSine(int);
+
+    /*! @brief Left phase shiffting method. It is designed for allowing interaction with phase of signal (interacting transition of height) */
     double getSineL();
+    
+    /*! @brief Right phase shiffting method. It is designed for allowing interaction with phase of signal (interacting transition of height) */
     double getSineR();
 
 private:

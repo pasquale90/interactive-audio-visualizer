@@ -1,8 +1,19 @@
+/*!*******************************************//**
+ * @file
+ * @author Melissas Paschalis <melissaspaschalis@gmail.com>
+ * @version 1.0 - demo
+ *
+ * @section LICENSE
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 3 of
+ * the License, or (at your option) any later version.
+***********************************************/
+
 #include <cstdlib>
 #include <chrono>
 #include <thread>
-
-
 #include "audio.h"
 #include "visualizer.h"
 #include "audiolizer.h"
@@ -11,7 +22,7 @@
 // Beatracker bt;
 Visualizer vs;
 Audiolizer al;
-AudioStream *myAudioStream;
+AudioStream myAudioStream;
 
 RegionOfInterest ROI;
 cv::Mat visualFrame;
@@ -47,15 +58,20 @@ void audioBufferCallback(jack_default_audio_sample_t* left, jack_default_audio_s
 
     // std::cout<<"----------------------------------------------------------------------------------------------------------------------------------------------------------"<<std::endl;
     
-
     if (exit_msg){
-        myAudioStream->~AudioStream(); // check if jackshutdown is set appropriately
+        myAudioStream.~AudioStream(); // check if jackshutdown is set appropriately
         vs.~Visualizer();
+        al.~Audiolizer();
         // bt.~Beatracker();
     }
 }
 
-
+/*! @brief main function.
+  * Two pointers are passed to fill a sine signal using the Audiolizer, which is then passed into the Visualizer for controling image properties using audio analysis tools.
+  * @param int argc - number of input arguments
+  * @param char **argv - arguments. These are parsed through the InputParser class defined in console.* files.
+  * @return int - success / failure of program
+  */
 int main(int argc,char **argv){
 
     Config cfg(argc,argv);
@@ -63,16 +79,13 @@ int main(int argc,char **argv){
     
     const char* serverName=NULL;
     const char* clientName="myAudioStream"; 
-    myAudioStream = new AudioStream(cfg,serverName,clientName);
-
+    // myAudioStream = new AudioStream(cfg,serverName,clientName);
+    myAudioStream.setConfig(serverName,clientName);
     al.setConfig(cfg);
     // bt.setConfig(cfg);
     vs.setConfig(cfg);
 
     std::thread trackingThread(&Audiolizer::capture, &al);
-
-    myAudioStream->AudioRouting();
-    myAudioStream->closeStream();
 
     trackingThread.join();
 

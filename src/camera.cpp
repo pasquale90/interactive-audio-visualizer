@@ -4,27 +4,9 @@
 
 #include "camera.h"
 
-
-Camera::Camera(const Config& cfg):
-                                camW(cfg.camResW), 
-                                camH(cfg.camResH), 
-                                fps(cfg.camfps){
-    std::cout<<"camW "<<camW<<std::endl;
-    std::cout<<"camH "<<camH<<std::endl;
-    std::cout<<"fps "<<fps<<std::endl;
-    initialize_camera();
-    cv::Mat frame(camH,camW,CV_8UC3);
+Camera::Camera(){
     frameToggle.store(false);
     toggleFrame=false;
-}
-
-Camera::Camera(){
-    camW=0;
-    camH=0;
-    fps=0;
-    // cv::namedWindow("Window");
-    frameToggle.store(false);
-    // std::cout<<"Camera initialized 1"<<std::endl;
 }
 
 void Camera::setConfig(const Config& cfg){
@@ -33,7 +15,6 @@ void Camera::setConfig(const Config& cfg){
     fps=cfg.camfps;
     initialize_camera();
     cv::Mat frame(camH,camW,CV_8UC3);
-    toggleFrame=false;
 }
 
 

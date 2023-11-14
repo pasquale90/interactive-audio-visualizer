@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_audiolizer_8h">
+<title>src/audiolizer.h File Reference</title>
+<indexterm><primary>src/audiolizer.h</primary></indexterm>
+<programlisting>#include &quot;signal.h&quot;
+#include &quot;videotracker.h&quot;
+</programlisting>Include dependency graph for audiolizer.h:<para>
+    <informalfigure>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="0" fileref="audiolizer_8h__incl.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </informalfigure>
+</para>
+This graph shows which files directly or indirectly include this file:<para>
+    <informalfigure>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="0" fileref="audiolizer_8h__dep__incl.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </informalfigure>
+</para>
+<simplesect>
+    <title>Classes    </title>
+        <itemizedlist>
+            <listitem><para>class <link linkend="_classAudiolizer">Audiolizer</link></para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+</section>

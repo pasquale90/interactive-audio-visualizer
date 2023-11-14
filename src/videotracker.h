@@ -15,15 +15,30 @@
 class VideoTracker{
 public:
 
+    /*! @brief Default constructor */
     VideoTracker();
+
+    /*! @brief Class destructor */
     ~VideoTracker();
 
+    /*! @brief Implicit constructor */
     void setConfig(const Config& cfg);
+
+    /*! @brief Displays initialized member variables */
     void display_config();
+
+    /*! @brief Threaded function - check the Camera::capture() / Audiolizer::capture() for more details */
     void capture();
+
+    /*! @brief Updates the tracking results */
     bool update(RegionOfInterest&, cv::Mat&);
+
+    /*! @brief Pulses whether a new tracking update has been emerged */
     bool pattern_locked();
+
+    /*! @brief Pulses whether a new camera frame has been captured */
     bool tickTock();
+
 private:
 
     bool _tracking_updated();

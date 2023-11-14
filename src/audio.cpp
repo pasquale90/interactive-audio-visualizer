@@ -1,16 +1,19 @@
 #include "audio.h"
 
-void audioBufferCallback(jack_default_audio_sample_t*,jack_default_audio_sample_t*);
-
 int streamAudio (jack_nframes_t nframes, void *arg){ //, float *in,void (*threading)(float *sig)
     return static_cast<AudioStream*>(arg)->streamBuffer(nframes);
 }
-AudioStream::AudioStream(const Config &cfg, const char* serverName,const char* clientName){
+
+AudioStream::AudioStream(){
+}
+
+void AudioStream::setConfig(const char* serverName,const char* clientName){
     
-    server_name=serverName;
-    client_name=clientName;  
     jack_options_t options = JackNoStartServer;//(JackSessionID|JackServerName|JackNoStartServer|JackUseExactName|JackNullOption)
 	jack_status_t status;
+
+    server_name=serverName;
+    client_name=clientName;  
 
     /* open a client connection to the JACK server */
 	client = jack_client_open (client_name, options, &status,server_name);
@@ -29,12 +32,14 @@ AudioStream::AudioStream(const Config &cfg, const char* serverName,const char* c
     if (status & JackServerStarted) {
         std::cout<<"\t>>JACK server started"<<std::endl;
     }
+    AudioRouting();
 }
 
 AudioStream::~AudioStream(){
-    std::cout<<"Audio stream object destructed"<<std::endl;
+    closeStream();
+    std::cout<<"Audio stream object destructedd"<<std::endl;
 }
-    
+
 void AudioStream::AudioRouting(){
     
     //callback
@@ -109,14 +114,8 @@ void AudioStream::AudioRouting(){
     free (todevice);
 }
 
+
 void AudioStream::closeStream(){
-    int simple_quit=0;
-    while (!simple_quit)    /* keep running until until we get a quit event */
-#ifdef WIN32
-        Sleep(1*1000);
-#else
-        sleep(1);
-#endif
     jack_client_close (client);
 }
 
@@ -143,11 +142,9 @@ int AudioStream::streamBuffer(jack_nframes_t nframes){
     return 0;
 }
 
-// void AudioStream::mix(){
-//     // for a more generic app, that makes use of the input sig from a USB audio interface or the OS sys ...
-//     // .. we ought to combine the two signals : the input from the channel(s) and the sine tone.
-//     // In case that more than 1 input sources are connected, access the number of input sources (in particular, the #input_sources that are contributing info to the aggregated *in buffer)
-// }
+void AudioStream::mix(){
+    // In case that more than 1 input sources are connected, access the number of input sources (in particular, the #input_sources that are contributing info to the aggregated *in buffer)
+}
 
 void AudioStream::jack_shutdown (void *arg)
 {

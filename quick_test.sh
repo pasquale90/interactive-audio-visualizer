@@ -46,7 +46,7 @@ clear
 bash welcome
 
 # echo ${sudopass} | sudo -S -k ./test ${sample_rate} ${buffer_size} &> logs/audio.log &
-./test ${args} &> logs/audio.log &
+./demo ${args} &> logs/audio.log &
 
 echo -e "Application is running... Run $ \033[32;1;4mbash\033[0m \033[32;1;4mstop.sh\033[0m to stop it. (|| for dev -->  press Q on the visual window ) "
-echo -e "Run manually with :\n./test ${args}"
+echo -e "Run manually with :\n./demo ${args}"
