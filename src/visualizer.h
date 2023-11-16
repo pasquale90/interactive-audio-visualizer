@@ -12,9 +12,24 @@
 class Visualizer{
 public:
     
+    /*! @brief Default constructor */
     Visualizer();
+
+    /*! @brief Class destructor */
     ~Visualizer();
+
+    /*! @brief Class implicit constructor */
     void setConfig(const Config&);
+
+    /*! @brief Method resplonsible for visualization.
+     * @param[in] float* left audio buffer filled with a sine wave tone
+     * @param[in] float* right audio buffer filled with a sine wave tone
+     * @param[in] cv::Mat - frame obtained from camera
+     * @param[in] bool frameElapsed - whether a new frame elapsed from the camera
+     * @param[in] bool trackEnabled - whether a new update emerged from tracking
+     * @param[in] int - frequency tone - currently affects the coloring (future releases will probably leave such features to the audio buffer signal analysis)
+     * @param[in] RegionOfInterest - tracking updates 
+     */
     int and_Sound_into_Image(float*, float*, cv::Mat, bool, bool, int, RegionOfInterest);
     
 private:
