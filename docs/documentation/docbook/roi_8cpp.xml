@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_roi_8cpp">
+<title>src/roi.cpp File Reference</title>
+<indexterm><primary>src/roi.cpp</primary></indexterm>
+This graph shows which files directly or indirectly include this file:<para>
+    <informalfigure>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="0" fileref="roi_8cpp__dep__incl.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </informalfigure>
+</para>
+<simplesect>
+    <title>Classes    </title>
+        <itemizedlist>
+            <listitem><para>struct <link linkend="_structRegionOfInterest">RegionOfInterest</link></para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Macros    </title>
+        <itemizedlist>
+            <listitem><para>#define <link linkend="_roi_8cpp_1a2d8c20d536c9e1eb53e057fbf44f5b98">ROI_H</link></para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Macro Definition Documentation</title>
+<anchor xml:id="_roi_8cpp_1a2d8c20d536c9e1eb53e057fbf44f5b98"/>    <section>
+    <title>ROI_H</title>
+<indexterm><primary>ROI_H</primary><secondary>roi.cpp</secondary></indexterm>
+<indexterm><primary>roi.cpp</primary><secondary>ROI_H</secondary></indexterm>
+<para><computeroutput>#define ROI_H</computeroutput></para><para>
+Definition at line 3 of file roi.cpp.</para>
+</section>
+</section>
+</section>

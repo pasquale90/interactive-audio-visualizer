@@ -1,0 +1,259 @@
+\hypertarget{main_8cpp}{}\doxysection{src/main.cpp File Reference}
+\label{main_8cpp}\index{src/main.cpp@{src/main.cpp}}
+{\ttfamily \#include $<$cstdlib$>$}\newline
+{\ttfamily \#include $<$chrono$>$}\newline
+{\ttfamily \#include $<$thread$>$}\newline
+{\ttfamily \#include \char`\"{}audio.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}visualizer.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}audiolizer.\+h\char`\"{}}\newline
+Include dependency graph for main.\+cpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{main_8cpp__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{main_8cpp_aec492d58c6b0bca2c0accfa47d7d7022}{audio\+Buffer\+Callback}} (jack\+\_\+default\+\_\+audio\+\_\+sample\+\_\+t $\ast$left, jack\+\_\+default\+\_\+audio\+\_\+sample\+\_\+t $\ast$right)
+\begin{DoxyCompactList}\small\item\em Callback method -\/ process called when a new audio buffer occurs It forces the Auiolizer and \mbox{\hyperlink{classVisualizer}{Visualizer}} classes to provide controlling methods for synchronizing audio (streaming) and image (both capturing \& visualization). Two pointers are passed to fill a sine signal using the \mbox{\hyperlink{classAudiolizer}{Audiolizer}}, which is then passed into the \mbox{\hyperlink{classVisualizer}{Visualizer}} for controling image properties using audio analysis tools. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{main_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}{main}} (int argc, char $\ast$$\ast$argv)
+\begin{DoxyCompactList}\small\item\em main function. Two pointers are passed to fill a sine signal using the \mbox{\hyperlink{classAudiolizer}{Audiolizer}}, which is then passed into the \mbox{\hyperlink{classVisualizer}{Visualizer}} for controling image properties using audio analysis tools. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classVisualizer}{Visualizer}} \mbox{\hyperlink{main_8cpp_aa18a433247736dad6f16a534dac5296a}{vs}}
+\item 
+\mbox{\hyperlink{classAudiolizer}{Audiolizer}} \mbox{\hyperlink{main_8cpp_a7aa32fee41a7276003157e6b1a57ca0e}{al}}
+\item 
+\mbox{\hyperlink{classAudioStream}{Audio\+Stream}} \mbox{\hyperlink{main_8cpp_aee07d9831de074ed10b7bc4718decc32}{my\+Audio\+Stream}}
+\item 
+\mbox{\hyperlink{structRegionOfInterest}{Region\+Of\+Interest}} \mbox{\hyperlink{main_8cpp_a98706ce58e524373a53a3470073307d5}{R\+OI}}
+\item 
+cv\+::\+Mat \mbox{\hyperlink{main_8cpp_ae8051b5253b0cd0841092a36b04bbfe6}{visual\+Frame}}
+\item 
+bool \mbox{\hyperlink{main_8cpp_a72ea00c833e2db6b8eaaa12eb8998be1}{exit\+\_\+msg}} =false
+\item 
+bool \mbox{\hyperlink{main_8cpp_a206fb2fd42888824db9cddc49c1dc1f8}{is\+Beat}}
+\item 
+bool \mbox{\hyperlink{main_8cpp_a7176f06959f418e3a5e063294559fe8a}{track\+Enabled}}
+\item 
+int \mbox{\hyperlink{main_8cpp_acd59d873186d5a56e9117111d56ef2ff}{curren\+Tone}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyAuthor}{Author}
+Melissas Paschalis \href{mailto:melissaspaschalis@gmail.com}{\texttt{ melissaspaschalis@gmail.\+com}} 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1.\+0 -\/ demo
+\end{DoxyVersion}
+\hypertarget{main_8cpp_LICENSE}{}\doxysubsection{L\+I\+C\+E\+N\+SE}\label{main_8cpp_LICENSE}
+This program is free software; you can redistribute it and/or modify it under the terms of the G\+NU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version. 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{main_8cpp_aec492d58c6b0bca2c0accfa47d7d7022}\label{main_8cpp_aec492d58c6b0bca2c0accfa47d7d7022}} 
+\index{main.cpp@{main.cpp}!audioBufferCallback@{audioBufferCallback}}
+\index{audioBufferCallback@{audioBufferCallback}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{audioBufferCallback()}{audioBufferCallback()}}
+{\footnotesize\ttfamily void audio\+Buffer\+Callback (\begin{DoxyParamCaption}\item[{jack\+\_\+default\+\_\+audio\+\_\+sample\+\_\+t $\ast$}]{left,  }\item[{jack\+\_\+default\+\_\+audio\+\_\+sample\+\_\+t $\ast$}]{right }\end{DoxyParamCaption})}
+
+
+
+Callback method -\/ process called when a new audio buffer occurs It forces the Auiolizer and \mbox{\hyperlink{classVisualizer}{Visualizer}} classes to provide controlling methods for synchronizing audio (streaming) and image (both capturing \& visualization). Two pointers are passed to fill a sine signal using the \mbox{\hyperlink{classAudiolizer}{Audiolizer}}, which is then passed into the \mbox{\hyperlink{classVisualizer}{Visualizer}} for controling image properties using audio analysis tools. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ out}}  & {\em jack\+\_\+default\+\_\+audio\+\_\+sample\+\_\+t$\ast$} & left -\/ left sine signal is a pointer to float array for the left channel \\
+\hline
+\mbox{\texttt{ out}}  & {\em jack\+\_\+default\+\_\+audio\+\_\+sample\+\_\+t$\ast$} & right -\/ right sine signal is a pointer to float array for the right channel \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 34 of file main.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{34                                                                                                \{ \textcolor{comment}{// -\/-\/> jack\_default\_audio\_sample\_t* === float*}}
+\DoxyCodeLine{35 \textcolor{comment}{    /*** fill latter}}
+\DoxyCodeLine{36 \textcolor{comment}{     * frameElapsed : a new frame has been elapsed (enables visualization)}}
+\DoxyCodeLine{37 \textcolor{comment}{     * trackEnabled : ROI's tracking signal (updates visualization)}}
+\DoxyCodeLine{38 \textcolor{comment}{     * currenTone : audiolizer's generated frequency responce                                   // currently controls the color changing -\/-\/> in other project, the mix should do it.}}
+\DoxyCodeLine{39 \textcolor{comment}{     * visualFrame : the whole frame of the camera when passed through ```turn\_Image\_into\_Sound()``` and the visual output when passed through ```and\_Sound\_into\_Image()``` }}
+\DoxyCodeLine{40 \textcolor{comment}{     * ROI : region of interest.Center(x,y), and volume(width, height) }}
+\DoxyCodeLine{41 \textcolor{comment}{     * // @TODO is to }}
+\DoxyCodeLine{42 \textcolor{comment}{    */}}
+\DoxyCodeLine{43     }
+\DoxyCodeLine{44 \textcolor{comment}{// auto t1 = std::chrono::high\_resolution\_clock::now();}}
+\DoxyCodeLine{45 }
+\DoxyCodeLine{46     \textcolor{comment}{// get the input from camera -\/-\/> a signal}}
+\DoxyCodeLine{47     \textcolor{keywordtype}{bool} frameElapsed=\mbox{\hyperlink{main_8cpp_a7aa32fee41a7276003157e6b1a57ca0e}{al}}.\mbox{\hyperlink{classAudiolizer_a5482f721f05ec213d1ca0fd5224d7296}{turn\_Image\_into\_Sound}}(\mbox{\hyperlink{main_8cpp_a7176f06959f418e3a5e063294559fe8a}{trackEnabled}},\mbox{\hyperlink{main_8cpp_acd59d873186d5a56e9117111d56ef2ff}{currenTone}},\mbox{\hyperlink{main_8cpp_ae8051b5253b0cd0841092a36b04bbfe6}{visualFrame}},\mbox{\hyperlink{main_8cpp_a98706ce58e524373a53a3470073307d5}{ROI}}, (\textcolor{keywordtype}{float} *)left ,  (\textcolor{keywordtype}{float} *)right); \textcolor{comment}{// rename frameElapsed with the var name "imClock"}}
+\DoxyCodeLine{48 }
+\DoxyCodeLine{49     \textcolor{comment}{// if (bt.isBeat((double *)in))}}
+\DoxyCodeLine{50     \textcolor{comment}{//     std::cout<<" Beat! "<<std::endl;      // do something on the beat}}
+\DoxyCodeLine{51     }
+\DoxyCodeLine{52     \mbox{\hyperlink{main_8cpp_a72ea00c833e2db6b8eaaa12eb8998be1}{exit\_msg}}=\mbox{\hyperlink{main_8cpp_aa18a433247736dad6f16a534dac5296a}{vs}}.\mbox{\hyperlink{classVisualizer_aaebea497f6be4cec9b3cadee0baed6ab}{and\_Sound\_into\_Image}}((\textcolor{keywordtype}{float} *)left, (\textcolor{keywordtype}{float} *)right, \mbox{\hyperlink{main_8cpp_ae8051b5253b0cd0841092a36b04bbfe6}{visualFrame}}, frameElapsed, \mbox{\hyperlink{main_8cpp_a7176f06959f418e3a5e063294559fe8a}{trackEnabled}}, \mbox{\hyperlink{main_8cpp_acd59d873186d5a56e9117111d56ef2ff}{currenTone}}, \mbox{\hyperlink{main_8cpp_a98706ce58e524373a53a3470073307d5}{ROI}});}
+\DoxyCodeLine{53 }
+\DoxyCodeLine{54 \textcolor{comment}{/* Getting number of milliseconds as a double. */}}
+\DoxyCodeLine{55 \textcolor{comment}{// auto t2 = std::chrono::high\_resolution\_clock::now();}}
+\DoxyCodeLine{56 \textcolor{comment}{// std::chrono::duration<double, std::milli> ms\_double = t2 -\/ t1;}}
+\DoxyCodeLine{57 \textcolor{comment}{// std::cout << ms\_double.count() << " ms\(\backslash\)n";}}
+\DoxyCodeLine{58 }
+\DoxyCodeLine{59     \textcolor{comment}{// std::cout<<"-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/"<<std::endl;}}
+\DoxyCodeLine{60     }
+\DoxyCodeLine{61     \textcolor{keywordflow}{if} (\mbox{\hyperlink{main_8cpp_a72ea00c833e2db6b8eaaa12eb8998be1}{exit\_msg}})\{}
+\DoxyCodeLine{62         \mbox{\hyperlink{main_8cpp_aee07d9831de074ed10b7bc4718decc32}{myAudioStream}}.\mbox{\hyperlink{classAudioStream_a480e5d3468bfe9357dd6c40649b1e449}{\string~AudioStream}}(); \textcolor{comment}{// check if jackshutdown is set appropriately}}
+\DoxyCodeLine{63         \mbox{\hyperlink{main_8cpp_aa18a433247736dad6f16a534dac5296a}{vs}}.\mbox{\hyperlink{classVisualizer_a013ec3101407fbe4805f289bc32d1265}{\string~Visualizer}}();}
+\DoxyCodeLine{64         \mbox{\hyperlink{main_8cpp_a7aa32fee41a7276003157e6b1a57ca0e}{al}}.\mbox{\hyperlink{classAudiolizer_ae2d5ef5b64e46ce2f0b2820debd8b775}{\string~Audiolizer}}();}
+\DoxyCodeLine{65         \textcolor{comment}{// bt.\string~Beatracker();}}
+\DoxyCodeLine{66     \}}
+\DoxyCodeLine{67 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{main_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}\label{main_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}} 
+\index{main.cpp@{main.cpp}!main@{main}}
+\index{main@{main}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$$\ast$}]{argv }\end{DoxyParamCaption})}
+
+
+
+main function. Two pointers are passed to fill a sine signal using the \mbox{\hyperlink{classAudiolizer}{Audiolizer}}, which is then passed into the \mbox{\hyperlink{classVisualizer}{Visualizer}} for controling image properties using audio analysis tools. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em int} & argc -\/ number of input arguments \\
+\hline
+{\em char} & $\ast$$\ast$argv -\/ arguments. These are parsed through the \mbox{\hyperlink{classInputParser}{Input\+Parser}} class defined in console.$\ast$ files. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int -\/ success / failure of program 
+\end{DoxyReturn}
+
+
+Definition at line 75 of file main.\+cpp.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{75                               \{}
+\DoxyCodeLine{76 }
+\DoxyCodeLine{77     \mbox{\hyperlink{structConfig}{Config}} cfg(argc,argv);}
+\DoxyCodeLine{78     cfg.display();}
+\DoxyCodeLine{79     }
+\DoxyCodeLine{80     \textcolor{keyword}{const} \textcolor{keywordtype}{char}* serverName=NULL;}
+\DoxyCodeLine{81     \textcolor{keyword}{const} \textcolor{keywordtype}{char}* clientName=\textcolor{stringliteral}{"myAudioStream"}; }
+\DoxyCodeLine{82     \textcolor{comment}{// myAudioStream = new AudioStream(cfg,serverName,clientName);}}
+\DoxyCodeLine{83     \mbox{\hyperlink{main_8cpp_aee07d9831de074ed10b7bc4718decc32}{myAudioStream}}.\mbox{\hyperlink{classAudioStream_a2518351337538297de78eb5aa79f5968}{setConfig}}(serverName,clientName);}
+\DoxyCodeLine{84     \mbox{\hyperlink{main_8cpp_a7aa32fee41a7276003157e6b1a57ca0e}{al}}.\mbox{\hyperlink{classAudiolizer_a3d1642efacdb40dabfcc38570e70a338}{setConfig}}(cfg);}
+\DoxyCodeLine{85     \textcolor{comment}{// bt.setConfig(cfg);}}
+\DoxyCodeLine{86     \mbox{\hyperlink{main_8cpp_aa18a433247736dad6f16a534dac5296a}{vs}}.\mbox{\hyperlink{classVisualizer_ad6d1964506122692d4ec30c9e75b1522}{setConfig}}(cfg);}
+\DoxyCodeLine{87 }
+\DoxyCodeLine{88     std::thread trackingThread(\&\mbox{\hyperlink{classAudiolizer_abb539248226943ca7a4c886992f39e45}{Audiolizer::capture}}, \&\mbox{\hyperlink{main_8cpp_a7aa32fee41a7276003157e6b1a57ca0e}{al}});}
+\DoxyCodeLine{89 }
+\DoxyCodeLine{90     trackingThread.join();}
+\DoxyCodeLine{91 }
+\DoxyCodeLine{92     \textcolor{keywordflow}{return} 0;}
+\DoxyCodeLine{93 \}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{main_8cpp_a7aa32fee41a7276003157e6b1a57ca0e}\label{main_8cpp_a7aa32fee41a7276003157e6b1a57ca0e}} 
+\index{main.cpp@{main.cpp}!al@{al}}
+\index{al@{al}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{al}{al}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAudiolizer}{Audiolizer}} al}
+
+
+
+Definition at line 24 of file main.\+cpp.
+
+\mbox{\Hypertarget{main_8cpp_acd59d873186d5a56e9117111d56ef2ff}\label{main_8cpp_acd59d873186d5a56e9117111d56ef2ff}} 
+\index{main.cpp@{main.cpp}!currenTone@{currenTone}}
+\index{currenTone@{currenTone}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{currenTone}{currenTone}}
+{\footnotesize\ttfamily int curren\+Tone}
+
+
+
+Definition at line 32 of file main.\+cpp.
+
+\mbox{\Hypertarget{main_8cpp_a72ea00c833e2db6b8eaaa12eb8998be1}\label{main_8cpp_a72ea00c833e2db6b8eaaa12eb8998be1}} 
+\index{main.cpp@{main.cpp}!exit\_msg@{exit\_msg}}
+\index{exit\_msg@{exit\_msg}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{exit\_msg}{exit\_msg}}
+{\footnotesize\ttfamily bool exit\+\_\+msg =false}
+
+
+
+Definition at line 29 of file main.\+cpp.
+
+\mbox{\Hypertarget{main_8cpp_a206fb2fd42888824db9cddc49c1dc1f8}\label{main_8cpp_a206fb2fd42888824db9cddc49c1dc1f8}} 
+\index{main.cpp@{main.cpp}!isBeat@{isBeat}}
+\index{isBeat@{isBeat}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{isBeat}{isBeat}}
+{\footnotesize\ttfamily bool is\+Beat}
+
+
+
+Definition at line 30 of file main.\+cpp.
+
+\mbox{\Hypertarget{main_8cpp_aee07d9831de074ed10b7bc4718decc32}\label{main_8cpp_aee07d9831de074ed10b7bc4718decc32}} 
+\index{main.cpp@{main.cpp}!myAudioStream@{myAudioStream}}
+\index{myAudioStream@{myAudioStream}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{myAudioStream}{myAudioStream}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAudioStream}{Audio\+Stream}} my\+Audio\+Stream}
+
+
+
+Definition at line 25 of file main.\+cpp.
+
+\mbox{\Hypertarget{main_8cpp_a98706ce58e524373a53a3470073307d5}\label{main_8cpp_a98706ce58e524373a53a3470073307d5}} 
+\index{main.cpp@{main.cpp}!ROI@{ROI}}
+\index{ROI@{ROI}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{ROI}{ROI}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structRegionOfInterest}{Region\+Of\+Interest}} R\+OI}
+
+
+
+Definition at line 27 of file main.\+cpp.
+
+\mbox{\Hypertarget{main_8cpp_a7176f06959f418e3a5e063294559fe8a}\label{main_8cpp_a7176f06959f418e3a5e063294559fe8a}} 
+\index{main.cpp@{main.cpp}!trackEnabled@{trackEnabled}}
+\index{trackEnabled@{trackEnabled}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{trackEnabled}{trackEnabled}}
+{\footnotesize\ttfamily bool track\+Enabled}
+
+
+
+Definition at line 31 of file main.\+cpp.
+
+\mbox{\Hypertarget{main_8cpp_ae8051b5253b0cd0841092a36b04bbfe6}\label{main_8cpp_ae8051b5253b0cd0841092a36b04bbfe6}} 
+\index{main.cpp@{main.cpp}!visualFrame@{visualFrame}}
+\index{visualFrame@{visualFrame}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{visualFrame}{visualFrame}}
+{\footnotesize\ttfamily cv\+::\+Mat visual\+Frame}
+
+
+
+Definition at line 28 of file main.\+cpp.
+
+\mbox{\Hypertarget{main_8cpp_aa18a433247736dad6f16a534dac5296a}\label{main_8cpp_aa18a433247736dad6f16a534dac5296a}} 
+\index{main.cpp@{main.cpp}!vs@{vs}}
+\index{vs@{vs}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{vs}{vs}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classVisualizer}{Visualizer}} vs}
+
+
+
+Definition at line 23 of file main.\+cpp.
+

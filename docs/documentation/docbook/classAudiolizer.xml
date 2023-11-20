@@ -1,0 +1,179 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_classAudiolizer">
+<title>Audiolizer Class Reference</title>
+<indexterm><primary>Audiolizer</primary></indexterm>
+<para>
+<computeroutput>#include &lt;audiolizer.h&gt;</computeroutput>
+</para>
+<simplesect>
+    <title>Public Member Functions    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_classAudiolizer_1a416bdbc7e4c303d921cf8a1995a08c9a">Audiolizer</link> ()</para>
+
+<para>Default constructor. </para>
+</listitem>
+            <listitem><para><link linkend="_classAudiolizer_1ae2d5ef5b64e46ce2f0b2820debd8b775">~Audiolizer</link> ()</para>
+
+<para>Class destructor. </para>
+</listitem>
+            <listitem><para>void <link linkend="_classAudiolizer_1a3d1642efacdb40dabfcc38570e70a338">setConfig</link> (const <link linkend="_structConfig">Config</link> &amp;cfg)</para>
+
+<para>Implicit constructor. </para>
+</listitem>
+            <listitem><para>bool <link linkend="_classAudiolizer_1a5482f721f05ec213d1ca0fd5224d7296">turn_Image_into_Sound</link> (bool &amp;, int &amp;, cv::Mat &amp;, <link linkend="_structRegionOfInterest">RegionOfInterest</link> &amp;, float *, float *)</para>
+
+<para>Member function responsible for obtaining image signal and converting it into sound of a certain frequency. comment method .... </para>
+</listitem>
+            <listitem><para>void <link linkend="_classAudiolizer_1abb539248226943ca7a4c886992f39e45">capture</link> ()</para>
+
+<para>Method responsible for obtaining the camera input in different thread. asynchronous camera frame capturing. It runs in it&apos;s own thread. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Detailed Description</title>
+<para>
+Definition at line 12 of file audiolizer.h.</para>
+</section>
+<section>
+<title>Constructor &amp; Destructor Documentation</title>
+<anchor xml:id="_classAudiolizer_1a416bdbc7e4c303d921cf8a1995a08c9a"/>    <section>
+    <title>Audiolizer()</title>
+<indexterm><primary>Audiolizer</primary><secondary>Audiolizer</secondary></indexterm>
+<indexterm><primary>Audiolizer</primary><secondary>Audiolizer</secondary></indexterm>
+<para><computeroutput>Audiolizer::Audiolizer ( )</computeroutput></para><para>
+
+<para>Default constructor. </para>
+</para>
+    </section><anchor xml:id="_classAudiolizer_1ae2d5ef5b64e46ce2f0b2820debd8b775"/>    <section>
+    <title>~Audiolizer()</title>
+<indexterm><primary>~Audiolizer</primary><secondary>Audiolizer</secondary></indexterm>
+<indexterm><primary>Audiolizer</primary><secondary>~Audiolizer</secondary></indexterm>
+<para><computeroutput>Audiolizer::~Audiolizer ( )</computeroutput></para><para>
+
+<para>Class destructor. </para>
+</para>
+</section>
+</section>
+<section>
+<title>Member Function Documentation</title>
+<anchor xml:id="_classAudiolizer_1abb539248226943ca7a4c886992f39e45"/>    <section>
+    <title>capture()</title>
+<indexterm><primary>capture</primary><secondary>Audiolizer</secondary></indexterm>
+<indexterm><primary>Audiolizer</primary><secondary>capture</secondary></indexterm>
+<para><computeroutput>void Audiolizer::capture ( )</computeroutput></para><para>
+
+<para>Method responsible for obtaining the camera input in different thread. asynchronous camera frame capturing. It runs in it&apos;s own thread. </para>
+</para>
+
+<para><formalpara><title>Returns</title>
+
+<para>void </para>
+</formalpara>
+</para>
+    </section><anchor xml:id="_classAudiolizer_1a3d1642efacdb40dabfcc38570e70a338"/>    <section>
+    <title>setConfig()</title>
+<indexterm><primary>setConfig</primary><secondary>Audiolizer</secondary></indexterm>
+<indexterm><primary>Audiolizer</primary><secondary>setConfig</secondary></indexterm>
+<para><computeroutput>void Audiolizer::setConfig (const <link linkend="_structConfig">Config</link> &amp; cfg)</computeroutput></para><para>
+
+<para>Implicit constructor. </para>
+</para>
+
+<para>
+                <formalpara>
+                    <title>
+Parameters                    </title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+                                <entry>const</entry>
+                                <entry>
+<para><link linkend="_structConfig">Config</link>&amp; cfg - it receives a <link linkend="_structConfig">Config</link> data structure to initialize member variables </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <formalpara><title>Returns</title>
+
+<para>void </para>
+</formalpara>
+</para>
+    </section><anchor xml:id="_classAudiolizer_1a5482f721f05ec213d1ca0fd5224d7296"/>    <section>
+    <title>turn_Image_into_Sound()</title>
+<indexterm><primary>turn_Image_into_Sound</primary><secondary>Audiolizer</secondary></indexterm>
+<indexterm><primary>Audiolizer</primary><secondary>turn_Image_into_Sound</secondary></indexterm>
+<para><computeroutput>bool Audiolizer::turn_Image_into_Sound (bool &amp; , int &amp; , cv::Mat &amp; , <link linkend="_structRegionOfInterest">RegionOfInterest</link> &amp; , float * , float * )</computeroutput></para><para>
+
+<para>Member function responsible for obtaining image signal and converting it into sound of a certain frequency. comment method .... </para>
+</para>
+
+<para>
+                <formalpara>
+                    <title>
+Parameters                    </title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="3" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+                                <entry>                                </entry>                                <entry>bool&amp;</entry>
+                                <entry>
+<para>trackEnabled - variable passed by reference to indicate whether there is a user interaction update. </para>
+</entry>
+                            </row>
+                            <row>
+                                <entry>                                </entry>                                <entry>int&amp;</entry>
+                                <entry>
+<para>freq - variable passed by reference that sets a current value to the current generating frequency responce. </para>
+</entry>
+                            </row>
+                            <row>
+                                <entry>                                </entry>                                <entry>cv::Mat&amp;</entry>
+                                <entry>
+<para>frame - variable passed by reference that sets a current value to the current generating frequency responce. </para>
+</entry>
+                            </row>
+                            <row>
+                                <entry>                                </entry>                                <entry>RegionOfInterest&amp;</entry>
+                                <entry>
+<para>roi - variable passed by reference that updates the value of the current tracking signal. </para>
+</entry>
+                            </row>
+                            <row>
+                                <entry>out                                </entry>                                <entry>float*</entry>
+                                <entry>
+<para>left - variable passed as a pointer for filling the left channel of the sine wave. </para>
+</entry>
+                            </row>
+                            <row>
+                                <entry>out                                </entry>                                <entry>float*</entry>
+                                <entry>
+<para>right - variable passed as a pointer for filling the right channel of the sine wave. </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <formalpara><title>Returns</title>
+
+<para>bool - if a new frame has elapsed </para>
+</formalpara>
+</para>
+</section>
+<para>
+The documentation for this class was generated from the following file:</para>
+src/<link linkend="_audiolizer_8h">audiolizer.h</link></section>
+</section>

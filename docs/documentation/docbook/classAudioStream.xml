@@ -1,0 +1,172 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_classAudioStream">
+<title>AudioStream Class Reference</title>
+<indexterm><primary>AudioStream</primary></indexterm>
+<para>
+<computeroutput>#include &lt;audio.h&gt;</computeroutput>
+</para>
+<simplesect>
+    <title>Public Member Functions    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_classAudioStream_1ab2e106f7e2f70f0cfb1d7b171da71f16">AudioStream</link> ()</para>
+
+<para>Class contructor. In this program, a setConfig is used for implicit initialization. </para>
+</listitem>
+            <listitem><para><link linkend="_classAudioStream_1a480e5d3468bfe9357dd6c40649b1e449">~AudioStream</link> ()</para>
+
+<para>class destructor disconnects the client from the server </para>
+</listitem>
+            <listitem><para>void <link linkend="_classAudioStream_1a2518351337538297de78eb5aa79f5968">setConfig</link> (const char *serverName, const char *clientName)</para>
+
+<para>implicit contructor Starts a connection to the server </para>
+</listitem>
+            <listitem><para>void <link linkend="_classAudioStream_1abbef5d58cfab9290a7b2774938da0215">AudioRouting</link> ()</para>
+
+<para>Creates the connection graph which connects the inputs with the outputs. </para>
+</listitem>
+            <listitem><para>void <link linkend="_classAudioStream_1a86a07551cb80ac8248ad0b1953ffb81d">closeStream</link> ()</para>
+
+<para>Disconnects the client from the server. </para>
+</listitem>
+            <listitem><para>int <link linkend="_classAudioStream_1a94ed22346857a37b90110db868628145">streamBuffer</link> (jack_nframes_t nframes)</para>
+
+<para>Method for streaming the audio buffer. Calls the audioBufferCallback to stream pulses of audio data using a float buffer to the rest of the working program. Through the audioBufferCallback, it passes a left and a right buffer as an input to the <link linkend="_classAudiolizer">Audiolizer</link> for filling a buffer of sinuisodal waves of varying frequencies. ... the filled signal is later passed to the <link linkend="_classVisualizer">Visualizer</link> for audio analysis before visualization, but <link linkend="_classVisualizer">Visualizer</link> does not change the values of the signal. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Detailed Description</title>
+<para>
+Definition at line 28 of file audio.h.</para>
+</section>
+<section>
+<title>Constructor &amp; Destructor Documentation</title>
+<anchor xml:id="_classAudioStream_1ab2e106f7e2f70f0cfb1d7b171da71f16"/>    <section>
+    <title>AudioStream()</title>
+<indexterm><primary>AudioStream</primary><secondary>AudioStream</secondary></indexterm>
+<indexterm><primary>AudioStream</primary><secondary>AudioStream</secondary></indexterm>
+<para><computeroutput>AudioStream::AudioStream ( )</computeroutput></para><para>
+
+<para>Class contructor. In this program, a setConfig is used for implicit initialization. </para>
+</para>
+    </section><anchor xml:id="_classAudioStream_1a480e5d3468bfe9357dd6c40649b1e449"/>    <section>
+    <title>~AudioStream()</title>
+<indexterm><primary>~AudioStream</primary><secondary>AudioStream</secondary></indexterm>
+<indexterm><primary>AudioStream</primary><secondary>~AudioStream</secondary></indexterm>
+<para><computeroutput>AudioStream::~AudioStream ( )</computeroutput></para><para>
+
+<para>class destructor disconnects the client from the server </para>
+</para>
+</section>
+</section>
+<section>
+<title>Member Function Documentation</title>
+<anchor xml:id="_classAudioStream_1abbef5d58cfab9290a7b2774938da0215"/>    <section>
+    <title>AudioRouting()</title>
+<indexterm><primary>AudioRouting</primary><secondary>AudioStream</secondary></indexterm>
+<indexterm><primary>AudioStream</primary><secondary>AudioRouting</secondary></indexterm>
+<para><computeroutput>void AudioStream::AudioRouting ( )</computeroutput></para><para>
+
+<para>Creates the connection graph which connects the inputs with the outputs. </para>
+</para>
+
+<para><formalpara><title>Returns</title>
+
+<para>void </para>
+</formalpara>
+</para>
+    </section><anchor xml:id="_classAudioStream_1a86a07551cb80ac8248ad0b1953ffb81d"/>    <section>
+    <title>closeStream()</title>
+<indexterm><primary>closeStream</primary><secondary>AudioStream</secondary></indexterm>
+<indexterm><primary>AudioStream</primary><secondary>closeStream</secondary></indexterm>
+<para><computeroutput>void AudioStream::closeStream ( )</computeroutput></para><para>
+
+<para>Disconnects the client from the server. </para>
+</para>
+
+<para><formalpara><title>Returns</title>
+
+<para>void </para>
+</formalpara>
+</para>
+    </section><anchor xml:id="_classAudioStream_1a2518351337538297de78eb5aa79f5968"/>    <section>
+    <title>setConfig()</title>
+<indexterm><primary>setConfig</primary><secondary>AudioStream</secondary></indexterm>
+<indexterm><primary>AudioStream</primary><secondary>setConfig</secondary></indexterm>
+<para><computeroutput>void AudioStream::setConfig (const char * serverName, const char * clientName)</computeroutput></para><para>
+
+<para>implicit contructor Starts a connection to the server </para>
+</para>
+
+<para>
+                <formalpara>
+                    <title>
+Parameters                    </title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+                                <entry>const</entry>
+                                <entry>
+<para>char* serverName - name of jack audio server </para>
+</entry>
+                            </row>
+                            <row>
+                                <entry>const</entry>
+                                <entry>
+<para>char* clientName - name of the client connected to the server </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <formalpara><title>Returns</title>
+
+<para>void </para>
+</formalpara>
+</para>
+    </section><anchor xml:id="_classAudioStream_1a94ed22346857a37b90110db868628145"/>    <section>
+    <title>streamBuffer()</title>
+<indexterm><primary>streamBuffer</primary><secondary>AudioStream</secondary></indexterm>
+<indexterm><primary>AudioStream</primary><secondary>streamBuffer</secondary></indexterm>
+<para><computeroutput>int AudioStream::streamBuffer (jack_nframes_t nframes)</computeroutput></para><para>
+
+<para>Method for streaming the audio buffer. Calls the audioBufferCallback to stream pulses of audio data using a float buffer to the rest of the working program. Through the audioBufferCallback, it passes a left and a right buffer as an input to the <link linkend="_classAudiolizer">Audiolizer</link> for filling a buffer of sinuisodal waves of varying frequencies. ... the filled signal is later passed to the <link linkend="_classVisualizer">Visualizer</link> for audio analysis before visualization, but <link linkend="_classVisualizer">Visualizer</link> does not change the values of the signal. </para>
+</para>
+
+<para>
+                <formalpara>
+                    <title>
+Parameters                    </title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+                                <entry>jack_nframes_t</entry>
+                                <entry>
+<para>nframes - the audio buffer size. Should be replaced with member variable using the <link linkend="_structConfig">Config</link> instance as a parameter </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <formalpara><title>Returns</title>
+
+<para>int - success message </para>
+</formalpara>
+</para>
+</section>
+<para>
+The documentation for this class was generated from the following file:</para>
+src/<link linkend="_audio_8h">audio.h</link></section>
+</section>

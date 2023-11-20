@@ -1,0 +1,313 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_classVideoTracker">
+<title>VideoTracker Class Reference</title>
+<indexterm><primary>VideoTracker</primary></indexterm>
+<para>
+<computeroutput>#include &lt;videotracker.h&gt;</computeroutput>
+</para>
+<simplesect>
+    <title>Public Member Functions    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_classVideoTracker_1a8a4eb43cf75ecaec34b1b54b99d7e701">VideoTracker</link> ()</para>
+
+<para>Default constructor. </para>
+</listitem>
+            <listitem><para><link linkend="_classVideoTracker_1ac20788504b98efbae977d3d55459b443">~VideoTracker</link> ()</para>
+
+<para>Class destructor. </para>
+</listitem>
+            <listitem><para>void <link linkend="_classVideoTracker_1a1bf38a464e67e51318d2184f0936d977">setConfig</link> (const <link linkend="_structConfig">Config</link> &amp;cfg)</para>
+
+<para>Implicit constructor. </para>
+</listitem>
+            <listitem><para>void <link linkend="_classVideoTracker_1a137ac7ebd98671668b3d4ff2787ff61f">display_config</link> ()</para>
+
+<para>Displays initialized member variables. </para>
+</listitem>
+            <listitem><para>void <link linkend="_classVideoTracker_1a1e8a70a417d6310df26387d80997c20c">capture</link> ()</para>
+
+<para>Threaded function - check the <link linkend="_classCamera_1abf92424200235ed48ec2d7135f02127e">Camera::capture()</link> / <link linkend="_classAudiolizer_1abb539248226943ca7a4c886992f39e45">Audiolizer::capture()</link> for more details. </para>
+</listitem>
+            <listitem><para>bool <link linkend="_classVideoTracker_1a8f2c83a6b22f426565bbfaf74d671735">update</link> (<link linkend="_structRegionOfInterest">RegionOfInterest</link> &amp;, cv::Mat &amp;)</para>
+
+<para>Updates the tracking results. </para>
+</listitem>
+            <listitem><para>bool <link linkend="_classVideoTracker_1aaaf958e2704bcb0395852314ce95a7e6">pattern_locked</link> ()</para>
+
+<para>Pulses whether a new tracking update has been emerged. </para>
+</listitem>
+            <listitem><para>bool <link linkend="_classVideoTracker_1a49cf51c741ce0e8b19047cbab593cd8b">tickTock</link> ()</para>
+
+<para>Pulses whether a new camera frame has been captured. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Detailed Description</title>
+<para>
+Definition at line 15 of file videotracker.h.</para>
+</section>
+<section>
+<title>Constructor &amp; Destructor Documentation</title>
+<anchor xml:id="_classVideoTracker_1a8a4eb43cf75ecaec34b1b54b99d7e701"/>    <section>
+    <title>VideoTracker()</title>
+<indexterm><primary>VideoTracker</primary><secondary>VideoTracker</secondary></indexterm>
+<indexterm><primary>VideoTracker</primary><secondary>VideoTracker</secondary></indexterm>
+<para><computeroutput>VideoTracker::VideoTracker ( )</computeroutput></para><para>
+
+<para>Default constructor. </para>
+</para>
+<para>
+Definition at line 4 of file videotracker.cpp.</para>
+<programlisting>4 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+5 &#32;&#32;&#32;&#32;trackingToggle.store(<emphasis role="keyword">false</emphasis>);
+6 &#32;&#32;&#32;&#32;patternlocked.store(<emphasis role="keyword">false</emphasis>);
+7 }
+</programlisting>    </section><anchor xml:id="_classVideoTracker_1ac20788504b98efbae977d3d55459b443"/>    <section>
+    <title>~VideoTracker()</title>
+<indexterm><primary>~VideoTracker</primary><secondary>VideoTracker</secondary></indexterm>
+<indexterm><primary>VideoTracker</primary><secondary>~VideoTracker</secondary></indexterm>
+<para><computeroutput>VideoTracker::~VideoTracker ( )</computeroutput></para><para>
+
+<para>Class destructor. </para>
+</para>
+<para>
+Definition at line 9 of file videotracker.cpp.</para>
+<programlisting>9 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+10 }
+</programlisting></section>
+</section>
+<section>
+<title>Member Function Documentation</title>
+<anchor xml:id="_classVideoTracker_1a1e8a70a417d6310df26387d80997c20c"/>    <section>
+    <title>capture()</title>
+<indexterm><primary>capture</primary><secondary>VideoTracker</secondary></indexterm>
+<indexterm><primary>VideoTracker</primary><secondary>capture</secondary></indexterm>
+<para><computeroutput>void VideoTracker::capture ( )</computeroutput></para><para>
+
+<para>Threaded function - check the <link linkend="_classCamera_1abf92424200235ed48ec2d7135f02127e">Camera::capture()</link> / <link linkend="_classAudiolizer_1abb539248226943ca7a4c886992f39e45">Audiolizer::capture()</link> for more details. </para>
+</para>
+<para>
+Definition at line 130 of file videotracker.cpp.</para>
+<programlisting>130 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+131 <emphasis role="comment">&#32;&#32;&#32;&#32;/***</emphasis>
+132 <emphasis role="comment">&#32;&#32;&#32;&#32;&#32;*&#32;Updates&#32;the&#32;roi&#32;and&#32;the&#32;(global)&#32;roi&#32;center.&#32;</emphasis>
+133 <emphasis role="comment">&#32;&#32;&#32;&#32;*/</emphasis>
+134 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;frameElapsed&#32;=&#32;camera.<link linkend="_classCamera_1abf92424200235ed48ec2d7135f02127e">capture</link>(currFrame);
+135 
+136 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>(!patternlocked.load()){
+137 
+138 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;std::cout&lt;&lt;&quot;time&#32;counter&#32;&quot;&lt;&lt;framecounter&lt;&lt;std::endl;</emphasis>
+139 
+140 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;thickness=1;
+141 
+142 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(framecounter&gt;0){
+143 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;circle(&#32;currFrame,
+144 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;cv::Point((W/2),(H/2)),
+145 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;radius,
+146 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;cv::Scalar(&#32;0,&#32;255,&#32;0&#32;),
+147 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;thickness=1,
+148 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;cv::LINE_8);
+149 
+150 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;cv::Mat&#32;tempROI(currFrame,&#32;centerBox);&#32;<emphasis role="comment">//&#32;access&#32;box&#32;information&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;</emphasis>
+151 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;tempROI.copyTo(ROI);&#32;<emphasis role="comment">//&#32;Copy&#32;the&#32;data&#32;into&#32;new&#32;matrix</emphasis>
+152 
+153 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;PREPROCESS</emphasis>
+154 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;...</emphasis>
+155 
+156 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>(BG.empty()){&#32;<emphasis role="comment">//&#32;--------------------------------------------------&gt;&#32;that&#32;is&#32;the&#32;first&#32;frame</emphasis>
+157 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ROI.copyTo(BG);
+158 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}<emphasis role="keywordflow">else</emphasis>{
+159 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+160 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;_show_timer();
+161 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;imshow(&quot;2&quot;,&#32;currFrame);</emphasis>
+162 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;cv::waitKey(1);</emphasis>
+163 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+164 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;framecounter--;
+165 
+166 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>(framecounter==0){&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;if&#32;similarity&#32;with&#32;the&#32;background&#32;is&#32;high,&#32;restart&#32;the&#32;timer!&#32;--&gt;&#32;disabled</emphasis>
+167 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+168 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;//&#32;Calculate&#32;the&#32;L2&#32;relative&#32;error&#32;between&#32;current&#32;ROI&#32;and&#32;the&#32;BG.</emphasis>
+169 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;double&#32;errorL2&#32;=&#32;norm(&#32;ROI,&#32;BG,&#32;cv::DIST_L2&#32;);</emphasis>
+170 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;//&#32;Convert&#32;to&#32;a&#32;reasonable&#32;scale,&#32;since&#32;L2&#32;error&#32;is&#32;summed&#32;across&#32;all&#32;pixels&#32;of&#32;the&#32;image.</emphasis>
+171 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;double&#32;L2difference&#32;=&#32;errorL2&#32;/&#32;(double)(&#32;ROI.rows&#32;*&#32;ROI.cols&#32;);</emphasis>
+172 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;std::cout&lt;&lt;&quot;similarity&#32;difference&#32;&quot;&lt;&lt;L2difference&lt;&lt;&quot;&#32;similarity_threshold&#32;&quot;&lt;&lt;similarity_threshold&lt;&lt;std::endl;</emphasis>
+173 
+174 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;if&#32;(L2difference&#32;&lt;&#32;similarity_threshold){&#32;//&#32;if&#32;current&#32;roi&#32;is&#32;similar&#32;to&#32;BG&#32;--&gt;&#32;low&#32;L2</emphasis>
+175 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;&#32;&#32;&#32;&#32;framecounter=fps*5;</emphasis>
+176 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;}else&#32;patternlocked=true;</emphasis>
+177 
+178 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;patternlocked.store(<emphasis role="keyword">true</emphasis>);
+179 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+180 &#32;&#32;&#32;&#32;}<emphasis role="keywordflow">else</emphasis>{
+181 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;ok;
+182 
+183 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(framecounter==0){
+184 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::cout&lt;&lt;<emphasis role="stringliteral">&quot;first&#32;occurence&#32;--&gt;&#32;init&#32;tracker&#32;here&quot;</emphasis>&lt;&lt;framecounter&lt;&lt;std::endl;
+185 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;tracker-&gt;init(currFrame,&#32;boundingBox);
+186 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+187 
+188 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;ok&#32;=&#32;tracker-&gt;update(currFrame,&#32;boundingBox);&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+189 
+190 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(framecounter&lt;=((-10)*fps)&#32;||&#32;boundingBox.x&lt;=0&#32;||&#32;boundingBox.y&lt;=0&#32;||&#32;boundingBox.width&lt;=0&#32;||&#32;boundingBox.height&lt;=0&#32;||&#32;(boundingBox.x+boundingBox.width)&gt;=W&#32;||&#32;(boundingBox.y+boundingBox.height)&gt;=H&#32;)&#32;{
+191 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;patternlocked.store(<emphasis role="keyword">false</emphasis>);
+192 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;framecounter=ROIw8sec*fps;
+193 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;boundingBox&#32;=&#32;centerBox;
+194 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+195 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Creating&#32;a&#32;new&#32;tracker</emphasis>
+196 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;tracker-&gt;clear();
+197 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;cv::Ptr&lt;cv::TrackerCSRT&gt;&#32;trackerNew&#32;=&#32;cv::TrackerCSRT::create();
+198 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;tracker&#32;=&#32;trackerNew;
+199 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+200 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>{
+201 
+202 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(ok)
+203 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+204 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Tracking&#32;success&#32;:&#32;Draw&#32;the&#32;tracked&#32;object</emphasis>
+205 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;rectangle(currFrame,&#32;boundingBox,&#32;cv::Scalar(&#32;255,&#32;0,&#32;0&#32;),&#32;2,&#32;1&#32;);&#32;//&#32;only&#32;for&#32;testing</emphasis>
+206 
+207 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;trackingToggle=!trackingToggle;
+208 
+209 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;currboxCenter_x.store(boundingBox.x&#32;+&#32;boundingBox.width/2);
+210 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;currboxCenter_y.store(boundingBox.y&#32;+&#32;boundingBox.height/2);
+211 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;currboxCenter_w.store(boundingBox.width);
+212 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;currboxCenter_h.store(boundingBox.height);
+213 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}&#32;&#32;&#32;
+214 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>
+215 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+216 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;currboxCenter_x.store(boxCenter.centerX);</emphasis>
+217 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;currboxCenter_y.store(boxCenter.centerY);</emphasis>
+218 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;currboxCenter_w.store(boxCenter.volumeW);</emphasis>
+219 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;currboxCenter_h.store(boxCenter.volumeH);</emphasis>
+220 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Tracking&#32;failure&#32;detected.</emphasis>
+221 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;putText(currFrame,&#32;&quot;Tracking&#32;failure&#32;detected&quot;,&#32;cv::Point(100,80),&#32;cv::FONT_HERSHEY_SIMPLEX,&#32;0.75,&#32;cv::Scalar(0,0,255),2);</emphasis>
+222 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+223 
+224 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;keep&#32;the&#32;initial&#32;box&#32;width&#32;and&#32;height</emphasis>
+225 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;cv::Rect&#32;temp(boundingBox.x,boundingBox.y,radius*2,radius*2);</emphasis>
+226 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;cv::Mat&#32;tempROI(currFrame,&#32;temp);</emphasis>
+227 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;tempROI.copyTo(ROI);</emphasis>
+228 
+229 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;cv::Mat&#32;tempROI(currFrame,&#32;boundingBox);
+230 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;tempROI.copyTo(ROI);
+231 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;framecounter--;
+232 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;imshow(&quot;2&quot;,&#32;currFrame);</emphasis>
+233 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+234 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+235 &#32;&#32;&#32;&#32;}&#32;&#32;
+236 
+237 }
+</programlisting>    </section><anchor xml:id="_classVideoTracker_1a137ac7ebd98671668b3d4ff2787ff61f"/>    <section>
+    <title>display_config()</title>
+<indexterm><primary>display_config</primary><secondary>VideoTracker</secondary></indexterm>
+<indexterm><primary>VideoTracker</primary><secondary>display_config</secondary></indexterm>
+<para><computeroutput>void VideoTracker::display_config ( )</computeroutput></para><para>
+
+<para>Displays initialized member variables. </para>
+</para>
+<para>
+Definition at line 44 of file videotracker.cpp.</para>
+<programlisting>44 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+45 &#32;&#32;&#32;&#32;std::cout&lt;&lt;<emphasis role="stringliteral">&quot;VideoTracker&#32;config&#32;::&#32;radius&#32;&quot;</emphasis>&lt;&lt;radius&lt;&lt;std::endl;
+46 &#32;&#32;&#32;&#32;std::cout&lt;&lt;<emphasis role="stringliteral">&quot;VideoTracker&#32;config&#32;::&#32;ROIw8sec&#32;&quot;</emphasis>&lt;&lt;ROIw8sec&lt;&lt;std::endl;
+47 }
+</programlisting>    </section><anchor xml:id="_classVideoTracker_1aaaf958e2704bcb0395852314ce95a7e6"/>    <section>
+    <title>pattern_locked()</title>
+<indexterm><primary>pattern_locked</primary><secondary>VideoTracker</secondary></indexterm>
+<indexterm><primary>VideoTracker</primary><secondary>pattern_locked</secondary></indexterm>
+<para><computeroutput>bool VideoTracker::pattern_locked ( )</computeroutput></para><para>
+
+<para>Pulses whether a new tracking update has been emerged. </para>
+</para>
+<para>
+Definition at line 53 of file videotracker.cpp.</para>
+<programlisting>53 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+54 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;patternlocked.load();
+55 }
+</programlisting>    </section><anchor xml:id="_classVideoTracker_1a1bf38a464e67e51318d2184f0936d977"/>    <section>
+    <title>setConfig()</title>
+<indexterm><primary>setConfig</primary><secondary>VideoTracker</secondary></indexterm>
+<indexterm><primary>VideoTracker</primary><secondary>setConfig</secondary></indexterm>
+<para><computeroutput>void VideoTracker::setConfig (const <link linkend="_structConfig">Config</link> &amp; cfg)</computeroutput></para><para>
+
+<para>Implicit constructor. </para>
+</para>
+<para>
+Definition at line 12 of file videotracker.cpp.</para>
+<programlisting>12 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+13 &#32;&#32;&#32;&#32;
+14 &#32;&#32;&#32;&#32;camera.<link linkend="_classCamera_1aac1401746621765e67ee6d48c615704f">setConfig</link>(cfg);
+15 &#32;&#32;&#32;&#32;camera.<link linkend="_classCamera_1ac1fecf974797af37cdc225fd5058d58a">display_config</link>();
+16 
+17 &#32;&#32;&#32;&#32;radius=cfg.<link linkend="_structConfig_1ab7715bd284d9f1c2cbaff357ac7b8a02">radius</link>;
+18 &#32;&#32;&#32;&#32;ROIw8sec&#32;=&#32;cfg.<link linkend="_structConfig_1a795806a552a1d6f41b041e96af2decd0">roiSec</link>;
+19 &#32;&#32;&#32;&#32;framecounter=ROIw8sec*camera.<link linkend="_classCamera_1aa3d65d169260075ef438eea63c0f5ddf">get_fps</link>();
+20 
+21 &#32;&#32;&#32;&#32;W=cfg.<link linkend="_structConfig_1a2b252e84e61b7f7a956ee5b60d95e14c">camResW</link>;
+22 &#32;&#32;&#32;&#32;H=cfg.<link linkend="_structConfig_1a7fa19a6d23b6abea005bed2195a26862">camResH</link>;
+23 &#32;&#32;&#32;&#32;fps&#32;=&#32;camera.<link linkend="_classCamera_1aa3d65d169260075ef438eea63c0f5ddf">get_fps</link>();
+24 &#32;&#32;&#32;&#32;
+25 &#32;&#32;&#32;&#32;boxCenter.<link linkend="_structRegionOfInterest_1a2aa354292437b33997ad927c3811a2f8">centerX</link>=W/2;
+26 &#32;&#32;&#32;&#32;boxCenter.<link linkend="_structRegionOfInterest_1a775e7dad2ea2fe86d3deb63eb07c1958">centerY</link>=H/2;
+27 &#32;&#32;&#32;&#32;boxCenter.<link linkend="_structRegionOfInterest_1aaaf191910097ff4690cb4ea2e285ddec">volumeW</link>=cfg.<link linkend="_structConfig_1ab7715bd284d9f1c2cbaff357ac7b8a02">radius</link>*2;
+28 &#32;&#32;&#32;&#32;boxCenter.<link linkend="_structRegionOfInterest_1a5db6d3f60b981a41158af59325856905">volumeH</link>=cfg.<link linkend="_structConfig_1ab7715bd284d9f1c2cbaff357ac7b8a02">radius</link>*2;
+29 
+30 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;previous_boxCenter=current_boxCenter;</emphasis>
+31 
+32 &#32;&#32;&#32;&#32;cv::Rect&#32;temp((W/2)-radius,(H/2)-radius,radius*2,radius*2);
+33 &#32;&#32;&#32;&#32;centerBox=temp;
+34 &#32;&#32;&#32;&#32;boundingBox=temp;
+35 &#32;&#32;&#32;&#32;
+36 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(cfg.<link linkend="_structConfig_1acd67afb023cf0f4bcdd6e43017d56f9a">trackingAlg</link>&#32;==&#32;0)&#32;<emphasis role="comment">//&quot;CSRT&quot;</emphasis>
+37 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;tracker&#32;=&#32;cv::TrackerCSRT::create();
+38 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(cfg.<link linkend="_structConfig_1acd67afb023cf0f4bcdd6e43017d56f9a">trackingAlg</link>&#32;==&#32;1)&#32;<emphasis role="comment">//&quot;MOSSE&quot;</emphasis>
+39 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;tracker&#32;=&#32;cv::TrackerMOSSE::create();
+40 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(cfg.<link linkend="_structConfig_1acd67afb023cf0f4bcdd6e43017d56f9a">trackingAlg</link>&#32;==&#32;2)&#32;<emphasis role="comment">//&quot;BOOSTING&quot;</emphasis>
+41 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;tracker&#32;=&#32;cv::TrackerBoosting::create();
+42 }
+</programlisting>    </section><anchor xml:id="_classVideoTracker_1a49cf51c741ce0e8b19047cbab593cd8b"/>    <section>
+    <title>tickTock()</title>
+<indexterm><primary>tickTock</primary><secondary>VideoTracker</secondary></indexterm>
+<indexterm><primary>VideoTracker</primary><secondary>tickTock</secondary></indexterm>
+<para><computeroutput>bool VideoTracker::tickTock ( )</computeroutput></para><para>
+
+<para>Pulses whether a new camera frame has been captured. </para>
+</para>
+<para>
+Definition at line 49 of file videotracker.cpp.</para>
+<programlisting>49 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+50 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;camera.<link linkend="_classCamera_1ab1640e09af17f9b84c6635a94be9d5c0">frame_elapsed</link>();
+51 }
+</programlisting>    </section><anchor xml:id="_classVideoTracker_1a8f2c83a6b22f426565bbfaf74d671735"/>    <section>
+    <title>update()</title>
+<indexterm><primary>update</primary><secondary>VideoTracker</secondary></indexterm>
+<indexterm><primary>VideoTracker</primary><secondary>update</secondary></indexterm>
+<para><computeroutput>bool VideoTracker::update (<link linkend="_structRegionOfInterest">RegionOfInterest</link> &amp; roi_center, cv::Mat &amp; roi)</computeroutput></para><para>
+
+<para>Updates the tracking results. </para>
+</para>
+<para>
+Definition at line 239 of file videotracker.cpp.</para>
+<programlisting>239 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+240 <emphasis role="comment">&#32;&#32;&#32;&#32;/***</emphasis>
+241 <emphasis role="comment">&#32;&#32;&#32;&#32;&#32;*&#32;Updates&#32;the&#32;roi&#32;and&#32;the&#32;(global)&#32;roi&#32;center.&#32;</emphasis>
+242 <emphasis role="comment">&#32;&#32;&#32;&#32;&#32;*&#32;Returns&#32;bool&#32;-&#32;Applies&#32;control&#32;the&#32;return&#32;values&#32;(i.e.&#32;if&#32;no&#32;changes&#32;occured&#32;by&#32;a&#32;visual&#32;stimulus</emphasis>
+243 <emphasis role="comment">&#32;&#32;&#32;&#32;*/</emphasis>
+244 
+245 &#32;&#32;&#32;&#32;currFrame.copyTo(roi);
+246 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(patternlocked.load()){
+247 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;roi_center.<link linkend="_structRegionOfInterest_1a2aa354292437b33997ad927c3811a2f8">centerX</link>=currboxCenter_x.load();
+248 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;roi_center.<link linkend="_structRegionOfInterest_1a775e7dad2ea2fe86d3deb63eb07c1958">centerY</link>=currboxCenter_y.load();
+249 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;roi_center.<link linkend="_structRegionOfInterest_1aaaf191910097ff4690cb4ea2e285ddec">volumeW</link>=currboxCenter_w.load();
+250 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;roi_center.<link linkend="_structRegionOfInterest_1a5db6d3f60b981a41158af59325856905">volumeH</link>=currboxCenter_h.load();
+251 &#32;&#32;&#32;&#32;}<emphasis role="keywordflow">else</emphasis>{
+252 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;roi_center&#32;=&#32;boxCenter;
+253 &#32;&#32;&#32;&#32;}
+254 
+255 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;_tracking_updated();
+256 }
+</programlisting></section>
+<para>
+The documentation for this class was generated from the following files:</para>
+src/<link linkend="_videotracker_8h">videotracker.h</link>src/<link linkend="_videotracker_8cpp">videotracker.cpp</link></section>
+</section>

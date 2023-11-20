@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_classInputParser">
+<title>InputParser Class Reference</title>
+<indexterm><primary>InputParser</primary></indexterm>
+<para>
+<computeroutput>#include &lt;console.h&gt;</computeroutput>
+</para>
+<simplesect>
+    <title>Public Member Functions    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_classInputParser_1af9fa5ead1f28b5294a713410df5b9531">InputParser</link> (int &amp;argc, char **argv)</para>
+
+<para>Class constructor. </para>
+</listitem>
+            <listitem><para>const std::string &amp; <link linkend="_classInputParser_1a3419884a7b59e5cb5df0fc7588c90e51">getCmdOption</link> (const std::string &amp;option) const</para>
+
+<para>Method to return the value of a certain key. </para>
+</listitem>
+            <listitem><para>bool <link linkend="_classInputParser_1aea813a8d6ee9ea6d250ab99333316bdf">cmdOptionExists</link> (const std::string &amp;option) const</para>
+
+<para>Method to control valid arguments. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Detailed Description</title>
+<para>
+Definition at line 10 of file console.h.</para>
+</section>
+<section>
+<title>Constructor &amp; Destructor Documentation</title>
+<anchor xml:id="_classInputParser_1af9fa5ead1f28b5294a713410df5b9531"/>    <section>
+    <title>InputParser()</title>
+<indexterm><primary>InputParser</primary><secondary>InputParser</secondary></indexterm>
+<indexterm><primary>InputParser</primary><secondary>InputParser</secondary></indexterm>
+<para><computeroutput>InputParser::InputParser (int &amp; argc, char ** argv)</computeroutput></para><para>
+
+<para>Class constructor. </para>
+</para>
+
+<para>
+                <formalpara>
+                    <title>
+Parameters                    </title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+                                <entry>int</entry>
+                                <entry>
+<para>&amp;argc - number of arguments </para>
+</entry>
+                            </row>
+                            <row>
+                                <entry>char</entry>
+                                <entry>
+<para>**argv - arguments provided by the user </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
+<para>
+Definition at line 3 of file console.cpp.</para>
+<programlisting>3 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+4 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">int</emphasis>&#32;i=1;&#32;i&#32;&lt;&#32;argc;&#32;++i)
+5 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;this-&gt;tokens.push_back(std::string(argv[i]));
+6 &#32;&#32;&#32;&#32;}
+</programlisting></section>
+</section>
+<section>
+<title>Member Function Documentation</title>
+<anchor xml:id="_classInputParser_1aea813a8d6ee9ea6d250ab99333316bdf"/>    <section>
+    <title>cmdOptionExists()</title>
+<indexterm><primary>cmdOptionExists</primary><secondary>InputParser</secondary></indexterm>
+<indexterm><primary>InputParser</primary><secondary>cmdOptionExists</secondary></indexterm>
+<para><computeroutput>bool InputParser::cmdOptionExists (const std::string &amp; option) const</computeroutput></para><para>
+
+<para>Method to control valid arguments. </para>
+</para>
+<para>
+Definition at line 18 of file console.cpp.</para>
+<programlisting>18 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+19 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;std::find(this-&gt;tokens.begin(),&#32;this-&gt;tokens.end(),&#32;option)
+20 &#32;&#32;&#32;&#32;!=&#32;this-&gt;tokens.end();
+21 }
+</programlisting>    </section><anchor xml:id="_classInputParser_1a3419884a7b59e5cb5df0fc7588c90e51"/>    <section>
+    <title>getCmdOption()</title>
+<indexterm><primary>getCmdOption</primary><secondary>InputParser</secondary></indexterm>
+<indexterm><primary>InputParser</primary><secondary>getCmdOption</secondary></indexterm>
+<para><computeroutput>const std::string &amp; InputParser::getCmdOption (const std::string &amp; option) const</computeroutput></para><para>
+
+<para>Method to return the value of a certain key. </para>
+</para>
+<para>
+Definition at line 8 of file console.cpp.</para>
+<programlisting>8 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+9 &#32;&#32;&#32;&#32;std::vector&lt;std::string&gt;::const_iterator&#32;itr;
+10 &#32;&#32;&#32;&#32;itr&#32;=&#32;&#32;std::find(this-&gt;tokens.begin(),&#32;this-&gt;tokens.end(),&#32;option);
+11 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(itr&#32;!=&#32;this-&gt;tokens.end()&#32;&amp;&amp;&#32;++itr&#32;!=&#32;this-&gt;tokens.end()){
+12 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;*itr;
+13 &#32;&#32;&#32;&#32;}
+14 &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<emphasis role="keyword">const</emphasis>&#32;std::string&#32;empty_string(<emphasis role="stringliteral">&quot;&quot;</emphasis>);
+15 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;empty_string;
+16 &#32;&#32;&#32;&#32;}
+</programlisting></section>
+<para>
+The documentation for this class was generated from the following files:</para>
+src/<link linkend="_console_8h">console.h</link>src/<link linkend="_console_8cpp">console.cpp</link></section>
+</section>

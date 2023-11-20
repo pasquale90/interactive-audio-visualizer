@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_classVisualizer">
+<title>Visualizer Class Reference</title>
+<indexterm><primary>Visualizer</primary></indexterm>
+<para>
+<computeroutput>#include &lt;visualizer.h&gt;</computeroutput>
+</para>
+<simplesect>
+    <title>Public Member Functions    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_classVisualizer_1a104487003c9fea602e26c072aae27efc">Visualizer</link> ()</para>
+
+<para>Default constructor. </para>
+</listitem>
+            <listitem><para><link linkend="_classVisualizer_1a013ec3101407fbe4805f289bc32d1265">~Visualizer</link> ()</para>
+
+<para>Class destructor. </para>
+</listitem>
+            <listitem><para>void <link linkend="_classVisualizer_1ad6d1964506122692d4ec30c9e75b1522">setConfig</link> (const <link linkend="_structConfig">Config</link> &amp;)</para>
+
+<para>Class implicit constructor. </para>
+</listitem>
+            <listitem><para>int <link linkend="_classVisualizer_1aaebea497f6be4cec9b3cadee0baed6ab">and_Sound_into_Image</link> (float *, float *, cv::Mat, bool, bool, int, <link linkend="_structRegionOfInterest">RegionOfInterest</link>)</para>
+
+<para>Method resplonsible for visualization. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Detailed Description</title>
+<para>
+Definition at line 12 of file visualizer.h.</para>
+</section>
+<section>
+<title>Constructor &amp; Destructor Documentation</title>
+<anchor xml:id="_classVisualizer_1a104487003c9fea602e26c072aae27efc"/>    <section>
+    <title>Visualizer()</title>
+<indexterm><primary>Visualizer</primary><secondary>Visualizer</secondary></indexterm>
+<indexterm><primary>Visualizer</primary><secondary>Visualizer</secondary></indexterm>
+<para><computeroutput>Visualizer::Visualizer ( )</computeroutput></para><para>
+
+<para>Default constructor. </para>
+</para>
+    </section><anchor xml:id="_classVisualizer_1a013ec3101407fbe4805f289bc32d1265"/>    <section>
+    <title>~Visualizer()</title>
+<indexterm><primary>~Visualizer</primary><secondary>Visualizer</secondary></indexterm>
+<indexterm><primary>Visualizer</primary><secondary>~Visualizer</secondary></indexterm>
+<para><computeroutput>Visualizer::~Visualizer ( )</computeroutput></para><para>
+
+<para>Class destructor. </para>
+</para>
+</section>
+</section>
+<section>
+<title>Member Function Documentation</title>
+<anchor xml:id="_classVisualizer_1aaebea497f6be4cec9b3cadee0baed6ab"/>    <section>
+    <title>and_Sound_into_Image()</title>
+<indexterm><primary>and_Sound_into_Image</primary><secondary>Visualizer</secondary></indexterm>
+<indexterm><primary>Visualizer</primary><secondary>and_Sound_into_Image</secondary></indexterm>
+<para><computeroutput>int Visualizer::and_Sound_into_Image (float * , float * , cv::Mat , bool , bool , int , <link linkend="_structRegionOfInterest">RegionOfInterest</link> )</computeroutput></para><para>
+
+<para>Method resplonsible for visualization. </para>
+</para>
+
+<para>
+                <formalpara>
+                    <title>
+Parameters                    </title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="3" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+                                <entry>in                                </entry>                                <entry>float*</entry>
+                                <entry>
+<para>left audio buffer filled with a sine wave tone </para>
+</entry>
+                            </row>
+                            <row>
+                                <entry>in                                </entry>                                <entry>float*</entry>
+                                <entry>
+<para>right audio buffer filled with a sine wave tone </para>
+</entry>
+                            </row>
+                            <row>
+                                <entry>in                                </entry>                                <entry>cv::Mat</entry>
+                                <entry>
+<para>- frame obtained from camera </para>
+</entry>
+                            </row>
+                            <row>
+                                <entry>in                                </entry>                                <entry>bool</entry>
+                                <entry>
+<para>frameElapsed - whether a new frame elapsed from the camera </para>
+</entry>
+                            </row>
+                            <row>
+                                <entry>in                                </entry>                                <entry>bool</entry>
+                                <entry>
+<para>trackEnabled - whether a new update emerged from tracking </para>
+</entry>
+                            </row>
+                            <row>
+                                <entry>in                                </entry>                                <entry>int</entry>
+                                <entry>
+<para>- frequency tone - currently affects the coloring (future releases will probably leave such features to the audio buffer signal analysis) </para>
+</entry>
+                            </row>
+                            <row>
+                                <entry>in                                </entry>                                <entry><link linkend="_structRegionOfInterest">RegionOfInterest</link></entry>
+                                <entry>
+<para>- tracking updates </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
+    </section><anchor xml:id="_classVisualizer_1ad6d1964506122692d4ec30c9e75b1522"/>    <section>
+    <title>setConfig()</title>
+<indexterm><primary>setConfig</primary><secondary>Visualizer</secondary></indexterm>
+<indexterm><primary>Visualizer</primary><secondary>setConfig</secondary></indexterm>
+<para><computeroutput>void Visualizer::setConfig (const <link linkend="_structConfig">Config</link> &amp; )</computeroutput></para><para>
+
+<para>Class implicit constructor. </para>
+</para>
+</section>
+<para>
+The documentation for this class was generated from the following file:</para>
+src/<link linkend="_visualizer_8h">visualizer.h</link></section>
+</section>

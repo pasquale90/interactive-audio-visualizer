@@ -1,0 +1,116 @@
+\hypertarget{classAudiolizer}{}\doxysection{Audiolizer Class Reference}
+\label{classAudiolizer}\index{Audiolizer@{Audiolizer}}
+
+
+{\ttfamily \#include $<$audiolizer.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classAudiolizer_a416bdbc7e4c303d921cf8a1995a08c9a}{Audiolizer}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classAudiolizer_ae2d5ef5b64e46ce2f0b2820debd8b775}{$\sim$\+Audiolizer}} ()
+\begin{DoxyCompactList}\small\item\em Class destructor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classAudiolizer_a3d1642efacdb40dabfcc38570e70a338}{set\+Config}} (const \mbox{\hyperlink{structConfig}{Config}} \&cfg)
+\begin{DoxyCompactList}\small\item\em Implicit constructor. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classAudiolizer_a5482f721f05ec213d1ca0fd5224d7296}{turn\+\_\+\+Image\+\_\+into\+\_\+\+Sound}} (bool \&, int \&, cv\+::\+Mat \&, \mbox{\hyperlink{structRegionOfInterest}{Region\+Of\+Interest}} \&, float $\ast$, float $\ast$)
+\begin{DoxyCompactList}\small\item\em Member function responsible for obtaining image signal and converting it into sound of a certain frequency. comment method .... \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classAudiolizer_abb539248226943ca7a4c886992f39e45}{capture}} ()
+\begin{DoxyCompactList}\small\item\em Method responsible for obtaining the camera input in different thread. asynchronous camera frame capturing. It runs in it\textquotesingle{}s own thread. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 12 of file audiolizer.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classAudiolizer_a416bdbc7e4c303d921cf8a1995a08c9a}\label{classAudiolizer_a416bdbc7e4c303d921cf8a1995a08c9a}} 
+\index{Audiolizer@{Audiolizer}!Audiolizer@{Audiolizer}}
+\index{Audiolizer@{Audiolizer}!Audiolizer@{Audiolizer}}
+\doxysubsubsection{\texorpdfstring{Audiolizer()}{Audiolizer()}}
+{\footnotesize\ttfamily Audiolizer\+::\+Audiolizer (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Default constructor. 
+
+\mbox{\Hypertarget{classAudiolizer_ae2d5ef5b64e46ce2f0b2820debd8b775}\label{classAudiolizer_ae2d5ef5b64e46ce2f0b2820debd8b775}} 
+\index{Audiolizer@{Audiolizer}!````~Audiolizer@{$\sim$Audiolizer}}
+\index{````~Audiolizer@{$\sim$Audiolizer}!Audiolizer@{Audiolizer}}
+\doxysubsubsection{\texorpdfstring{$\sim$Audiolizer()}{~Audiolizer()}}
+{\footnotesize\ttfamily Audiolizer\+::$\sim$\+Audiolizer (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Class destructor. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classAudiolizer_abb539248226943ca7a4c886992f39e45}\label{classAudiolizer_abb539248226943ca7a4c886992f39e45}} 
+\index{Audiolizer@{Audiolizer}!capture@{capture}}
+\index{capture@{capture}!Audiolizer@{Audiolizer}}
+\doxysubsubsection{\texorpdfstring{capture()}{capture()}}
+{\footnotesize\ttfamily void Audiolizer\+::capture (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Method responsible for obtaining the camera input in different thread. asynchronous camera frame capturing. It runs in it\textquotesingle{}s own thread. 
+
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classAudiolizer_a3d1642efacdb40dabfcc38570e70a338}\label{classAudiolizer_a3d1642efacdb40dabfcc38570e70a338}} 
+\index{Audiolizer@{Audiolizer}!setConfig@{setConfig}}
+\index{setConfig@{setConfig}!Audiolizer@{Audiolizer}}
+\doxysubsubsection{\texorpdfstring{setConfig()}{setConfig()}}
+{\footnotesize\ttfamily void Audiolizer\+::set\+Config (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structConfig}{Config}} \&}]{cfg }\end{DoxyParamCaption})}
+
+
+
+Implicit constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em const} & \mbox{\hyperlink{structConfig}{Config}}\& cfg -\/ it receives a \mbox{\hyperlink{structConfig}{Config}} data structure to initialize member variables \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classAudiolizer_a5482f721f05ec213d1ca0fd5224d7296}\label{classAudiolizer_a5482f721f05ec213d1ca0fd5224d7296}} 
+\index{Audiolizer@{Audiolizer}!turn\_Image\_into\_Sound@{turn\_Image\_into\_Sound}}
+\index{turn\_Image\_into\_Sound@{turn\_Image\_into\_Sound}!Audiolizer@{Audiolizer}}
+\doxysubsubsection{\texorpdfstring{turn\_Image\_into\_Sound()}{turn\_Image\_into\_Sound()}}
+{\footnotesize\ttfamily bool Audiolizer\+::turn\+\_\+\+Image\+\_\+into\+\_\+\+Sound (\begin{DoxyParamCaption}\item[{bool \&}]{,  }\item[{int \&}]{,  }\item[{cv\+::\+Mat \&}]{,  }\item[{\mbox{\hyperlink{structRegionOfInterest}{Region\+Of\+Interest}} \&}]{,  }\item[{float $\ast$}]{,  }\item[{float $\ast$}]{ }\end{DoxyParamCaption})}
+
+
+
+Member function responsible for obtaining image signal and converting it into sound of a certain frequency. comment method .... 
+
+
+\begin{DoxyParams}[1]{Parameters}
+ & {\em bool\&} & track\+Enabled -\/ variable passed by reference to indicate whether there is a user interaction update. \\
+\hline
+ & {\em int\&} & freq -\/ variable passed by reference that sets a current value to the current generating frequency responce. \\
+\hline
+ & {\em cv\+::\+Mat\&} & frame -\/ variable passed by reference that sets a current value to the current generating frequency responce. \\
+\hline
+ & {\em Region\+Of\+Interest\&} & roi -\/ variable passed by reference that updates the value of the current tracking signal. \\
+\hline
+\mbox{\texttt{ out}}  & {\em float$\ast$} & left -\/ variable passed as a pointer for filling the left channel of the sine wave. \\
+\hline
+\mbox{\texttt{ out}}  & {\em float$\ast$} & right -\/ variable passed as a pointer for filling the right channel of the sine wave. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bool -\/ if a new frame has elapsed 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/\mbox{\hyperlink{audiolizer_8h}{audiolizer.\+h}}\end{DoxyCompactItemize}

@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_classBeatracker">
+<title>Beatracker Class Reference</title>
+<indexterm><primary>Beatracker</primary></indexterm>
+<para>
+<computeroutput>#include &lt;beatracker.h&gt;</computeroutput>
+</para>
+<simplesect>
+    <title>Public Member Functions    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_classBeatracker_1a522514fd1fcb175012c940a6694d1844">Beatracker</link> ()</para>
+</listitem>
+            <listitem><para><link linkend="_classBeatracker_1ad7105f108fb218a4793511c05713f6fc">Beatracker</link> (int)</para>
+</listitem>
+            <listitem><para><link linkend="_classBeatracker_1a4637494e852ed6b9df61f2cd66205f76">~Beatracker</link> ()</para>
+</listitem>
+            <listitem><para>void <link linkend="_classBeatracker_1a14361d082ec82a43db3debf2f9843b69">setConfig</link> (const <link linkend="_structConfig">Config</link> &amp;)</para>
+</listitem>
+            <listitem><para>bool <link linkend="_classBeatracker_1a7bce70503bd9b5569423e9d6c8cb86ee">isBeat</link> (double *)</para>
+</listitem>
+            <listitem><para>bool <link linkend="_classBeatracker_1a917a575a4b55bcc04e57832cfce510a6">isOnset</link> (double *)</para>
+</listitem>
+            <listitem><para>bool <link linkend="_classBeatracker_1a5e40468c257fae9960050685d91ae7f4">isDownbeat</link> ()</para>
+</listitem>
+            <listitem><para>float <link linkend="_classBeatracker_1ae000004f4977d11fc7fc9226b9655878">getCurrTempoEstimate</link> ()</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Detailed Description</title>
+<para>
+Definition at line 10 of file beatracker.h.</para>
+</section>
+<section>
+<title>Constructor &amp; Destructor Documentation</title>
+<anchor xml:id="_classBeatracker_1a522514fd1fcb175012c940a6694d1844"/>    <section>
+    <title>Beatracker()<computeroutput>[1/2]</computeroutput></title>
+<indexterm><primary>Beatracker</primary><secondary>Beatracker</secondary></indexterm>
+<indexterm><primary>Beatracker</primary><secondary>Beatracker</secondary></indexterm>
+<para><computeroutput>Beatracker::Beatracker ( )</computeroutput></para>    </section><anchor xml:id="_classBeatracker_1ad7105f108fb218a4793511c05713f6fc"/>    <section>
+    <title>Beatracker()<computeroutput>[2/2]</computeroutput></title>
+<indexterm><primary>Beatracker</primary><secondary>Beatracker</secondary></indexterm>
+<indexterm><primary>Beatracker</primary><secondary>Beatracker</secondary></indexterm>
+<para><computeroutput>Beatracker::Beatracker (int )</computeroutput></para>    </section><anchor xml:id="_classBeatracker_1a4637494e852ed6b9df61f2cd66205f76"/>    <section>
+    <title>~Beatracker()</title>
+<indexterm><primary>~Beatracker</primary><secondary>Beatracker</secondary></indexterm>
+<indexterm><primary>Beatracker</primary><secondary>~Beatracker</secondary></indexterm>
+<para><computeroutput>Beatracker::~Beatracker ( )</computeroutput></para></section>
+</section>
+<section>
+<title>Member Function Documentation</title>
+<anchor xml:id="_classBeatracker_1ae000004f4977d11fc7fc9226b9655878"/>    <section>
+    <title>getCurrTempoEstimate()</title>
+<indexterm><primary>getCurrTempoEstimate</primary><secondary>Beatracker</secondary></indexterm>
+<indexterm><primary>Beatracker</primary><secondary>getCurrTempoEstimate</secondary></indexterm>
+<para><computeroutput>float Beatracker::getCurrTempoEstimate ( )</computeroutput></para>    </section><anchor xml:id="_classBeatracker_1a7bce70503bd9b5569423e9d6c8cb86ee"/>    <section>
+    <title>isBeat()</title>
+<indexterm><primary>isBeat</primary><secondary>Beatracker</secondary></indexterm>
+<indexterm><primary>Beatracker</primary><secondary>isBeat</secondary></indexterm>
+<para><computeroutput>bool Beatracker::isBeat (double * )</computeroutput></para>    </section><anchor xml:id="_classBeatracker_1a5e40468c257fae9960050685d91ae7f4"/>    <section>
+    <title>isDownbeat()</title>
+<indexterm><primary>isDownbeat</primary><secondary>Beatracker</secondary></indexterm>
+<indexterm><primary>Beatracker</primary><secondary>isDownbeat</secondary></indexterm>
+<para><computeroutput>bool Beatracker::isDownbeat ( )</computeroutput></para>    </section><anchor xml:id="_classBeatracker_1a917a575a4b55bcc04e57832cfce510a6"/>    <section>
+    <title>isOnset()</title>
+<indexterm><primary>isOnset</primary><secondary>Beatracker</secondary></indexterm>
+<indexterm><primary>Beatracker</primary><secondary>isOnset</secondary></indexterm>
+<para><computeroutput>bool Beatracker::isOnset (double * )</computeroutput></para>    </section><anchor xml:id="_classBeatracker_1a14361d082ec82a43db3debf2f9843b69"/>    <section>
+    <title>setConfig()</title>
+<indexterm><primary>setConfig</primary><secondary>Beatracker</secondary></indexterm>
+<indexterm><primary>Beatracker</primary><secondary>setConfig</secondary></indexterm>
+<para><computeroutput>void Beatracker::setConfig (const <link linkend="_structConfig">Config</link> &amp; )</computeroutput></para></section>
+<para>
+The documentation for this class was generated from the following file:</para>
+src/<link linkend="_beatracker_8h">beatracker.h</link></section>
+</section>

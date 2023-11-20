@@ -1,0 +1,99 @@
+\hypertarget{classWaveform}{}\doxysection{Waveform Class Reference}
+\label{classWaveform}\index{Waveform@{Waveform}}
+
+
+{\ttfamily \#include $<$raw.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classWaveform_a4a10db706dde8126a190a650f0b639fb}{Waveform}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classWaveform_af4f2ae8b1749306657602b53a8ab90df}{$\sim$\+Waveform}} ()
+\begin{DoxyCompactList}\small\item\em Class destructor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classWaveform_a6949ecedf4f1cb6fb3a05cf6fe2db100}{set\+\_\+config}} (const \mbox{\hyperlink{structConfig}{Config}} \&)
+\begin{DoxyCompactList}\small\item\em Implicit constructor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classWaveform_a7da374d3faea3740f83bce0d39528296}{prepare\+\_\+waveform}} (float $\ast$, float $\ast$)
+\begin{DoxyCompactList}\small\item\em It fills an unknown size (buffer\+\_\+size $\ast$ (?)Buffers\+Elapsed) of data obtained from each buffer, while next visualization frame is not currently changing. \end{DoxyCompactList}\item 
+float $\ast$ \mbox{\hyperlink{classWaveform_af09161ce6c2a88f8a3b29bc067d6427c}{get\+Waveform}} (float \&, float \&, int \&)
+\begin{DoxyCompactList}\small\item\em It returns data collected from all buffers occured on the meantime, and sends them all to the \mbox{\hyperlink{classVisualizer}{Visualizer}} for further processing and visualization. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classWaveform_aa233c6fff1928bfb37b74fb883cdb970}{get\+Wave\+Len}} ()
+\begin{DoxyCompactList}\small\item\em Returns the current length of the signal. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 9 of file raw.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classWaveform_a4a10db706dde8126a190a650f0b639fb}\label{classWaveform_a4a10db706dde8126a190a650f0b639fb}} 
+\index{Waveform@{Waveform}!Waveform@{Waveform}}
+\index{Waveform@{Waveform}!Waveform@{Waveform}}
+\doxysubsubsection{\texorpdfstring{Waveform()}{Waveform()}}
+{\footnotesize\ttfamily Waveform\+::\+Waveform (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Default constructor. 
+
+\mbox{\Hypertarget{classWaveform_af4f2ae8b1749306657602b53a8ab90df}\label{classWaveform_af4f2ae8b1749306657602b53a8ab90df}} 
+\index{Waveform@{Waveform}!````~Waveform@{$\sim$Waveform}}
+\index{````~Waveform@{$\sim$Waveform}!Waveform@{Waveform}}
+\doxysubsubsection{\texorpdfstring{$\sim$Waveform()}{~Waveform()}}
+{\footnotesize\ttfamily Waveform\+::$\sim$\+Waveform (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Class destructor. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classWaveform_af09161ce6c2a88f8a3b29bc067d6427c}\label{classWaveform_af09161ce6c2a88f8a3b29bc067d6427c}} 
+\index{Waveform@{Waveform}!getWaveform@{getWaveform}}
+\index{getWaveform@{getWaveform}!Waveform@{Waveform}}
+\doxysubsubsection{\texorpdfstring{getWaveform()}{getWaveform()}}
+{\footnotesize\ttfamily float$\ast$ Waveform\+::get\+Waveform (\begin{DoxyParamCaption}\item[{float \&}]{,  }\item[{float \&}]{,  }\item[{int \&}]{ }\end{DoxyParamCaption})}
+
+
+
+It returns data collected from all buffers occured on the meantime, and sends them all to the \mbox{\hyperlink{classVisualizer}{Visualizer}} for further processing and visualization. 
+
+\mbox{\Hypertarget{classWaveform_aa233c6fff1928bfb37b74fb883cdb970}\label{classWaveform_aa233c6fff1928bfb37b74fb883cdb970}} 
+\index{Waveform@{Waveform}!getWaveLen@{getWaveLen}}
+\index{getWaveLen@{getWaveLen}!Waveform@{Waveform}}
+\doxysubsubsection{\texorpdfstring{getWaveLen()}{getWaveLen()}}
+{\footnotesize\ttfamily int Waveform\+::get\+Wave\+Len (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Returns the current length of the signal. 
+
+\mbox{\Hypertarget{classWaveform_a7da374d3faea3740f83bce0d39528296}\label{classWaveform_a7da374d3faea3740f83bce0d39528296}} 
+\index{Waveform@{Waveform}!prepare\_waveform@{prepare\_waveform}}
+\index{prepare\_waveform@{prepare\_waveform}!Waveform@{Waveform}}
+\doxysubsubsection{\texorpdfstring{prepare\_waveform()}{prepare\_waveform()}}
+{\footnotesize\ttfamily void Waveform\+::prepare\+\_\+waveform (\begin{DoxyParamCaption}\item[{float $\ast$}]{,  }\item[{float $\ast$}]{ }\end{DoxyParamCaption})}
+
+
+
+It fills an unknown size (buffer\+\_\+size $\ast$ (?)Buffers\+Elapsed) of data obtained from each buffer, while next visualization frame is not currently changing. 
+
+\mbox{\Hypertarget{classWaveform_a6949ecedf4f1cb6fb3a05cf6fe2db100}\label{classWaveform_a6949ecedf4f1cb6fb3a05cf6fe2db100}} 
+\index{Waveform@{Waveform}!set\_config@{set\_config}}
+\index{set\_config@{set\_config}!Waveform@{Waveform}}
+\doxysubsubsection{\texorpdfstring{set\_config()}{set\_config()}}
+{\footnotesize\ttfamily void Waveform\+::set\+\_\+config (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structConfig}{Config}} \&}]{ }\end{DoxyParamCaption})}
+
+
+
+Implicit constructor. 
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/\mbox{\hyperlink{raw_8h}{raw.\+h}}\end{DoxyCompactItemize}
