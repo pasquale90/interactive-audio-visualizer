@@ -1,10 +1,15 @@
 #!bin/bash
-make clean
-make
+rm -r build demo
+mkdir build
+cd build
+cmake ../
+cmake --build .
+mv demo ../
+cd ../
 
 ################################################################ ARGUMENTS ################################################################
 #---------------------------------------------------------------- system -----------------------------------------------------------------#
-audio_device=K6
+audio_device=Generic_1
 #----------------------------------------------------------------- audio -----------------------------------------------------------------#
 sample_rate=44100 #16000 #
 buffer_size=512 
@@ -66,7 +71,7 @@ nohup ${startJack_command} &> logs/audioServer.log &
 
 sleep 1
 
-clear
+# clear
 bash welcome
 
 # echo ${sudopass} | sudo -S -k ./demo ${sample_rate} ${buffer_size} &> logs/audio.log &

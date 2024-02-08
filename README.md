@@ -25,7 +25,7 @@ This project develops a novel interactive tool that aims to provide a real-time 
 - beat tracking : [BeatTrack](https://github.com/adamstark/BTrack)
 - fast fourier transform : [FFTW](http://fftw.org/)
 - tracking algorithm : [OpenCV CSRT/KFC/BOOSTING](https://docs.opencv.org/3.4/d9/df8/group__tracking.html)
-  - *for the real-time tracking feature, more than 15 c++ based methods has been tested (including hand, face, skeleton tracking and generic object detection/segmentation or optical flow), but discarded from the pipeline due to constraints met during development. An detailed report will be uploaded soon... Some of them are the following:
+  - *for the real-time tracking feature, more than 15 c++ based methods has been tested (including hand, face, skeleton tracking and generic object detection/segmentation or optical flow), but discarded from the pipeline due to constraints met during development. Some of them are the following:
      - [YOLO-NAS-onnx](https://github.com/pasquale90/YOLO-NAS-onnxruntime)
      - [openpose](https://github.com/pasquale90/openpose)
      - [deepstream pose estimation](https://github.com/NVIDIA-AI-IOT/deepstream_pose_estimation)
@@ -34,8 +34,15 @@ This project develops a novel interactive tool that aims to provide a real-time 
      - [BodySkeletonTracker](https://github.com/derzu/BodySkeletonTracker)
      - ...
 
-### Requirements and compilation insructions
-*Will be uploaded soon*
+### Dependencies
+ - [jack audio](https://jackaudio.org/)
+ - [opencv](https://opencv.org/)
+ - [fftw3](http://fftw.org/)
+ - [libsamplerate](https://github.com/libsndfile/libsamplerate)
+ - [BTrack](https://github.com/pasquale90/BTrack)
+
+### Compilation instructions
+  - Please follow [instructions](instructions.md) for compiling and running [IAV](https://github.com/pasquale90/interactive-audio-visualizer).
 
 ### Future steps involve the development of the following additional features: 
 - [ ] enriched visualization (i.e. visualize FFT)
@@ -43,3 +50,5 @@ This project develops a novel interactive tool that aims to provide a real-time 
 - [ ] add a drum transcription feature to enable the creation of rhythm patterns
 - [ ] Docker support (if feasible due to hardware constraints)
 - [ ] Fixes reported in the [todos](todos) file
+  - [x] provide instructions for building
+  - [x] upgrade Make to CMake
