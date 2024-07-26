@@ -72,7 +72,7 @@ nohup ${startJack_command} &> logs/audioServer.log &
 sleep 1
 
 # clear
-bash welcome
+bash ./scripts/welcome
 
 # echo ${sudopass} | sudo -S -k ./demo ${sample_rate} ${buffer_size} &> logs/audio.log &
 ./demo ${args} &> logs/audio.log &

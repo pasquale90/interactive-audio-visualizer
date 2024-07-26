@@ -6,7 +6,7 @@ This project develops a novel interactive tool that aims to provide a real-time 
    
 ### Video Demo
     
-[![Interactive Audio Visualizer demo gif](iav.gif)](https://youtu.be/y8mJdEyd31Y)
+[![Interactive Audio Visualizer demo gif](files/iav.gif)](https://youtu.be/y8mJdEyd31Y)
 
 
  :notes: <sup>*click on frame to navigate to my video demonstration content on Youtube*</sup> :sound:
@@ -14,9 +14,9 @@ This project develops a novel interactive tool that aims to provide a real-time 
 
 ### Contents (will be updated soon)
 
-- [Documentation](docs/readme.md)
-- [preliminary analysis steps](docs/preliminary_steps.md)
-- [UML desing](uml.drawio) (will be updated soon)
+- [Documentation](files/documentation/readme.md)
+- [preliminary analysis steps](files/documentation/preliminary_steps.md)
+
 - build instructions (will be provided soon)
 
 #### Libraries
@@ -42,13 +42,14 @@ This project develops a novel interactive tool that aims to provide a real-time 
  - [BTrack](https://github.com/pasquale90/BTrack)
 
 ### Compilation instructions
-  - Please follow [instructions](instructions.md) for compiling and running [IAV](https://github.com/pasquale90/interactive-audio-visualizer).
+  - Please follow [instructions](files/instructions.md) for compiling and running [IAV](https://github.com/pasquale90/interactive-audio-visualizer).
 
 ### Future steps involve the development of the following additional features: 
 - [ ] enriched visualization (i.e. visualize FFT)
 - [ ] replace linear audio frequency transition with a grid of predefined notes.
 - [ ] add a drum transcription feature to enable the creation of rhythm patterns
 - [ ] Docker support (if feasible due to hardware constraints)
-- [ ] Fixes reported in the [todos](todos) file
+- [ ] Fixes reported in the [todos](files/todos) file
   - [x] provide instructions for building
   - [x] upgrade Make to CMake
+- [ ] rework
