@@ -60,8 +60,8 @@ void audioBufferCallback(jack_default_audio_sample_t* left, jack_default_audio_s
     
     if (exit_msg){
         myAudioStream.~AudioStream(); // check if jackshutdown is set appropriately
-        vs.~Visualizer();
-        al.~Audiolizer();
+        vs.shutdown();
+        al.shutdown();
         // bt.~Beatracker();
     }
 }
@@ -80,10 +80,10 @@ int main(int argc,char **argv){
     const char* serverName=NULL;
     const char* clientName="myAudioStream"; 
     // myAudioStream = new AudioStream(cfg,serverName,clientName);
-    myAudioStream.setConfig(serverName,clientName);
-    al.setConfig(cfg);
+    myAudioStream.setup(serverName,clientName);
+    al.setup(cfg);
     // bt.setConfig(cfg);
-    vs.setConfig(cfg);
+    vs.setup(cfg);
 
     std::thread trackingThread(&Audiolizer::capture, &al);
 

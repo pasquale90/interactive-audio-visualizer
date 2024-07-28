@@ -9,15 +9,16 @@ Audiolizer::Audiolizer(){
     */
 }
 
-Audiolizer::~Audiolizer(){
-    camera_tracker.~VideoTracker();
+void Audiolizer::shutdown(){
+    sig.erase();
+    camera_tracker.terminate();
 }
 
-void Audiolizer::setConfig(const Config& cfg){
+void Audiolizer::setup(const Config& cfg){
     
     //initialize all settings    
-    camera_tracker.setConfig(cfg);
-    sig.set_config(cfg);
+    camera_tracker.setup(cfg);
+    sig.setup(cfg);
     camera_tracker.display_config();
     maxW = cfg.camResW;
     maxH = cfg.camResH;

@@ -6,12 +6,12 @@ VideoTracker::VideoTracker(){
     patternlocked.store(false);
 }
 
-VideoTracker::~VideoTracker(){
+void VideoTracker::terminate(){
 }
 
-void VideoTracker::setConfig(const Config& cfg){
+void VideoTracker::setup(const Config& cfg){
     
-    camera.setConfig(cfg);
+    camera.setup(cfg);
     camera.display_config();
 
     radius=cfg.radius;

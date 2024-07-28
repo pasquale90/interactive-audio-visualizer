@@ -17,15 +17,15 @@ public:
     */
     Audiolizer();
 
-    /*! @brief Class destructor.
+    /*! @brief Class implicit destructor.
     */
-    ~Audiolizer();
+    void shutdown();
 
    /*! @brief Implicit constructor.
     * @param const Config& cfg - it receives a Config data structure to initialize member variables
     * @return void
     */
-    void setConfig(const Config& cfg);
+    void setup(const Config& cfg);
     
    /*! @brief Member function responsible for obtaining image signal and converting it into sound of a certain frequency.
     * comment method ....

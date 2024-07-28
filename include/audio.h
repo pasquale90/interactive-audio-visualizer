@@ -44,7 +44,7 @@ public:
         * @param const char* clientName - name of the client connected to the server
         * @return void
     */
-    void setConfig(const char* serverName,const char* clientName); 
+    void setup(const char* serverName,const char* clientName); 
 
     /*! @brief Creates the connection graph which connects the inputs with the outputs
     * @return void

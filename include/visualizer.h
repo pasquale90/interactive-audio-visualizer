@@ -3,7 +3,7 @@
 
 #include "raw.h"
 #include "fft.h"
-#include "roi.cpp"
+#include "roi.h"
 #include <opencv2/opencv.hpp>
 // #include <opencv2/core/core.hpp>
 // #include "opencv2/highgui/highgui.hpp"
@@ -15,11 +15,11 @@ public:
     /*! @brief Default constructor */
     Visualizer();
 
-    /*! @brief Class destructor */
-    ~Visualizer();
+    /*! @brief Class implicit destructor */
+    void shutdown();
 
     /*! @brief Class implicit constructor */
-    void setConfig(const Config&);
+    void setup(const Config&);
 
     /*! @brief Method resplonsible for visualization.
      * @param[in] float* left audio buffer filled with a sine wave tone

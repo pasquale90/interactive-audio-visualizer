@@ -9,7 +9,7 @@ Camera::Camera(){
     toggleFrame=false;
 }
 
-void Camera::setConfig(const Config& cfg){
+void Camera::setup(const Config& cfg){
     camW=cfg.camResW; 
     camH=cfg.camResH;
     fps=cfg.camfps;
@@ -45,7 +45,7 @@ void Camera::display_config(){
     std::cout<<"Camera config :: fps "<<fps<<std::endl;
 }
 
-Camera::~Camera(){
+void Camera::turnOff(){
     frame.release();
     cap.release();
     std::cout<<"Camera object destructed"<<std::endl;

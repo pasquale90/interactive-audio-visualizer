@@ -12,11 +12,11 @@ public:
     /*! @brief Default constructor */
     Waveform();
 
-    /*! @brief Class destructor */
-    ~Waveform();    
+    /*! @brief Class implicit destructor */
+    void clean();    
 
     /*! @brief Implicit constructor */
-    void set_config(const Config&);
+    void setup(const Config&);
 
     /*! @brief It fills an unknown size (buffer_size * (?)BuffersElapsed) of data obtained from each buffer, while next visualization frame is not currently changing */
     void prepare_waveform(float*,float*);

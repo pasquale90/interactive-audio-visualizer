@@ -2,7 +2,7 @@
 #define CONFIG_H
 
 #include "console.h"
-#include "config_defaults.cpp"
+#include "config_defaults.h"
 
 struct Config{
    /*! @brief Struct constructor.

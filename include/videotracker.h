@@ -10,7 +10,7 @@
 #include <opencv2/tracking/tracker.hpp>
 
 #include "camera.h"
-#include "roi.cpp"
+#include "roi.h"
 
 class VideoTracker{
 public:
@@ -18,11 +18,11 @@ public:
     /*! @brief Default constructor */
     VideoTracker();
 
-    /*! @brief Class destructor */
-    ~VideoTracker();
+    /*! @brief Class implicit destructor */
+    void terminate();
 
     /*! @brief Implicit constructor */
-    void setConfig(const Config& cfg);
+    void setup(const Config& cfg);
 
     /*! @brief Displays initialized member variables */
     void display_config();

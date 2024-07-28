@@ -11,12 +11,10 @@ set(SOURCE_FILES
     src/audiolizer.cpp
     src/camera.cpp
     src/config.cpp
-    src/config_defaults.cpp
     src/console.cpp
     src/fft.cpp
     src/main.cpp
     src/raw.cpp
-    src/roi.cpp
     src/signal.cpp
     src/videotracker.cpp
     src/visualizer.cpp
@@ -29,6 +27,7 @@ find_path(OPENCV_INCLUDE_DIR
 
 set(BTRACK_INCLUDE_DIR libraries/BTrack/src)
 set(INCLUDE_DIRECTORIES
+    include
     ${OPENCV_INCLUDE_DIR}
     ${BTRACK_INCLUDE_DIR}
 )

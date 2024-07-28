@@ -7,7 +7,7 @@ int streamAudio (jack_nframes_t nframes, void *arg){ //, float *in,void (*thread
 AudioStream::AudioStream(){
 }
 
-void AudioStream::setConfig(const char* serverName,const char* clientName){
+void AudioStream::setup(const char* serverName,const char* clientName){
     
     jack_options_t options = JackNoStartServer;//(JackSessionID|JackServerName|JackNoStartServer|JackUseExactName|JackNullOption)
 	jack_status_t status;

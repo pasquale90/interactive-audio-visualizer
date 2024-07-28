@@ -20,13 +20,13 @@ Signal::Signal(){
 	amplitude = 0.1;				// not even heuristic
 }
 
-void Signal::set_config(const Config& cfg){
+void Signal::setup(const Config& cfg){
 	sampleRate=cfg.sampleRate;
 	bufferSize=cfg.bufferSize;
     sine=new double[bufferSize];
 }
 
-Signal::~Signal(){
+void Signal::erase(){
     delete[] sine;
 }
 

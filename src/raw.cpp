@@ -3,12 +3,12 @@
 Waveform::Waveform(){
 }
 
-Waveform::~Waveform(){
+void Waveform::clean(){
     delete[] wave;
     std::cout<<"Waveform object destroyed"<<std::endl;
 }
 
-void Waveform::set_config(const Config &cfg){
+void Waveform::setup(const Config &cfg){
     
     buffer_size=cfg.bufferSize;
     int radius = cfg.radius;

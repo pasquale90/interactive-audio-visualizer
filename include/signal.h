@@ -20,10 +20,10 @@ public:
     Signal();
 
     /*! @brief Class destructor.  */
-    ~Signal();
+    void erase();
 
     /*! @brief Class implicit constructor.  */
-    void set_config(const Config&);
+    void setup(const Config&);
 
     /*! @brief Method for that generates a phase-shifted tone to fill the current buffer*/
     void prepareSine(int);

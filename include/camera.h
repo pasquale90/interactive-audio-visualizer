@@ -16,10 +16,10 @@ public:
     Camera();
 
     /*! @brief Class destructor.*/
-    ~Camera();
+    void turnOff();
 
     /*! @brief Class implicit constructor*/
-    void setConfig(const Config&);
+    void setup(const Config&);
 
     /*! @brief Method for capturing frames received from the camera. It is called by Audiolizer*/
     bool capture(cv::Mat&);

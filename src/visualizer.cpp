@@ -6,17 +6,17 @@ Visualizer::Visualizer(){
      */
 }
 
-Visualizer::~Visualizer(){
+void Visualizer::shutdown(){
     // delete[] dft;
     cv::destroyWindow("Interactive Audio Visualizer");  
     visualFrame.release();
     camBinaryMask.release();
-    wf.~Waveform();
+    wf.clean();
     // sp.~Spectrogram();  
     std::cout<<"Visualizer destructed"<<std::endl;
 }
 
-void Visualizer::setConfig(const Config& cfg){
+void Visualizer::setup(const Config& cfg){
     
     W=cfg.displayW;
     H=cfg.displayH;
@@ -31,7 +31,7 @@ void Visualizer::setConfig(const Config& cfg){
     cv::Mat img(H,W, CV_8UC3,cv::Scalar(0,0,0));
     visualFrame = img;
         
-    wf.set_config(cfg);
+    wf.setup(cfg);
     
 
     // buffersPerFrame=std::ceil((SR/buffer_size)/(double)fps);
