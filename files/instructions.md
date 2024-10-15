@@ -68,6 +68,3 @@ To stop the jack audio server, simply run:
 ```
 bash stop.sh
 ```
-
-
-For more information you may consider mailing at melissaspaschalis@gmail.com
