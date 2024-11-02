@@ -11,8 +11,9 @@ if [ "$1" == "clean" ]
     exit
 fi
 
-mkdir ${rootDir}/${testDir}/build
+mkdir -p ${rootDir}/${testDir}/build
 cd ${rootDir}/${testDir}/build
 cmake ..
 cmake --build .
+mkdir -p ${rootDir}/bin/
 mv ${exeFile} ${rootDir}/bin/
