@@ -1,9 +1,9 @@
-name: GitHub Actions Demo
+name: CI custom demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: [push]
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
     steps:
-      - run: bash scripts/compileTests.sh
-      - run: ./bin/test_all
+      - run: bash ${{ github.workspace }}scripts/compileTests.sh
+      - run: .${{ github.workspace }}/bin/test_all
