@@ -5,5 +5,5 @@ jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
     steps:
-      - run: bash ${{ github.workspace }}scripts/compileTests.sh
+      - run: bash ${{ github.workspace }}/scripts/compileTests.sh
       - run: .${{ github.workspace }}/bin/test_all
