@@ -9,6 +9,6 @@ jobs:
       - uses: actions/checkout@v4
     
       - name: Build tests
-        run: ${PWD}/scripts/compileTests.s
+        run: ${PWD}/scripts/compileTests.sh
       - name: Apply tests
         run: ${PWD}/bin/test_all
