@@ -1,12 +1,16 @@
 cmake_minimum_required(VERSION 3.10)
-
-project(demo)
+project(interactive-audio-visualizer)
 
 set(CMAKE_CXX_STANDARD 11)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -pedantic -Wall -Wextra -Wno-error")
 
 set(SOURCE_FILES
+    src/gui/audiohw.cpp
+    src/gui.cpp
+    src/gui/camerahw.cpp
+    src/gui/screenhw.cpp
+    src/settings.cpp
     # src/audio.cpp
     # src/audiolizer.cpp
     # src/camera.cpp
@@ -26,32 +30,45 @@ set(SOURCE_FILES
 # )
 
 # set(BTRACK_INCLUDE_DIR libraries/BTrack/src)
-# set(INCLUDE_DIRECTORIES
-#     include
-#     ${OPENCV_INCLUDE_DIR}
-#     ${BTRACK_INCLUDE_DIR}
-# )
+set(INCLUDE_DIRECTORIES
+    include
+    include/gui    
+    # ${OPENCV_INCLUDE_DIR}
+    # ${BTRACK_INCLUDE_DIR}
+)
 
 # include(CMakePrintHelpers)
 # cmake_print_variables(INCLUDE_DIRECTORIES)
 
-# set(LIBRARIES
-#     jack
-#     fftw3
-#     samplerate
-#     opencv_core
-#     opencv_highgui
-#     opencv_imgproc
-#     opencv_videoio
-#     opencv_video
-#     opencv_imgcodecs
-#     opencv_features2d
-#     opencv_tracking
-#     pthread
-# )
+find_package(Qt6 COMPONENTS Widgets Core Gui REQUIRED)
 
-add_executable(demo ${SOURCE_FILES})
+set(LIBRARIES
+    Qt6::Widgets
+    Qt6::Core
+    Qt6::Gui
+    asound
+    v4l2
+    X11
+    Xrandr
+    sqlite3
+    # jack
+    # fftw3
+    # samplerate
+    # opencv_core
+    # opencv_highgui
+    # opencv_imgproc
+    # opencv_videoio
+    # opencv_video
+    # opencv_imgcodecs
+    # opencv_features2d
+    # opencv_tracking
+    # pthread
+)
 
-target_include_directories(demo PRIVATE ${INCLUDE_DIRECTORIES})
+add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
-# target_link_libraries(demo ${LIBRARIES})
+target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_DIRECTORIES})
+
+target_link_libraries(${PROJECT_NAME} ${LIBRARIES})
+
+set_target_properties(${PROJECT_NAME} PROPERTIES AUTOMOC ON)

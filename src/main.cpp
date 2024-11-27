@@ -18,9 +18,49 @@
   * @param char **argv - arguments. These are parsed through the InputParser class defined in console.* files.
   * @return int - success / failure of program
   */
-int main(int argc,char **argv){
+// int main(int argc,char **argv){
+
+//     std::cout<<"Hello IAV!"<<std::endl;
+    
+//     return 0;
+// }
+
+
+#include <cstdint>
+#include <iostream>
+#include "gui.h"
+
+int main(int argc, char *argv[]){
+    GUI gui(argc, argv);
+    return 0;
+}
+
+
+void start_iav() {
+
+    // int i = 2;
+    // while (i >0 ){
+    //     std::cout<<".";
+    //     i--;
+    //     sleep(1);
+    // }
+    // std::cout << "Application started!" << std::endl;
 
     std::cout<<"Hello IAV!"<<std::endl;
     
-    return 0;
+    SettingsDB settingsDB;
+    std::unordered_map<std::string, std::string> settings = settingsDB.loadSettings();
+    std::cout<<"audioDevice "<<settings["audioDevice"]<<std::endl;
+    std::cout<<"sampleRate "<<settings["sampleRate"]<<std::endl;
+    std::cout<<"cameraDevice "<<settings["cameraDevice"]<<std::endl;
+    std::cout<<"resolution "<<settings["resolution"]<<std::endl;
+    std::cout<<"bufferSize "<<settings["bufferSize"]<<std::endl;
+    std::cout<<"frameRate "<<settings["frameRate"]<<std::endl;
+    std::cout<<"displayResolution "<<settings["displayResolution"]<<std::endl;
+    std::cout<<"displayFrameRate "<<settings["displayFrameRate"]<<std::endl;
+    std::cout<<"frequencyRange "<<settings["frequencyRange"]<<std::endl;
+    std::cout<<"roi "<<settings["roi"]<<std::endl;
+    std::cout<<"trigger "<<settings["trigger"]<<std::endl;
+    std::cout<<"trackingAlgorithm "<<settings["trackingAlgorithm"]<<std::endl;
+
 }
