@@ -1,7 +1,6 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include <filesystem>
 #include <unordered_map>
 #include <sqlite3.h>
 #include "paths.h"
