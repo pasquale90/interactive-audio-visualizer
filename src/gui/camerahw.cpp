@@ -1,4 +1,5 @@
 #include "gui/camerahw.h"
+#include <cstddef>
 
 std::vector<CameraInfo> getAvailableCameras() {
     std::vector<CameraInfo> cameras;
@@ -56,8 +57,8 @@ std::vector<CameraInfo> getAvailableCameras() {
                         uniquesResolutionValues.insert(resVal);
                     }
                 } else if (frmsizeenum.type == V4L2_FRMSIZE_TYPE_STEPWISE) {
-                     for (int w = frmsizeenum.stepwise.min_width; w <= frmsizeenum.stepwise.max_width; w += frmsizeenum.stepwise.step_width) {
-                        for (int h = frmsizeenum.stepwise.min_height; h <= frmsizeenum.stepwise.max_height; h += frmsizeenum.stepwise.step_height) {
+                     for (size_t w = frmsizeenum.stepwise.min_width; w <= frmsizeenum.stepwise.max_width; w += frmsizeenum.stepwise.step_width) {
+                        for (size_t h = frmsizeenum.stepwise.min_height; h <= frmsizeenum.stepwise.max_height; h += frmsizeenum.stepwise.step_height) {
 
                             std::string resVal = std::to_string(w) +"x"+ std::to_string(h);
                             if(uniquesResolutionValues.find(resVal)== uniquesResolutionValues.end()){

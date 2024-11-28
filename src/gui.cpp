@@ -1,4 +1,5 @@
 #include "gui.h"
+#include <cstddef>
 
 // forward declaration in main.cpp
 void start_iav();
@@ -186,7 +187,7 @@ void GUI::initializeTexts(){
         // printf("%s : %d, %d\n",name.c_str(), sr.first, sr.second);
         QString audio_device = QString::fromStdString(name);
         audioDevices.append(audio_device);
-        for (int i = 0; i< supportedRates.size(); ++i){
+        for (size_t i = 0; i< supportedRates.size(); ++i){
             if (supportedRates[i] >= sr.first && supportedRates[i]<= sr.second)
                 sampleRates[audio_device].append(QString::number(supportedRates[i]));
         }
