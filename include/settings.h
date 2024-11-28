@@ -9,7 +9,7 @@
 class SettingsDB {
 public:
 
-    SettingsDB(const std::string& db_path=Paths::dbPath);
+    SettingsDB(const std::string& db_path=Paths::databasePath);
     ~SettingsDB();
     bool saveSettings(const std::unordered_map<std::string, std::string>& settings);
     std::unordered_map<std::string, std::string> loadSettings();
