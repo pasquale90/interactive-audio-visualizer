@@ -20,7 +20,10 @@ public:
     GUI(int argc, char *argv[]);
 
 private:
-    
+
+    std::vector<std::string> audioExplanations;
+
+
     void initializeComponents();
     void initializeTexts();
     void setupComboBoxes(QApplication);

@@ -1,4 +1,5 @@
 #include "gui/audiohw.h"
+#include <utility>
 
 bool get_sampleRate_range(int card, int device, std::pair<unsigned int, unsigned int> &sample_rate)
 {
@@ -8,7 +9,7 @@ bool get_sampleRate_range(int card, int device, std::pair<unsigned int, unsigned
     char name[32];
     unsigned int sample_rate_min, sample_rate_max;
 
-    // Open the PCM device
+    // Open the PCM device    
     sprintf(name, "hw:%d,%d", card, device);
     err = snd_pcm_open(&handle, name, SND_PCM_STREAM_PLAYBACK, 0);
     if (err < 0) {
@@ -27,6 +28,7 @@ bool get_sampleRate_range(int card, int device, std::pair<unsigned int, unsigned
         return 0;
     }
 
+    
     // Get sample rate range
     err = snd_pcm_hw_params_get_rate_min(params, &sample_rate_min, NULL);
     if (err < 0) {
@@ -90,7 +92,7 @@ int get_audio_hardware_info(AHI &audio_hw_info){
 
         std::string card_id = snd_ctl_card_info_get_id(info) ; 
         std::string mixer = snd_ctl_card_info_get_mixername(info);
-        card_id = card_id + "("+mixer+")";
+// card_id = card_id + "("+mixer+")";
 
         // Free the card info
         snd_ctl_card_info_free(info);
@@ -102,8 +104,8 @@ int get_audio_hardware_info(AHI &audio_hw_info){
         while(!get_sampleRate_range(card, device,sample_rate_range)){
             ++device;
         }
-        
-        audio_hw_info.push_back({card_id, sample_rate_range});
+
+        audio_hw_info.push_back({ std::make_pair(card_id,mixer) , sample_rate_range});
         
     }
 

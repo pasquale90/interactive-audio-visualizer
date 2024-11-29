@@ -57,18 +57,29 @@ void GUI::initializeComponents(){
 
 
 void GUI::addExplanations(){
-    // Add explanation to the roi comboBox options
+
+    // Add explanation to the audio devices,
+    for (size_t i = 0; i<audioExplanations.size(); ++i)
+        deviceComboBox->setItemData(i, QString::fromStdString( audioExplanations[i] ), Qt::ToolTipRole);
+
+    // .. to the frame rates of both camera and screen,
+    frameRateComboBox->setItemData(0, "≈25-30 fps", Qt::ToolTipRole);
+    displayFrameRateComboBox->setItemData(0, "≈25-30 fps", Qt::ToolTipRole);
+
+    // ... to the roi comboBox options,
     roiComboBox->setItemData(0, "5% of camera's capture resolution.", Qt::ToolTipRole);
     roiComboBox->setItemData(1, "10% of camera's capture resolution.", Qt::ToolTipRole);
     roiComboBox->setItemData(2, "15% of camera's capture resolution.", Qt::ToolTipRole);
 
-    // Add explanation to the roi comboBox options
+    // .. to the capturing method,
     triggerComboBox->setItemData(0, "Capturing is initialized manually, using the Space Bar key", Qt::ToolTipRole);
-    triggerComboBox->setItemData(1, "A 5sec timer will initialize the capturing", Qt::ToolTipRole);
+    triggerComboBox->setItemData(1, "A 5-seconds timer will initialize the capturing", Qt::ToolTipRole);
 
+    // .. and finally to the frequency ranges
     frequencyRangeComboBox->setItemData(0, "300 Hz up to 700 Hz", Qt::ToolTipRole);
     frequencyRangeComboBox->setItemData(1, "300 Hz up to 1500 Hz", Qt::ToolTipRole);
     frequencyRangeComboBox->setItemData(2, "100 Hz up to 20 kHz", Qt::ToolTipRole);
+
 }
 
 GUI::GUI(int argc, char *argv[]) {
@@ -125,7 +136,7 @@ GUI::GUI(int argc, char *argv[]) {
             updateResolution(text);
         });
 
-    cameraLayout.addWidget(createDropDownList(frameRateComboBox,cameraFrameRateLabel, {"≈25-30 fps"}));
+    cameraLayout.addWidget(createDropDownList(frameRateComboBox,cameraFrameRateLabel, {"Auto"}));
     cameraSettings.setLayout(&cameraLayout);
     mainLayout.addWidget(&cameraSettings);
 
@@ -133,7 +144,7 @@ GUI::GUI(int argc, char *argv[]) {
     QGroupBox displaySettings("Display Settings");
     QVBoxLayout displayLayout;
     displayLayout.addWidget(createDropDownList(displayResolutionComboBox,screenResolutionLabel, displayResolutions));
-    displayLayout.addWidget(createDropDownList(displayFrameRateComboBox,screenFrameRateLabel, {"≈25-30 fps"}));
+    displayLayout.addWidget(createDropDownList(displayFrameRateComboBox,screenFrameRateLabel, {"Auto"}));
     displaySettings.setLayout(&displayLayout);
     mainLayout.addWidget(&displaySettings);
 
@@ -183,9 +194,10 @@ void GUI::initializeTexts(){
     // Get audio devices and sample rates supported
     AHI audio_hw_info;
     get_audio_hardware_info(audio_hw_info);
-    for (const auto&[name,sr]:audio_hw_info){
+    for (const auto&[info,sr]:audio_hw_info){
         // printf("%s : %d, %d\n",name.c_str(), sr.first, sr.second);
-        QString audio_device = QString::fromStdString(name);
+        QString audio_device = QString::fromStdString(info.first);
+        audioExplanations.push_back(info.second);
         audioDevices.append(audio_device);
         for (size_t i = 0; i< supportedRates.size(); ++i){
             if (supportedRates[i] >= sr.first && supportedRates[i]<= sr.second)
@@ -211,6 +223,7 @@ void GUI::initializeTexts(){
     for(const std::pair&[width,height] : screen_resolutions){
         displayResolutions.append(QString::number(width) + "x" + QString::number(height));
     }
+
 }
 
 
@@ -221,7 +234,7 @@ void GUI::saveCurrentStates(){
     settings["audioDevice"] = deviceComboBox->currentText().toStdString();
     settings["sampleRate"] = sampleRateComboBox->currentText().toStdString();
     settings["cameraDevice"] = cameraDeviceComboBox->currentText().toStdString();
-    settings["resolution"] = resolutionComboBox->currentText().toStdString();
+    settings["cameraResolution"] = resolutionComboBox->currentText().toStdString();
     settings["bufferSize"] = bufferSizeComboBox->currentText().toStdString();
     settings["frameRate"] = frameRateComboBox->currentText().toStdString();
     settings["displayResolution"] = displayResolutionComboBox->currentText().toStdString();
@@ -245,8 +258,8 @@ void GUI::loadCurrentStates(){
             sampleRateComboBox->setCurrentText(QString::fromStdString(settings["sampleRate"]));
         if (cameraDevices.contains(QString::fromStdString(settings["cameraDevice"])))
             cameraDeviceComboBox->setCurrentText(QString::fromStdString(settings["cameraDevice"]));
-        if (cameraResolutions[QString::fromStdString(settings["cameraDevice"])].contains(QString::fromStdString(settings["resolution"])))
-            resolutionComboBox->setCurrentText(QString::fromStdString(settings["resolution"]));
+        if (cameraResolutions[QString::fromStdString(settings["cameraDevice"])].contains(QString::fromStdString(settings["cameraResolution"])))
+            resolutionComboBox->setCurrentText(QString::fromStdString(settings["cameraResolution"]));
         bufferSizeComboBox->setCurrentText(QString::fromStdString(settings["bufferSize"]));
         frameRateComboBox->setCurrentText(QString::fromStdString(settings["frameRate"]));
         if (displayResolutions.contains(QString::fromStdString(settings["displayResolution"])))
