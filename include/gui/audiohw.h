@@ -7,6 +7,10 @@
 #include <utility>
 #include <vector>
 #include <string>
+#include <climits>
+
+const std::vector<unsigned int> supportedRates({8000, 11025, 16000, 22050, 32000, 44100, 48000, 88200, 96000, 176000, 192000, 352800, 384000});
+constexpr int quantizationRatio { sizeof(float) * CHAR_BIT };
 
 using AHI=std::vector<std::pair<std::string, std::pair<unsigned int, unsigned int>>>;
 

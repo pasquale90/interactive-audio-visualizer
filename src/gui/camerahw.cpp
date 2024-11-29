@@ -1,6 +1,12 @@
 #include "gui/camerahw.h"
 #include <cstddef>
 
+#include <algorithm>
+
+static bool compareResolutions(std::pair<int, int> r1,std::pair<int, int> r2){
+    return (r1.first > r2.first) ? true : (r1.second > r2.second);
+}
+
 std::vector<CameraInfo> getAvailableCameras() {
     std::vector<CameraInfo> cameras;
     std::unordered_set<std::string> uniquesResolutionValues;
@@ -65,8 +71,6 @@ std::vector<CameraInfo> getAvailableCameras() {
                                 camera.resolutions.push_back({w,h});
                                 uniquesResolutionValues.insert(resVal);
                             }
-
-                    
                         }
                     }
                 }
@@ -76,6 +80,7 @@ std::vector<CameraInfo> getAvailableCameras() {
              fmtdesc.index++;
         }
 
+        std::sort(camera.resolutions.begin(),camera.resolutions.end(),compareResolutions);
         cameras.push_back(camera);
         close(fd);
     }

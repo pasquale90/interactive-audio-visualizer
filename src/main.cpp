@@ -11,6 +11,7 @@
  * the License, or (at your option) any later version.
 ***********************************************/
 #include <iostream>
+#include "gui.h"
 
 /*! @brief main function.
   * Two pointers are passed to fill a sine signal using the Audiolizer, which is then passed into the Visualizer for controling image properties using audio analysis tools.
@@ -18,17 +19,6 @@
   * @param char **argv - arguments. These are parsed through the InputParser class defined in console.* files.
   * @return int - success / failure of program
   */
-// int main(int argc,char **argv){
-
-//     std::cout<<"Hello IAV!"<<std::endl;
-    
-//     return 0;
-// }
-
-
-#include <cstdint>
-#include <iostream>
-#include "gui.h"
 
 int main(int argc, char *argv[]){
     GUI gui(argc, argv);

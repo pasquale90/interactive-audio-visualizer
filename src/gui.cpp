@@ -1,17 +1,13 @@
 #include "gui.h"
 #include <cstddef>
+#include <string>
 
-// forward declaration in main.cpp
+// forward declaration of function defined in main.cpp
 void start_iav();
-
-#include <iostream> // erase latter
 
 #include "audiohw.h"
 #include "camerahw.h"
 #include "screenhw.h"
-
-std::vector<unsigned int> supportedRates({8000, 11025, 16000, 22050, 32000, 44100, 48000, 88200, 96000, 176000, 192000, 352800, 384000});
-
 
 void GUI::initializeComponents(){
     
@@ -20,6 +16,7 @@ void GUI::initializeComponents(){
     cameraDeviceComboBox = new QComboBox();
     resolutionComboBox = new QComboBox();
     bufferSizeComboBox = new QComboBox();
+    quantizationComboBox = new QComboBox();
     frameRateComboBox= new QComboBox();
     displayResolutionComboBox= new QComboBox();
     displayFrameRateComboBox= new QComboBox();
@@ -33,6 +30,7 @@ void GUI::initializeComponents(){
     cameraDeviceLabel = new QLabel("Device:");
     cameraResolutionLabel = new QLabel("Resolution:");
     bufferSizeLabel = new QLabel("Buffer Size");
+    quantizationLabel = new QLabel("Quantization");
     cameraFrameRateLabel = new QLabel("Frame Rate");
     screenResolutionLabel= new QLabel("Resolution");
     screenFrameRateLabel= new QLabel("Frames per second");
@@ -46,6 +44,7 @@ void GUI::initializeComponents(){
     cameraDeviceLabel->setToolTip("Select camera input device.");
     cameraResolutionLabel->setToolTip("Set camera capture resolution.");
     bufferSizeLabel->setToolTip("Configure audio buffer size.");
+    quantizationLabel->setToolTip("Quantization range for digitalizing audio data");
     cameraFrameRateLabel->setToolTip("Set camera frame rate (currently fixed).");
     screenResolutionLabel->setToolTip("Select screen resolution.");
     screenFrameRateLabel->setToolTip("Set screen frame rate (currently fixed).");
@@ -103,6 +102,7 @@ GUI::GUI(int argc, char *argv[]) {
     });
     
     audioLayout.addWidget(createDropDownList(bufferSizeComboBox,bufferSizeLabel, {"32", "64", "128", "256", "512", "1024", "2048", "4096"}));
+    audioLayout.addWidget(createDropDownList(quantizationComboBox,quantizationLabel, {QString::number( quantizationRatio )} ));
     audioSettings.setLayout(&audioLayout);
     mainLayout.addWidget(&audioSettings);
 
@@ -232,7 +232,6 @@ void GUI::saveCurrentStates(){
     settings["trackingAlgorithm"] = trackingAlgorithmComboBox->currentText().toStdString();
 
     settingsDB.saveSettings(settings);
-
 }
 
 void GUI::loadCurrentStates(){
