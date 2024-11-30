@@ -94,6 +94,15 @@ int get_audio_hardware_info(AHI &audio_hw_info){
         std::string mixer = snd_ctl_card_info_get_mixername(info);
 // card_id = card_id + "("+mixer+")";
 
+        // Check if it is an output device and if it can be opened
+        snd_pcm_t *handle;
+        const char* card_name = ("hw:" + std::to_string(card) + ",0").c_str();
+        if (snd_pcm_open(&handle, card_name, SND_PCM_STREAM_PLAYBACK, 0) >= 0) {
+            snd_pcm_close(handle);
+        } else {
+            continue; // Skip this card if it doesn't support output.
+        }
+
         // Free the card info
         snd_ctl_card_info_free(info);
         snd_ctl_close(ctl_handle);
