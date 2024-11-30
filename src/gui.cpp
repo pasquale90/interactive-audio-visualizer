@@ -5,9 +5,11 @@
 // forward declaration of function defined in main.cpp
 void start_iav();
 
-#include "audiohw.h"
-#include "camerahw.h"
-#include "screenhw.h"
+#include "gui/opencvfps.h"
+#include "gui/audiohw.h"
+#include "gui/camerahw.h"
+#include "gui/screenhw.h"
+
 
 void GUI::initializeComponents(){
     
@@ -63,8 +65,9 @@ void GUI::addExplanations(){
         deviceComboBox->setItemData(i, QString::fromStdString( audioExplanations[i] ), Qt::ToolTipRole);
 
     // .. to the frame rates of both camera and screen,
-    frameRateComboBox->setItemData(0, "≈25-30 fps", Qt::ToolTipRole);
-    displayFrameRateComboBox->setItemData(0, "≈25-30 fps", Qt::ToolTipRole);
+    approxFps = getCVfps_approx(cameraDeviceComboBox->currentText().toStdString().c_str());
+    frameRateComboBox->setItemData(0, "≈"+ QString::number( approxFps )+" fps detected hardware capability", Qt::ToolTipRole);
+    displayFrameRateComboBox->setItemData(0, "≈"+ QString::number( approxFps )+" fps detected hardware capability", Qt::ToolTipRole);
 
     // ... to the roi comboBox options,
     roiComboBox->setItemData(0, "5% of camera's capture resolution.", Qt::ToolTipRole);
@@ -153,7 +156,7 @@ GUI::GUI(int argc, char *argv[]) {
     QVBoxLayout iavLayout;
     iavLayout.addWidget(createDropDownList(frequencyRangeComboBox,iavFrequencyRangeLabel, {"Narrow", "Normal", "Wide"}));
     iavLayout.addWidget(createDropDownList(roiComboBox,iavRegionOfInterestLabel, {"Small","Medium","Large"}));
-    iavLayout.addWidget(createDropDownList(triggerComboBox,iavTriggerLabel, {"Manual (Space Bar)", "Auto (Timer - 5 sec)"}));
+    iavLayout.addWidget(createDropDownList(triggerComboBox,iavTriggerLabel, {"Manual", "Auto"}));
     iavLayout.addWidget(createDropDownList(trackingAlgorithmComboBox,iavTrackingAlgLabel, {"CSRT", "KFC", "BOOSTING"}));
     iavSettings.setLayout(&iavLayout);
     mainLayout.addWidget(&iavSettings);
@@ -226,7 +229,6 @@ void GUI::initializeTexts(){
 
 }
 
-
 void GUI::saveCurrentStates(){
 
     std::unordered_map<std::string, std::string> settings;
@@ -235,7 +237,10 @@ void GUI::saveCurrentStates(){
     settings["sampleRate"] = sampleRateComboBox->currentText().toStdString();
     settings["cameraDevice"] = cameraDeviceComboBox->currentText().toStdString();
     settings["cameraResolution"] = resolutionComboBox->currentText().toStdString();
+    settings["cameraFrameRate"] = std::to_string(approxFps);
     settings["bufferSize"] = bufferSizeComboBox->currentText().toStdString();
+    settings["quantization"] = quantizationComboBox->currentText().toStdString();
+    settings["quantizationRatio"] = std::to_string(quantizationRatio);
     settings["frameRate"] = frameRateComboBox->currentText().toStdString();
     settings["displayResolution"] = displayResolutionComboBox->currentText().toStdString();
     settings["displayFrameRate"] = displayFrameRateComboBox->currentText().toStdString();

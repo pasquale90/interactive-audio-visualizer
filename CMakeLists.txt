@@ -10,11 +10,12 @@ set(SOURCE_FILES
     src/gui.cpp
     src/gui/camerahw.cpp
     src/gui/screenhw.cpp
+    src/gui/opencvfps.cpp
     src/settings.cpp
     # src/audio.cpp
     # src/audiolizer.cpp
     # src/camera.cpp
-    # src/config.cpp
+    src/config.cpp
     # src/console.cpp
     # src/fft.cpp
     src/main.cpp
@@ -24,16 +25,16 @@ set(SOURCE_FILES
     # src/visualizer.cpp
 )
 
-# find_path(OPENCV_INCLUDE_DIR
-#     NAMES opencv2/core.hpp
-#     PATH_SUFFIXES opencv4
-# )
+find_path(OPENCV_INCLUDE_DIR
+    NAMES opencv2/core.hpp
+    PATH_SUFFIXES opencv4
+)
 
 # set(BTRACK_INCLUDE_DIR libraries/BTrack/src)
 set(INCLUDE_DIRECTORIES
     include
-    include/gui    
-    # ${OPENCV_INCLUDE_DIR}
+    # include/gui    
+    ${OPENCV_INCLUDE_DIR}
     # ${BTRACK_INCLUDE_DIR}
 )
 
@@ -54,10 +55,10 @@ set(LIBRARIES
     # jack
     # fftw3
     # samplerate
-    # opencv_core
+    opencv_core
     # opencv_highgui
     # opencv_imgproc
-    # opencv_videoio
+    opencv_videoio
     # opencv_video
     # opencv_imgcodecs
     # opencv_features2d
@@ -71,4 +72,4 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_DIRECTORIES})
 
 target_link_libraries(${PROJECT_NAME} ${LIBRARIES})
 
-set_target_properties(${PROJECT_NAME} PROPERTIES AUTOMOC ON)
+# set_target_properties(${PROJECT_NAME} PROPERTIES AUTOMOC ON)

@@ -21,6 +21,7 @@ public:
 
 private:
 
+    double approxFps;
     std::vector<std::string> audioExplanations;
 
 
