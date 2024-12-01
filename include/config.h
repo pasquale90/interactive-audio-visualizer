@@ -1,53 +1,42 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include "console.h"
-#include "config_defaults.h"
+// #include "console.h"
+// #include "config_defaults.h"
+#include "config_types.h"
+#include <unordered_map>
+#include "settings.h"
 
-struct Config{
-   /*! @brief Struct constructor.
-    * It receives values from the program arguments, it uses the InputParser to parse them, and passes them in a form of a struct object to the rest of the files.
-    * @param int argc - number of arguments provided by the user
-    * @return char* argv[] - arguments provided by the user
-    */
-    Config(int argc, char *argv[]);
-   
-   /*! @brief Default constructor.
-    */
-    Config();
-    
-    /*! @brief Copy constructor.
-    */
-    Config(const Config& c);
+class Config{
 
-    /*! @brief Class destructor.
-    */
-    ~Config();
+public:
     
+    static Config& getInstance(){
+        static Config config;
+        return config;
+    }
+
+    Config(Config const&)           = delete;
+    void operator=(Config const&)   = delete;
+
     /*! @brief Display function. It prints out in the console all the parameter values 
     * @return void
     */
     void display();
 
-    int sampleRate;
-    int quantization;
-    int bufferSize;
-    
-    int minFrequency;
-    int maxFrequency;
+private:
 
-    int fps;
-    int displayW;
-    int displayH;
-    
-    int camResW;
-    int camResH;
-    int camfps;
-    
-    int radius;
-    int roiSec;
+    std::unordered_map<std::string, std::string> settings;
+    AudioConfig audconf;
+    CameraConfig camconf;
+    DisplayConfig dispconf;
+    IAVConfig  iavconf;
 
-    int trackingAlg;
+   /*! @brief Class constructor.
+    * During construction the settings database will be read to initialize objects of different configuration types. 
+    */
+    Config() ;
+
 };
 
 #endif

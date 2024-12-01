@@ -12,39 +12,24 @@
 ***********************************************/
 #include <iostream>
 #include "gui.h"
-
-
+#include "config.h"
 
 void start_iav() {
 
+    Config& cfg = Config::getInstance();
+    cfg.display();
     std::cout<<"Hello IAV!"<<std::endl;
-    
-    SettingsDB settingsDB;
-    std::unordered_map<std::string, std::string> settings = settingsDB.loadSettings();
-    std::cout<<"audioDevice "<<settings["audioDevice"]<<std::endl;
-    std::cout<<"sampleRate "<<settings["sampleRate"]<<std::endl;
-    std::cout<<"cameraDevice "<<settings["cameraDevice"]<<std::endl;
-    std::cout<<"resolution "<<settings["resolution"]<<std::endl;
-    std::cout<<"bufferSize "<<settings["bufferSize"]<<std::endl;
-    std::cout<<"frameRate "<<settings["frameRate"]<<std::endl;
-    std::cout<<"displayResolution "<<settings["displayResolution"]<<std::endl;
-    std::cout<<"displayFrameRate "<<settings["displayFrameRate"]<<std::endl;
-    std::cout<<"frequencyRange "<<settings["frequencyRange"]<<std::endl;
-    std::cout<<"roi "<<settings["roi"]<<std::endl;
-    std::cout<<"trigger "<<settings["trigger"]<<std::endl;
-    std::cout<<"trackingAlgorithm "<<settings["trackingAlgorithm"]<<std::endl;
 
 }
 
 /*! @brief main function.
-  * Two pointers are passed to fill a sine signal using the Audiolizer, which is then passed into the Visualizer for controling image properties using audio analysis tools.
-  * @param int argc - number of input arguments
-  * @param char **argv - arguments. These are parsed through the InputParser class defined in console.* files.
+  * @param int argc - number of input arguments.
+  * @param char **argv - arguments. No additional arguments are required. These variables are only used to initialize the QT application instance.
   * @return int - success / failure of program
   */
-
 int main(int argc, char *argv[]){
     GUI gui(argc, argv);
+
     start_iav();
     return 0;
 }
