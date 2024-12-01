@@ -13,28 +13,9 @@
 #include <iostream>
 #include "gui.h"
 
-/*! @brief main function.
-  * Two pointers are passed to fill a sine signal using the Audiolizer, which is then passed into the Visualizer for controling image properties using audio analysis tools.
-  * @param int argc - number of input arguments
-  * @param char **argv - arguments. These are parsed through the InputParser class defined in console.* files.
-  * @return int - success / failure of program
-  */
-
-int main(int argc, char *argv[]){
-    GUI gui(argc, argv);
-    return 0;
-}
 
 
 void start_iav() {
-
-    // int i = 2;
-    // while (i >0 ){
-    //     std::cout<<".";
-    //     i--;
-    //     sleep(1);
-    // }
-    // std::cout << "Application started!" << std::endl;
 
     std::cout<<"Hello IAV!"<<std::endl;
     
@@ -53,4 +34,17 @@ void start_iav() {
     std::cout<<"trigger "<<settings["trigger"]<<std::endl;
     std::cout<<"trackingAlgorithm "<<settings["trackingAlgorithm"]<<std::endl;
 
+}
+
+/*! @brief main function.
+  * Two pointers are passed to fill a sine signal using the Audiolizer, which is then passed into the Visualizer for controling image properties using audio analysis tools.
+  * @param int argc - number of input arguments
+  * @param char **argv - arguments. These are parsed through the InputParser class defined in console.* files.
+  * @return int - success / failure of program
+  */
+
+int main(int argc, char *argv[]){
+    GUI gui(argc, argv);
+    start_iav();
+    return 0;
 }

@@ -2,9 +2,6 @@
 #include <cstddef>
 #include <string>
 
-// forward declaration of function defined in main.cpp
-void start_iav();
-
 #include "gui/opencvfps.h"
 #include "gui/audiohw.h"
 #include "gui/camerahw.h"
@@ -176,7 +173,7 @@ GUI::GUI(int argc, char *argv[]) {
                 errorLabel->hide(); // Hide if resolutions are compatible
                 saveCurrentStates();
                 app.quit();
-                start_iav();
+                // exiting to start_iav();
             } else {
                 errorLabel->show(); // Show error message if not compatible
             }
