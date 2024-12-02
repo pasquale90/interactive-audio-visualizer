@@ -6,7 +6,7 @@ SettingsDB::SettingsDB(const std::string& db_path) : dbPath(db_path) {
         db = nullptr;
         return;
     }
-
+    
     // Create table if it doesn't exist
     const char* createTableSQL = 
         "CREATE TABLE IF NOT EXISTS settings ("
@@ -18,12 +18,6 @@ SettingsDB::SettingsDB(const std::string& db_path) : dbPath(db_path) {
         sqlite3_free(errMsg);
         sqlite3_close(db);
         db = nullptr;
-    }
-}
-
-SettingsDB::~SettingsDB() {
-    if (db) {
-        sqlite3_close(db);
     }
 }
 
@@ -93,8 +87,4 @@ std::unordered_map<std::string, std::string> SettingsDB::loadSettings() {
 
     sqlite3_finalize(stmt);
     return settings;
-}
-
-bool SettingsDB::isFirstRun() const {
-    return !std::filesystem::exists(dbPath);
 }

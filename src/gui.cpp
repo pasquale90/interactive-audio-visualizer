@@ -251,27 +251,25 @@ void GUI::saveCurrentStates(){
 
 void GUI::loadCurrentStates(){
 
-    if (!settingsDB.isFirstRun()) {
-        auto settings = settingsDB.loadSettings();
-        
-        if (audioDevices.contains(QString::fromStdString(settings["audioDevice"])))
-            deviceComboBox->setCurrentText(QString::fromStdString(settings["audioDevice"]));
-        if (sampleRates[QString::fromStdString(settings["audioDevice"])].contains(QString::fromStdString(settings["sampleRate"])))
-            sampleRateComboBox->setCurrentText(QString::fromStdString(settings["sampleRate"]));
-        if (cameraDevices.contains(QString::fromStdString(settings["cameraDevice"])))
-            cameraDeviceComboBox->setCurrentText(QString::fromStdString(settings["cameraDevice"]));
-        if (cameraResolutions[QString::fromStdString(settings["cameraDevice"])].contains(QString::fromStdString(settings["cameraResolution"])))
-            resolutionComboBox->setCurrentText(QString::fromStdString(settings["cameraResolution"]));
-        bufferSizeComboBox->setCurrentText(QString::fromStdString(settings["bufferSize"]));
-        frameRateComboBox->setCurrentText(QString::fromStdString(settings["frameRate"]));
-        if (displayResolutions.contains(QString::fromStdString(settings["displayResolution"])))
-            displayResolutionComboBox->setCurrentText(QString::fromStdString(settings["displayResolution"]));
-        displayFrameRateComboBox->setCurrentText(QString::fromStdString(settings["displayFrameRate"]));
-        frequencyRangeComboBox->setCurrentText(QString::fromStdString(settings["frequencyRange"]));
-        roiComboBox->setCurrentText(QString::fromStdString(settings["roi"]));
-        triggerComboBox->setCurrentText(QString::fromStdString(settings["trigger"]));
-        trackingAlgorithmComboBox->setCurrentText(QString::fromStdString(settings["trackingAlgorithm"]));
-    }
+    auto settings = settingsDB.loadSettings();
+    
+    if (audioDevices.contains(QString::fromStdString(settings["audioDevice"])))
+        deviceComboBox->setCurrentText(QString::fromStdString(settings["audioDevice"]));
+    if (sampleRates[QString::fromStdString(settings["audioDevice"])].contains(QString::fromStdString(settings["sampleRate"])))
+        sampleRateComboBox->setCurrentText(QString::fromStdString(settings["sampleRate"]));
+    if (cameraDevices.contains(QString::fromStdString(settings["cameraDevice"])))
+        cameraDeviceComboBox->setCurrentText(QString::fromStdString(settings["cameraDevice"]));
+    if (cameraResolutions[QString::fromStdString(settings["cameraDevice"])].contains(QString::fromStdString(settings["cameraResolution"])))
+        resolutionComboBox->setCurrentText(QString::fromStdString(settings["cameraResolution"]));
+    bufferSizeComboBox->setCurrentText(QString::fromStdString(settings["bufferSize"]));
+    frameRateComboBox->setCurrentText(QString::fromStdString(settings["frameRate"]));
+    if (displayResolutions.contains(QString::fromStdString(settings["displayResolution"])))
+        displayResolutionComboBox->setCurrentText(QString::fromStdString(settings["displayResolution"]));
+    displayFrameRateComboBox->setCurrentText(QString::fromStdString(settings["displayFrameRate"]));
+    frequencyRangeComboBox->setCurrentText(QString::fromStdString(settings["frequencyRange"]));
+    roiComboBox->setCurrentText(QString::fromStdString(settings["roi"]));
+    triggerComboBox->setCurrentText(QString::fromStdString(settings["trigger"]));
+    trackingAlgorithmComboBox->setCurrentText(QString::fromStdString(settings["trackingAlgorithm"]));
 
 }
 
