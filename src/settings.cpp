@@ -21,6 +21,14 @@ SettingsDB::SettingsDB(const std::string& db_path) : dbPath(db_path) {
     }
 }
 
+SettingsDB::~SettingsDB(){
+
+    if (db) {
+        sqlite3_close(db);
+    }
+    
+}
+
 bool SettingsDB::saveSettings(const std::unordered_map<std::string, std::string>& settings) {
     if (!db) return false;
 
