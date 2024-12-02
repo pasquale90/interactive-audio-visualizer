@@ -14,13 +14,13 @@ set(SOURCE_FILES
     src/gui/screenhw.cpp
     src/gui/opencvfps.cpp
     src/settings.cpp
+    src/main.cpp
+    src/config.cpp
+    src/iav.cpp
     # src/audio.cpp
     # src/audiolizer.cpp
     # src/camera.cpp
-    src/config.cpp
-    # src/console.cpp
     # src/fft.cpp
-    src/main.cpp
     # src/raw.cpp
     # src/signal.cpp
     # src/videotracker.cpp

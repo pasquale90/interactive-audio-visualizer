@@ -10,17 +10,8 @@
  * published by the Free Software Foundation; either version 3 of
  * the License, or (at your option) any later version.
 ***********************************************/
-#include <iostream>
 #include "gui.h"
-#include "config.h"
-
-void start_iav() {
-
-    Config& cfg = Config::getInstance();
-    cfg.display();
-    std::cout<<"Hello IAV!"<<std::endl;
-
-}
+#include "iav.h"
 
 /*! @brief main function.
   * @param int argc - number of input arguments.
@@ -28,8 +19,10 @@ void start_iav() {
   * @return int - success / failure of program
   */
 int main(int argc, char *argv[]){
+    
     GUI gui(argc, argv);
+    IAV interactiveAudioVisualizer;
+    interactiveAudioVisualizer.start();
 
-    start_iav();
     return 0;
 }
