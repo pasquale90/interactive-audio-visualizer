@@ -1,6 +1,6 @@
 #!bin/bash
 
-cd test/
-mdkir build
+mkdir test/build
+cd test/build
 cmake ..
 make
