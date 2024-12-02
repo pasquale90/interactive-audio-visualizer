@@ -1,0 +1,14 @@
+name: CI custom demo
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+on: [push]
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+
+      - uses: actions/checkout@v4
+    
+      - name: Build tests
+        run: bash ${PWD}/scripts/compileTests.sh
+      - name: Apply tests
+        run: ${PWD}/test/build/test_all
