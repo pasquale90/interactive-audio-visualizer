@@ -16,7 +16,6 @@ TEST_F(ConfigTest,isSingleton) {
 
 
 TEST_F(ConfigTest,AudioVariablesInitialized) {
-    cfg.display();
 
     if (isInitialized){
         EXPECT_FALSE(cfg.audconf.audioDevice.empty());
