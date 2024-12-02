@@ -20,6 +20,7 @@ set(INCLUDE_DIRECTORIES
 set(SOURCE_FILES
     allTests.cpp
     ../src/settings.cpp
+    ../src/config.cpp
 )
 add_executable(test_all ${SOURCE_FILES})
 
