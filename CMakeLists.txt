@@ -5,6 +5,8 @@ set(CMAKE_CXX_STANDARD 11)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -pedantic -Wall -Wextra -Wno-error")
 
+option(BUILD_TESTS "Build the tests" OFF)
+
 set(SOURCE_FILES
     src/gui/audiohw.cpp
     src/gui.cpp
@@ -72,4 +74,6 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_DIRECTORIES})
 
 target_link_libraries(${PROJECT_NAME} ${LIBRARIES})
 
-# set_target_properties(${PROJECT_NAME} PROPERTIES AUTOMOC ON)
+if(BUILD_TESTS)
+    add_subdirectory(test)
+endif()

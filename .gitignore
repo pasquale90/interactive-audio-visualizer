@@ -7,15 +7,12 @@ logs/*
 build/*
 external/*
 libs/*
-test
-./test
 libraries/
 libraries/YOLO-NAS-onnxruntime/
 libraries/openpose/
 libraries/BTrack
 src/main copy.cpp
 src/visualizer copy*
-tests/
 src/__scales*
 src/__frequencies*
 src/__wavelengths*

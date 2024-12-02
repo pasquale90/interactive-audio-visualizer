@@ -14,5 +14,8 @@ namespace Paths{
     const std::string databasePath {getAbsPath("../data/settings.db")};
 }
 
+namespace PathsTest{
+    const std::string databasePath {getAbsPath("../data/test.db")};
+}
 
 #endif
