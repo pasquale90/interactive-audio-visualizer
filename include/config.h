@@ -24,19 +24,19 @@ public:
     */
     void display();
 
-private:
-
-    std::unordered_map<std::string, std::string> settings;
     AudioConfig audconf;
     CameraConfig camconf;
     DisplayConfig dispconf;
     IAVConfig  iavconf;
 
-   /*! @brief Class constructor.
+private:
+    /*! @brief Class constructor.
     * During construction the settings database will be read to initialize objects of different configuration types. 
     */
-    Config() ;
-
+    Config();
+    
+    std::unordered_map<std::string, std::string> settings;
+    
 };
 
 #endif

@@ -2,25 +2,26 @@
 #define CONFIG_TYPES_H
 
 #include <string>
+#include <atomic>
 
 struct AudioConfig{
     std::string audioDevice;
-    int sampleRate;
+    std::atomic<int> sampleRate;
     int quantization;
-    int bufferSize;
+    std::atomic<int> bufferSize;
 };
 
 struct CameraConfig{
     std::string device;
-    double frameRate;
-    int camResW;
-    int camResH;
+    std::atomic<double> frameRate;
+    std::atomic<int> camResW;
+    std::atomic<int> camResH;
 };
 
 struct DisplayConfig{
-    int dispResW;
-    int dispResH;
-    double fps;
+    std::atomic<int> dispResW;
+    std::atomic<int> dispResH;
+    std::atomic<double> fps;
 };
 
 struct IAVConfig{
