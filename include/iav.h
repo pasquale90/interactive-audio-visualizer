@@ -2,6 +2,8 @@
 #define IAV_H
 
 #include "config.h"
+#include "audioserver.h"
+
 
 class IAV{
 
@@ -14,6 +16,7 @@ class IAV{
     private:
 
         Config& cfg = Config::getInstance();
+        AudioServer audioServer;
 };
 
 

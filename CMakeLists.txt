@@ -17,6 +17,7 @@ set(SOURCE_FILES
     src/main.cpp
     src/config.cpp
     src/iav.cpp
+    src/audioserver.cpp
     # src/audio.cpp
     # src/audiolizer.cpp
     # src/camera.cpp
@@ -54,7 +55,9 @@ set(LIBRARIES
     X11
     Xrandr
     sqlite3
-    # jack
+    jack
+    jackserver
+    jacknet
     # fftw3
     # samplerate
     opencv_core

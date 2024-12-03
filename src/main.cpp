@@ -10,8 +10,8 @@
  * published by the Free Software Foundation; either version 3 of
  * the License, or (at your option) any later version.
 ***********************************************/
+#include "iav.h" // iav.h before gui.h
 #include "gui.h"
-#include "iav.h"
 
 /*! @brief main function.
   * @param int argc - number of input arguments.
