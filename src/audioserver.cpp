@@ -3,6 +3,8 @@ AudioServer::AudioServer(const char* driverName):driver_name(driverName){
     server = jackctl_server_create2(NULL, NULL, NULL);
     parameters = jackctl_server_get_parameters(server);
     sigmask = jackctl_setup_signals(0);
+    drivers = jackctl_server_get_drivers_list(server);
+
 }
 void AudioServer::setup_server(Config& cfg){
     
@@ -48,7 +50,7 @@ void AudioServer::change_server_parameters(){
 void AudioServer::print_parameters(const JSList * node_ptr)
 {
     while (node_ptr != NULL) {
-        jackctl_parameter_t * parameter = (jackctl_parameter_t *)node_ptr->data;
+        jackctl_parameter_t * parameter = static_cast<jackctl_parameter_t*>(node_ptr->data);
         printf("\nparameter name = %s\n", jackctl_parameter_get_name(parameter));
         printf("parameter id = %c\n", jackctl_parameter_get_id(parameter));
         printf("parameter short decs = %s\n", jackctl_parameter_get_short_description(parameter));
@@ -59,9 +61,9 @@ void AudioServer::print_parameters(const JSList * node_ptr)
 }
 jackctl_driver_t* AudioServer::jackctl_server_get_driver()
 {
-    const JSList * node_ptr = jackctl_server_get_drivers_list(server);
+    const JSList * node_ptr = drivers;
     while (node_ptr) {
-        if (strcmp(jackctl_driver_get_name((jackctl_driver_t *)node_ptr->data), driver_name) == 0) {
+        if (strcmp(jackctl_driver_get_name(static_cast<jackctl_driver_t *>(node_ptr->data)), driver_name) == 0) {
             return (jackctl_driver_t *)node_ptr->data;
         }
         node_ptr = jack_slist_next(node_ptr);
@@ -71,7 +73,7 @@ jackctl_driver_t* AudioServer::jackctl_server_get_driver()
 jackctl_parameter_t* AudioServer::jackctl_get_parameter(const JSList * parameters_list,const char * parameter_name){
     while (parameters_list)
     {
-        if (strcmp(jackctl_parameter_get_name((jackctl_parameter_t *)parameters_list->data), parameter_name) == 0)
+        if (strcmp(jackctl_parameter_get_name(static_cast<jackctl_parameter_t *>(parameters_list->data)), parameter_name) == 0)
         {
             return (jackctl_parameter_t *)parameters_list->data;
         }
@@ -104,10 +106,9 @@ void AudioServer::print_value(union jackctl_parameter_value value, jackctl_param
      }
 }
 void AudioServer::print_driver_info(){
-    const JSList * drivers = jackctl_server_get_drivers_list(server);
     const JSList * node_ptr = drivers;
     while (node_ptr != NULL) {
-        jackctl_driver_t *driver = (jackctl_driver_t *)node_ptr->data;
+        jackctl_driver_t *driver = static_cast<jackctl_driver_t *>(node_ptr->data);
         if (!strcmp(jackctl_driver_get_name(driver),driver_name)){
             printf("\n--------------------------\n");
             printf("driver = %s\n", jackctl_driver_get_name(driver));
@@ -119,16 +120,15 @@ void AudioServer::print_driver_info(){
 }
 void AudioServer::change_ALSAdriver_parameters(Config& cfg){
     
-    const JSList * drivers = jackctl_server_get_drivers_list(server);
     const JSList * node_ptr = drivers;
     while (node_ptr != NULL) {
         
-        jackctl_driver_t *driver = (jackctl_driver_t *)node_ptr->data;
+        jackctl_driver_t *driver = static_cast<jackctl_driver_t *>(node_ptr->data);
         if (!strcmp(jackctl_driver_get_name(driver),driver_name)){
                     const JSList * param_ptr = jackctl_driver_get_parameters(driver);
                     while (param_ptr != NULL) {
                         
-                        jackctl_parameter_t * parameter = (jackctl_parameter_t *)param_ptr->data;
+                        jackctl_parameter_t * parameter = static_cast<jackctl_parameter_t *>(param_ptr->data);
                         const char* param_name = jackctl_parameter_get_name(parameter);
                         // Configure sample rate
                         if (!strcmp(param_name,"rate")){
@@ -143,7 +143,8 @@ void AudioServer::change_ALSAdriver_parameters(Config& cfg){
                         }
                         // Configure device name
                         else if (!strcmp(param_name,"device")){
-                            const char* device_name = ("hw:"+cfg.audconf.audioDevice).c_str();
+                            std::string device_name_str = "hw:"+cfg.audconf.audioDevice;
+                            const char* device_name = device_name_str.c_str();
                             if (jackctl_parameter_set_value (parameter, (const union jackctl_parameter_value*)device_name )){
                                 printf("Audioserver::change_ALSAdriver_parameters : device name has changed! %s\n",device_name);
                             }

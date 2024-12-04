@@ -15,7 +15,7 @@ class AudioServer{
 public:
     /*! @brief Default constructor
     */
-    AudioServer(const char* driverName = supported_driver);
+    explicit AudioServer(const char* driverName = supported_driver);
     
     /*! @brief Setup the jack audio server by changing server parameters and alsa driver parameters
     * @return void
@@ -33,7 +33,6 @@ private:
     jackctl_server_t *server;
     const JSList *parameters;
     const JSList *drivers;
-    const JSList *node_ptr;
     jackctl_sigmask_t *sigmask;
     const char *driver_name;
     

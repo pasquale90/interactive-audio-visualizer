@@ -54,12 +54,12 @@ bool get_sampleRate_range(int card, int device, std::pair<unsigned int, unsigned
 int get_audio_hardware_info(AHI &audio_hw_info){
 
     int card = -1;
-    int err;
-
+    
     // Loop through all available cards
     while (true) {
+        
         // Find the next card
-        err = snd_card_next(&card);
+        int err = snd_card_next(&card);
         if (err < 0) {
             // Error getting next card
             break;
@@ -96,7 +96,8 @@ int get_audio_hardware_info(AHI &audio_hw_info){
 
         // Check if it is an output device and if it can be opened
         snd_pcm_t *handle;
-        const char* card_name = ("hw:" + std::to_string(card) + ",0").c_str();
+        std::string card_name_str ="hw:" + std::to_string(card) + ",0"; 
+        const char* card_name = card_name_str.c_str();
         if (snd_pcm_open(&handle, card_name, SND_PCM_STREAM_PLAYBACK, 0) >= 0) {
             snd_pcm_close(handle);
         } else {
