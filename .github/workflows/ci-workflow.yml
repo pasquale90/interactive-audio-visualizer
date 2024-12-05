@@ -1,10 +1,12 @@
 name: Continuous Integration and Static Analysis for IAV
 run-name: "🚀 IAV CI Build | Repo: ${GITHUB_REPOSITORY} | Status: ${{ github.action_status }} | Commit: ${{ github.sha }} 🛠️"
-on: [push]
-  branches:
+on:
+  push:
+    branches:
       - refactor
+
 jobs:
-  Explore-GitHub-Actions:
+  Static-Analysis-and-Testing:
     runs-on: ubuntu-latest
     steps:
 
@@ -12,10 +14,10 @@ jobs:
         run: apt-get update && apt-get install -y cppcheck clang-tidy
 
       - name: Checkout code
-      - uses: actions/checkout@v4
+        uses: actions/checkout@v4
 
-      - name: static analysis with cppcheck
-        run: bash ${PWD}/scripts/gen_staticAnalysisLogs.sh
+      - name: Static analysis with cppcheck
+        run: bash ${PWD}/scripts/genStaticAnalysisLogs.sh
 
       - name: Build tests
         run: bash ${PWD}/scripts/compileTests.sh
@@ -27,6 +29,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: static-analysis-log-files
-          path: |
-            ${PWD}/checks/cppcheck.log
-            ${PWD}/checks/clang-tidy.log
+          path: ${PWD}/checks/cppcheck.log ${PWD}/checks/clang-tidy.log
