@@ -48,7 +48,7 @@ private:
     * @param const JSList* - a pointer to a JSList that holds a table of all configurable parameters.
     * @return void
     */
-    void print_parameters(const JSList*);
+    static void print_parameters(const JSList*);
     /*! @brief Function to get the selected driver. In this program, the alsa driver is selected by default.
     * @return jackctl_driver_t* -  a pointer to the driver instance.
     */
@@ -58,7 +58,7 @@ private:
     * @param const char* - the parameter's name
     * @return jackctl_parameter_t* - a pointer to a the selected parameter object
     */
-    jackctl_parameter_t* jackctl_get_parameter(const JSList*,const char *);
+    static jackctl_parameter_t* jackctl_get_parameter(const JSList*,const char *);
     /*! @brief helper function used to print all the available information relate to the driver of interest. 
     * In this case, parameters of the ALSA driver
     * @return void
@@ -69,6 +69,6 @@ private:
     * @param jackctl_param_type_t - Parameter types, intentionally similar to jack_driver_param_type_t
     * @return void
     */
-    void print_value(union jackctl_parameter_value, jackctl_param_type_t);
+    static void print_value(union jackctl_parameter_value, jackctl_param_type_t);
 };
 #endif
