@@ -58,9 +58,10 @@ void GUI::initializeComponents(){
 void GUI::addExplanations(){
 
     // Add explanation to the audio devices,
-    for (size_t i = 0; i<audioExplanations.size(); ++i)
+    for (size_t i = 0; i<audioExplanations.size(); ++i){
         deviceComboBox->setItemData(i, QString::fromStdString( audioExplanations[i] ), Qt::ToolTipRole);
-
+    }
+    
     // .. to the frame rates of both camera and screen,
     approxFps = getCVfps_approx(cameraDeviceComboBox->currentText().toStdString().c_str());
     frameRateComboBox->setItemData(0, "≈"+ QString::number( approxFps )+" fps detected hardware capability", Qt::ToolTipRole);
@@ -82,9 +83,9 @@ void GUI::addExplanations(){
 
 }
 
-GUI::GUI(int argc, char *argv[]) {
-    
-    QApplication app(argc,argv);
+GUI::GUI() {    
+    int argc = 0;
+    QApplication app(argc,nullptr);
 
     QWidget window;
     window.setWindowTitle("Interactive Audio Visualizer");
@@ -168,11 +169,11 @@ GUI::GUI(int argc, char *argv[]) {
     mainLayout.addWidget(errorLabel);
     
     QPushButton startButton("Start");
-        QObject::connect(&startButton, &QPushButton::clicked, [this, &app]() {
+        QObject::connect(&startButton, &QPushButton::clicked, [this]() {
             if(checkResolutionCompatibility()) {
                 errorLabel->hide(); // Hide if resolutions are compatible
                 saveCurrentStates();
-                app.quit();
+                QApplication::quit();
                 // exiting to start_iav();
             } else {
                 errorLabel->show(); // Show error message if not compatible
@@ -186,7 +187,7 @@ GUI::GUI(int argc, char *argv[]) {
     window.setLayout(&mainLayout);
     window.show();
 
-    app.exec();
+    QApplication::exec();
 }
 
 void GUI::initializeTexts(){
@@ -199,9 +200,10 @@ void GUI::initializeTexts(){
         QString audio_device = QString::fromStdString(info.first);
         audioExplanations.push_back(info.second);
         audioDevices.append(audio_device);
-        for (size_t i = 0; i< supportedRates.size(); ++i){
-            if (supportedRates[i] >= sr.first && supportedRates[i]<= sr.second)
-                sampleRates[audio_device].append(QString::number(supportedRates[i]));
+        for (auto srate: supportedRates){
+            if (srate >= sr.first && srate <= sr.second){
+                sampleRates[audio_device].append(QString::number(srate));
+            }
         }
     }
 
@@ -213,15 +215,16 @@ void GUI::initializeTexts(){
 
         if (!camera.resolutions.empty()){
             cameraDevices.append(camera_device);
-            for (const auto& res : camera.resolutions) 
+            for (const auto& res : camera.resolutions) {
                 cameraResolutions[camera_device].append(QString::number(res.first) + "x" + QString::number(res.second));
+            }
         }
     }
 
     // Get screen resolutions for the main screen
     auto screen_resolutions = get_screen_resolution();
-    for(const std::pair&[width,height] : screen_resolutions){
-        displayResolutions.append(QString::number(width) + "x" + QString::number(height));
+    for(const auto&resolution : screen_resolutions){
+        displayResolutions.append(QString::number(resolution.first) + "x" + QString::number(resolution.second));
     }
 
 }
@@ -253,18 +256,23 @@ void GUI::loadCurrentStates(){
 
     auto settings = settingsDB.loadSettings();
     
-    if (audioDevices.contains(QString::fromStdString(settings["audioDevice"])))
+    if (audioDevices.contains(QString::fromStdString(settings["audioDevice"]))){
         deviceComboBox->setCurrentText(QString::fromStdString(settings["audioDevice"]));
-    if (sampleRates[QString::fromStdString(settings["audioDevice"])].contains(QString::fromStdString(settings["sampleRate"])))
+    }
+    if (sampleRates[QString::fromStdString(settings["audioDevice"])].contains(QString::fromStdString(settings["sampleRate"]))){
         sampleRateComboBox->setCurrentText(QString::fromStdString(settings["sampleRate"]));
-    if (cameraDevices.contains(QString::fromStdString(settings["cameraDevice"])))
+    }
+    if (cameraDevices.contains(QString::fromStdString(settings["cameraDevice"]))){
         cameraDeviceComboBox->setCurrentText(QString::fromStdString(settings["cameraDevice"]));
-    if (cameraResolutions[QString::fromStdString(settings["cameraDevice"])].contains(QString::fromStdString(settings["cameraResolution"])))
+    }
+    if (cameraResolutions[QString::fromStdString(settings["cameraDevice"])].contains(QString::fromStdString(settings["cameraResolution"]))){
         resolutionComboBox->setCurrentText(QString::fromStdString(settings["cameraResolution"]));
+    }
     bufferSizeComboBox->setCurrentText(QString::fromStdString(settings["bufferSize"]));
     frameRateComboBox->setCurrentText(QString::fromStdString(settings["frameRate"]));
-    if (displayResolutions.contains(QString::fromStdString(settings["displayResolution"])))
+    if (displayResolutions.contains(QString::fromStdString(settings["displayResolution"]))){
         displayResolutionComboBox->setCurrentText(QString::fromStdString(settings["displayResolution"]));
+    }
     displayFrameRateComboBox->setCurrentText(QString::fromStdString(settings["displayFrameRate"]));
     frequencyRangeComboBox->setCurrentText(QString::fromStdString(settings["frequencyRange"]));
     roiComboBox->setCurrentText(QString::fromStdString(settings["roi"]));
@@ -285,13 +293,13 @@ void GUI::updateResolution(const QString &cameraDevice) {
 
 QWidget* GUI::createDropDownList(QComboBox *comboBox,QLabel *label,const QStringList& comboBoxItems) {
     
-    QHBoxLayout *rowLayout = new QHBoxLayout;
+    auto *rowLayout = new QHBoxLayout;
     comboBox->addItems(comboBoxItems);
 
     rowLayout->addWidget(label);
     rowLayout->addWidget(comboBox);
 
-    QWidget *rowWidget = new QWidget;
+    auto *rowWidget = new QWidget;
     rowWidget->setLayout(rowLayout);
 
     return rowWidget;

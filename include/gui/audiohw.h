@@ -16,7 +16,7 @@ using AHI=std::vector<std::pair< std::pair<std::string, std::string> , std::pair
 
 bool get_sampleRate_range(int, int, std::pair<unsigned int, unsigned int>&);
 
-int get_audio_hardware_info(AHI&);
+void get_audio_hardware_info(AHI&);
 
 // std::vector<unsigned int> supportedRates;
 

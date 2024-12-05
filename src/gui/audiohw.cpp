@@ -7,14 +7,15 @@ bool get_sampleRate_range(int card, int device, std::pair<unsigned int, unsigned
     snd_pcm_hw_params_t *params;
     int err;
     char name[32];
-    unsigned int sample_rate_min, sample_rate_max;
+    unsigned int sample_rate_min,
+                 sample_rate_max;
 
     // Open the PCM device    
     sprintf(name, "hw:%d,%d", card, device);
     err = snd_pcm_open(&handle, name, SND_PCM_STREAM_PLAYBACK, 0);
     if (err < 0) {
         // Error opening PCM device
-        return 0;
+        return false;
     }
 
     // Allocate hardware parameters object
@@ -25,22 +26,22 @@ bool get_sampleRate_range(int card, int device, std::pair<unsigned int, unsigned
     if (err < 0) {
         // Error setting hwparams 
         snd_pcm_close(handle);
-        return 0;
+        return false;
     }
 
     
     // Get sample rate range
-    err = snd_pcm_hw_params_get_rate_min(params, &sample_rate_min, NULL);
+    err = snd_pcm_hw_params_get_rate_min(params, &sample_rate_min, nullptr);
     if (err < 0) {
         // Error getting sample rate min 
         snd_pcm_close(handle);
-        return 0;
+        return false;
     }
-    err = snd_pcm_hw_params_get_rate_max(params, &sample_rate_max, NULL);
+    err = snd_pcm_hw_params_get_rate_max(params, &sample_rate_max, nullptr);
     if (err < 0) {
         // Error getting sample rate max
         snd_pcm_close(handle);
-        return 0;
+        return false;
     }
 
     sample_rate.first = sample_rate_min;
@@ -48,10 +49,10 @@ bool get_sampleRate_range(int card, int device, std::pair<unsigned int, unsigned
 
     // Close the PCM device
     snd_pcm_close(handle);
-    return 1;
+    return true;
 }
 
-int get_audio_hardware_info(AHI &audio_hw_info){
+void get_audio_hardware_info(AHI &audio_hw_info){
 
     int card = -1;
     
@@ -118,16 +119,4 @@ int get_audio_hardware_info(AHI &audio_hw_info){
         audio_hw_info.push_back({ std::make_pair(card_id,mixer) , sample_rate_range});
         
     }
-
-    return EXIT_SUCCESS;
 }
-
-// int main(){
-//     AHI audio_hw_info;
-//     // return get_audio_hardware_info(audio_hw_info);
-//     get_audio_hardware_info(audio_hw_info);
-//     for (const auto&[name,sr]:audio_hw_info){
-//         printf("%s : %d, %d\n",name.c_str(), sr.first, sr.second);
-//     }
-//     return 0;
-// }

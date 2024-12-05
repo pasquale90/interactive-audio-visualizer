@@ -18,9 +18,9 @@
   * @param char **argv - arguments. No additional arguments are required. These variables are only used to initialize the QT application instance.
   * @return int - success / failure of program
   */
-int main(int argc, char *argv[]){
+int main(){
     
-    GUI gui(argc, argv);
+    GUI gui;
     IAV interactiveAudioVisualizer;
     interactiveAudioVisualizer.start();
 

@@ -17,7 +17,7 @@
 class GUI{
 public:
 
-    GUI(int argc, char *argv[]);
+    GUI();
 
 private:
 
@@ -29,7 +29,7 @@ private:
     void initializeTexts();
     void setupComboBoxes(QApplication);
 
-    QWidget* createDropDownList(QComboBox *, QLabel *, const QStringList&);
+    static QWidget* createDropDownList(QComboBox *, QLabel *, const QStringList&);
 
     void updateSampleRates(const QString&);
     void updateResolution(const QString&);

@@ -46,11 +46,11 @@ Config::Config(){
 		} 
 		
 		if (settings["roi"] == "Small")
-			iavconf.roiRadius = 0.05 * camconf.camResW;
+			iavconf.roiRadius = static_cast<int>(0.05 * camconf.camResW);
 		else if (settings["roi"] == "Medium")
-			iavconf.roiRadius = 0.1 * camconf.camResW;
+			iavconf.roiRadius = static_cast<int>(0.1 * camconf.camResW);
 		else if (settings["roi"] == "Large")
-			iavconf.roiRadius = 0.15 * camconf.camResW;
+			iavconf.roiRadius = static_cast<int>(0.15 * camconf.camResW);
 		iavconf.trigger = settings["trigger"];
 		iavconf.trackingAlg = settings["trackingAlgorithm"];
 	}
