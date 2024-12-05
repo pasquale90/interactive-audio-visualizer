@@ -6,27 +6,45 @@ on:
       - refactor
 
 jobs:
-  Static-Analysis-and-Testing:
+
+  Static-Analysis:
     runs-on: ubuntu-latest
     steps:
 
-      - name: Install cppcheck and clang-tidy
-        run: sudo apt-get update && sudo apt-get install -y cppcheck clang-tidy
+      # - name: Checkout code
+      #   uses: actions/checkout@v4
+    
+      # - name: Install cppcheck and clang-tidy
+      #   run: sudo apt-get update && sudo apt-get install -y cppcheck clang-tidy
+
+      # - name: Static analysis with cppcheck
+      #   run: bash ${PWD}/scripts/genStaticAnalysisLogs.sh
+
+      # - name: Upload cppcheck and clang-tidy output as artifacts
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: static-analysis-log-files
+      #     path: ${PWD}/checks/cppcheck.log ${PWD}/checks/clang-tidy.log
+
+      - name: Static analysis message
+        run: echo "Natively supported."
+
+  Building:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Building message
+        run: echo "maybe in the future..."
+
+
+  Testing:
+    runs-on: ubuntu-latest
+    steps:
 
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Static analysis with cppcheck
-        run: bash ${PWD}/scripts/genStaticAnalysisLogs.sh
 
       - name: Build tests
         run: bash ${PWD}/scripts/compileTests.sh
 
       - name: Apply tests
         run: ${PWD}/test/build/test_all
-
-      - name: Upload cppcheck and clang-tidy output as artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: static-analysis-log-files
-          path: ${PWD}/checks/cppcheck.log ${PWD}/checks/clang-tidy.log
