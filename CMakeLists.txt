@@ -22,7 +22,7 @@ set(SOURCE_FILES
     src/config.cpp
     src/iav.cpp
     src/audioserver.cpp
-    # src/audio.cpp
+    src/audio.cpp
     # src/audiolizer.cpp
     # src/camera.cpp
     # src/fft.cpp

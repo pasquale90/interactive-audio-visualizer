@@ -6,8 +6,11 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <cstring>
+#include <mutex>
+#include <condition_variable>
 #include <jack/jack.h>
 #include <jack/control.h>
+
 class Config;
 const char supported_driver[5] = "alsa";
 /*! @brief The jack-audio server running on the alsa drivers*/
@@ -17,6 +20,8 @@ public:
     */
     explicit AudioServer(const char* driverName = supported_driver);
     
+    ~AudioServer();
+    
     /*! @brief Setup the jack audio server by changing server parameters and alsa driver parameters
     * @return void
     */
@@ -24,7 +29,7 @@ public:
     /*! @brief Starts the jack audio server
     * @return void
     */
-    void start_server();
+    void start_server(std::mutex&, std::condition_variable&, bool&);
     /*! @brief Stops the jack audio server
     * @return void
     */

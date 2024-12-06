@@ -8,6 +8,11 @@ AudioServer::AudioServer(const char* driverName):driver_name(driverName){
 
 }
 
+AudioServer::~AudioServer(){
+    printf("Stopping server\n");
+    stop_server();
+}
+
 void AudioServer::setup_server(Config& cfg){
     
     change_server_parameters();
@@ -20,9 +25,17 @@ void AudioServer::stop_server(){
     jackctl_server_close(server);
     jackctl_server_destroy(server);
 }
-void AudioServer::start_server(){
+void AudioServer::start_server(std::mutex& mtx, std::condition_variable& cv, bool& serverStarted){
     jackctl_server_open(server, jackctl_server_get_driver());
     jackctl_server_start(server);
+
+    // Signal that server has been started
+    {
+        std::lock_guard<std::mutex> lock(mtx);
+        serverStarted = true;
+    }
+    cv.notify_one();
+
     jackctl_wait_signals(sigmask);
 }
 void AudioServer::change_server_parameters(){

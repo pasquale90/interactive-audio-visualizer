@@ -7,7 +7,8 @@
 #include <iostream>
 #include <cstring>
 #include <unistd.h>
-
+#include <mutex>
+#include <condition_variable>
 
 /*! @brief Callback method - process called when a new audio buffer occurs
   * It forces the Auiolizer and Visualizer classes to provide controlling methods for synchronizing audio (streaming) and image (both capturing & visualization).
@@ -16,13 +17,8 @@
   * @param[out] jack_default_audio_sample_t* right - right sine signal is a pointer to float array for the right channel
   * @return void
   */
-void audioBufferCallback(jack_default_audio_sample_t* left,jack_default_audio_sample_t* right);
-
-/*! @brief A non-member fuction used to alias the AudioStream::streamBuffer which is used as an argument in the AudioStream::jack_set_process_callback member function.
- * @param jack_nframes nframes - the buffer size
- * @param void *arg - optional arguments
- */
-int streamAudio (jack_nframes_t nframes, void *arg);
+//@TEMP_COMMENTED
+// void audioBufferCallback(jack_default_audio_sample_t* left,jack_default_audio_sample_t* right);
 
 // Class for routing audio signal. Uses the jack audio API.
 class AudioStream{
@@ -37,19 +33,11 @@ public:
     * disconnects the client from the server
     */
     ~AudioStream();
-    
-    /*! @brief implicit contructor
-        * Starts a connection to the server
-        * @param const char* serverName - name of jack audio server
-        * @param const char* clientName - name of the client connected to the server
-        * @return void
-    */
-    void setup(const char* serverName,const char* clientName); 
 
-    /*! @brief Creates the connection graph which connects the inputs with the outputs
+    /*! @brief Starts a connection to the server and creates the connection graph which connects the inputs with the outputs
     * @return void
     */
-    void AudioRouting();
+    void clientConnect(std::mutex&, std::condition_variable&, bool&);
 
     /*! @brief Disconnects the client from the server
     * @return void
@@ -66,27 +54,26 @@ public:
     int streamBuffer(jack_nframes_t nframes);
     
 private:
-    jack_port_t *input_port;
+    jack_port_t *input_port;  //@TEMP_IMPL
     jack_port_t *output_port_left;
     jack_port_t *output_port_right;
     jack_client_t *client;
 
-    double *in;
-    const char *server_name;
+    float *in;
     const char *client_name ;
-    const char **fromdevice;
+    const char **fromdevice;  //@TEMP_IMPL
     const char **todevice;
+
+    /*! @brief A non-member fuction used to alias the AudioStream::streamBuffer which is used as an argument in the AudioStream::jack_set_process_callback member function.
+    * @param jack_nframes nframes - the buffer size
+    * @param void *arg - optional arguments
+    */
+    static int streamAudio (jack_nframes_t nframes, void *arg);
+
 
     /*! @brief Shutdown jack
     */
     static void jack_shutdown (void *arg);
-
-    /*! @todo mix multiple input sources
-     *  function to mix (inplace) the left and right outs with all the input signals received from all the input channels supported by the audio device
-     *  nores :for a more generic app, that makes use of the input sig from a USB audio interface or the OS sys ...
-     *  .. we ought to combine the two signals : the input from the channel(s) and the sine tone.
-     */
-    void mix();
 };
 
 #endif
