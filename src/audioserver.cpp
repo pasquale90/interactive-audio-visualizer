@@ -1,4 +1,5 @@
 #include "audioserver.h"
+#include <sys/types.h>
 AudioServer::AudioServer(const char* driverName):driver_name(driverName){
     server = jackctl_server_create2(NULL, NULL, NULL);
     parameters = jackctl_server_get_parameters(server);
@@ -6,6 +7,7 @@ AudioServer::AudioServer(const char* driverName):driver_name(driverName){
     drivers = jackctl_server_get_drivers_list(server);
 
 }
+
 void AudioServer::setup_server(Config& cfg){
     
     change_server_parameters();
@@ -119,7 +121,6 @@ void AudioServer::print_driver_info(){
     }    
 }
 void AudioServer::change_ALSAdriver_parameters(Config& cfg){
-    
     const JSList * node_ptr = drivers;
     while (node_ptr != NULL) {
         
@@ -137,8 +138,9 @@ void AudioServer::change_ALSAdriver_parameters(Config& cfg){
                                 printf("Audioserver::change_ALSAdriver_parameters : sample rate changed succesfully to %d\n",sr);
                             }
                             // else{
-                            //     printf("Audioserver::change_ALSAdriver_parameters : Reconfiguring sample rate to %d\n",sr);
-                            //     // cfg.audconf.sampleRate.store(sr);
+                            //     jackctl_parameter_value jpv = jackctl_parameter_get_value(parameter);
+                            //     cfg.audconf.sampleRate.store(static_cast<int>(jpv.ui));
+                            //     printf("Audioserver::change_ALSAdriver_parameters : Reconfiguring sample rate to %d\n",cfg.audconf.sampleRate.load());
                             // }
                         }
                         // Configure device name
@@ -146,21 +148,24 @@ void AudioServer::change_ALSAdriver_parameters(Config& cfg){
                             std::string device_name_str = "hw:"+cfg.audconf.audioDevice;
                             const char* device_name = device_name_str.c_str();
                             if (jackctl_parameter_set_value (parameter, (const union jackctl_parameter_value*)device_name )){
-                                printf("Audioserver::change_ALSAdriver_parameters : device name has changed! %s\n",device_name);
+                                printf("Audioserver::change_ALSAdriver_parameters : device name has changed to: %s\n",device_name);
                             }
                             // else{
-                            //     printf("Audioserver::change_ALSAdriver_parameters : device name has NOT changed! %s\n",device_name);
+                            //     jackctl_parameter_value defaultDevice = jackctl_parameter_get_default_value(parameter);
+                            //     cfg.audconf.audioDevice = defaultDevice.str;
+                            //     printf("Audioserver::change_ALSAdriver_parameters : configuring default device to :  %s\n",cfg.audconf.audioDevice.c_str());
                             // }
                         }
                         // Configure buffer size
                         else if (!strcmp(param_name,"period")){
                             int buffer_size = cfg.audconf.bufferSize.load();
                             if (jackctl_parameter_set_value (parameter, (const union jackctl_parameter_value*)&buffer_size)){
-                                printf("Audioserver::change_ALSAdriver_parameters : buffer size has changed! %d \n",buffer_size);
+                                printf("Audioserver::change_ALSAdriver_parameters : buffer size has changed to: %d \n",buffer_size);
                             }
                             // else{
-                            //     printf("Audioserver::change_ALSAdriver_parameters : buffer size has NOT changed! %d \n",buffer_size);
-                            //     cfg.audconf.bufferSize.store(buffer_size);
+                            //     jackctl_parameter_value jpv = jackctl_parameter_get_value(parameter);
+                            //     cfg.audconf.bufferSize.store(static_cast<int>(jpv.ui));
+                            //     printf("Audioserver::change_ALSAdriver_parameters : buffer size has NOT changed. Current buffer size value : %d \n",cfg.audconf.bufferSize.load());
                             // }
                         }
                         param_ptr = jack_slist_next(param_ptr);
