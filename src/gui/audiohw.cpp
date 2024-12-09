@@ -1,7 +1,9 @@
 #include "gui/audiohw.h"
 #include <utility>
 
-bool get_sampleRate_range(int card, int device, std::pair<unsigned int, unsigned int> &sample_rate)
+// using namespace AudioHardware;
+
+bool AudioHardware::get_audio_device_info(int card, int device, std::pair<unsigned int, unsigned int> &sample_rate,unsigned int &numChannels)
 {
     snd_pcm_t *handle;
     snd_pcm_hw_params_t *params;
@@ -29,7 +31,6 @@ bool get_sampleRate_range(int card, int device, std::pair<unsigned int, unsigned
         return false;
     }
 
-    
     // Get sample rate range
     err = snd_pcm_hw_params_get_rate_min(params, &sample_rate_min, nullptr);
     if (err < 0) {
@@ -47,12 +48,35 @@ bool get_sampleRate_range(int card, int device, std::pair<unsigned int, unsigned
     sample_rate.first = sample_rate_min;
     sample_rate.second = sample_rate_max;
 
+    // get number of output channels
+    err = snd_pcm_hw_params_get_channels(params, &numChannels);// channels now holds the number of channels (outputs)
+    if (err < 0 || numChannels <=0 ) {
+        // Set the desired number of channels (e.g., 2 for stereo)
+        unsigned int atLeastStereo = 2;
+        err = snd_pcm_hw_params_set_channels(handle, params, atLeastStereo);
+        if (err < 0) {
+            
+            unsigned int atLeastMono = 1;
+            err = snd_pcm_hw_params_set_channels(handle, params, atLeastMono);
+            if (err < 0) {
+                // Error setting channels
+                snd_pcm_close(handle);
+                return false;
+            } 
+            // set numChannels to mono
+            snd_pcm_hw_params_get_channels(params, &numChannels);
+        } else {
+            //set numChannels to stereo
+            snd_pcm_hw_params_get_channels(params, &numChannels);
+        }
+    }
+
     // Close the PCM device
     snd_pcm_close(handle);
     return true;
 }
 
-void get_audio_hardware_info(AHI &audio_hw_info){
+void AudioHardware::get_audio_hardware_info(std::vector<Info> &audio_hw_info){
 
     int card = -1;
     
@@ -109,14 +133,19 @@ void get_audio_hardware_info(AHI &audio_hw_info){
         snd_ctl_card_info_free(info);
         snd_ctl_close(ctl_handle);
 
-         // Get PCM device info
+        // Get PCM device info
         int device = 0;
+        unsigned int numChannels = 0;
         std::pair<unsigned int, unsigned int> sample_rate_range;
-        while(!get_sampleRate_range(card, device,sample_rate_range)){
+        while(!AudioHardware::get_audio_device_info(card, device,sample_rate_range,numChannels) && device < MAX_POTENTIAL_AUDIO_DEVICES ){
             ++device;
         }
 
-        audio_hw_info.push_back({ std::make_pair(card_id,mixer) , sample_rate_range});
+        Info deviceInfo;
+        deviceInfo.card_info = std::make_pair(card_id,mixer);
+        deviceInfo.sample_rate_range = sample_rate_range;
+        deviceInfo.numberOfChannels = numChannels;
+        audio_hw_info.push_back(deviceInfo);
         
     }
 }

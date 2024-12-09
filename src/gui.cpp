@@ -114,7 +114,7 @@ GUI::GUI() {
     });
     
     audioLayout.addWidget(createDropDownList(bufferSizeComboBox,bufferSizeLabel, {"32", "64", "128", "256", "512", "1024", "2048", "4096"}));
-    audioLayout.addWidget(createDropDownList(quantizationComboBox,quantizationLabel, {QString::number( quantizationRatio )} ));
+    audioLayout.addWidget(createDropDownList(quantizationComboBox,quantizationLabel, {QString::number( AudioHardware::quantizationRatio )} ));
     audioSettings.setLayout(&audioLayout);
     mainLayout.addWidget(&audioSettings);
 
@@ -193,14 +193,14 @@ GUI::GUI() {
 void GUI::initializeTexts(){
     
     // Get audio devices and sample rates supported
-    AHI audio_hw_info;
+    std::vector<AudioHardware::Info> audio_hw_info;
     get_audio_hardware_info(audio_hw_info);
-    for (const auto&[info,sr]:audio_hw_info){
+    for (const auto&[info,sr,numChannels]:audio_hw_info){
         // printf("%s : %d, %d\n",name.c_str(), sr.first, sr.second);
         QString audio_device = QString::fromStdString(info.first);
         audioExplanations.push_back(info.second);
         audioDevices.append(audio_device);
-        for (auto srate: supportedRates){
+        for (auto srate: AudioHardware::supportedRates){
             if (srate >= sr.first && srate <= sr.second){
                 sampleRates[audio_device].append(QString::number(srate));
             }
@@ -240,7 +240,7 @@ void GUI::saveCurrentStates(){
     settings["cameraFrameRate"] = std::to_string(approxFps);
     settings["bufferSize"] = bufferSizeComboBox->currentText().toStdString();
     settings["quantization"] = quantizationComboBox->currentText().toStdString();
-    settings["quantizationRatio"] = std::to_string(quantizationRatio);
+    settings["quantizationRatio"] = std::to_string(AudioHardware::quantizationRatio);
     settings["frameRate"] = frameRateComboBox->currentText().toStdString();
     settings["displayResolution"] = displayResolutionComboBox->currentText().toStdString();
     settings["displayFrameRate"] = displayFrameRateComboBox->currentText().toStdString();
