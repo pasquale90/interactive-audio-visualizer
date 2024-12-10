@@ -11,6 +11,8 @@
 #include <jack/jack.h>
 #include <jack/control.h>
 
+// #define SERVER_VERBOSE
+
 class Config;
 const char supported_driver[5] = "alsa";
 /*! @brief The jack-audio server running on the alsa drivers*/
@@ -49,11 +51,7 @@ private:
     * @return void
     */
     void change_ALSAdriver_parameters(Config&);
-    /*! @brief Function that prints server and driver parameters and can be used for configuring both server and driver on setup.
-    * @param const JSList* - a pointer to a JSList that holds a table of all configurable parameters.
-    * @return void
-    */
-    static void print_parameters(const JSList*);
+    
     /*! @brief Function to get the selected driver. In this program, the alsa driver is selected by default.
     * @return jackctl_driver_t* -  a pointer to the driver instance.
     */
@@ -64,16 +62,27 @@ private:
     * @return jackctl_parameter_t* - a pointer to a the selected parameter object
     */
     static jackctl_parameter_t* jackctl_get_parameter(const JSList*,const char *);
-    /*! @brief helper function used to print all the available information relate to the driver of interest. 
-    * In this case, parameters of the ALSA driver
+
+#ifdef SERVER_VERBOSE
+    /*! @brief Function that prints server and driver parameters and can be used for configuring both server and driver on setup.
+    * @param const JSList* - a pointer to a JSList that holds a table of all configurable parameters.
     * @return void
     */
-    void print_driver_info();
+    static void print_parameters(const JSList*);
+    
     /*! @brief helper function to print the values of parameters.
     * @param union jackctl_parameter_value -  Type for parameter value, intentionally similar to jack_driver_param_value_t
     * @param jackctl_param_type_t - Parameter types, intentionally similar to jack_driver_param_type_t
     * @return void
     */
     static void print_value(union jackctl_parameter_value, jackctl_param_type_t);
+    
+    /*! @brief helper function used to print all the available information relate to the driver of interest. 
+    * In this case, parameters of the ALSA driver
+    * @return void
+    */
+    void print_driver_info();
+#endif
+
 };
 #endif

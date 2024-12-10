@@ -16,7 +16,9 @@ AudioServer::~AudioServer(){
 void AudioServer::setup_server(Config& cfg){
     
     change_server_parameters();
+#ifdef SERVER_VERBOSE
     print_driver_info();
+#endif
     change_ALSAdriver_parameters(cfg);
 }
 void AudioServer::stop_server(){
@@ -62,18 +64,7 @@ void AudioServer::change_server_parameters(){
         printf("Success on changing real-time priority");
     }
 }
-void AudioServer::print_parameters(const JSList * node_ptr)
-{
-    while (node_ptr != NULL) {
-        jackctl_parameter_t * parameter = static_cast<jackctl_parameter_t*>(node_ptr->data);
-        printf("\nparameter name = %s\n", jackctl_parameter_get_name(parameter));
-        printf("parameter id = %c\n", jackctl_parameter_get_id(parameter));
-        printf("parameter short decs = %s\n", jackctl_parameter_get_short_description(parameter));
-        printf("parameter long decs = %s\n", jackctl_parameter_get_long_description(parameter));
-        print_value(jackctl_parameter_get_default_value(parameter), jackctl_parameter_get_type(parameter));
-        node_ptr = jack_slist_next(node_ptr);
-    }
-}
+
 jackctl_driver_t* AudioServer::jackctl_server_get_driver()
 {
     const JSList * node_ptr = drivers;
@@ -96,6 +87,22 @@ jackctl_parameter_t* AudioServer::jackctl_get_parameter(const JSList * parameter
     }
     return NULL;
 }
+
+#ifdef SERVER_VERBOSE
+
+void AudioServer::print_parameters(const JSList * node_ptr)
+{
+    while (node_ptr != NULL) {
+        jackctl_parameter_t * parameter = static_cast<jackctl_parameter_t*>(node_ptr->data);
+        printf("\nparameter name = %s\n", jackctl_parameter_get_name(parameter));
+        printf("parameter id = %c\n", jackctl_parameter_get_id(parameter));
+        printf("parameter short decs = %s\n", jackctl_parameter_get_short_description(parameter));
+        printf("parameter long decs = %s\n", jackctl_parameter_get_long_description(parameter));
+        print_value(jackctl_parameter_get_default_value(parameter), jackctl_parameter_get_type(parameter));
+        node_ptr = jack_slist_next(node_ptr);
+    }
+}
+
 void AudioServer::print_value(union jackctl_parameter_value value, jackctl_param_type_t type){
     switch (type) {
     
@@ -120,6 +127,7 @@ void AudioServer::print_value(union jackctl_parameter_value value, jackctl_param
             break;
      }
 }
+
 void AudioServer::print_driver_info(){
     const JSList * node_ptr = drivers;
     while (node_ptr != NULL) {
@@ -133,6 +141,8 @@ void AudioServer::print_driver_info(){
         node_ptr = jack_slist_next(node_ptr);
     }    
 }
+#endif
+
 void AudioServer::change_ALSAdriver_parameters(Config& cfg){
     const JSList * node_ptr = drivers;
     while (node_ptr != NULL) {
