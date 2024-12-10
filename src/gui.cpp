@@ -30,6 +30,8 @@ void GUI::initializeComponents(){
     cameraResolutionLabel = new QLabel("Resolution:");
     bufferSizeLabel = new QLabel("Buffer Size");
     quantizationLabel = new QLabel("Quantization");
+    numOutputChannelsLabel = new QLabel("Output channels");
+    numOutputChannelsValue = new QLabel();
     cameraFrameRateLabel = new QLabel("Frame Rate");
     screenResolutionLabel= new QLabel("Resolution");
     screenFrameRateLabel= new QLabel("Frames per second");
@@ -44,6 +46,7 @@ void GUI::initializeComponents(){
     cameraResolutionLabel->setToolTip("Set camera capture resolution.");
     bufferSizeLabel->setToolTip("Configure audio buffer size.");
     quantizationLabel->setToolTip("Quantization range for digitalizing audio data");
+    numOutputChannelsLabel->setToolTip("Number of output channels (>2 is Stereo)");
     cameraFrameRateLabel->setToolTip("Set camera frame rate (currently fixed).");
     screenResolutionLabel->setToolTip("Select screen resolution.");
     screenFrameRateLabel->setToolTip("Set screen frame rate (currently fixed).");
@@ -52,6 +55,10 @@ void GUI::initializeComponents(){
     iavTriggerLabel->setToolTip("Choose capturing method.");
     iavTrackingAlgLabel->setToolTip("Select object tracking algorithm.");
 
+    // create a layout for the #Outchannels
+    numChannelsLayout = new QHBoxLayout();
+    numChannelsLayout->addWidget(numOutputChannelsLabel);
+    numChannelsLayout->addWidget(numOutputChannelsValue);
 }
 
 
@@ -111,10 +118,12 @@ GUI::GUI() {
     QObject::connect(deviceComboBox, &QComboBox::currentTextChanged, 
     [this](const QString &text){
         updateSampleRates(text);
+        updateNumChannelsInfo(text);
     });
     
     audioLayout.addWidget(createDropDownList(bufferSizeComboBox,bufferSizeLabel, {"32", "64", "128", "256", "512", "1024", "2048", "4096"}));
     audioLayout.addWidget(createDropDownList(quantizationComboBox,quantizationLabel, {QString::number( AudioHardware::quantizationRatio )} ));
+    audioLayout.addLayout(numChannelsLayout);
     audioSettings.setLayout(&audioLayout);
     mainLayout.addWidget(&audioSettings);
 
@@ -195,11 +204,12 @@ void GUI::initializeTexts(){
     // Get audio devices and sample rates supported
     std::vector<AudioHardware::Info> audio_hw_info;
     get_audio_hardware_info(audio_hw_info);
-    for (const auto&[info,sr,numChannels]:audio_hw_info){
+    for (const auto&[info,sr,nChannels]:audio_hw_info){
         // printf("%s : %d, %d\n",name.c_str(), sr.first, sr.second);
         QString audio_device = QString::fromStdString(info.first);
         audioExplanations.push_back(info.second);
         audioDevices.append(audio_device);
+        numChannels.append(QString::number(nChannels));
         for (auto srate: AudioHardware::supportedRates){
             if (srate >= sr.first && srate <= sr.second){
                 sampleRates[audio_device].append(QString::number(srate));
@@ -240,6 +250,7 @@ void GUI::saveCurrentStates(){
     settings["cameraFrameRate"] = std::to_string(approxFps);
     settings["bufferSize"] = bufferSizeComboBox->currentText().toStdString();
     settings["quantization"] = quantizationComboBox->currentText().toStdString();
+    settings["numChannels"] = numOutputChannelsValue->text().toStdString();
     settings["quantizationRatio"] = std::to_string(AudioHardware::quantizationRatio);
     settings["frameRate"] = frameRateComboBox->currentText().toStdString();
     settings["displayResolution"] = displayResolutionComboBox->currentText().toStdString();
@@ -269,6 +280,7 @@ void GUI::loadCurrentStates(){
         resolutionComboBox->setCurrentText(QString::fromStdString(settings["cameraResolution"]));
     }
     bufferSizeComboBox->setCurrentText(QString::fromStdString(settings["bufferSize"]));
+    // numOutputChannelsValue->setText(QString::fromStdString(settings["numChannels"]));
     frameRateComboBox->setCurrentText(QString::fromStdString(settings["frameRate"]));
     if (displayResolutions.contains(QString::fromStdString(settings["displayResolution"]))){
         displayResolutionComboBox->setCurrentText(QString::fromStdString(settings["displayResolution"]));
@@ -284,6 +296,11 @@ void GUI::loadCurrentStates(){
 void GUI::updateSampleRates(const QString &audioDevice) {
     sampleRateComboBox->clear();
     sampleRateComboBox->addItems(sampleRates[audioDevice]);
+}
+
+// static int lala = 1;
+void GUI::updateNumChannelsInfo(const QString &audioDevice) {
+    numOutputChannelsValue->setText(numChannels[audioDevices.indexOf(audioDevice)]);
 }
 
 void GUI::updateResolution(const QString &cameraDevice) {

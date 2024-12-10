@@ -50,15 +50,15 @@ bool AudioHardware::get_audio_device_info(int card, int device, std::pair<unsign
 
     // get number of output channels
     err = snd_pcm_hw_params_get_channels(params, &numChannels);// channels now holds the number of channels (outputs)
-    if (err < 0 || numChannels <=0 ) {
+    if (err < 0 || numChannels ==0 ) {
         // Set the desired number of channels (e.g., 2 for stereo)
         unsigned int atLeastStereo = 2;
         err = snd_pcm_hw_params_set_channels(handle, params, atLeastStereo);
-        if (err < 0) {
+        if (err < 0 || numChannels ==0 ) {
             
             unsigned int atLeastMono = 1;
             err = snd_pcm_hw_params_set_channels(handle, params, atLeastMono);
-            if (err < 0) {
+            if (err < 0 || numChannels ==0) {
                 // Error setting channels
                 snd_pcm_close(handle);
                 return false;

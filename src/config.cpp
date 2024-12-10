@@ -12,6 +12,7 @@ Config::Config(){
 		audconf.sampleRate.store(std::stoi(settings["sampleRate"])); // --> WILL BE ADJUSTED BY JACK
 		audconf.quantization = std::stoi(settings["quantizationRatio"]);
 		audconf.bufferSize.store(std::stoi(settings["bufferSize"])); // --> WILL BE ADJUSTED BY JACK
+		audconf.numChannels = std::stoi(settings["numChannels"]);
 
 		// Initialize camera configuration
 		camconf.device = settings["cameraDevice"];
@@ -64,7 +65,8 @@ void Config::display(){
     std::cout<<"sampling rate            \t:\t"<<audconf.sampleRate.load()<<" samples/sec"<<std::endl;
     std::cout<<"quantization             \t:\t"<<audconf.quantization<<" bits"<<std::endl;
     std::cout<<"buffer size              \t:\t"<<audconf.bufferSize.load()<<" samples"<<std::endl;
-    std::cout<<"----------------- display settings ----------------------\n";
+	std::cout<<"num output channels      \t:\t"<<audconf.numChannels<<" "<<std::endl;
+	std::cout<<"----------------- display settings ----------------------\n";
     std::cout<<"frames per second        \t:\t"<<dispconf.fps.load()<<" fps"<<std::endl;
     std::cout<<"display Width            \t:\t"<<dispconf.dispResW.load()<<" pixels"<<std::endl;
     std::cout<<"display Height           \t:\t"<<dispconf.dispResH.load()<<" pixels"<<std::endl;

@@ -32,6 +32,7 @@ private:
     static QWidget* createDropDownList(QComboBox *, QLabel *, const QStringList&);
 
     void updateSampleRates(const QString&);
+    void updateNumChannelsInfo(const QString&);
     void updateResolution(const QString&);
 
     void saveCurrentStates();
@@ -43,6 +44,7 @@ private:
     SettingsDB settingsDB;
 
     QStringList audioDevices,
+                numChannels,
                 cameraDevices,
                 displayResolutions;
     
@@ -68,6 +70,8 @@ private:
             *cameraResolutionLabel,
             *bufferSizeLabel,
             *quantizationLabel,
+            *numOutputChannelsLabel,
+            *numOutputChannelsValue,
             *cameraFrameRateLabel,
             *screenResolutionLabel,
             *screenFrameRateLabel,
@@ -76,6 +80,7 @@ private:
             *iavTriggerLabel,
             *iavTrackingAlgLabel,
             *errorLabel;
+    QHBoxLayout* numChannelsLayout;
 };
 
 #endif
