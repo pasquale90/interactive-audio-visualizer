@@ -1,6 +1,5 @@
 #ifndef AUDIOSERVER_H
 #define AUDIOSERVER_H
-#include "config.h"
 #include <stdio.h>
 #include <errno.h>
 #include <unistd.h>
@@ -13,7 +12,8 @@
 
 // #define SERVER_VERBOSE
 
-class Config;
+struct AudioConfig;
+
 const char supported_driver[5] = "alsa";
 /*! @brief The jack-audio server running on the alsa drivers*/
 class AudioServer{
@@ -27,7 +27,7 @@ public:
     /*! @brief Setup the jack audio server by changing server parameters and alsa driver parameters
     * @return void
     */
-    void setup_server(Config&);
+    void setup_server();
     /*! @brief Starts the jack audio server
     * @return void
     */
@@ -42,7 +42,8 @@ private:
     const JSList *drivers;
     jackctl_sigmask_t *sigmask;
     const char *driver_name;
-    
+    AudioConfig& audiocfg;
+
     /*! @brief Function to change the jack audio server parameters
     * @return void
     */
@@ -50,7 +51,7 @@ private:
     /*! @brief Function to change the alsa driver parameters
     * @return void
     */
-    void change_ALSAdriver_parameters(Config&);
+    void change_ALSAdriver_parameters();
     
     /*! @brief Function to get the selected driver. In this program, the alsa driver is selected by default.
     * @return jackctl_driver_t* -  a pointer to the driver instance.

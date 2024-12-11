@@ -13,7 +13,7 @@ static void other(){
 IAV::IAV()
 {
     // Here setup everything
-    audioServer.setup_server(cfg);
+    audioServer.setup_server();
     cfg.display();
 
     audServerThread = std::thread (&AudioServer::start_server,&audioServer,std::ref(mtxServer), std::ref(cvServer), std::ref(serverStarted));

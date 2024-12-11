@@ -1,6 +1,9 @@
 #include "audioserver.h"
 #include <sys/types.h>
-AudioServer::AudioServer(const char* driverName):driver_name(driverName){
+
+#include "config.h"
+
+AudioServer::AudioServer(const char* driverName):driver_name(driverName),audiocfg (Config::getInstance().audconf){
     server = jackctl_server_create2(NULL, NULL, NULL);
     parameters = jackctl_server_get_parameters(server);
     sigmask = jackctl_setup_signals(0);
@@ -13,13 +16,13 @@ AudioServer::~AudioServer(){
     stop_server();
 }
 
-void AudioServer::setup_server(Config& cfg){
+void AudioServer::setup_server(){
     
     change_server_parameters();
 #ifdef SERVER_VERBOSE
     print_driver_info();
 #endif
-    change_ALSAdriver_parameters(cfg);
+    change_ALSAdriver_parameters();
 }
 void AudioServer::stop_server(){
     printf("\n\nShutting down server\n\n");
@@ -143,7 +146,7 @@ void AudioServer::print_driver_info(){
 }
 #endif
 
-void AudioServer::change_ALSAdriver_parameters(Config& cfg){
+void AudioServer::change_ALSAdriver_parameters(){
     const JSList * node_ptr = drivers;
     while (node_ptr != NULL) {
         
@@ -156,7 +159,7 @@ void AudioServer::change_ALSAdriver_parameters(Config& cfg){
                         const char* param_name = jackctl_parameter_get_name(parameter);
                         // Configure sample rate
                         if (!strcmp(param_name,"rate")){
-                            int sr = cfg.audconf.sampleRate.load();
+                            int sr = audiocfg.sampleRate.load();
                             if (jackctl_parameter_set_value (parameter, (const union jackctl_parameter_value*)&sr)){
                                 printf("Audioserver::change_ALSAdriver_parameters : sample rate changed succesfully to %d\n",sr);
                             }
@@ -168,7 +171,7 @@ void AudioServer::change_ALSAdriver_parameters(Config& cfg){
                         }
                         // Configure device name
                         else if (!strcmp(param_name,"device")){
-                            std::string device_name_str = "hw:"+cfg.audconf.audioDevice;
+                            std::string device_name_str = "hw:"+audiocfg.audioDevice;
                             const char* device_name = device_name_str.c_str();
                             if (jackctl_parameter_set_value (parameter, (const union jackctl_parameter_value*)device_name )){
                                 printf("Audioserver::change_ALSAdriver_parameters : device name has changed to: %s\n",device_name);
@@ -181,7 +184,7 @@ void AudioServer::change_ALSAdriver_parameters(Config& cfg){
                         }
                         // Configure buffer size
                         else if (!strcmp(param_name,"period")){
-                            int buffer_size = cfg.audconf.bufferSize.load();
+                            int buffer_size = audiocfg.bufferSize.load();
                             if (jackctl_parameter_set_value (parameter, (const union jackctl_parameter_value*)&buffer_size)){
                                 printf("Audioserver::change_ALSAdriver_parameters : buffer size has changed to: %d \n",buffer_size);
                             }
