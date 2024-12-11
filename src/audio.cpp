@@ -25,13 +25,10 @@ AudioStream::AudioStream():audiocfg (Config::getInstance().audconf){
     if (audiocfg.numChannels.load() == 1){
         output_ports[1] = nullptr;
         outputBuffers[1]=nullptr;
-    }
-        
-
-    if (audiocfg.numChannels.load() == 2) {
-        callable = &Sine::getStereoSignal;  // Point to getStereoSignal for processing 2 stereo buffers
-    } else {
         callable = &Sine::getMonoSignal;  // Point to getMonoSignal for processing 1 single mono buffer
+    }        
+    else if (audiocfg.numChannels.load() == 2) {
+        callable = &Sine::getStereoSignal;  // Point to getStereoSignal for processing 2 stereo buffers
     }
 
 }
@@ -108,17 +105,13 @@ void AudioStream::clientConnect(std::mutex& mtx, std::condition_variable& cv, bo
             }
         }
     }
-    
-    for (size_t ch = 0 ; ch < audiocfg.numChannels.load(); ++ch){
-        outputBuffers[ch] = static_cast<float *>(jack_port_get_buffer (output_ports[ch], audiocfg.numChannels.load() ));
-    }
 
     free (todevice);
 }
 
 
 void AudioStream::closeStream(){
-
+    
     for (size_t i=0; i<audiocfg.numChannels.load();++i){
         if (jack_port_connected(output_ports[i])){
             if(jack_port_disconnect(client,output_ports[i])){
@@ -134,6 +127,10 @@ void AudioStream::closeStream(){
 
 int AudioStream::streamBuffer(){
 
+    for (size_t ch = 0 ; ch < audiocfg.numChannels.load(); ++ch){
+        outputBuffers[ch] = static_cast<float *>(jack_port_get_buffer (output_ports[ch], audiocfg.numChannels.load() ));
+    }
+    
     static int tone = 300;    
     (sine.*callable)(tone,outputBuffers); 
     tone++;
