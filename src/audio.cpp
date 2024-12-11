@@ -20,8 +20,6 @@ AudioStream::AudioStream():audiocfg (Config::getInstance().audconf){
     client = nullptr;
     todevice = nullptr;
     
-    audiocfg.numChannels.store(std::min(audiocfg.numChannels.load(),2u));
-
     if (audiocfg.numChannels.load() == 1){
         output_ports[1] = nullptr;
         outputBuffers[1]=nullptr;

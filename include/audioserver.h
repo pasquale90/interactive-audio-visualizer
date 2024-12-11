@@ -42,7 +42,7 @@ private:
     const JSList *drivers;
     jackctl_sigmask_t *sigmask;
     const char *driver_name;
-    AudioConfig& audiocfg;
+    const AudioConfig& audiocfg;
 
     /*! @brief Function to change the jack audio server parameters
     * @return void

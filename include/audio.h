@@ -60,7 +60,7 @@ public:
     
 private:
 
-    AudioConfig& audiocfg;
+    const AudioConfig& audiocfg;
     
     const char *client_name ;
     const char **todevice;

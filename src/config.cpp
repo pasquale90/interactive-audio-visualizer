@@ -12,7 +12,9 @@ Config::Config(){
 		audconf.sampleRate.store(std::stoi(settings["sampleRate"])); // --> WILL BE ADJUSTED BY JACK
 		audconf.quantization = std::stoi(settings["quantizationRatio"]);
 		audconf.bufferSize.store(std::stoi(settings["bufferSize"])); // --> WILL BE ADJUSTED BY JACK
-		audconf.numChannels = std::stoi(settings["numChannels"]);
+		audconf.numChannels.store(std::stoi(settings["numChannels"]));
+		audconf.numChannels.store(std::min(audconf.numChannels.load(),2u)); // --> make numChannels mono or stereo and discard greater values
+
 
 		// Initialize camera configuration
 		camconf.device = settings["cameraDevice"];
@@ -55,6 +57,9 @@ Config::Config(){
 		iavconf.trigger = settings["trigger"];
 		iavconf.trackingAlg = settings["trackingAlgorithm"];
 	}
+	if (runAtomicityCheck()){
+		std::cerr<<"WARNING: Atomicity is not supported on this platform for some types"<<std::endl;
+	}
 }
 
 void Config::display(){
@@ -65,7 +70,7 @@ void Config::display(){
     std::cout<<"sampling rate            \t:\t"<<audconf.sampleRate.load()<<" samples/sec"<<std::endl;
     std::cout<<"quantization             \t:\t"<<audconf.quantization<<" bits"<<std::endl;
     std::cout<<"buffer size              \t:\t"<<audconf.bufferSize.load()<<" samples"<<std::endl;
-	std::cout<<"num output channels      \t:\t"<<audconf.numChannels<<" "<<std::endl;
+	std::cout<<"num output channels      \t:\t"<<audconf.numChannels.load()<<" "<<std::endl;
 	std::cout<<"----------------- display settings ----------------------\n";
     std::cout<<"frames per second        \t:\t"<<dispconf.fps.load()<<" fps"<<std::endl;
     std::cout<<"display Width            \t:\t"<<dispconf.dispResW.load()<<" pixels"<<std::endl;
@@ -84,3 +89,27 @@ void Config::display(){
     std::cout<<"#########################################################\n\n";
 
 }
+
+bool Config::runAtomicityCheck() {
+	
+	bool warning = false;
+	
+	// Check for atomic lock freedom for each atomic member in ConfigStruct
+	if (!std::atomic<int>::is_always_lock_free) {
+		std::cout << "Warning: atomic<int> is not lock-free!\n";
+		warning = true;
+	}
+
+	if (!std::atomic<unsigned int>::is_always_lock_free) {
+		std::cout << "Warning: atomic<unsigned int> is not lock-free!\n";
+		warning = true;
+	}
+
+	if (!std::atomic<double>::is_always_lock_free) {
+		std::cout << "Warning: atomic<double> is not lock-free!\n";
+		warning = true;
+	}
+
+	return warning;
+}
+

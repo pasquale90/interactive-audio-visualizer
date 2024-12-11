@@ -15,7 +15,7 @@ public:
     void getStereoSignal(int, float*[2]);
 
 private:
-    AudioConfig& audiocfg;
+    const AudioConfig& audiocfg;
     int prevfreq;
     float phase;
     float rads_per_sample;

@@ -36,7 +36,9 @@ private:
     Config();
     
     std::unordered_map<std::string, std::string> settings;
-    
+
+    bool runAtomicityCheck();
+
 };
 
 #endif
