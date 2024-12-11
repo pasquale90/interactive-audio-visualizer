@@ -9,7 +9,7 @@ struct AudioConfig{
     std::atomic<int> sampleRate;
     int quantization;
     std::atomic<int> bufferSize;
-    unsigned int numChannels;
+    std::atomic<unsigned int> numChannels;
 };
 
 struct CameraConfig{

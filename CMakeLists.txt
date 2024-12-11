@@ -27,6 +27,7 @@ set(SOURCE_FILES
     # src/camera.cpp
     # src/fft.cpp
     # src/raw.cpp
+    src/sine.cpp
     # src/signal.cpp
     # src/videotracker.cpp
     # src/visualizer.cpp

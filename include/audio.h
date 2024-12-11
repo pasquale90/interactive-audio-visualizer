@@ -9,6 +9,9 @@
 #include <unistd.h>
 #include <mutex>
 #include <condition_variable>
+#include "sine.h"
+
+class Config;
 
 /*! @brief Callback method - process called when a new audio buffer occurs
   * It forces the Auiolizer and Visualizer classes to provide controlling methods for synchronizing audio (streaming) and image (both capturing & visualization).
@@ -34,6 +37,8 @@ public:
     */
     ~AudioStream();
 
+  void setup_client(const Config& cfg);
+
     /*! @brief Starts a connection to the server and creates the connection graph which connects the inputs with the outputs
     * @return void
     */
@@ -51,18 +56,20 @@ public:
     * @param jack_nframes_t nframes - the audio buffer size. Should be replaced with member variable using the Config instance as a parameter
     * @return int - success message
     */
-    int streamBuffer(jack_nframes_t nframes);
+    int streamBuffer();
     
 private:
-    jack_port_t *input_port;  //@TEMP_IMPL
-    jack_port_t *output_port_left;
-    jack_port_t *output_port_right;
-    jack_client_t *client;
 
-    float *in;
+    AudioConfig& audiocfg;
+    
     const char *client_name ;
-    const char **fromdevice;  //@TEMP_IMPL
     const char **todevice;
+    jack_client_t *client;
+    jack_port_t * output_ports[2];
+    float *outputBuffers[2];
+
+    Sine sine;
+    void (Sine::*callable)(int,float*[2]) = nullptr;
 
     /*! @brief A non-member fuction used to alias the AudioStream::streamBuffer which is used as an argument in the AudioStream::jack_set_process_callback member function.
     * @param jack_nframes nframes - the buffer size
