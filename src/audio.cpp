@@ -126,7 +126,7 @@ void AudioStream::closeStream(){
 int AudioStream::streamBuffer(){
 
     for (size_t ch = 0 ; ch < audiocfg.numChannels.load(); ++ch){
-        outputBuffers[ch] = static_cast<float *>(jack_port_get_buffer (output_ports[ch], audiocfg.numChannels.load() ));
+        outputBuffers[ch] = static_cast<float *>(jack_port_get_buffer (output_ports[ch], audiocfg.bufferSize.load() ));
     }
     
     static int tone = 300;    
