@@ -1,58 +1,46 @@
 #include "videotracker.h"
 
-
 VideoTracker::VideoTracker(){
     trackingToggle.store(false);
     patternlocked.store(false);
-}
 
-void VideoTracker::terminate(){
-}
+    // if (cfg.iavconf.trigger == "Auto"); //  @TODO
+    countdown_ms = photo_countdown_sec*1000;
+    t1.setTimer(photo_countdown_sec);
+    t2.setTimer(experience_duration_sec);
 
-void VideoTracker::setup(const Config& cfg){
-    
-    camera.setup(cfg);
-    camera.display_config();
+    boxCenter.centerX=cfg.camconf.camResW.load()/2;
+    boxCenter.centerY=cfg.camconf.camResH.load()/2;
+    boxCenter.volumeW=cfg.iavconf.roiRadius;
+    boxCenter.volumeH=cfg.iavconf.roiRadius;
 
-    radius=cfg.radius;
-    ROIw8sec = cfg.roiSec;
-    framecounter=ROIw8sec*camera.get_fps();
-
-    W=cfg.camResW;
-    H=cfg.camResH;
-    fps = camera.get_fps();
-    
-    boxCenter.centerX=W/2;
-    boxCenter.centerY=H/2;
-    boxCenter.volumeW=cfg.radius*2;
-    boxCenter.volumeH=cfg.radius*2;
-
-    // previous_boxCenter=current_boxCenter;
-
+    int radius=cfg.iavconf.roiRadius;
+    int W=cfg.camconf.camResW.load();
+    int H=cfg.camconf.camResH.load();
     cv::Rect temp((W/2)-radius,(H/2)-radius,radius*2,radius*2);
     centerBox=temp;
     boundingBox=temp;
     
-    if (cfg.trackingAlg == 0) //"CSRT"
+    _initialize_tracker();
+}
+
+void VideoTracker::_initialize_tracker(){
+    if (cfg.iavconf.trackingAlg == "CSRT") {
         tracker = cv::TrackerCSRT::create();
-    if (cfg.trackingAlg == 1) //"MOSSE"
-        tracker = cv::TrackerMOSSE::create();
-    if (cfg.trackingAlg == 2) //"BOOSTING"
+    } else if (cfg.iavconf.trackingAlg == "KFC") {
+        tracker = cv::TrackerKCF::create();
+    }else if (cfg.iavconf.trackingAlg == "BOOSTING") {
         tracker = cv::TrackerBoosting::create();
+    }
 }
 
-void VideoTracker::display_config(){
-    std::cout<<"VideoTracker config :: radius "<<radius<<std::endl;
-    std::cout<<"VideoTracker config :: ROIw8sec "<<ROIw8sec<<std::endl;
-}
+// bool VideoTracker::tickTock(){
+//     return camera.frame_elapsed();
+// }
 
-bool VideoTracker::tickTock(){
-    return camera.frame_elapsed();
-}
-
-bool VideoTracker::pattern_locked(){
-    return patternlocked.load();
-}
+// bool VideoTracker::pattern_locked(){
+//     return patternlocked.load();
+// }
 
 bool VideoTracker::_tracking_updated(){
 
@@ -65,210 +53,143 @@ bool VideoTracker::_tracking_updated(){
     }
 }
 
-void VideoTracker::_show_timer(){
-    std::string strtime = std::to_string(framecounter/fps);
-    //----------------------------------------------------------- left
-    int y = boxCenter.centerY + boxCenter.volumeH/2;
-    int x = boxCenter.centerX - 2*boxCenter.volumeW;
-    int b = 255 - currFrame.at<cv::Vec3b>( y , x )[0];
-    int g = 255 - currFrame.at<cv::Vec3b>( y , x )[1];
-    int r = 255 - currFrame.at<cv::Vec3b>( y , x )[2];
-    cv::putText(currFrame, 
-        strtime, //text
-        cv::Point( x , y ),
-        cv::FONT_HERSHEY_DUPLEX,
-        1.0,
-        CV_RGB(r, g, b),
-        1);
-    //----------------------------------------------------------- right
-    y = currFrame.rows/2;                                   
-    x = boxCenter.centerX + 2*boxCenter.volumeW;
-    b = 255 - currFrame.at<cv::Vec3b>( y , x )[0];
-    g = 255 - currFrame.at<cv::Vec3b>( y , x )[1];
-    r = 255 - currFrame.at<cv::Vec3b>( y , x )[2];
-    cv::putText(currFrame,                                                                        
-        strtime, 
-        cv::Point( x , y ),
-        cv::FONT_HERSHEY_DUPLEX,
-        1.0,
-        CV_RGB(r, g, b),
-        1);
-        cv::putText(currFrame,
-        strtime, //text
-        cv::Point( x , y ),
-        cv::FONT_HERSHEY_DUPLEX,
-        1.0,
-        CV_RGB(r, g, b),
-        1);
-    //----------------------------------------------------------- top
-    y = boxCenter.centerY - 2*boxCenter.volumeH;
-    x = currFrame.cols/2;
-    b = 255 - currFrame.at<cv::Vec3b>( y , x )[0];
-    g = 255 - currFrame.at<cv::Vec3b>( y , x )[1];
-    r = 255 - currFrame.at<cv::Vec3b>( y , x )[2];
-    cv::putText(currFrame, 
-        strtime, //text
-        cv::Point( x , y ),
-        cv::FONT_HERSHEY_DUPLEX,
-        1.0,
-        CV_RGB(r, g, b),
-        1);
-    //----------------------------------------------------------- bottom
-    y = boxCenter.centerY + 2*boxCenter.volumeH;
-    x = currFrame.cols/2;
-    b = 255 - currFrame.at<cv::Vec3b>( y , x )[0];
-    g = 255 - currFrame.at<cv::Vec3b>( y , x )[1];
-    r = 255 - currFrame.at<cv::Vec3b>( y , x )[2];
-    cv::putText(currFrame,
-        strtime, //text
-        cv::Point( x , y ),
-        cv::FONT_HERSHEY_DUPLEX,
-        1.0,
-        CV_RGB(r, g, b),
-        1);
+
+void VideoTracker::_show_timer(const int millisecondsElapsed) {
+    
+    int x = currFrame.cols / 2;
+    int y = currFrame.rows / 2;
+
+    int radius = cfg.iavconf.roiRadius;  
+    int thickness = 3;
+    double angle = (millisecondsElapsed / static_cast<double>(countdown_ms)) * 360.0;
+    cv::circle(currFrame, cv::Point(x, y), radius, CV_RGB(245, 245, 245), thickness);
+
+    // int r = 255 - (millisecondsElapsed * 5) % 255;  // Gradually change the color to orange/yellow
+    // int g = (millisecondsElapsed * 2) % 255;
+    // int b = (millisecondsElapsed * 4) % 255;
+    int r = static_cast<int>(127.5 * (1 + sin(angle * M_PI / 180.0)));  // Sinusoidal for red
+    int g = static_cast<int>(127.5 * (1 + sin((angle + 120) * M_PI / 180.0)));  // Sinusoidal for green
+    int b = static_cast<int>(127.5 * (1 + sin((angle + 240) * M_PI / 180.0)));  // Sinusoidal for blue
+
+    cv::ellipse(currFrame, cv::Point(x, y), cv::Size(radius, radius), 0, -90, -90 + angle, CV_RGB(r, g, b), thickness);
+
 }
+
+static int framecounter = 0;
 void VideoTracker::capture(){
+
     /***
-     * Updates the roi and the (global) roi center. 
+     * Updates the video frames and implements the detection pipeline. 
     */
-    bool frameElapsed = camera.capture(currFrame);
 
-    if(!patternlocked.load()){
+    while(true){
+        
+        bool frameElapsed = camera.capture(currFrame);
 
-        // std::cout<<"time counter "<<framecounter<<std::endl;
+        framecounter++;
 
-        int thickness=1;
+        if (!frameElapsed){
+            break;
+        }
+        
+        int W = cfg.camconf.camResW.load();
+        int H = cfg.camconf.camResH.load();
 
-        if (framecounter>0){
-            circle( currFrame,
-                    cv::Point((W/2),(H/2)),
-                    radius,
-                    cv::Scalar( 0, 255, 0 ),
-                    thickness=1,
-                    cv::LINE_8);
+        int millisecondsElapsed;
 
-            cv::Mat tempROI(currFrame, centerBox); // access box information                
-            tempROI.copyTo(ROI); // Copy the data into new matrix
+        // if there s not pattern yet.
+        if(!patternlocked.load()){
 
-            // PREPROCESS
-            // ...
+            bool countDown = t1.getCurrentTime(millisecondsElapsed);
+            // std::cout<<"t1 countDown "<<countDown<< " seconds "<<millisecondsElapsed<<" patternlocked.load() "<<patternlocked.load()<<std::endl;
 
-            if(BG.empty()){ // --------------------------------------------------> that is the first frame
-                ROI.copyTo(BG);
-            }else{
-                
-                _show_timer();
+            // if still waiting for the automatic trigger
+            if(!countDown){
+
+                _show_timer(millisecondsElapsed);
+                // temporarily show frame...
                 // imshow("2", currFrame);
                 // cv::waitKey(1);
-            }
-            framecounter--;
 
-        }else if(framecounter==0){     // if similarity with the background is high, restart the timer! --> disabled
+            }else // if trigger is activated. 
+            {   cv::Mat tempROI(currFrame, centerBox); // access box information                
+                tempROI.copyTo(ROI); // Copy the data into new matrix
+                patternlocked.store(true);
+            }
+        }else{
+        // }else if (framecounter%3==0){ // --> this will be used to skip frames 
+            bool ok;
+
+            // if the time allowed for the iav experience has elapsed
+            if (t1.isTimerFinished()){
+                // std::cout<<"first occurence --> init tracker here"<<std::endl;
+                tracker->init(currFrame, boundingBox);
+                t2.setTimer(experience_duration_sec);
+                t1.pauseTimer();
+            }
+
+            bool countDown = t2.getCurrentTime(millisecondsElapsed);
+
+            ok = tracker->update(currFrame, boundingBox);         
+
+            // prevent out of lost tracking / time elapsed / bounds tracking
+            if (countDown || boundingBox.x<=0 || boundingBox.y<=0 || boundingBox.width<=0 || boundingBox.height<=0 || (boundingBox.x+boundingBox.width)>=W || (boundingBox.y+boundingBox.height)>=H ) {
+                
+                patternlocked.store(false);
+                t1.setTimer(5);
+
+                boundingBox = centerBox;
+                
+                // Creating a new tracker
+                tracker->clear();
+                _initialize_tracker();
+                tracker->init(currFrame, boundingBox);
+            }
+            else{ // during  successfull tracking
+                if (ok){
+
+                    trackingToggle=!trackingToggle;
+
+                    currboxCenter_x.store(static_cast<int>(boundingBox.x + boundingBox.width/2));
+                    currboxCenter_y.store(static_cast<int>(boundingBox.y + boundingBox.height/2));
+                    currboxCenter_w.store(static_cast<int>(boundingBox.width));
+                    currboxCenter_h.store(static_cast<int>(boundingBox.height));
         
-            // // Calculate the L2 relative error between current ROI and the BG.
-            // double errorL2 = norm( ROI, BG, cv::DIST_L2 );
-            // // Convert to a reasonable scale, since L2 error is summed across all pixels of the image.
-            // double L2difference = errorL2 / (double)( ROI.rows * ROI.cols );
-            // std::cout<<"similarity difference "<<L2difference<<" similarity_threshold "<<similarity_threshold<<std::endl;
-
-            // if (L2difference < similarity_threshold){ // if current roi is similar to BG --> low L2
-            //     framecounter=fps*5;
-            // }else patternlocked=true;
-
-            patternlocked.store(true);
-        }
-    }else{
-        bool ok;
-
-        if (framecounter==0){
-            std::cout<<"first occurence --> init tracker here"<<framecounter<<std::endl;
-            tracker->init(currFrame, boundingBox);
-        }
-
-        ok = tracker->update(currFrame, boundingBox);         
-
-        if (framecounter<=((-10)*fps) || boundingBox.x<=0 || boundingBox.y<=0 || boundingBox.width<=0 || boundingBox.height<=0 || (boundingBox.x+boundingBox.width)>=W || (boundingBox.y+boundingBox.height)>=H ) {
-            patternlocked.store(false);
-            framecounter=ROIw8sec*fps;
-            boundingBox = centerBox;
-            
-            // Creating a new tracker
-            tracker->clear();
-            cv::Ptr<cv::TrackerCSRT> trackerNew = cv::TrackerCSRT::create();
-            tracker = trackerNew;
-        }
-        else{
-
-            if (ok)
-            {
-                // Tracking success : Draw the tracked object
-                // rectangle(currFrame, boundingBox, cv::Scalar( 255, 0, 0 ), 2, 1 ); // only for testing
-
-                trackingToggle=!trackingToggle;
-
-                currboxCenter_x.store(boundingBox.x + boundingBox.width/2);
-                currboxCenter_y.store(boundingBox.y + boundingBox.height/2);
-                currboxCenter_w.store(boundingBox.width);
-                currboxCenter_h.store(boundingBox.height);
-            }   
-            else
-            {
-                // currboxCenter_x.store(boxCenter.centerX);
-                // currboxCenter_y.store(boxCenter.centerY);
-                // currboxCenter_w.store(boxCenter.volumeW);
-                // currboxCenter_h.store(boxCenter.volumeH);
-                // Tracking failure detected.
-                // putText(currFrame, "Tracking failure detected", cv::Point(100,80), cv::FONT_HERSHEY_SIMPLEX, 0.75, cv::Scalar(0,0,255),2);
+                }
             }
 
-            // keep the initial box width and height
-            // cv::Rect temp(boundingBox.x,boundingBox.y,radius*2,radius*2);
-            // cv::Mat tempROI(currFrame, temp);
-            // tempROI.copyTo(ROI);
-
-            cv::Mat tempROI(currFrame, boundingBox);
-            tempROI.copyTo(ROI);
-            framecounter--;
-            // imshow("2", currFrame);
-        }
-            
-    }  
-
+            // temp draw detection
+            // int radius = cfg.iavconf.roiRadius;
+            // cv::Rect temprect(boundingBox.x,boundingBox.y,radius*2,radius*2);
+            // cv::rectangle(currFrame, temprect, cv::Scalar(0, 255, 0), 2, cv::LINE_AA);
+            // imshow("1", currFrame);
+            // cv::waitKey(1);
+        } 
+    }
 }
 
-bool VideoTracker::update(RegionOfInterest &roi_center,cv::Mat& roi){
+bool VideoTracker::update(RegionOfInterest &roi_center,cv::Mat& frame){
     /***
      * Updates the roi and the (global) roi center. 
      * Returns bool - Applies control the return values (i.e. if no changes occured by a visual stimulus
     */
 
-    currFrame.copyTo(roi);
     if (patternlocked.load()){
-        roi_center.centerX=currboxCenter_x.load();
-        roi_center.centerY=currboxCenter_y.load();
-        roi_center.volumeW=currboxCenter_w.load();
-        roi_center.volumeH=currboxCenter_h.load();
+        roi_center.centerX.store(currboxCenter_x.load());
+        roi_center.centerY.store(currboxCenter_y.load());
+        roi_center.volumeW.store(currboxCenter_w.load());
+        roi_center.volumeH.store(currboxCenter_h.load());
+        if (!frame.empty()) {
+            frame.release();
+        }
+
     }else{
-        roi_center = boxCenter;
+        currFrame.copyTo(frame);
+        roi_center.centerX.store(-1);
+        roi_center.centerY.store(-1);
+        roi_center.volumeW.store(-1);
+        roi_center.volumeH.store(-1);
     }
 
     return _tracking_updated();
-}
-
-bool VideoTracker::_check_similarity(){
-    // Calculate the L2 relative error between current ROI and the BG.
-    double errorL2 = norm( ROI, BG, cv::DIST_L2 );
-    // Convert to a reasonable scale, since L2 error is summed across all pixels of the image.
-    double L2difference = errorL2 / (double)( ROI.rows * ROI.cols );
-    std::cout<<"similarity difference"<<L2difference<<" similarity_threshold "<<similarity_threshold<<std::endl;
-
-    if (L2difference < similarity_threshold){ // if current roi is similar to BG --> low L2
-        return true;
-    }else{                                  // else initialize tracking
-        return false;
-    }
-}
-
-void VideoTracker::_init_timer(){
-    framecounter=ROIw8sec*camera.get_fps();                 // restart timer
 }

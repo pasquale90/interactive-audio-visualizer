@@ -4,59 +4,48 @@
 
 #include "camera.h"
 
-Camera::Camera(){
+
+#include <iostream>
+Camera::Camera() : cameracfg(Config::getInstance().camconf){
     frameToggle.store(false);
     toggleFrame=false;
-}
-
-void Camera::setup(const Config& cfg){
-    camW=cfg.camResW; 
-    camH=cfg.camResH;
-    fps=cfg.camfps;
+    cv::Mat frame(cameracfg.camResH.load(),cameracfg.camResW.load(),CV_8UC3);
     initialize_camera();
-    cv::Mat frame(camH,camW,CV_8UC3);
 }
-
 
 void Camera::initialize_camera(){
-    int deviceID = 0; // 0 = open default camera
-    int apiID = 0; // 0 = autodetect default API - otherwise use --> cv::CAP_GSTREAMER
-    cap.open(deviceID, apiID);     // cap.open(0);
-    int w=cap.get(cv::CAP_PROP_FRAME_WIDTH);
-    int h=cap.get(cv::CAP_PROP_FRAME_HEIGHT);
-    cap.set(cv::CAP_PROP_FRAME_WIDTH, camW);
-    cap.set(cv::CAP_PROP_FRAME_HEIGHT, camH);
-    cap.set(cv::CAP_PROP_FORMAT, CV_8UC3 );
-    proper_fps = cap.get(cv::CAP_PROP_FPS);
-    // std::cout<<"Proper fps "<<proper_fps<<std::endl;
-    // std::cout<<"Proper w "<<w<<std::endl;
-    // std::cout<<"Proper h "<<h<<std::endl;
+
+    int device = cameracfg.device.back()-'0';
+    int width = cameracfg.camResW.load();
+    int height = cameracfg.camResH.load();
+    int fps = static_cast<int>(cameracfg.frameRate.load());
+
+    if (!cap.open(device, cv::CAP_V4L2)) {
+        std::cerr << "Error: Could not open camera " << device << std::endl;
+    }
+
+    cap.set(cv::CAP_PROP_FRAME_WIDTH, width);
+    cap.set(cv::CAP_PROP_FRAME_HEIGHT, height);
     cap.set(cv::CAP_PROP_FPS, fps);
-    if( !cap.isOpened() )
-    {
-        std::cerr << "***Could not initialize capturing...***\n";
-    }else std::cout<<"Camera initialized succesfully"<<std::endl;
 
+    int actualWidth = (int)cap.get(cv::CAP_PROP_FRAME_WIDTH);
+    int actualHeight = (int)cap.get(cv::CAP_PROP_FRAME_HEIGHT);
+    double actualFps = cap.get(cv::CAP_PROP_FPS);
+
+    if (actualWidth != width || actualHeight != height || actualFps != fps) {
+        
+        std::cerr << "Warning: Camera properties might not be set correctly!" << std::endl;
+        
+        cameracfg.camResW.store(actualWidth);
+        cameracfg.camResH.store(actualHeight);
+        cameracfg.frameRate.store(actualFps);
+    }
 }
 
-void Camera::display_config(){
-    std::cout<<"Camera config :: camW "<<camW<<std::endl;
-    std::cout<<"Camera config :: camH "<<camH<<std::endl;
-    std::cout<<"Camera config :: fps "<<fps<<std::endl;
-}
-
-void Camera::turnOff(){
+Camera::~Camera(){
     frame.release();
     cap.release();
     std::cout<<"Camera object destructed"<<std::endl;
-}
-
-int Camera::get_fps(){
-    return fps;
-}
-
-int Camera::get_actual_fps(){
-    return (int)proper_fps;
 }
 
 bool Camera::frame_elapsed(){
@@ -80,7 +69,6 @@ bool Camera::capture(cv::Mat& frame){
 
     if(!(frame.empty())){
         frameToggle.store(!frameToggle.load());
-        // std::cout<<"************************************************************************captured! ************************************************************************"<<frameToggle.load()<<std::endl;
         return true;
     }
     return false;

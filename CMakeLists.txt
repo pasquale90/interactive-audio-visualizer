@@ -23,12 +23,13 @@ set(SOURCE_FILES
     src/iav.cpp
     src/audioserver.cpp
     src/audio.cpp
+    src/sine.cpp
+    src/camera.cpp
+    src/videotracker.cpp
+    src/timer.cpp
     # src/audiolizer.cpp
-    # src/camera.cpp
     # src/fft.cpp
     # src/raw.cpp
-    src/sine.cpp
-    # src/videotracker.cpp
     # src/visualizer.cpp
 )
 
@@ -65,14 +66,14 @@ set(LIBRARIES
     # fftw3
     # samplerate
     opencv_core
-    # opencv_highgui
-    # opencv_imgproc
+    opencv_highgui
+    opencv_imgproc
     opencv_videoio
-    # opencv_video
-    # opencv_imgcodecs
-    # opencv_features2d
-    # opencv_tracking
-    # pthread
+    opencv_video
+    opencv_imgcodecs
+    opencv_features2d
+    opencv_tracking
+    pthread
 )
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
