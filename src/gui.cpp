@@ -23,6 +23,7 @@ void GUI::initializeComponents(){
     roiComboBox= new QComboBox();
     triggerComboBox= new QComboBox();
     trackingAlgorithmComboBox= new QComboBox();
+    skipFramesSlider = new QSlider(Qt::Horizontal);  // Horizontal slider
     
     audioDeviceLabel = new QLabel("Device:");
     sampleRateLabel = new QLabel("Sample Rate:");
@@ -39,6 +40,8 @@ void GUI::initializeComponents(){
     iavRegionOfInterestLabel= new QLabel("ROI");
     iavTriggerLabel= new QLabel("Trigger");
     iavTrackingAlgLabel= new QLabel("Tracking algorithm");
+    accuracyLabel = new QLabel("Accuracy");
+    cpuLoadLabel = new QLabel("Economy");
 
     audioDeviceLabel->setToolTip("Choose audio output device.");
     sampleRateLabel->setToolTip("Set samples per second.");
@@ -54,6 +57,9 @@ void GUI::initializeComponents(){
     iavRegionOfInterestLabel->setToolTip("Set region of interest size (window size for photshooting pattern).");
     iavTriggerLabel->setToolTip("Choose capturing method.");
     iavTrackingAlgLabel->setToolTip("Select object tracking algorithm.");
+    accuracyLabel->setToolTip("Do not skip frames.");
+    cpuLoadLabel->setToolTip("Skip frames.");
+    skipFramesSlider->setToolTip("CURRENTLY UNSUPPORTED");
 
     // create a layout for the #Outchannels
     numChannelsLayout = new QHBoxLayout();
@@ -83,10 +89,14 @@ void GUI::addExplanations(){
     triggerComboBox->setItemData(0, "Capturing is initialized manually, using the Space Bar key", Qt::ToolTipRole);
     triggerComboBox->setItemData(1, "A 5-seconds timer will initialize the capturing", Qt::ToolTipRole);
 
-    // .. and finally to the frequency ranges
+    // .. to the frequency ranges
     frequencyRangeComboBox->setItemData(0, "300 Hz up to 700 Hz", Qt::ToolTipRole);
     frequencyRangeComboBox->setItemData(1, "300 Hz up to 1500 Hz", Qt::ToolTipRole);
     frequencyRangeComboBox->setItemData(2, "100 Hz up to 20 kHz", Qt::ToolTipRole);
+
+    // .. and finally to the tracking algorithms
+    trackingAlgorithmComboBox->setItemData(0, "Recommended", Qt::ToolTipRole);
+    trackingAlgorithmComboBox->setItemData(1, "Not recommended", Qt::ToolTipRole);
 
 }
 
@@ -165,6 +175,7 @@ GUI::GUI() {
     iavLayout.addWidget(createDropDownList(roiComboBox,iavRegionOfInterestLabel, {"Small","Medium","Large"}));
     iavLayout.addWidget(createDropDownList(triggerComboBox,iavTriggerLabel, {"Manual", "Auto"}));
     iavLayout.addWidget(createDropDownList(trackingAlgorithmComboBox,iavTrackingAlgLabel, {"CSRT", "KCF"}));
+    iavLayout.addWidget(createSkipFramesSlider(accuracyLabel, cpuLoadLabel));
     iavSettings.setLayout(&iavLayout);
     mainLayout.addWidget(&iavSettings);
 
@@ -259,6 +270,7 @@ void GUI::saveCurrentStates(){
     settings["roi"] = roiComboBox->currentText().toStdString();
     settings["trigger"] = triggerComboBox->currentText().toStdString();
     settings["trackingAlgorithm"] = trackingAlgorithmComboBox->currentText().toStdString();
+    settings["skipFramesRatio"] = std::to_string(skipFramesSlider->value());
 
     settingsDB.saveSettings(settings);
 }
@@ -290,6 +302,7 @@ void GUI::loadCurrentStates(){
     roiComboBox->setCurrentText(QString::fromStdString(settings["roi"]));
     triggerComboBox->setCurrentText(QString::fromStdString(settings["trigger"]));
     trackingAlgorithmComboBox->setCurrentText(QString::fromStdString(settings["trackingAlgorithm"]));
+    skipFramesSlider->setValue(std::stoi(settings["skipFramesRatio"]));
 
 }
 
@@ -322,6 +335,25 @@ QWidget* GUI::createDropDownList(QComboBox *comboBox,QLabel *label,const QString
     return rowWidget;
 }
 
+QWidget* GUI::createSkipFramesSlider(QLabel *label1, QLabel *label2) {
+
+    skipFramesSlider->setMinimum(1); 
+    skipFramesSlider->setMaximum(5);
+    skipFramesSlider->setValue(0); 
+
+    QWidget* sliderWidget = new QWidget();
+    QHBoxLayout* layout = new QHBoxLayout(sliderWidget);
+
+    layout->addWidget(label1, 0, Qt::AlignLeft);
+    layout->addWidget(skipFramesSlider);
+    layout->addWidget(label2, 0, Qt::AlignRight);
+
+    // optional .. 
+    // connect(skipFramesSlider, &QSlider::valueChanged, this, &Gui::onSliderValueChanged);
+
+    sliderWidget->setLayout(layout);  // Set the layout to the container widget
+    return sliderWidget;  // Return the widget containing the slider and labels
+}
 
 bool GUI::checkResolutionCompatibility() {
     // Resolutions are currently stored as "WidthxHeight"

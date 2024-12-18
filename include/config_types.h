@@ -31,6 +31,7 @@ struct IAVConfig{
     int roiRadius;
     std::string trigger;
     std::string trackingAlg;
+    // int skipFramesRatio;
 };
 
 

@@ -11,6 +11,7 @@
 #include <QGroupBox>
 #include <QMap>
 #include <QPair>
+#include <QSlider>
 
 #include "settings.h"
 
@@ -30,6 +31,7 @@ private:
     void setupComboBoxes(QApplication);
 
     static QWidget* createDropDownList(QComboBox *, QLabel *, const QStringList&);
+    QWidget* createSkipFramesSlider(QLabel *, QLabel *);
 
     void updateSampleRates(const QString&);
     void updateNumChannelsInfo(const QString&);
@@ -79,7 +81,12 @@ private:
             *iavRegionOfInterestLabel,
             *iavTriggerLabel,
             *iavTrackingAlgLabel,
+            *accuracyLabel,
+            *cpuLoadLabel,
             *errorLabel;
+
+    QSlider* skipFramesSlider;  // Horizontal slider
+    
     QHBoxLayout* numChannelsLayout;
 };
 

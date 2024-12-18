@@ -56,6 +56,8 @@ Config::Config(){
 			iavconf.roiRadius = static_cast<int>(0.15 * camconf.camResW);
 		iavconf.trigger = settings["trigger"];
 		iavconf.trackingAlg = settings["trackingAlgorithm"];
+		// iavconf.skipFramesRatio = std::stoi(settings["skipFramesRatio"]);
+		// for defining skipFramesRatio, fps/skipFramesRatio should deduce the final value of frameRate and fps variables.
 	}
 	if (runAtomicityCheck()){
 		std::cerr<<"WARNING: Atomicity is not supported on this platform for some types"<<std::endl;
@@ -86,6 +88,8 @@ void Config::display(){
     std::cout<<"radius                   \t:\t"<<iavconf.roiRadius<<" pixels"<<std::endl;
     std::cout<<"trigger method           \t:\t"<<iavconf.trigger<<std::endl;
     std::cout<<"tracking algorithm       \t:\t"<<iavconf.trackingAlg<<std::endl;
+	// std::cout<<"skip frames ratio        \t:\t"<<iavconf.skipFramesRatio<<std::endl;
+	// std::cout<<"number of skip frames	 \t:\t"<<iavconf.skipFramesRatio-1<<" frames"<<std::endl;
     std::cout<<"#########################################################\n\n";
 
 }

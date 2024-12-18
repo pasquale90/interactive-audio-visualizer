@@ -1,5 +1,7 @@
 #include "videotracker.h"
+// #include <thread>
 
+// VideoTracker::VideoTracker(): waiting_ms ((1000/static_cast<int>(cfg.camconf.frameRate.load()) * cfg.iavconf.skipFramesRatio)){    
 VideoTracker::VideoTracker(){
     trackingToggle.store(false);
     patternlocked.store(false);
@@ -22,6 +24,9 @@ VideoTracker::VideoTracker(){
     boundingBox=temp;
     
     _initialize_tracker();
+
+    // std::cout<<"Sleeping ms "<<waiting_ms<<std::endl;
+
 }
 
 void VideoTracker::_initialize_tracker(){
@@ -73,7 +78,6 @@ void VideoTracker::_show_timer(const int millisecondsElapsed) {
 
 }
 
-static int framecounter = 0;
 void VideoTracker::capture(){
 
     /***
@@ -81,10 +85,10 @@ void VideoTracker::capture(){
     */
 
     while(true){
-        
+
         bool frameElapsed = camera.capture(currFrame);
 
-        framecounter++;
+        // framecounter++;
 
         if (!frameElapsed){
             break;
@@ -106,8 +110,8 @@ void VideoTracker::capture(){
 
                 _show_timer(millisecondsElapsed);
                 // temporarily show frame...
-                // imshow("2", currFrame);
-                // cv::waitKey(1);
+                imshow("2", currFrame);
+                cv::waitKey(1);
 
             }else // if trigger is activated. 
             {   cv::Mat tempROI(currFrame, centerBox); // access box information                
@@ -115,7 +119,6 @@ void VideoTracker::capture(){
                 patternlocked.store(true);
             }
         }else{
-        // }else if (framecounter%3==0){ // --> this will be used to skip frames 
             bool ok;
 
             // if the time allowed for the iav experience has elapsed
@@ -131,7 +134,7 @@ void VideoTracker::capture(){
             ok = tracker->update(currFrame, boundingBox);         
 
             // prevent out of lost tracking / time elapsed / bounds tracking
-            if (countDown || boundingBox.x<=0 || boundingBox.y<=0 || boundingBox.width<=0 || boundingBox.height<=0 || (boundingBox.x+boundingBox.width)>=W || (boundingBox.y+boundingBox.height)>=H ) {
+            if (!ok || countDown || boundingBox.x<=0 || boundingBox.y<=0 || boundingBox.width<=0 || boundingBox.height<=0 || (boundingBox.x+boundingBox.width)>=W || (boundingBox.y+boundingBox.height)>=H ) {
                 
                 patternlocked.store(false);
                 t1.setTimer(5);
@@ -143,25 +146,23 @@ void VideoTracker::capture(){
                 tracker->init(currFrame, boundingBox);
             }
             else{ // during  successfull tracking
-                if (ok){
 
-                    trackingToggle=!trackingToggle;
+                trackingToggle=!trackingToggle;
 
-                    currboxCenter_x.store(static_cast<int>(boundingBox.x + boundingBox.width/2));
-                    currboxCenter_y.store(static_cast<int>(boundingBox.y + boundingBox.height/2));
-                    currboxCenter_w.store(static_cast<int>(boundingBox.width));
-                    currboxCenter_h.store(static_cast<int>(boundingBox.height));
-        
-                }
+                currboxCenter_x.store(static_cast<int>(boundingBox.x + boundingBox.width/2));
+                currboxCenter_y.store(static_cast<int>(boundingBox.y + boundingBox.height/2));
+                currboxCenter_w.store(static_cast<int>(boundingBox.width));
+                currboxCenter_h.store(static_cast<int>(boundingBox.height));
+    
+        // temp draw detection
+        int radius = cfg.iavconf.roiRadius;
+        cv::Rect temprect(boundingBox.x,boundingBox.y,radius*2,radius*2);
+        cv::rectangle(currFrame, temprect, cv::Scalar(0, 255, 0), 2, cv::LINE_AA);
+        imshow("1", currFrame);
+        cv::waitKey(1);
             }
-
-            // temp draw detection
-            // int radius = cfg.iavconf.roiRadius;
-            // cv::Rect temprect(boundingBox.x,boundingBox.y,radius*2,radius*2);
-            // cv::rectangle(currFrame, temprect, cv::Scalar(0, 255, 0), 2, cv::LINE_AA);
-            // imshow("1", currFrame);
-            // cv::waitKey(1);
         } 
+        // std::this_thread::sleep_for(std::chrono::milliseconds(waiting_ms));
     }
 }
 
