@@ -21,8 +21,10 @@
 int main(){
     
     GUI gui;
-    IAV interactiveAudioVisualizer;
-    interactiveAudioVisualizer.start();
-
+    if (!gui.onExit()){
+      IAV interactiveAudioVisualizer;
+      interactiveAudioVisualizer.start();
+    }
+    
     return 0;
 }

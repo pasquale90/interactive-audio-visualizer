@@ -102,6 +102,8 @@ void GUI::addExplanations(){
 
 GUI::GUI() {    
     int argc = 0;
+    applicationStart = false;
+    
     QApplication app(argc,nullptr);
 
     QWidget window;
@@ -193,6 +195,7 @@ GUI::GUI() {
             if(checkResolutionCompatibility()) {
                 errorLabel->hide(); // Hide if resolutions are compatible
                 saveCurrentStates();
+                applicationStart = true;
                 QApplication::quit();
                 // exiting to start_iav();
             } else {
@@ -366,4 +369,8 @@ bool GUI::checkResolutionCompatibility() {
     int displayHeight = displayRes.split("x")[1].toInt();
 
     return (cameraWidth <= displayWidth && cameraHeight <= displayHeight);
+}
+
+bool GUI::onExit(){
+    return !applicationStart;
 }

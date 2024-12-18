@@ -19,12 +19,13 @@ class GUI{
 public:
 
     GUI();
+    bool onExit();
 
 private:
 
+    bool applicationStart;
     double approxFps;
     std::vector<std::string> audioExplanations;
-
 
     void initializeComponents();
     void initializeTexts();
