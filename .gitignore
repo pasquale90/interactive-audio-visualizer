@@ -17,3 +17,4 @@ src/__scales*
 src/__frequencies*
 src/__wavelengths*
 temp/
+checks/
