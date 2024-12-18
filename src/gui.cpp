@@ -164,7 +164,7 @@ GUI::GUI() {
     iavLayout.addWidget(createDropDownList(frequencyRangeComboBox,iavFrequencyRangeLabel, {"Narrow", "Normal", "Wide"}));
     iavLayout.addWidget(createDropDownList(roiComboBox,iavRegionOfInterestLabel, {"Small","Medium","Large"}));
     iavLayout.addWidget(createDropDownList(triggerComboBox,iavTriggerLabel, {"Manual", "Auto"}));
-    iavLayout.addWidget(createDropDownList(trackingAlgorithmComboBox,iavTrackingAlgLabel, {"CSRT", "KFC", "BOOSTING"}));
+    iavLayout.addWidget(createDropDownList(trackingAlgorithmComboBox,iavTrackingAlgLabel, {"CSRT", "KCF"}));
     iavSettings.setLayout(&iavLayout);
     mainLayout.addWidget(&iavSettings);
 

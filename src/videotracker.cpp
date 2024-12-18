@@ -27,10 +27,8 @@ VideoTracker::VideoTracker(){
 void VideoTracker::_initialize_tracker(){
     if (cfg.iavconf.trackingAlg == "CSRT") {
         tracker = cv::TrackerCSRT::create();
-    } else if (cfg.iavconf.trackingAlg == "KFC") {
+    } else if (cfg.iavconf.trackingAlg == "KCF") {
         tracker = cv::TrackerKCF::create();
-    }else if (cfg.iavconf.trackingAlg == "BOOSTING") {
-        tracker = cv::TrackerBoosting::create();
     }
 }
 
@@ -141,7 +139,6 @@ void VideoTracker::capture(){
                 boundingBox = centerBox;
                 
                 // Creating a new tracker
-                tracker->clear();
                 _initialize_tracker();
                 tracker->init(currFrame, boundingBox);
             }

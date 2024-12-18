@@ -7,7 +7,6 @@
 #include <utility>
 #include <opencv2/tracking.hpp>
 #include <opencv2/features2d.hpp>
-#include <opencv2/tracking/tracker.hpp>
 
 #include "camera.h"
 #include "roi.h"
@@ -53,7 +52,7 @@ private:
     RegionOfInterest boxCenter;
     cv::Mat ROI,currFrame;
     cv::Rect centerBox;
-    cv::Rect2d boundingBox;
+    cv::Rect boundingBox;
     
     std::atomic<int> currboxCenter_x,currboxCenter_y,currboxCenter_w,currboxCenter_h;
     std::atomic<bool> patternlocked;
