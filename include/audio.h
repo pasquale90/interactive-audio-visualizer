@@ -69,7 +69,7 @@ private:
     float *outputBuffers[2];
 
     Sine sine;
-    void (Sine::*callable)(int,float*[2]) = nullptr;
+    void (Sine::*make_sound)(int,float*[2]) = nullptr;
 
     /*! @brief A non-member fuction used to alias the AudioStream::streamBuffer which is used as an argument in the AudioStream::jack_set_process_callback member function.
     * @param jack_nframes nframes - the buffer size

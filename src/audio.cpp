@@ -23,10 +23,10 @@ AudioStream::AudioStream():audiocfg (Config::getInstance().audconf){
     if (audiocfg.numChannels.load() == 1){
         output_ports[1] = nullptr;
         outputBuffers[1]=nullptr;
-        callable = &Sine::getMonoSignal;  // Point to getMonoSignal for processing 1 single mono buffer
+        make_sound = &Sine::setMonoSignal;  // Point to setMonoSignal for processing 1 single mono buffer
     }        
     else if (audiocfg.numChannels.load() == 2) {
-        callable = &Sine::getStereoSignal;  // Point to getStereoSignal for processing 2 stereo buffers
+        make_sound = &Sine::setStereoSignal;  // Point to setStereoSignal for processing 2 stereo buffers
     }
 
 }
@@ -130,7 +130,7 @@ int AudioStream::streamBuffer(){
     }
     
     static int tone = 300;    
-    (sine.*callable)(tone,outputBuffers); 
+    (sine.*make_sound)(tone,outputBuffers); 
     tone++;
 
     // audioBufferCallback(left,right);

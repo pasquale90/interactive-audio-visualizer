@@ -11,8 +11,8 @@ public:
     /*! @brief Default constructor */
     Sine();
 
-    void getMonoSignal(int, float*[2]);
-    void getStereoSignal(int, float*[2]);
+    void setMonoSignal(int, float*[2]);
+    void setStereoSignal(int, float*[2]);
 
 private:
     const AudioConfig& audiocfg;
