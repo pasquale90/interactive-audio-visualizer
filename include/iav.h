@@ -6,7 +6,9 @@
 #include "config.h"
 #include "audioserver.h"
 #include "audio.h"
+#include "roi.h"
 #include "videotracker.h"
+#include "audiolizer.h"
 
 class IAV{
 
@@ -22,6 +24,7 @@ class IAV{
         AudioServer audioServer;
         AudioStream audioStream;
         VideoTracker videoTracker;
+        Audiolizer audiolizer;
 
         std::thread audServerThread;
         std::thread audClientThread;
@@ -31,6 +34,12 @@ class IAV{
         std::mutex mtxServer;
         std::condition_variable cvServer;
         bool serverStarted{false};
+
+        // shared data
+        bool trackingUpdated,patternLocked;
+        RegionOfInterest trackingSig;
+        cv::Mat cameraFrame;
+        int frequency;
 
         void audiovisual();
 };

@@ -1,11 +1,38 @@
 #include "iav.h"
 
-#include <iostream>
+// #include <iostream>
+#include <cstdio>
+#include <ncurses.h>
 
 void IAV::audiovisual(){
-    // while(true){
+
+    // @TEMP ncurses for getting the exit sig
+    initscr();
+    nodelay(stdscr, TRUE);  // Set non-blocking
+    cbreak();
+    noecho();
+    char c = '\0';
+
+    while (c != 'q') {
+        int key = getch();
+        c = static_cast<char>(key);
+        clear(); 
+        mvprintw(0, 0, "Press 'q' to quit.");
+        refresh();  
+
+        // update videoTracker's shared data  
+        trackingUpdated = videoTracker.update(trackingSig,cameraFrame,patternLocked);
+  
         // convert tracking signal into frequency
-        // bool frameElapsed=al.turn_Image_into_Sound(trackEnabled,currenTone,visualFrame,ROI, (float *)left ,  (float *)right); // rename frameElapsed with the var name "imClock"
+        bool frequencyChanged = audiolizer.turn_Image_into_Sound(trackingUpdated, patternLocked, trackingSig, frequency);
+        
+        // update audioStream with the newFrequency
+        if (frequencyChanged){
+            audioStream.update(frequency);
+        }
+        
+
+
         // visualize everything
         // exit_msg=vs.and_Sound_into_Image((float *)left, (float *)right, visualFrame, frameElapsed, trackEnabled, currenTone, ROI);
 
@@ -13,13 +40,12 @@ void IAV::audiovisual(){
         // if (exit_msg){
         //     return;
         // }
-    // }
-    char c='\0';
-    while (c!='q') {
-        std::cout<<"give c"<<std::endl;
-        std::cin>>c;
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(25));
     }
+    endwin();
     return;
+
 }
 
 IAV::IAV()
@@ -33,6 +59,8 @@ IAV::IAV()
     trackingThread = std::thread(&VideoTracker::capture,&videoTracker);
     iavThread = std::thread(&IAV::audiovisual,this);
 
+    // initialize shared data
+    frequency=0;
 }
 
 // IAV::~IAV(){

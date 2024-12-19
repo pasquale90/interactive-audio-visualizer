@@ -25,7 +25,7 @@ public:
     void capture();
 
     /*! @brief Updates the tracking results */
-    bool update(RegionOfInterest&, cv::Mat&);
+    bool update(RegionOfInterest&, cv::Mat&, bool&);
 
     // /*! @brief Pulses whether a new tracking update has been emerged */
     // bool pattern_locked();

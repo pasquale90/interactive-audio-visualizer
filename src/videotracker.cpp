@@ -166,13 +166,15 @@ void VideoTracker::capture(){
     }
 }
 
-bool VideoTracker::update(RegionOfInterest &roi_center,cv::Mat& frame){
+bool VideoTracker::update(RegionOfInterest &roi_center,cv::Mat& frame, bool &patternLocked){
     /***
      * Updates the roi and the (global) roi center. 
      * Returns bool - Applies control the return values (i.e. if no changes occured by a visual stimulus
     */
 
-    if (patternlocked.load()){
+    patternLocked = patternlocked.load();
+    
+    if (patternLocked){
         roi_center.centerX.store(currboxCenter_x.load());
         roi_center.centerY.store(currboxCenter_y.load());
         roi_center.volumeW.store(currboxCenter_w.load());

@@ -7,6 +7,7 @@
 #include <iostream>
 #include <cstring>
 #include <unistd.h>
+#include <atomic>
 #include <mutex>
 #include <condition_variable>
 #include "sine.h"
@@ -57,6 +58,8 @@ public:
     * @return int - success message
     */
     int streamBuffer();
+
+    void update(int);
     
 private:
 
@@ -70,6 +73,7 @@ private:
 
     Sine sine;
     void (Sine::*make_sound)(int,float*[2]) = nullptr;
+    std::atomic<int> tone;
 
     /*! @brief A non-member fuction used to alias the AudioStream::streamBuffer which is used as an argument in the AudioStream::jack_set_process_callback member function.
     * @param jack_nframes nframes - the buffer size

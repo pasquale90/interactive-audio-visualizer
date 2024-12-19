@@ -29,6 +29,8 @@ AudioStream::AudioStream():audiocfg (Config::getInstance().audconf){
         make_sound = &Sine::setStereoSignal;  // Point to setStereoSignal for processing 2 stereo buffers
     }
 
+    tone.store(0);
+
 }
 
 AudioStream::~AudioStream(){
@@ -129,10 +131,8 @@ int AudioStream::streamBuffer(){
         outputBuffers[ch] = static_cast<float *>(jack_port_get_buffer (output_ports[ch], audiocfg.bufferSize.load() ));
     }
     
-    static int tone = 300;    
-    (sine.*make_sound)(tone,outputBuffers); 
-    tone++;
-
+    (sine.*make_sound)(tone.load(),outputBuffers); 
+    
     // audioBufferCallback(left,right);
     // here, sharing of the data is required..
 
@@ -142,4 +142,8 @@ int AudioStream::streamBuffer(){
 void AudioStream::jack_shutdown (void *UNUSED(arg))
 {
 	exit (1);
+}
+
+void AudioStream::update(int frequency){
+    tone.store(frequency);
 }

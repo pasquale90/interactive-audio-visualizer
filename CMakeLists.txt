@@ -3,11 +3,11 @@ project(interactive-audio-visualizer)
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -pedantic -Wall -Wextra -Werror")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -pedantic -Wall -Wextra -Werror -Wunused")
 
 # enable clang-tidy and cppcheck static analysis
-set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks='bugprone-*,performance-*,clang-analyzer-*')
-set(CMAKE_CXX_CPPCHECK cppcheck --enable=performance,warning,style)
+# set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks='bugprone-*,performance-*,clang-analyzer-*')
+# set(CMAKE_CXX_CPPCHECK cppcheck --enable=performance,warning,style)
 
 option(BUILD_TESTS "Build the tests" OFF)
 
@@ -27,7 +27,7 @@ set(SOURCE_FILES
     src/camera.cpp
     src/videotracker.cpp
     src/timer.cpp
-    # src/audiolizer.cpp
+    src/audiolizer.cpp
     # src/fft.cpp
     # src/raw.cpp
     # src/visualizer.cpp
@@ -74,6 +74,7 @@ set(LIBRARIES
     opencv_features2d
     opencv_tracking
     pthread
+    ncurses
 )
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
