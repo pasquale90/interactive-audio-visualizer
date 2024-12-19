@@ -5,6 +5,8 @@
 * translates the tracking signal into audio frequency
 */
 
+#include <functional>
+
 #include "config_types.h"
 struct RegionOfInterest;
 
@@ -28,11 +30,14 @@ public:
     */
     bool turn_Image_into_Sound(const bool, const bool, const RegionOfInterest&, int&);
 
+    void setAudioUpdater(std::function<void(int)>);
 private:
 
     CameraConfig &cameracfg;
     IAVConfig &iavcfg;
     int frequencyRange,prev_freq;
+
+    std::function<void(int)> updateAudio;
 
     /*! @brief Method that receives the tracking updates and handles the way of how the visual interaction will affect sound
     * This function maps the box potition into a certain frequency. Will be updated using more interaction data (i.e. speed)

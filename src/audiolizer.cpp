@@ -13,6 +13,10 @@ Audiolizer::Audiolizer():cameracfg(Config::getInstance().camconf),iavcfg(Config:
     prev_freq=0;
 }
 
+void Audiolizer::setAudioUpdater(std::function<void(int)> func){
+    updateAudio = std::move(func);
+}
+
 bool Audiolizer::turn_Image_into_Sound(const bool tracking_updated, const bool pattern_locked , const RegionOfInterest &roi, int& freq){
 
    /***
@@ -35,7 +39,13 @@ bool Audiolizer::turn_Image_into_Sound(const bool tracking_updated, const bool p
         }
     }
 
-    return freq != prevFreq;
+    // update audioStream with the newFrequency
+    bool frequencyChanged = freq != prevFreq;
+    if (frequencyChanged){
+        updateAudio(freq);
+    }
+    
+    return frequencyChanged;
 
 }
 

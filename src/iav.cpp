@@ -24,14 +24,8 @@ void IAV::audiovisual(){
         trackingUpdated = videoTracker.update(trackingSig,cameraFrame,patternLocked);
   
         // convert tracking signal into frequency
-        bool frequencyChanged = audiolizer.turn_Image_into_Sound(trackingUpdated, patternLocked, trackingSig, frequency);
-        
-        // update audioStream with the newFrequency
-        if (frequencyChanged){
-            audioStream.update(frequency);
-        }
-        
-
+        // bool frequencyChanged = // @temporarily commented to supress warning
+        audiolizer.turn_Image_into_Sound(trackingUpdated, patternLocked, trackingSig, frequency);
 
         // visualize everything
         // exit_msg=vs.and_Sound_into_Image((float *)left, (float *)right, visualFrame, frameElapsed, trackEnabled, currenTone, ROI);
@@ -53,6 +47,8 @@ IAV::IAV()
     // Here setup everything
     audioServer.setup_server();
     cfg.display();
+
+    audiolizer.setAudioUpdater(std::bind(&AudioStream::update,&audioStream,std::placeholders::_1));
     
     audServerThread = std::thread (&AudioServer::start_server,&audioServer,std::ref(mtxServer), std::ref(cvServer), std::ref(serverStarted));
     audClientThread = std::thread (&AudioStream::clientConnect,&audioStream,std::ref(mtxServer), std::ref(cvServer), std::ref(serverStarted));
