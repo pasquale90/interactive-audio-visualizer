@@ -57,7 +57,7 @@ private:
     std::atomic<int> currboxCenter_x,currboxCenter_y,currboxCenter_w,currboxCenter_h;
     std::atomic<bool> patternlocked;
 
-    // const int waiting_ms;
+    const int waiting_ms;
 
 };
 

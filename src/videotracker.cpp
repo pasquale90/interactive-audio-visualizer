@@ -1,8 +1,8 @@
 #include "videotracker.h"
-// #include <thread>
+#include <thread>
 
 // VideoTracker::VideoTracker(): waiting_ms ((1000/static_cast<int>(cfg.camconf.frameRate.load()) * cfg.iavconf.skipFramesRatio)){    
-VideoTracker::VideoTracker(){
+VideoTracker::VideoTracker(): waiting_ms ((1000/static_cast<int>(cfg.camconf.frameRate.load()))){    
     trackingToggle.store(false);
     patternlocked.store(false);
 
@@ -25,7 +25,7 @@ VideoTracker::VideoTracker(){
     
     _initialize_tracker();
 
-    // std::cout<<"Sleeping ms "<<waiting_ms<<std::endl;
+    std::cout<<"Sleeping ms "<<waiting_ms<<std::endl;
 
 }
 
@@ -87,8 +87,6 @@ void VideoTracker::capture(){
     while(true){
 
         bool frameElapsed = camera.capture(currFrame);
-
-        // framecounter++;
 
         if (!frameElapsed){
             break;
@@ -162,7 +160,7 @@ void VideoTracker::capture(){
         cv::waitKey(1);
             }
         } 
-        // std::this_thread::sleep_for(std::chrono::milliseconds(waiting_ms));
+        std::this_thread::sleep_for(std::chrono::milliseconds(waiting_ms));
     }
 }
 
