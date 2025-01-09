@@ -4,14 +4,15 @@ IAV::IAV()
 {
     // Here setup everything
     audioServer.setup_server();
-    cfg.display();
 
     audiolizer.setAudioUpdater(std::bind(&AudioStream::update,&audioStream,std::placeholders::_1));
-    
+    visualizer.setAudiolizerUpdater(std::bind(&Audiolizer::turn_Image_into_Sound, &audiolizer, std::placeholders::_1,std::placeholders::_2,std::placeholders::_3,std::placeholders::_4));
+
     audServerThread = std::thread (&AudioServer::start_server,&audioServer,std::ref(mtxServer), std::ref(cvServer), std::ref(serverStarted));
     audioThread = std::thread (&AudioStream::clientConnect,&audioStream,std::ref(mtxServer), std::ref(cvServer), std::ref(serverStarted));
     visualThread = std::thread(&Visualizer::broadcast,&visualizer);
-    
+
+    cfg.display();
 }
 
 

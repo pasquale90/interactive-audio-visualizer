@@ -1,6 +1,8 @@
 #ifndef VISUALIZER_H
 #define VISUALIZER_H
 
+#include <functional>
+
 #include "raw.h"
 #include "fft.h"
 #include "roi.h"
@@ -19,6 +21,8 @@ public:
     ~Visualizer();
 
     void broadcast();
+
+    void setAudiolizerUpdater(std::function<void(const bool, const bool, const RegionOfInterest&, int&)>);
 
 private:
     const Config &cfg = Config::getInstance();
@@ -41,6 +45,9 @@ private:
     void _show_timer(float);
     bool trackingToggle;
     void updateTrackingMode(bool);
+    // method to update audioLizer
+    std::function<void(const bool, const bool, const RegionOfInterest&, int&)> updateAudioLizer ;
+
     
 // later ..
     void _set_BG_manually(int,bool);

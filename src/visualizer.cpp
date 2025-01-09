@@ -28,6 +28,10 @@ trackingToggle = false;
 
 }
 
+void Visualizer::setAudiolizerUpdater(std::function<void(const bool, const bool, const RegionOfInterest&, int&)> function){
+    updateAudioLizer = std::move(function);
+}
+
 void Visualizer::updateTrackingMode(bool trackingEnabled){
 
     if (trackingToggle!=trackingEnabled){
@@ -48,7 +52,7 @@ void Visualizer::broadcast(){
 
     bool trackingEnabled,trackingUpdated;
     RegionOfInterest trackingSig;
-    // int frequency=200;
+    int frequency;
 
     while(true){
 
@@ -81,7 +85,9 @@ void Visualizer::broadcast(){
             _setToCamera(remaining_percentage);
             trackingUpdated = trackingEnabled = false;
         }
-    
+
+        updateAudioLizer(trackingUpdated, trackingEnabled, trackingSig, frequency);
+
         bool exit_msg = _showFrame();
         if (exit_msg)
             break;

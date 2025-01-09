@@ -6,8 +6,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -pedantic -Wall -Wextra -Werror -Wunused")
 
 # enable clang-tidy and cppcheck static analysis
-# set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks='bugprone-*,performance-*,clang-analyzer-*')
-# set(CMAKE_CXX_CPPCHECK cppcheck --enable=performance,warning,style)
+set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks='bugprone-*,performance-*,clang-analyzer-*')
+set(CMAKE_CXX_CPPCHECK cppcheck --enable=performance,warning,style)
 
 option(BUILD_TESTS "Build the tests" OFF)
 
