@@ -4,10 +4,10 @@
 #include "raw.h"
 #include "fft.h"
 #include "roi.h"
-#include <opencv2/opencv.hpp>
-// #include <opencv2/core/core.hpp>
-// #include "opencv2/highgui/highgui.hpp"
-// #include <opencv2/core/mat.hpp>
+
+#include "videotracker.h"
+#include "camera.h"
+#include "trigger.h"
 
 class Visualizer{
 public:
@@ -15,51 +15,44 @@ public:
     /*! @brief Default constructor */
     Visualizer();
 
-    /*! @brief Class implicit destructor */
-    void shutdown();
+    /*! @brief Class destructor */
+    ~Visualizer();
 
-    /*! @brief Class implicit constructor */
-    void setup(const Config&);
+    void broadcast();
 
-    /*! @brief Method resplonsible for visualization.
-     * @param[in] float* left audio buffer filled with a sine wave tone
-     * @param[in] float* right audio buffer filled with a sine wave tone
-     * @param[in] cv::Mat - frame obtained from camera
-     * @param[in] bool frameElapsed - whether a new frame elapsed from the camera
-     * @param[in] bool trackEnabled - whether a new update emerged from tracking
-     * @param[in] int - frequency tone - currently affects the coloring (future releases will probably leave such features to the audio buffer signal analysis)
-     * @param[in] RegionOfInterest - tracking updates 
-     */
-    int and_Sound_into_Image(float*, float*, cv::Mat, bool, bool, int, RegionOfInterest);
-    
 private:
-    Waveform wf;
-    int *wave;
+    const Config &cfg = Config::getInstance();
+    Camera camera;
+    VideoTracker videoTracker;
+    Trigger trigger;
     // Spectrogram sp;
-    // double *dft;
-    cv::Mat visualFrame;
-    cv::Mat camBinaryMask;
+    // float *dft;
 
-    int W,H,fps,SR,buffer_size;
+    cv::Mat visualFrame,cameraFrame;
+    // cv::Mat camBinaryMask;
+
+    float transpose_ratio_x, transpose_ratio_y;
     int R,G,B;
-    int fmin, fmax;
     int LR,TB;
     int numPointsPerimeter;
-    // int bufferCount;
-    // int buffersPerFrame;
 
+//working on them
+    void _setToCamera(float);
+    void _show_timer(float);
+    bool trackingToggle;
+    void updateTrackingMode(bool);
+    
+// later ..
     void _set_BG_manually(int,bool);
-    void _set_FG_manually(cv::Mat, RegionOfInterest);
-    void _setToCamera(cv::Mat);
-    void _create_camMask(int,int);    
+    void _set_FG_manually(const RegionOfInterest&);
+    void _create_camMask();    
     bool _showFrame();
 
     // void midPointCircleDraw(int x_centre, int y_centre, int r);
     // int update_spectrogram();
-    void draWaveform(int,int);
-    void drawSmallcircle(int,int,int,int,int,int);
+    void draWaveform();
+    void drawSmallcircle(const RegionOfInterest &);
 };
-
 
 
 #endif

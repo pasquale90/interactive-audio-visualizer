@@ -6,16 +6,13 @@
 #include "config.h"
 #include "audioserver.h"
 #include "audio.h"
-#include "roi.h"
-#include "videotracker.h"
 #include "audiolizer.h"
+#include "visualizer.h"
 
 class IAV{
 
     public:
         IAV();
-        // ~IAV();
-        
         void start();
 
     private:
@@ -23,25 +20,17 @@ class IAV{
         Config& cfg = Config::getInstance();
         AudioServer audioServer;
         AudioStream audioStream;
-        VideoTracker videoTracker;
         Audiolizer audiolizer;
-
+        Visualizer visualizer;
+        
         std::thread audServerThread;
-        std::thread audClientThread;
-        std::thread trackingThread;
-        std::thread iavThread;
+        std::thread audioThread;
+        std::thread visualThread;
 
         std::mutex mtxServer;
         std::condition_variable cvServer;
         bool serverStarted{false};
 
-        // shared data
-        bool trackingUpdated,patternLocked;
-        RegionOfInterest trackingSig;
-        cv::Mat cameraFrame;
-        int frequency;
-
-        void audiovisual();
 };
 
 

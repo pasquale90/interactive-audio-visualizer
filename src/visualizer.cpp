@@ -1,53 +1,108 @@
 #include "visualizer.h"
+#include <cstddef>
+
+constexpr int qASCII {113}; // 113 q
+// constexpr int spaceASCII {32};// 32 space
 
 Visualizer::Visualizer(){
-    /***
-     * requires implementation, initialization missing
-     */
-}
 
-void Visualizer::shutdown(){
-    // delete[] dft;
-    cv::destroyWindow("Interactive Audio Visualizer");  
-    visualFrame.release();
-    camBinaryMask.release();
-    wf.clean();
-    // sp.~Spectrogram();  
-    std::cout<<"Visualizer destructed"<<std::endl;
-}
+    int W=cfg.dispconf.dispResW.load();
+    int H=cfg.dispconf.dispResH.load();
 
-void Visualizer::setup(const Config& cfg){
-    
-    W=cfg.displayW;
-    H=cfg.displayH;
-    SR=cfg.sampleRate;
-    buffer_size=cfg.bufferSize;
-    fps=cfg.fps;
-
-    fmin = cfg.minFrequency;
-    fmax = cfg.maxFrequency;
-        
     cv::namedWindow("Interactive Audio Visualizer",cv::WINDOW_AUTOSIZE);
-    cv::Mat img(H,W, CV_8UC3,cv::Scalar(0,0,0));
+    cv::Mat img( H , W, CV_8UC3,cv::Scalar(0,0,0));
     visualFrame = img;
-        
-    wf.setup(cfg);
-    
+       
+    // _create_camMask();
 
-    // buffersPerFrame=std::ceil((SR/buffer_size)/(double)fps);
-    // beatCount=0;
-    // sp=new Spectrogram(buffer_size,buffersPerFrame,H);
-    // dft=new double[H];
-    // sp.set_config(cfg);
-    // Spectrogram sp(buffer_size,buffersPerFrame,H);
-    
-    _create_camMask(cfg.camResW,cfg.camResH);
+    int cameraW = cfg.camconf.camResW.load();
+    int cameraH = cfg.camconf.camResH.load();
+    LR = W - cameraW;
+    TB = H - cameraH;
 
+    transpose_ratio_x = static_cast<float>(W) / static_cast<float>(cameraW) / 2.0f;
+    transpose_ratio_y = static_cast<float>(H) / static_cast<float>(cameraH) / 2.0f;
+
+trackingToggle = false;
     std::cout<<"Visualizer constructed"<<std::endl;
 
 }
 
-void Visualizer::_create_camMask(int cameraW,int cameraH){
+void Visualizer::updateTrackingMode(bool trackingEnabled){
+
+    if (trackingToggle!=trackingEnabled){
+
+        std::cout<<"\t\tupdateTrackingMode"<<std::endl;
+
+        if (!trackingToggle && trackingEnabled){
+            videoTracker.initializeTracker(cameraFrame);
+            std::cout<<"\n \t\t\tinitializing tracker \n"<<std::endl;
+        }
+        trackingToggle = trackingEnabled;
+        
+    }
+
+}
+
+void Visualizer::broadcast(){
+
+    bool trackingEnabled,trackingUpdated;
+    RegionOfInterest trackingSig;
+    // int frequency=200;
+
+    while(true){
+
+        // camera in visualizer
+        bool frameElapsed = camera.capture(cameraFrame); // get data
+        if (!frameElapsed){
+            return;
+        }   
+
+        float remaining_percentage;
+        trackingEnabled = trigger.isTrackingEnabled(remaining_percentage);
+        updateTrackingMode(trackingEnabled);
+
+        if (trackingEnabled){ // preprocess visual_frame -->   doesn't depict the frame, it just edits it so it does not require a new frame to be captured by the camera.
+            
+            trackingUpdated = videoTracker.trackObject(cameraFrame, trackingSig);
+
+            if (!trackingUpdated){
+                // reset
+                trigger.reset();
+            }            
+                
+            // update the current visualframe according to the changing of the tracking stimulus
+            // _set_BG_manually(frequency, trackingEnabled);
+            // update_spectrogram();
+            _set_FG_manually(trackingSig);
+
+
+        }else{
+            _setToCamera(remaining_percentage);
+            trackingUpdated = trackingEnabled = false;
+        }
+    
+        bool exit_msg = _showFrame();
+        if (exit_msg)
+            break;
+    }
+}
+
+Visualizer::~Visualizer(){
+    cv::destroyWindow("Interactive Audio Visualizer");  
+    visualFrame.release();
+    cameraFrame.release();
+    // camBinaryMask.release();
+    std::cout<<"Visualizer destructed"<<std::endl;
+}
+
+/*
+void Visualizer::_create_camMask(){
+
+    int cameraW = cfg.camconf.camResW.load();
+    int cameraH = cfg.camconf.camResH.load();
+    int W=cfg.dispconf.dispResW.load();
+    int H=cfg.dispconf.dispResH.load();
 
     // calculate areas
     int r = (cameraW>cameraH) ? cameraH/2 : cameraW/2;
@@ -63,6 +118,7 @@ void Visualizer::_create_camMask(int cameraW,int cameraH){
     cv::Mat m1 = cv::Mat(cameraH,cameraW, CV_64F, cv::Scalar(0)); // CV_32F
     camBinaryMask=m1;
 
+r = cfg.iavconf.roiRadius;
     int thickness=1;
     circle( camBinaryMask,
         cv::Point(center_x,center_y),
@@ -108,18 +164,20 @@ void Visualizer::_create_camMask(int cameraW,int cameraH){
         }
     }
 }
+*/
 
-bool Visualizer::_showFrame(){ //bool nativeWindow
-    //Showing the video//
+bool Visualizer::_showFrame(){ 
     cv::imshow("Interactive Audio Visualizer", visualFrame);
-    if (cv::waitKey(1) == 113) return true;
+    int msg = cv::waitKey(1);
+    if (msg == qASCII) return true; 
+    // else if (cfg.iavconf.trigger=="Manual" && msg == spaceASCII)    
     return false;
-
 }
 
-void Visualizer::_set_BG_manually(int tone, bool trackEnabled){
+#include "unused_defines.h"
+void Visualizer::_set_BG_manually(int tone, bool UNUSED(trackEnabled)){
 
-    double percent;
+    float percent;
 
 // naive conversion
     // if (tone>0 && tone<200){                  
@@ -178,46 +236,50 @@ void Visualizer::_set_BG_manually(int tone, bool trackEnabled){
         // int B = visualFrame.at<cv::Vec3b>(0,0)[0];
         // int G = visualFrame.at<cv::Vec3b>(0,0)[1];
         // int R = visualFrame.at<cv::Vec3b>(0,0)[2];
-        int B,G,R;
-        if (tone>fmin && tone<=300){                // keep blue             
-            percent = (double)tone/300.;  // high trans
+
+        int B {0},G {0},R {0};
+        if (tone> cfg.iavconf.minFrequency && tone<=300){                // keep blue             
+            percent = static_cast<float>(tone)/300.0f;  // high trans
             B = 255;
-            G = (255.*percent);
-            R = (255.*(1.-percent));
+            G = static_cast<int>(255.*percent);
+            R = static_cast<int>(255.*(1.-percent));
         }
         else if (tone >300 && tone <=700){       // keep green
-            percent = (double)tone/700.; // low trans
-            B = (255.*percent);
+            percent = static_cast<float>(tone)/700.0f; // low trans
+            B = static_cast<int>(255.*percent);
             G = 255;
-            R = (255.*(1.-percent));
+            R = static_cast<int>(255.*(1.-percent));
         }
-        else if (tone >700 && tone <=fmax) {    // keep red
-            percent = (double)tone/(double)fmax;            
-            B = (255.*percent);
-            G = (255.*(1.-percent));
+        else if (tone >700 && tone <= cfg.iavconf.maxFrequency) {    // keep red
+            percent = static_cast<float>(tone)/static_cast<float>(cfg.iavconf.maxFrequency);            
+            B = static_cast<int>(255.*percent);
+            G = static_cast<int>(255.*(1.-percent));
             R = 255;
         }
         visualFrame.setTo( cv::Scalar( B, G, R ) );
 }
 
-void Visualizer::drawSmallcircle(int cameraW, int cameraH, int roicenterX, int roicenterY, int roiVolumeW, int roiVolumeH){
+void Visualizer::drawSmallcircle(const RegionOfInterest &roi){
 
-    LR = W - cameraW;
-    TB = H - cameraH;
+    int roicenterX = roi.centerX.load();
+    int roicenterY = roi.centerY.load();
+    int roiVolumeW = roi.volumeW.load();
+    int roiVolumeH = roi.volumeH.load();
 
+    int W=cfg.dispconf.dispResW.load();
+    int H=cfg.dispconf.dispResH.load();
+    
     int center_x = LR/2 + roicenterX; //  
     int center_y = TB/2 + roicenterY; // H/2;
-    float transpose_ratio_x = (float)W / (float)cameraW / 2.;
-    float transpose_ratio_y = (float)H / (float)cameraH / 2.;
 
     if ( center_x < W/2 ) //-W*2/3)
-        center_x -= transpose_ratio_x*(W/2 - center_x);
+        center_x -= static_cast<int>(transpose_ratio_x * (static_cast<float>(W) / 2.0f - static_cast<float>(center_x)));
     else if ( center_x > W/2) //*2/3)
-        center_x += transpose_ratio_x*(center_x - W/2);
+        center_x += static_cast<int>(transpose_ratio_x * (static_cast<float>(center_x) - static_cast<float>(W) / 2.0f));
     if ( center_y < H/2 )
-        center_y -= transpose_ratio_y*(H/2 - center_y);
+        center_y -= static_cast<int>(transpose_ratio_y * (static_cast<float>(H) / 2.0f - static_cast<float>(center_y)));
     else if ( center_y > H/2 )
-        center_y += transpose_ratio_y*(center_y - H/2);
+        center_y += static_cast<int>(transpose_ratio_y * (static_cast<float>(center_y) - static_cast<float>(H) / 2.0f));
 
     cv::Point center(center_x, center_y);//Declaring the center point
     int radius = roiVolumeW > roiVolumeH ? roiVolumeW/2 : roiVolumeH/2; //Declaring the radius
@@ -227,67 +289,40 @@ void Visualizer::drawSmallcircle(int cameraW, int cameraH, int roicenterX, int r
 
 }
 
-void Visualizer::draWaveform(int cameraW,int cameraH){
-
-    int x_centre = W/2; 
-    int y_centre = H/2; // H/2;
-    int r = (cameraW>cameraH) ? cameraH/2 : cameraW/2;
-
-    float min,max;
-    int numSamples;
-    float *wave = wf.getWaveform(min,max,numSamples);
-    
-    // depict waveform
-    int start=0;
-    int end=numPointsPerimeter;
-    double waveSamplingRatio = (double)numSamples / (double)numPointsPerimeter;
-    double curRadians=0.0;
-    double radianStep=2*M_PI / (double)numPointsPerimeter;
-
-    // if (numSamples<numPointsPerimeter){
-    //     end=numSamples;
-    // }else end = numPointsPerimeter;
-    // std::cout<<"numPointsPerimeter "<<numPointsPerimeter<<" numSamplesWaveform "<<numSamples<<std::endl;
-
-    int counter = 0;
-    int thickness=1;
-    int x1,x2,y1,y2;
-    float percent;
-    float new_radius;
-    for (int i=start; i<end ; i++){
-        
-        // pixels are calculated given the following equations:
-        // x = cx + r * cos(a)
-        // y = cy + r * sin(a)
-        x1 = (float)r * std::cos(curRadians) + (float)x_centre;
-        y1 = (float)r * std::sin(curRadians) + (float)y_centre;
-
-        // normalize in -1 1
-        percent = 2* ( (wave[counter]-min) / (max-min) ) -1;
-
-        // trasport x and y
-        new_radius = r+((float)H/40.*percent);
-        x2 = new_radius * std::cos(curRadians) + (float)x_centre;
-        y2 = new_radius * std::sin(curRadians) + (float)y_centre;
-        cv::Point p1(x1, y1), p2(x2, y2); 
-        cv::line(visualFrame, p1, p2, cv::Scalar(255, 0, 0), thickness, cv::LINE_8); 
-
-        counter++;
-        if (counter>numSamples) counter=0;
-
-        curRadians+=radianStep;
-    }
+void Visualizer::draWaveform(){
     
 }
 
-void Visualizer::_set_FG_manually(cv::Mat cameraFrame , RegionOfInterest roi){
+void Visualizer::_set_FG_manually(const RegionOfInterest &roi){
 
-    drawSmallcircle(cameraFrame.cols,cameraFrame.rows,roi.centerX,roi.centerY,roi.volumeW,roi.volumeH);
-    draWaveform(cameraFrame.cols,cameraFrame.rows);
-    
+    drawSmallcircle(roi);
+    draWaveform();
 }
 
-void Visualizer::_setToCamera(cv::Mat cameraFrame){
+void Visualizer::_show_timer(float percent) {
+    
+    int x = cameraFrame.cols / 2;
+    int y = cameraFrame.rows / 2;
+
+    int radius = cfg.iavconf.roiRadius;  
+    int thickness = 3;
+    float angle = percent * 360.0f;
+    cv::circle(cameraFrame, cv::Point(x, y), radius, CV_RGB(245, 245, 245), thickness);
+
+    // int r = 255 - (millisecondsElapsed * 5) % 255;  // Gradually change the color to orange/yellow
+    // int g = (millisecondsElapsed * 2) % 255;
+    // int b = (millisecondsElapsed * 4) % 255;
+    int r = static_cast<int>(127.5 * (1 + sin(angle * M_PI / 180.0)));  // Sinusoidal for red
+    int g = static_cast<int>(127.5 * (1 + sin((angle + 120) * M_PI / 180.0)));  // Sinusoidal for green
+    int b = static_cast<int>(127.5 * (1 + sin((angle + 240) * M_PI / 180.0)));  // Sinusoidal for blue
+
+    cv::ellipse(cameraFrame, cv::Point(x, y), cv::Size(radius, radius), 0, -90, -90 + angle, CV_RGB(r, g, b), thickness);
+
+}
+
+void Visualizer::_setToCamera(float remaining_percentage){
+
+    _show_timer(remaining_percentage);
 
     int cameraW=cameraFrame.cols;
     int cameraH=cameraFrame.rows;
@@ -295,25 +330,31 @@ void Visualizer::_setToCamera(cv::Mat cameraFrame){
     int L = (visualFrame.cols - cameraW)/2;
     int T = (visualFrame.rows - cameraH)/2;
 
-    int r = (cameraW>cameraH) ? cameraH/2 : cameraW/2;
+    // int r = (cameraW>cameraH) ? cameraH/2 : cameraW/2;
 
-    // draw transparent pixels in a form of enclosed circle within camera frame
-    double vB = (double)visualFrame.at<cv::Vec3b>(0,0)[0];
-    double vG = (double)visualFrame.at<cv::Vec3b>(0,0)[1];
-    double vR = (double)visualFrame.at<cv::Vec3b>(0,0)[2];
-    for (int i=0;i<cameraW;i++){
-        for (int j=0;j<cameraH;j++){
-            if (camBinaryMask.at<double>(j,i)>0.){
-                double ratio = camBinaryMask.at<double>(j,i);
-                cameraFrame.at<cv::Vec3b>(j,i)[0] = ((ratio*vB) + (1.-ratio)*(double)cameraFrame.at<cv::Vec3b>(j,i)[0])/2.;
-                cameraFrame.at<cv::Vec3b>(j,i)[1] = ((ratio*vG) + (1.-ratio)*(double)cameraFrame.at<cv::Vec3b>(j,i)[1])/2.;
-                cameraFrame.at<cv::Vec3b>(j,i)[2] = ((ratio*vR) + (1.-ratio)*(double)cameraFrame.at<cv::Vec3b>(j,i)[2])/2.;
-            }
-        }
-    }
+// @ THIS IS POSTPONED -- > RELATED TO CAMBINARYMASK METHOD 
+// @ ALSO, IS THIS THE METHOD TO DEPICT THE ROI? 
+
+    // // draw transparent pixels in a form of enclosed circle within camera frame
+    // double vB = (double)visualFrame.at<cv::Vec3b>(0,0)[0];
+    // double vG = (double)visualFrame.at<cv::Vec3b>(0,0)[1];
+    // double vR = (double)visualFrame.at<cv::Vec3b>(0,0)[2];
+    // for (int i=0;i<cameraW;i++){
+    //     for (int j=0;j<cameraH;j++){
+    //         if (camBinaryMask.at<double>(j,i)>0.){
+    //             double ratio = camBinaryMask.at<double>(j,i);
+    //             cameraFrame.at<cv::Vec3b>(j,i)[0] = ((ratio*vB) + (1.-ratio)*(double)cameraFrame.at<cv::Vec3b>(j,i)[0])/2.;
+    //             cameraFrame.at<cv::Vec3b>(j,i)[1] = ((ratio*vG) + (1.-ratio)*(double)cameraFrame.at<cv::Vec3b>(j,i)[1])/2.;
+    //             cameraFrame.at<cv::Vec3b>(j,i)[2] = ((ratio*vR) + (1.-ratio)*(double)cameraFrame.at<cv::Vec3b>(j,i)[2])/2.;
+    //         }
+    //     }
+    // }
     cameraFrame.copyTo(visualFrame(cv::Rect(L,T,cameraFrame.cols, cameraFrame.rows)));
 }
 
+
+
+/*
 int Visualizer::and_Sound_into_Image(float* left, float* right,cv::Mat videoframe, bool frameElapsed, bool trackEnabled, int tone,RegionOfInterest roi){
     
     bool exit_msg=false;
@@ -335,6 +376,7 @@ int Visualizer::and_Sound_into_Image(float* left, float* right,cv::Mat videofram
     }
     return exit_msg;
 }
+*/
 
 // int Visualizer::update_spectrogram(){
 //     /***
