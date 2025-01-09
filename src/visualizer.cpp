@@ -76,7 +76,7 @@ void Visualizer::broadcast(){
             }            
                 
             // update the current visualframe according to the changing of the tracking stimulus
-            // _set_BG_manually(frequency, trackingEnabled);
+            _set_BG_manually(frequency, trackingEnabled);
             // update_spectrogram();
             _set_FG_manually(trackingSig);
 
