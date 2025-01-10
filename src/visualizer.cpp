@@ -62,7 +62,8 @@ void Visualizer::_create_camMask(){
     int H=cfg.dispconf.dispResH.load();
 
     // calculate areas
-    int r = (cameraW>cameraH) ? cameraH/2 : cameraW/2;
+    // int r = (cameraW>cameraH) ? cameraH/2 : cameraW/2;
+    int r = std::min(cameraW , cameraH)/2;
     
     // int outArea = pow( 2*r, 2 ) - (M_PI * pow(r,2)); // pow( 2*r, 2 ) is the area of the box (same center, 2*r both edges) which is subtracted by the circle area πr^2
     // outArea+= (abs(cameraW-cameraH) * r); // abs(cameraW-cameraH) = rest area outside the camera frame
@@ -75,7 +76,7 @@ void Visualizer::_create_camMask(){
     cv::Mat m1 = cv::Mat(cameraH,cameraW, CV_64F, cv::Scalar(0)); // CV_32F
     camBinaryMask=m1;
 
-r = cfg.iavconf.roiRadius;
+    r = cfg.iavconf.roiRadius;
     int thickness = 1;
     circle( camBinaryMask,
         cv::Point(center_x,center_y),
@@ -103,10 +104,9 @@ r = cfg.iavconf.roiRadius;
             // bool condition2 = (pow((i - cameraW/2),2) + pow((j - cameraH/2),2)) >= 
 
             if (condition){
-                // double transparency = (center_dist-(double)r)/ (double)abs(cameraW-cameraH);
-                float transparency = (center_dist-(float)r)/ (float)sqrt(pow(cameraW-cameraH,2));
+                float transparency = (center_dist- static_cast<float>(r))/ static_cast<double>(sqrt(pow(cameraW-cameraH,2)));
             
-                camBinaryMask.at<float>(j,i) = transparency;
+                camBinaryMask.at<double>(j,i) = transparency;
 
                 // if (max_dist == r+4 || center_dist == r+3 || center_dist == r+1 || center_dist == r+2 || center_dist == r){
                 if (max_dist == static_cast<float>(r+4) || center_dist == static_cast<float>(r+3) || 
@@ -176,7 +176,7 @@ Visualizer::~Visualizer(){
     cv::destroyWindow("Interactive Audio Visualizer");  
     visualFrame.release();
     cameraFrame.release();
-    // camBinaryMask.release();
+    camBinaryMask.release();
     std::cout<<"Visualizer destructed"<<std::endl;
 }
 
@@ -426,20 +426,20 @@ void Visualizer::_setToCamera(float remaining_percentage){
 // @ THIS IS POSTPONED -- > RELATED TO CAMBINARYMASK METHOD 
 // @ ALSO, IS THIS THE METHOD TO DEPICT THE ROI? 
 
-    // // draw transparent pixels in a form of enclosed circle within camera frame
-    // double vB = (double)visualFrame.at<cv::Vec3b>(0,0)[0];
-    // double vG = (double)visualFrame.at<cv::Vec3b>(0,0)[1];
-    // double vR = (double)visualFrame.at<cv::Vec3b>(0,0)[2];
-    // for (int i=0;i<cameraW;i++){
-    //     for (int j=0;j<cameraH;j++){
-    //         if (camBinaryMask.at<double>(j,i)>0.){
-    //             double ratio = camBinaryMask.at<double>(j,i);
-    //             cameraFrame.at<cv::Vec3b>(j,i)[0] = ((ratio*vB) + (1.-ratio)*(double)cameraFrame.at<cv::Vec3b>(j,i)[0])/2.;
-    //             cameraFrame.at<cv::Vec3b>(j,i)[1] = ((ratio*vG) + (1.-ratio)*(double)cameraFrame.at<cv::Vec3b>(j,i)[1])/2.;
-    //             cameraFrame.at<cv::Vec3b>(j,i)[2] = ((ratio*vR) + (1.-ratio)*(double)cameraFrame.at<cv::Vec3b>(j,i)[2])/2.;
-    //         }
-    //     }
-    // }
+    // draw transparent pixels in a form of enclosed circle within camera frame
+    double vB = (double)visualFrame.at<cv::Vec3b>(0,0)[0];
+    double vG = (double)visualFrame.at<cv::Vec3b>(0,0)[1];
+    double vR = (double)visualFrame.at<cv::Vec3b>(0,0)[2];
+    for (int i=0;i<cameraW;i++){
+        for (int j=0;j<cameraH;j++){
+            if (camBinaryMask.at<double>(j,i)>0.){
+                double ratio = camBinaryMask.at<double>(j,i);
+                cameraFrame.at<cv::Vec3b>(j,i)[0] = ((ratio*vB) + (1.-ratio)*(double)cameraFrame.at<cv::Vec3b>(j,i)[0])/2.;
+                cameraFrame.at<cv::Vec3b>(j,i)[1] = ((ratio*vG) + (1.-ratio)*(double)cameraFrame.at<cv::Vec3b>(j,i)[1])/2.;
+                cameraFrame.at<cv::Vec3b>(j,i)[2] = ((ratio*vR) + (1.-ratio)*(double)cameraFrame.at<cv::Vec3b>(j,i)[2])/2.;
+            }
+        }
+    }
     cameraFrame.copyTo(visualFrame(cv::Rect(L,T,cameraFrame.cols, cameraFrame.rows)));
 }
 
