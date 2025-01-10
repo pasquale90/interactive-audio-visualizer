@@ -15,11 +15,15 @@ Sine::Sine():audiocfg(Config::getInstance().audconf){
     prevfreq=0;
 	phase=0.0;
 // @FIX
-	amplitude = 0.1;	
+	amplitude = 0.0;	
 }
 
 void Sine::setupShareables(const std::shared_ptr<Waveform>& fifo){
     waveform = fifo;
+}
+
+void Sine::setVolume(float volume){
+	amplitude = volume;
 }
 
 void Sine::setMonoSignal(int frequency, float* monoBuffer[2]){

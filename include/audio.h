@@ -60,7 +60,7 @@ public:
     */
     int streamBuffer();
 
-    void update(int);
+    void update(int,  float);
 
     void setupShareables(const std::shared_ptr<Waveform>&);
     

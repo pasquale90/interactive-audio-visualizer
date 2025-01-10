@@ -148,6 +148,7 @@ void AudioStream::jack_shutdown (void *UNUSED(arg))
 	exit (1);
 }
 
-void AudioStream::update(int frequency){
+void AudioStream::update(int frequency, float volume){
     tone.store(frequency);
+    sine.setVolume(volume);
 }

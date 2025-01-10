@@ -20,6 +20,8 @@ public:
     void setMonoSignal(int, float*[2]);
     void setStereoSignal(int, float*[2]);
 
+    void setVolume(float);
+    
 private:
     const AudioConfig& audiocfg;
     int prevfreq;

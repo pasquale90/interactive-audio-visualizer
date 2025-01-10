@@ -5,7 +5,7 @@ IAV::IAV()
     // Here setup everything
     audioServer.setup_server();
 
-    audiolizer.setAudioUpdater(std::bind(&AudioStream::update,&audioStream,std::placeholders::_1));
+    audiolizer.setAudioUpdater(std::bind(&AudioStream::update,&audioStream,std::placeholders::_1,std::placeholders::_2));
     visualizer.setAudiolizerUpdater(std::bind(&Audiolizer::turn_Image_into_Sound, &audiolizer, std::placeholders::_1,std::placeholders::_2,std::placeholders::_3,std::placeholders::_4));
 
     waveform = std::make_shared<Waveform>();

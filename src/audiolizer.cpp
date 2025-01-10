@@ -13,7 +13,7 @@ Audiolizer::Audiolizer():cameracfg(Config::getInstance().camconf),iavcfg(Config:
     prev_freq=0;
 }
 
-void Audiolizer::setAudioUpdater(std::function<void(int)> func){
+void Audiolizer::setAudioUpdater(std::function<void(int, float)> func){
     updateAudio = std::move(func);
 }
 
@@ -36,13 +36,14 @@ bool Audiolizer::turn_Image_into_Sound(const bool tracking_updated, const bool p
             gradualy_fade(freq); // gradualy fade frequency to zero --> if frequency > 0 , slowly decline
         }else{
             freq=0;
+            volume = 0;
         }
     }
 
     // update audioStream with the newFrequency
     bool frequencyChanged = freq != prevFreq;
     if (frequencyChanged){
-        updateAudio(freq);
+        updateAudio(freq , volume);
     }
     
     return frequencyChanged;
@@ -51,18 +52,22 @@ bool Audiolizer::turn_Image_into_Sound(const bool tracking_updated, const bool p
 
 bool Audiolizer::translate(const RegionOfInterest &roi, int& freq){
 
-    double roiCenterX = static_cast<double>(roi.centerX.load());
-    double maxW = static_cast<double>(cameracfg.camResW.load());
-
+    // translate the x coordinate.
+    float roiCenterX = static_cast<float>(roi.centerX.load());
     // normalize x, y position 
-    double spatial_percent = roiCenterX / maxW;
-    
+    float spatial_percent = roiCenterX / static_cast<float>(cameracfg.camResW.load());
     //apply translation from x,y to Hz
-    freq = iavcfg.minFrequency + static_cast<int>(spatial_percent* (double)( frequencyRange ));
-    
+    freq = iavcfg.minFrequency + static_cast<int>(spatial_percent* static_cast<float>( frequencyRange ));
     // @TEMPORARY DISABLED
     // int2log_freq(freq); // define here the logarthmic tranformation of the input freq
-    
+
+    // translate the y coordinate 
+    float roiCenterY = static_cast<float>(roi.centerY.load());
+    // volume ranges from 0.1 up to 0.7 ==> percentage=0.1+(sample×(0.7−0.1)/maxVal)​
+    // volume = 0.1f + (( roiCenterY * 0.6f) / static_cast<float>(cameracfg.camResH.load()));
+    // volume ranges from 1.0 down to 0.1 ==> percentage=1.0 - (sample×(1.0−0.1)/maxVal)​
+    volume= 1.0f - (( roiCenterY * 0.9f) / static_cast<float>(cameracfg.camResH.load()));
+
     if (freq!=prev_freq){ // if previous frequency has the same value as before it returns the previous frequency
         prev_freq = freq;
         return true;
