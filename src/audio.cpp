@@ -33,6 +33,10 @@ AudioStream::AudioStream():audiocfg (Config::getInstance().audconf){
 
 }
 
+void AudioStream::setupShareables(const std::shared_ptr<Waveform> &fifo){
+    sine.setupShareables(fifo);
+}
+
 AudioStream::~AudioStream(){
     closeStream();
     std::cout<<"Audio stream object destructed"<<std::endl;

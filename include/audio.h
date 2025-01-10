@@ -13,6 +13,7 @@
 #include "sine.h"
 
 class Config;
+class Waveform;
 
 /*! @brief Callback method - process called when a new audio buffer occurs
   * It forces the Auiolizer and Visualizer classes to provide controlling methods for synchronizing audio (streaming) and image (both capturing & visualization).
@@ -60,6 +61,8 @@ public:
     int streamBuffer();
 
     void update(int);
+
+    void setupShareables(const std::shared_ptr<Waveform>&);
     
 private:
 

@@ -1,6 +1,8 @@
 #include "visualizer.h"
 #include <cstddef>
 
+#include "waveform.h"
+
 constexpr int qASCII {113}; // 113 q
 // constexpr int spaceASCII {32};// 32 space
 
@@ -13,7 +15,7 @@ Visualizer::Visualizer(){
     cv::Mat img( H , W, CV_8UC3,cv::Scalar(0,0,0));
     visualFrame = img;
        
-    // _create_camMask();
+    _create_camMask();
 
     int cameraW = cfg.camconf.camResW.load();
     int cameraH = cfg.camconf.camResH.load();
@@ -32,6 +34,10 @@ void Visualizer::setAudiolizerUpdater(std::function<void(const bool, const bool,
     updateAudioLizer = std::move(function);
 }
 
+void Visualizer::setupShareables(std::shared_ptr<Waveform> fifo){
+    waveform = std::move(fifo);
+}
+
 void Visualizer::updateTrackingMode(bool trackingEnabled){
 
     if (trackingToggle!=trackingEnabled){
@@ -48,11 +54,83 @@ void Visualizer::updateTrackingMode(bool trackingEnabled){
 
 }
 
+void Visualizer::_create_camMask(){
+
+    int cameraW = cfg.camconf.camResW.load();
+    int cameraH = cfg.camconf.camResH.load();
+    int W=cfg.dispconf.dispResW.load();
+    int H=cfg.dispconf.dispResH.load();
+
+    // calculate areas
+    int r = (cameraW>cameraH) ? cameraH/2 : cameraW/2;
+    
+    // int outArea = pow( 2*r, 2 ) - (M_PI * pow(r,2)); // pow( 2*r, 2 ) is the area of the box (same center, 2*r both edges) which is subtracted by the circle area πr^2
+    // outArea+= (abs(cameraW-cameraH) * r); // abs(cameraW-cameraH) = rest area outside the camera frame
+
+    int center_x = cameraW/2;
+    int center_y = cameraH/2;
+
+    numPointsPerimeter = static_cast<int>(floor((sqrt(2)*(r-1)+4)/2)*8);  // https://stackoverflow.com/a/14995443/15842840
+
+    cv::Mat m1 = cv::Mat(cameraH,cameraW, CV_64F, cv::Scalar(0)); // CV_32F
+    camBinaryMask=m1;
+
+r = cfg.iavconf.roiRadius;
+    int thickness = 1;
+    circle( camBinaryMask,
+        cv::Point(center_x,center_y),
+        r,
+        cv::Scalar( 0, 255, 0 ),
+        thickness,
+        cv::LINE_8);
+    
+    for (int i=0;i<cameraW;i++){
+        for (int j=0;j<cameraH;j++){
+            
+            float center_dist = (float) sqrt ( pow((i-center_x),2) + pow((j-center_y),2) );
+            
+            // https://stackoverflow.com/a/839931/15842840
+            // Get the max distance for each point to normalize the distance between square and circles perimeter
+            // x = cx + r * cos(a)
+            // y = cy + r * sin(a)
+            float max_dist = (float) sqrt ( pow((i-center_x),2) + pow((j-center_y),2) );
+            bool condition = center_dist > (float)r ;
+            
+            //(x - a)**2 + (y - b)**2 == r**2;
+            // double term1 = (pow((i - cameraW/2),2) + pow((j - cameraH/2),2));
+            // double term2 = pow(r,2);
+            // bool condition2 = term1 >= term2;
+            // bool condition2 = (pow((i - cameraW/2),2) + pow((j - cameraH/2),2)) >= 
+
+            if (condition){
+                // double transparency = (center_dist-(double)r)/ (double)abs(cameraW-cameraH);
+                float transparency = (center_dist-(float)r)/ (float)sqrt(pow(cameraW-cameraH,2));
+            
+                camBinaryMask.at<float>(j,i) = transparency;
+
+                // if (max_dist == r+4 || center_dist == r+3 || center_dist == r+1 || center_dist == r+2 || center_dist == r){
+                if (max_dist == static_cast<float>(r+4) || center_dist == static_cast<float>(r+3) || 
+                    center_dist == static_cast<float>(r+1) || center_dist == static_cast<float>(r+2) || 
+                    center_dist == static_cast<float>(r)){
+
+                    int T = (H - cameraH)/2;
+                    int L = (W - cameraW)/2;
+                    int x = L + i;
+                    int y = T + j;
+                    visualFrame.at<cv::Vec3b>(y,x)[0] = 137;
+                    visualFrame.at<cv::Vec3b>(y,x)[1] = 137;
+                    visualFrame.at<cv::Vec3b>(y,x)[2] = 137;
+                }
+            }
+        }
+    }
+}
+
 void Visualizer::broadcast(){
 
     bool trackingEnabled,trackingUpdated;
     RegionOfInterest trackingSig;
-    int frequency;
+    int frequency {0};
 
     while(true){
 
@@ -101,76 +179,6 @@ Visualizer::~Visualizer(){
     // camBinaryMask.release();
     std::cout<<"Visualizer destructed"<<std::endl;
 }
-
-/*
-void Visualizer::_create_camMask(){
-
-    int cameraW = cfg.camconf.camResW.load();
-    int cameraH = cfg.camconf.camResH.load();
-    int W=cfg.dispconf.dispResW.load();
-    int H=cfg.dispconf.dispResH.load();
-
-    // calculate areas
-    int r = (cameraW>cameraH) ? cameraH/2 : cameraW/2;
-    
-    // int outArea = pow( 2*r, 2 ) - (M_PI * pow(r,2)); // pow( 2*r, 2 ) is the area of the box (same center, 2*r both edges) which is subtracted by the circle area πr^2
-    // outArea+= (abs(cameraW-cameraH) * r); // abs(cameraW-cameraH) = rest area outside the camera frame
-
-    int center_x = cameraW/2;
-    int center_y = cameraH/2;
-
-    numPointsPerimeter = floor((sqrt(2)*(r-1)+4)/2)*8;  // https://stackoverflow.com/a/14995443/15842840
-
-    cv::Mat m1 = cv::Mat(cameraH,cameraW, CV_64F, cv::Scalar(0)); // CV_32F
-    camBinaryMask=m1;
-
-r = cfg.iavconf.roiRadius;
-    int thickness=1;
-    circle( camBinaryMask,
-        cv::Point(center_x,center_y),
-        r,
-        cv::Scalar( 0, 255, 0 ),
-        thickness=1,
-        cv::LINE_8);
-    
-    for (int i=0;i<cameraW;i++){
-        for (int j=0;j<cameraH;j++){
-            
-            double center_dist = (double) sqrt ( pow((i-center_x),2) + pow((j-center_y),2) );
-            
-            // https://stackoverflow.com/a/839931/15842840
-            // Get the max distance for each point to normalize the distance between square and circles perimeter
-            // x = cx + r * cos(a)
-            // y = cy + r * sin(a)
-            double max_dist = (double) sqrt ( pow((i-center_x),2) + pow((j-center_y),2) );
-            bool condition = center_dist > (double)r ;
-            
-            //(x - a)**2 + (y - b)**2 == r**2;
-            // double term1 = (pow((i - cameraW/2),2) + pow((j - cameraH/2),2));
-            // double term2 = pow(r,2);
-            // bool condition2 = term1 >= term2;
-            // bool condition2 = (pow((i - cameraW/2),2) + pow((j - cameraH/2),2)) >= 
-
-            if (condition){
-                // double transparency = (center_dist-(double)r)/ (double)abs(cameraW-cameraH);
-                double transparency = (center_dist-(double)r)/ (double)sqrt(pow(cameraW-cameraH,2));
-            
-                camBinaryMask.at<double>(j,i) = transparency;
-
-                if (max_dist == r+4 || center_dist == r+3 || center_dist == r+1 || center_dist == r+2 || center_dist == r){
-                    int T = (H - cameraH)/2;
-                    int L = (W - cameraW)/2;
-                    int x = L + i;
-                    int y = T + j;
-                    visualFrame.at<cv::Vec3b>(y,x)[0] = 137;
-                    visualFrame.at<cv::Vec3b>(y,x)[1] = 137;
-                    visualFrame.at<cv::Vec3b>(y,x)[2] = 137;
-                }
-            }
-        }
-    }
-}
-*/
 
 bool Visualizer::_showFrame(){ 
     cv::imshow("Interactive Audio Visualizer", visualFrame);
@@ -296,6 +304,82 @@ void Visualizer::drawSmallcircle(const RegionOfInterest &roi){
 }
 
 void Visualizer::draWaveform(){
+
+    int W=cfg.dispconf.dispResW.load();
+    int H=cfg.dispconf.dispResH.load();
+    int cameraW = cfg.camconf.camResW.load();
+    int cameraH = cfg.camconf.camResH.load();
+
+// can these be adjusted be the small circle? Non
+    int x_centre = W/2; 
+    int y_centre = H/2; // H/2;
+    int r = (cameraW>cameraH) ? cameraH/2 : cameraW/2;
+
+    float min,max;
+    size_t numSamples;
+// float *wave = wf.getWaveform(min,max,numSamples);
+std::cout<<"waveform.availableForReading() "<<waveform->availableForReading()<<"    bufferCOunt = "<<waveform->bufferCount<<" ::::::: "<<waveform->min<<" < "<<waveform->max<<std::endl;
+    min = waveform->min , max = waveform->max;
+    numSamples = waveform->availableForReading();
+
+
+    // depict waveform
+    int start=0;
+    int end=numPointsPerimeter;
+    // double waveSamplingRatio = (double)numSamples / (double)numPointsPerimeter;
+    double curRadians=0.0;
+    double radianStep=2*M_PI / (double)numPointsPerimeter;
+
+    // if (numSamples<numPointsPerimeter){
+    //     end=numSamples;
+    // }else end = numPointsPerimeter;
+    // std::cout<<"numPointsPerimeter "<<numPointsPerimeter<<" numSamplesWaveform "<<numSamples<<std::endl;
+
+    // std::cout<<"numPointsPerimeter "<<numPointsPerimeter<<" numSamples"<<numSamples<<std::endl;
+
+    size_t counter = 0;
+    int thickness=1;
+    int x1,x2,y1,y2;
+    float percent;
+    float new_radius;
+    float waveVal;
+    for (int i=start; i<end ; i++){
+        
+        // pixels are calculated given the following equations:
+        // x = cx + r * cos(a)
+        // y = cy + r * sin(a)
+
+        // x1 = (float)r * std::cos(curRadians) + (float)x_centre;
+        // y1 = (float)r * std::sin(curRadians) + (float)y_centre;
+        // x1 = (float)(r * std::cos(curRadians)) + (float)x_centre;
+        // y1 = (float)(r * std::sin(curRadians)) + (float)y_centre;
+        x1 = static_cast<int>((float)r * std::cos(curRadians) + (float)x_centre);
+        y1 = static_cast<int>((float)r * std::sin(curRadians) + (float)y_centre);
+    
+
+
+        // normalize in -1 1
+// percent = 2* ( (wave[counter]-min) / (max-min) ) -1;
+        waveform->read(waveVal);
+        percent = 2* ( (waveVal-min) / (max-min) ) -1;
+
+        // trasport x and y
+        // new_radius = r+((float)H/40.*percent);
+        new_radius = static_cast<float>(r + ((float)H / 40. * percent));
+
+        // x2 = new_radius * std::cos(curRadians) + (float)x_centre;
+        // y2 = new_radius * std::sin(curRadians) + (float)y_centre;
+        x2 = static_cast<int>(new_radius * std::cos(curRadians) + (float)x_centre);
+        y2 = static_cast<int>(new_radius * std::sin(curRadians) + (float)y_centre);
+
+        cv::Point p1(x1, y1), p2(x2, y2); 
+        cv::line(visualFrame, p1, p2, cv::Scalar(255, 0, 0), thickness, cv::LINE_8); 
+
+        counter++;
+        if (counter>numSamples) counter=0;
+
+        curRadians+=radianStep;
+    }
     
 }
 
@@ -303,6 +387,7 @@ void Visualizer::_set_FG_manually(const RegionOfInterest &roi){
 
     drawSmallcircle(roi);
     draWaveform();
+    
 }
 
 void Visualizer::_show_timer(float percent) {

@@ -31,6 +31,8 @@ class IAV{
         std::condition_variable cvServer;
         bool serverStarted{false};
 
+        std::shared_ptr<Waveform> waveform;
+
 };
 
 

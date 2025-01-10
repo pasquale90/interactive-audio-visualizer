@@ -2,14 +2,15 @@
 #define VISUALIZER_H
 
 #include <functional>
+#include <memory>
 
-#include "raw.h"
 #include "fft.h"
 #include "roi.h"
 
 #include "videotracker.h"
 #include "camera.h"
 #include "trigger.h"
+class Waveform;
 
 class Visualizer{
 public:
@@ -23,17 +24,19 @@ public:
     void broadcast();
 
     void setAudiolizerUpdater(std::function<void(const bool, const bool, const RegionOfInterest&, int&)>);
+    void setupShareables(std::shared_ptr<Waveform>);
 
 private:
     const Config &cfg = Config::getInstance();
     Camera camera;
     VideoTracker videoTracker;
     Trigger trigger;
+    std::shared_ptr<Waveform> waveform;
     // Spectrogram sp;
     // float *dft;
 
     cv::Mat visualFrame,cameraFrame;
-    // cv::Mat camBinaryMask;
+    cv::Mat camBinaryMask;
 
     float transpose_ratio_x, transpose_ratio_y;
     int R,G,B;

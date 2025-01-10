@@ -28,10 +28,10 @@ set(SOURCE_FILES
     src/videotracker.cpp
     src/timer.cpp
     src/audiolizer.cpp
-    # src/fft.cpp
-    # src/raw.cpp
     src/visualizer.cpp
     src/trigger.cpp
+    src/waveform.cpp
+    # src/fft.cpp
 )
 
 find_path(OPENCV_INCLUDE_DIR
