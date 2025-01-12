@@ -145,6 +145,11 @@ void AudioStream::jack_shutdown (void *UNUSED(arg))
 	exit (1);
 }
 
+/**
+ * Retrieves the minimum and maximum values from the waveform.
+ * @param[out] frequency The tones spectral frequency.
+ * @param[out] volume The volume of the tone.
+ */
 void AudioStream::update(int frequency, float volume){
     tone.frequency.store(frequency);
     tone.volume.store(volume);

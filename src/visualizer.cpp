@@ -102,7 +102,7 @@ void Visualizer::_create_camMask(){
             // bool condition2 = (pow((i - cameraW/2),2) + pow((j - cameraH/2),2)) >= 
 
             if (condition){
-                float transparency = (center_dist- static_cast<float>(r))/ static_cast<double>(sqrt(pow(cameraW-cameraH,2)));
+                float transparency = (center_dist- static_cast<float>(r))/ static_cast<float>(sqrt(pow(cameraW-cameraH,2)));
             
                 camBinaryMask.at<double>(j,i) = transparency;
 
@@ -312,11 +312,10 @@ void Visualizer::draWaveform(){
     int y_centre = H/2; // H/2;
     int r = (cameraW>cameraH) ? cameraH/2 : cameraW/2;
 
-    float min,max;
+    float minMax[2];
     size_t numSamples;
-// float *wave = wf.getWaveform(min,max,numSamples);
-// std::cout<<"waveform.availableForReading() "<<waveform->a/vailableForReading()<<"    bufferCOunt = "<<waveform->bufferCount<<" ::::::: "<<waveform->min<<" < "<<waveform->max<<std::endl;
-    waveform->getMinMax(min,max);
+    waveform->getMinMax(minMax);
+    float min = minMax[0],max = minMax[1];
     numSamples = waveform->availableForReading();
 
 
@@ -425,16 +424,16 @@ void Visualizer::_setToCamera(float remaining_percentage){
 // @ ALSO, IS THIS THE METHOD TO DEPICT THE ROI? 
 
     // draw transparent pixels in a form of enclosed circle within camera frame
-    double vB = (double)visualFrame.at<cv::Vec3b>(0,0)[0];
-    double vG = (double)visualFrame.at<cv::Vec3b>(0,0)[1];
-    double vR = (double)visualFrame.at<cv::Vec3b>(0,0)[2];
+    float vB = (float)visualFrame.at<cv::Vec3b>(0,0)[0];
+    float vG = (float)visualFrame.at<cv::Vec3b>(0,0)[1];
+    float vR = (float)visualFrame.at<cv::Vec3b>(0,0)[2];
     for (int i=0;i<cameraW;i++){
         for (int j=0;j<cameraH;j++){
             if (camBinaryMask.at<double>(j,i)>0.){
-                double ratio = camBinaryMask.at<double>(j,i);
-                cameraFrame.at<cv::Vec3b>(j,i)[0] = ((ratio*vB) + (1.-ratio)*(double)cameraFrame.at<cv::Vec3b>(j,i)[0])/2.;
-                cameraFrame.at<cv::Vec3b>(j,i)[1] = ((ratio*vG) + (1.-ratio)*(double)cameraFrame.at<cv::Vec3b>(j,i)[1])/2.;
-                cameraFrame.at<cv::Vec3b>(j,i)[2] = ((ratio*vR) + (1.-ratio)*(double)cameraFrame.at<cv::Vec3b>(j,i)[2])/2.;
+                float ratio = camBinaryMask.at<float>(j,i);
+                cameraFrame.at<cv::Vec3b>(j,i)[0] = static_cast<unsigned char>(((ratio*vB) + (1.-ratio)*(float)cameraFrame.at<cv::Vec3b>(j,i)[0])/2.f);
+                cameraFrame.at<cv::Vec3b>(j,i)[1] = static_cast<unsigned char>(((ratio*vG) + (1.-ratio)*(float)cameraFrame.at<cv::Vec3b>(j,i)[1])/2.f);
+                cameraFrame.at<cv::Vec3b>(j,i)[2] = static_cast<unsigned char>(((ratio*vR) + (1.-ratio)*(float)cameraFrame.at<cv::Vec3b>(j,i)[2])/2.f);
             }
         }
     }

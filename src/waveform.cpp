@@ -4,7 +4,7 @@
 Waveform::Waveform(): readpos(0), writepos(0){
     // calculate num of buffers per display frame;
     int audioSamplesPerFrame = static_cast<int>(cfg.audconf.sampleRate.load() / cfg.dispconf.fps.load());
-    int buffersPerFrame = std::ceil( audioSamplesPerFrame / static_cast<float>(cfg.audconf.bufferSize.load()));
+    int buffersPerFrame = std::ceil( static_cast<float>(audioSamplesPerFrame) / static_cast<float>(cfg.audconf.bufferSize.load()));
     audioSamplesPerFrame = (buffersPerFrame+1) * cfg.audconf.bufferSize.load(); // add 1 and make it divisible by bufferSize.
 
     waveTable.reserve(audioSamplesPerFrame);
@@ -75,7 +75,12 @@ size_t Waveform::availableForReading() const {
     }
 }
 
-void Waveform::getMinMax(float& min, float &max){
-    min = this->min;
-    max = this->max;
+/**
+ * Retrieves the minimum and maximum values from the waveform.
+ * @param[out] min The minimum value (output parameter).
+ * @param[out] max The maximum value (output parameter).
+ */
+void Waveform::getMinMax(float minMax[2]){
+    minMax[0] = this->min;
+    minMax[1] = this->max;
 } 

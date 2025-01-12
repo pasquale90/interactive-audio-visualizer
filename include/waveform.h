@@ -21,7 +21,7 @@ public:
     bool isFull() const;
     size_t size() const;
     size_t availableForReading() const;
-    void getMinMax(float&,float&);
+    void getMinMax(float[2]);
     
 private:
 
