@@ -7,6 +7,7 @@
 class Config;
 struct AudioConfig;
 class Waveform;
+struct Tone;
 
 class Sine{
 
@@ -17,17 +18,17 @@ public:
 
     void setupShareables(const std::shared_ptr<Waveform>&);
 
-    void setMonoSignal(int, float*[2]);
-    void setStereoSignal(int, float*[2]);
+    void setMonoSignal(Tone&, float*[2]);
+    void setStereoSignal(Tone&, float*[2]);
 
-    void setVolume(float);
+    // void setVolume(float);
     
 private:
     const AudioConfig& audiocfg;
     int prevfreq;
     float phase;
     float rads_per_sample;
-    float amplitude;
+    // float amplitude;
 
     std::shared_ptr<Waveform> waveform;
 

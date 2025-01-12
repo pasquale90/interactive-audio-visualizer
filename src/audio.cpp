@@ -28,9 +28,6 @@ AudioStream::AudioStream():audiocfg (Config::getInstance().audconf){
     else if (audiocfg.numChannels.load() == 2) {
         make_sound = &Sine::setStereoSignal;  // Point to setStereoSignal for processing 2 stereo buffers
     }
-
-    tone.store(0);
-
 }
 
 void AudioStream::setupShareables(const std::shared_ptr<Waveform> &fifo){
@@ -135,7 +132,7 @@ int AudioStream::streamBuffer(){
         outputBuffers[ch] = static_cast<float *>(jack_port_get_buffer (output_ports[ch], audiocfg.bufferSize.load() ));
     }
     
-    (sine.*make_sound)(tone.load(),outputBuffers); 
+    (sine.*make_sound)(tone,outputBuffers); 
     
     // audioBufferCallback(left,right);
     // here, sharing of the data is required..
@@ -149,6 +146,6 @@ void AudioStream::jack_shutdown (void *UNUSED(arg))
 }
 
 void AudioStream::update(int frequency, float volume){
-    tone.store(frequency);
-    sine.setVolume(volume);
+    tone.frequency.store(frequency);
+    tone.volume.store(volume);
 }

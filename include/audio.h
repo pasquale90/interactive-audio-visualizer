@@ -11,6 +11,7 @@
 #include <mutex>
 #include <condition_variable>
 #include "sine.h"
+#include "tone.h"
 
 class Config;
 class Waveform;
@@ -75,8 +76,8 @@ private:
     float *outputBuffers[2];
 
     Sine sine;
-    void (Sine::*make_sound)(int,float*[2]) = nullptr;
-    std::atomic<int> tone;
+    void (Sine::*make_sound)(Tone&,float*[2]) = nullptr;
+    Tone tone;
 
     /*! @brief A non-member fuction used to alias the AudioStream::streamBuffer which is used as an argument in the AudioStream::jack_set_process_callback member function.
     * @param jack_nframes nframes - the buffer size
