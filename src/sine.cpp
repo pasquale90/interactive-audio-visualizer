@@ -41,7 +41,6 @@ void Sine::setMonoSignal(int frequency, float* monoBuffer[2]){
 
 		waveform->write(value); // fill the shareable ring buffer
 	}	
-	waveform->bufferCount++;
 }
 
 void Sine::setStereoSignal(int frequency, float* stereoBuffer[2]){
@@ -60,6 +59,4 @@ void Sine::setStereoSignal(int frequency, float* stereoBuffer[2]){
 
 		waveform->write(value); // fill the shareable ring buffer
 	}	
-	waveform->bufferCount++;
-
 }

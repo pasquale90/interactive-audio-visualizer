@@ -28,14 +28,16 @@ Visualizer::Visualizer(){
 trackingToggle = false;
     std::cout<<"Visualizer constructed"<<std::endl;
 
+    waveform = std::make_shared<Waveform>();
+
 }
 
 void Visualizer::setAudiolizerUpdater(std::function<void(const bool, const bool, const RegionOfInterest&, int&)> function){
     updateAudioLizer = std::move(function);
 }
 
-void Visualizer::setupShareables(std::shared_ptr<Waveform> fifo){
-    waveform = std::move(fifo);
+std::shared_ptr<Waveform> Visualizer::get_waveform(){
+    return waveform;
 }
 
 void Visualizer::updateTrackingMode(bool trackingEnabled){
@@ -155,7 +157,6 @@ void Visualizer::broadcast(){
                 
             // update the current visualframe according to the changing of the tracking stimulus
             _set_BG_manually(frequency, trackingEnabled);
-            // update_spectrogram();
             _set_FG_manually(trackingSig);
 
 
@@ -318,21 +319,20 @@ void Visualizer::draWaveform(){
     float min,max;
     size_t numSamples;
 // float *wave = wf.getWaveform(min,max,numSamples);
-std::cout<<"waveform.availableForReading() "<<waveform->availableForReading()<<"    bufferCOunt = "<<waveform->bufferCount<<" ::::::: "<<waveform->min<<" < "<<waveform->max<<std::endl;
-    min = waveform->min , max = waveform->max;
+// std::cout<<"waveform.availableForReading() "<<waveform->a/vailableForReading()<<"    bufferCOunt = "<<waveform->bufferCount<<" ::::::: "<<waveform->min<<" < "<<waveform->max<<std::endl;
+    waveform->getMinMax(min,max);
     numSamples = waveform->availableForReading();
 
 
     // depict waveform
-    int start=0;
-    int end=numPointsPerimeter;
+    size_t end;
     // double waveSamplingRatio = (double)numSamples / (double)numPointsPerimeter;
     double curRadians=0.0;
     double radianStep=2*M_PI / (double)numPointsPerimeter;
 
-    // if (numSamples<numPointsPerimeter){
-    //     end=numSamples;
-    // }else end = numPointsPerimeter;
+    if (numSamples< static_cast<size_t>(numPointsPerimeter)){
+        end=numSamples;
+    }else end = static_cast<size_t>(numPointsPerimeter);
     // std::cout<<"numPointsPerimeter "<<numPointsPerimeter<<" numSamplesWaveform "<<numSamples<<std::endl;
 
     // std::cout<<"numPointsPerimeter "<<numPointsPerimeter<<" numSamples"<<numSamples<<std::endl;
@@ -343,8 +343,10 @@ std::cout<<"waveform.availableForReading() "<<waveform->availableForReading()<<"
     float percent;
     float new_radius;
     float waveVal;
-    for (int i=start; i<end ; i++){
+    for (size_t i=0; i<end ; i++){
         
+        // std::cout<<"read "<<waveform->readpos.load()<<" write "<<waveform->writepos.load()<<std::endl;
+
         // pixels are calculated given the following equations:
         // x = cx + r * cos(a)
         // y = cy + r * sin(a)

@@ -24,7 +24,8 @@ public:
     void broadcast();
 
     void setAudiolizerUpdater(std::function<void(const bool, const bool, const RegionOfInterest&, int&)>);
-    void setupShareables(std::shared_ptr<Waveform>);
+
+    std::shared_ptr<Waveform> get_waveform();
 
 private:
     const Config &cfg = Config::getInstance();

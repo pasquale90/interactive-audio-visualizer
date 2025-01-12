@@ -21,16 +21,15 @@ public:
     bool isFull() const;
     size_t size() const;
     size_t availableForReading() const;
-
-    int bufferCount;
-    float min,max;
-
+    void getMinMax(float&,float&);
+    
 private:
 
     Config &cfg = Config::getInstance();
     std::vector<float> waveTable; // The actual buffer; 
     std::atomic<size_t> readpos;
     std::atomic<size_t> writepos;
+    float min,max;
 };
 
 #endif
