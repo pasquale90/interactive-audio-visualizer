@@ -11,6 +11,7 @@ Audiolizer::Audiolizer():cameracfg(Config::getInstance().camconf),iavcfg(Config:
     // maxH = cameracfg.camResH.load();
     frequencyRange = iavcfg.maxFrequency - iavcfg.minFrequency;
     prev_freq=0;
+    volume = 0.f;
 }
 
 void Audiolizer::setAudioUpdater(std::function<void(int, float)> func){
@@ -36,7 +37,7 @@ bool Audiolizer::turn_Image_into_Sound(const bool tracking_updated, const bool p
             gradualy_fade(freq); // gradualy fade frequency to zero --> if frequency > 0 , slowly decline
         }else{
             freq=0;
-            volume = 0;
+            volume = 0.f;
         }
     }
 

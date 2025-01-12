@@ -43,12 +43,8 @@ std::shared_ptr<Waveform> Visualizer::get_waveform(){
 void Visualizer::updateTrackingMode(bool trackingEnabled){
 
     if (trackingToggle!=trackingEnabled){
-
-        std::cout<<"\t\tupdateTrackingMode"<<std::endl;
-
         if (!trackingToggle && trackingEnabled){
             videoTracker.initializeTracker(cameraFrame);
-            std::cout<<"\n \t\t\tinitializing tracker \n"<<std::endl;
         }
         trackingToggle = trackingEnabled;
         
