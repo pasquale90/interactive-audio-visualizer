@@ -86,7 +86,7 @@ void GUI::addExplanations(){
     roiComboBox->setItemData(2, "15% of camera's capture resolution.", Qt::ToolTipRole);
 
     // .. to the capturing method,
-    triggerComboBox->setItemData(0, "Capturing is initialized manually, using the Space Bar key", Qt::ToolTipRole);
+    // triggerComboBox->setItemData(0, "Capturing is initialized manually, using the Space Bar key", Qt::ToolTipRole);
     triggerComboBox->setItemData(1, "A 5-seconds timer will initialize the capturing", Qt::ToolTipRole);
 
     // .. to the frequency ranges
@@ -175,7 +175,7 @@ GUI::GUI() {
     QVBoxLayout iavLayout;
     iavLayout.addWidget(createDropDownList(frequencyRangeComboBox,iavFrequencyRangeLabel, {"Narrow", "Normal", "Wide"}));
     iavLayout.addWidget(createDropDownList(roiComboBox,iavRegionOfInterestLabel, {"Small","Medium","Large"}));
-    iavLayout.addWidget(createDropDownList(triggerComboBox,iavTriggerLabel, {"Manual", "Auto"}));
+    iavLayout.addWidget(createDropDownList(triggerComboBox,iavTriggerLabel, {"Auto"})); //"Manual",
     iavLayout.addWidget(createDropDownList(trackingAlgorithmComboBox,iavTrackingAlgLabel, {"CSRT", "KCF"}));
     iavLayout.addWidget(createSkipFramesSlider(accuracyLabel, cpuLoadLabel));
     iavSettings.setLayout(&iavLayout);
