@@ -424,16 +424,16 @@ void Visualizer::_setToCamera(float remaining_percentage){
 // @ ALSO, IS THIS THE METHOD TO DEPICT THE ROI? 
 
     // draw transparent pixels in a form of enclosed circle within camera frame
-    float vB = (float)visualFrame.at<cv::Vec3b>(0,0)[0];
-    float vG = (float)visualFrame.at<cv::Vec3b>(0,0)[1];
-    float vR = (float)visualFrame.at<cv::Vec3b>(0,0)[2];
+    double vB = (double)visualFrame.at<cv::Vec3b>(0,0)[0];
+    double vG = (double)visualFrame.at<cv::Vec3b>(0,0)[1];
+    double vR = (double)visualFrame.at<cv::Vec3b>(0,0)[2];
     for (int i=0;i<cameraW;i++){
         for (int j=0;j<cameraH;j++){
             if (camBinaryMask.at<double>(j,i)>0.){
-                float ratio = camBinaryMask.at<float>(j,i);
-                cameraFrame.at<cv::Vec3b>(j,i)[0] = static_cast<unsigned char>(((ratio*vB) + (1.-ratio)*(float)cameraFrame.at<cv::Vec3b>(j,i)[0])/2.f);
-                cameraFrame.at<cv::Vec3b>(j,i)[1] = static_cast<unsigned char>(((ratio*vG) + (1.-ratio)*(float)cameraFrame.at<cv::Vec3b>(j,i)[1])/2.f);
-                cameraFrame.at<cv::Vec3b>(j,i)[2] = static_cast<unsigned char>(((ratio*vR) + (1.-ratio)*(float)cameraFrame.at<cv::Vec3b>(j,i)[2])/2.f);
+                double ratio = camBinaryMask.at<double>(j,i);
+                cameraFrame.at<cv::Vec3b>(j,i)[0] = static_cast<unsigned char>(((ratio*vB) + (1.-ratio)*(double)cameraFrame.at<cv::Vec3b>(j,i)[0])/2.);
+                cameraFrame.at<cv::Vec3b>(j,i)[1] = static_cast<unsigned char>(((ratio*vG) + (1.-ratio)*(double)cameraFrame.at<cv::Vec3b>(j,i)[1])/2.);
+                cameraFrame.at<cv::Vec3b>(j,i)[2] = static_cast<unsigned char>(((ratio*vR) + (1.-ratio)*(double)cameraFrame.at<cv::Vec3b>(j,i)[2])/2.);
             }
         }
     }
