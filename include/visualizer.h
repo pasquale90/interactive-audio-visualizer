@@ -4,13 +4,13 @@
 #include <functional>
 #include <memory>
 
-#include "fft.h"
+// #include "fft.h"
 #include "roi.h"
 
 #include "videotracker.h"
 #include "camera.h"
 #include "trigger.h"
-class Waveform;
+#include "waveform.h"
 
 class Visualizer{
 public:
@@ -25,14 +25,14 @@ public:
 
     void setAudiolizerUpdater(std::function<void(const bool, const bool, const RegionOfInterest&, int&)>);
 
-    std::shared_ptr<Waveform> get_waveform();
+    void updateAudioSignal(float);
 
 private:
     const Config &cfg = Config::getInstance();
     Camera camera;
     VideoTracker videoTracker;
     Trigger trigger;
-    std::shared_ptr<Waveform> waveform;
+    Waveform waveform;
     // Spectrogram sp;
     // float *dft;
 

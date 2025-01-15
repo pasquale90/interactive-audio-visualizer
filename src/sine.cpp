@@ -15,17 +15,11 @@ Sine::Sine():audiocfg(Config::getInstance().audconf){
 	rads_per_sample = 0.;
     prevfreq=0;
 	phase=0.0;
-// @FIX
-	// amplitude = 0.0;	
 }
 
-void Sine::setupShareables(const std::shared_ptr<Waveform>& fifo){
-    waveform = fifo;
+void Sine::setVisualizerUpdater(std::function<void(float)> updater){
+    updateVisualizer = updater;
 }
-
-// void Sine::setVolume(float volume){
-// 	amplitude = volume;
-// }
 
 void Sine::setMonoSignal(Tone& tone, float* monoBuffer[2]){
 	
@@ -42,8 +36,8 @@ void Sine::setMonoSignal(Tone& tone, float* monoBuffer[2]){
 		monoBuffer[0][i] = value;
 		phase+=rads_per_sample;					// shift phase by amount of rads_per_sample
 		if (phase >= 2*M_PI) phase=0;			// if phase reaches 2pi , zero it down.
-
-		waveform->write(value); // fill the shareable ring buffer
+		
+		updateVisualizer(value); // fill the shareable ring buffer
 	}	
 }
 
@@ -64,6 +58,6 @@ void Sine::setStereoSignal(Tone& tone, float* stereoBuffer[2]){
 		phase+=rads_per_sample;					// shift phase by amount of rads_per_sample
 		if (phase >= 2*M_PI) phase=0;			// if phase reaches 2pi , zero it down.
 
-		waveform->write(value); // fill the shareable ring buffer
+		updateVisualizer(value); // fill the shareable ring buffer
 	}	
 }

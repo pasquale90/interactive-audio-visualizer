@@ -63,7 +63,7 @@ public:
 
     void update(int,  float);
 
-    void setupShareables(const std::shared_ptr<Waveform>&);
+    void setVisualizerUpdater(std::function<void(float)>);
     
 private:
 

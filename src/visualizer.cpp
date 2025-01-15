@@ -1,8 +1,6 @@
 #include "visualizer.h"
 #include <cstddef>
 
-#include "waveform.h"
-
 constexpr int qASCII {113}; // 113 q
 // constexpr int spaceASCII {32};// 32 space
 
@@ -27,17 +25,10 @@ Visualizer::Visualizer(){
 
 trackingToggle = false;
     std::cout<<"Visualizer constructed"<<std::endl;
-
-    waveform = std::make_shared<Waveform>();
-
 }
 
 void Visualizer::setAudiolizerUpdater(std::function<void(const bool, const bool, const RegionOfInterest&, int&)> function){
     updateAudioLizer = std::move(function);
-}
-
-std::shared_ptr<Waveform> Visualizer::get_waveform(){
-    return waveform;
 }
 
 void Visualizer::updateTrackingMode(bool trackingEnabled){
@@ -50,6 +41,11 @@ void Visualizer::updateTrackingMode(bool trackingEnabled){
         
     }
 
+}
+
+void Visualizer::updateAudioSignal(float newValue){
+    waveform.write(newValue);
+    // spectrogram.read(newValue);
 }
 
 void Visualizer::_create_camMask(){
@@ -314,9 +310,9 @@ void Visualizer::draWaveform(){
 
     float minMax[2];
     size_t numSamples;
-    waveform->getMinMax(minMax);
+    waveform.getMinMax(minMax);
     float min = minMax[0],max = minMax[1];
-    numSamples = waveform->availableForReading();
+    numSamples = waveform.availableForReading();
 
 
     // depict waveform
@@ -357,7 +353,7 @@ void Visualizer::draWaveform(){
 
         // normalize in -1 1
 // percent = 2* ( (wave[counter]-min) / (max-min) ) -1;
-        waveform->read(waveVal);
+        waveform.read(waveVal);
         percent = 2* ( (waveVal-min) / (max-min) ) -1;
 
         // trasport x and y

@@ -30,15 +30,14 @@ AudioStream::AudioStream():audiocfg (Config::getInstance().audconf){
     }
 }
 
-void AudioStream::setupShareables(const std::shared_ptr<Waveform> &fifo){
-    sine.setupShareables(fifo);
+void AudioStream::setVisualizerUpdater(std::function<void(float)> updater){
+    sine.setVisualizerUpdater(updater);
 }
 
 AudioStream::~AudioStream(){
     closeStream();
     std::cout<<"Audio stream object destructed"<<std::endl;
 }
-
 
 void AudioStream::clientConnect(std::mutex& mtx, std::condition_variable& cv, bool& serverStarted){
 
