@@ -16,6 +16,11 @@ class IAV{
         ~IAV();
         void start();
 
+        IAV(const IAV&) = delete;
+        IAV(IAV&&) = delete;
+        IAV& operator=(const IAV&) = delete;
+        IAV&& operator=(IAV&&) = delete;
+        
     private:
 
         Config& cfg = Config::getInstance();

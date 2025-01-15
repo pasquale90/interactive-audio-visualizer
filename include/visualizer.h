@@ -20,6 +20,10 @@ public:
 
     /*! @brief Class destructor */
     ~Visualizer();
+    Visualizer(const Visualizer&) = delete;
+    Visualizer(Visualizer&&) = delete;
+    Visualizer& operator=(const Visualizer&) = delete;
+    Visualizer& operator=(Visualizer&&) = delete;
 
     void broadcast();
 

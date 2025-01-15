@@ -65,6 +65,11 @@ public:
 
     void setVisualizerUpdater(std::function<void(float)>);
     
+    AudioStream(const AudioStream&) = delete;
+    AudioStream(AudioStream&&)  = delete;
+    AudioStream& operator=(const AudioStream&) = delete;
+    AudioStream& operator=(AudioStream&&) = delete;
+
 private:
 
     const AudioConfig& audiocfg;

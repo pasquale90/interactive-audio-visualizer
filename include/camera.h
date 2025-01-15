@@ -31,6 +31,12 @@ public:
 
     /*! @brief Method for returning the value of actual frames per second, based on hardware capacity*/
     int get_actual_fps();
+
+    Camera (const Camera&) = delete;
+    Camera (Camera&&) = delete;
+    Camera& operator=(const Camera&) = delete;
+    Camera& operator=(Camera&&) = delete;
+    
 private:
 
     CameraConfig &cameracfg;

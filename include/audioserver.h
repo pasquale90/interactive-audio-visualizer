@@ -36,6 +36,12 @@ public:
     * @return void
     */
     void stop_server();
+
+    AudioServer (const AudioServer&) = delete;
+    AudioServer (AudioServer&&) = delete;
+    AudioServer& operator=(const AudioServer&) = delete;
+    AudioServer& operator=(AudioServer&&) = delete;
+    
 private:
     jackctl_server_t *server;
     const JSList *parameters;
