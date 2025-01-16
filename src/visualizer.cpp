@@ -458,7 +458,7 @@ void Visualizer::drawSpectrogram(){
         // Normalize magnitude to a reasonable range based on the highest value
         int normalized_magnitude = static_cast<int>( 
                                         std::min( 
-                                            (float)((magnitude - min_magnitude) / (max_magnitude - min_magnitude) * H * 0.5), 
+                                            (float)((magnitude - min_magnitude) / (max_magnitude - min_magnitude) * static_cast<float>(H) * 0.5),
                                             static_cast<float>(H)/2.f
                                         )
                                     );
