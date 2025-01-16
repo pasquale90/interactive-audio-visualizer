@@ -18,7 +18,7 @@ Sine::Sine():audiocfg(Config::getInstance().audconf){
 }
 
 void Sine::setVisualizerUpdater(std::function<void(float)> updater){
-    updateVisualizer = updater;
+    updateVisualizer = std::move(updater);
 }
 
 void Sine::setMonoSignal(Tone& tone, float* monoBuffer[2]){

@@ -31,7 +31,7 @@ AudioStream::AudioStream():audiocfg (Config::getInstance().audconf){
 }
 
 void AudioStream::setVisualizerUpdater(std::function<void(float)> updater){
-    sine.setVisualizerUpdater(updater);
+    sine.setVisualizerUpdater(std::move(updater));
 }
 
 AudioStream::~AudioStream(){
