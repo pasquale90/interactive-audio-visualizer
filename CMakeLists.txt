@@ -31,7 +31,7 @@ set(SOURCE_FILES
     src/visualizer.cpp
     src/trigger.cpp
     src/waveform.cpp
-    # src/fft.cpp
+    src/spectrogram.cpp
 )
 
 find_path(OPENCV_INCLUDE_DIR
@@ -39,16 +39,10 @@ find_path(OPENCV_INCLUDE_DIR
     PATH_SUFFIXES opencv4
 )
 
-# set(BTRACK_INCLUDE_DIR libraries/BTrack/src)
 set(INCLUDE_DIRECTORIES
     include
-    # include/gui    
     ${OPENCV_INCLUDE_DIR}
-    # ${BTRACK_INCLUDE_DIR}
 )
-
-# include(CMakePrintHelpers)
-# cmake_print_variables(INCLUDE_DIRECTORIES)
 
 find_package(Qt6 COMPONENTS Widgets Core Gui REQUIRED)
 
@@ -64,8 +58,6 @@ set(LIBRARIES
     jack
     jackserver
     jacknet
-    # fftw3
-    # samplerate
     opencv_core
     opencv_highgui
     opencv_imgproc
@@ -75,7 +67,8 @@ set(LIBRARIES
     opencv_features2d
     opencv_tracking
     pthread
-    ncurses
+    fftw3
+    samplerate
 )
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})

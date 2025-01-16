@@ -3,14 +3,15 @@
 
 #include <functional>
 #include <memory>
+#include <vector>
 
-// #include "fft.h"
 #include "roi.h"
 
 #include "videotracker.h"
 #include "camera.h"
 #include "trigger.h"
 #include "waveform.h"
+#include "spectrogram.h"
 
 class Visualizer{
 public:
@@ -37,8 +38,8 @@ private:
     VideoTracker videoTracker;
     Trigger trigger;
     Waveform waveform;
-    // Spectrogram sp;
-    // float *dft;
+    Spectrogram spectrogram;
+    std::vector<float> specMagnitude;
 
     cv::Mat visualFrame,cameraFrame;
     cv::Mat camBinaryMask;
@@ -66,6 +67,7 @@ private:
     // void midPointCircleDraw(int x_centre, int y_centre, int r);
     // int update_spectrogram();
     void draWaveform();
+    void drawSpectrogram();
     void drawSmallcircle(const RegionOfInterest &);
 };
 

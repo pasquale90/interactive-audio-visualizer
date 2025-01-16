@@ -1,5 +1,6 @@
 #include "visualizer.h"
 #include <cstddef>
+#include <iostream>
 
 constexpr int qASCII {113}; // 113 q
 // constexpr int spaceASCII {32};// 32 space
@@ -25,6 +26,11 @@ Visualizer::Visualizer(){
 
 trackingToggle = false;
     std::cout<<"Visualizer constructed"<<std::endl;
+
+    int nfft = spectrogram.get_numFFTPoints();
+    specMagnitude.reserve(nfft);
+    specMagnitude.resize(nfft);
+    // static_assert( (nfft == cfg.dispconf.dispResW.load()) , "Display width and number of fft points missmatch error.");
 }
 
 void Visualizer::setAudiolizerUpdater(std::function<void(const bool, const bool, const RegionOfInterest&, int&)> function){
@@ -45,7 +51,7 @@ void Visualizer::updateTrackingMode(bool trackingEnabled){
 
 void Visualizer::updateAudioSignal(float newValue){
     waveform.write(newValue);
-    // spectrogram.read(newValue);
+    spectrogram.write(newValue);
 }
 
 void Visualizer::_create_camMask(){
@@ -268,14 +274,15 @@ void Visualizer::_set_BG_manually(int tone, bool UNUSED(trackEnabled)){
 
 void Visualizer::drawSmallcircle(const RegionOfInterest &roi){
 
+
+    int W=cfg.dispconf.dispResW.load();
+    int H=cfg.dispconf.dispResH.load();
+    
     int roicenterX = roi.centerX.load();
     int roicenterY = roi.centerY.load();
     int roiVolumeW = roi.volumeW.load();
     int roiVolumeH = roi.volumeH.load();
 
-    int W=cfg.dispconf.dispResW.load();
-    int H=cfg.dispconf.dispResH.load();
-    
     int center_x = LR/2 + roicenterX; //  
     int center_y = TB/2 + roicenterY; // H/2;
 
@@ -288,7 +295,7 @@ void Visualizer::drawSmallcircle(const RegionOfInterest &roi){
     else if ( center_y > H/2 )
         center_y += static_cast<int>(transpose_ratio_y * (static_cast<float>(center_y) - static_cast<float>(H) / 2.0f));
 
-    cv::Point center(center_x, center_y);//Declaring the center point
+    cv::Point center(W - center_x, center_y);//Declaring the center point - Reflect horizontally
     int radius = roiVolumeW > roiVolumeH ? roiVolumeW/2 : roiVolumeH/2; //Declaring the radius
     cv::Scalar line_Color(0, 0, 0);//Color of the circle
     int thickness = 2;//thickens of the line
@@ -380,6 +387,7 @@ void Visualizer::_set_FG_manually(const RegionOfInterest &roi){
 
     drawSmallcircle(roi);
     draWaveform();
+    drawSpectrogram();
     
 }
 
@@ -414,11 +422,6 @@ void Visualizer::_setToCamera(float remaining_percentage){
     int L = (visualFrame.cols - cameraW)/2;
     int T = (visualFrame.rows - cameraH)/2;
 
-    // int r = (cameraW>cameraH) ? cameraH/2 : cameraW/2;
-
-// @ THIS IS POSTPONED -- > RELATED TO CAMBINARYMASK METHOD 
-// @ ALSO, IS THIS THE METHOD TO DEPICT THE ROI? 
-
     // draw transparent pixels in a form of enclosed circle within camera frame
     double vB = (double)visualFrame.at<cv::Vec3b>(0,0)[0];
     double vG = (double)visualFrame.at<cv::Vec3b>(0,0)[1];
@@ -433,9 +436,65 @@ void Visualizer::_setToCamera(float remaining_percentage){
             }
         }
     }
-    cameraFrame.copyTo(visualFrame(cv::Rect(L,T,cameraFrame.cols, cameraFrame.rows)));
+    cameraFrame.copyTo(visualFrame(cv::Rect(L,T,cameraW,cameraH)));
 }
 
+void Visualizer::drawSpectrogram(){
+
+    const double FREQ_MIN = (double)cfg.iavconf.minFrequency;  // Minimum frequency in Hz (for example, 20 Hz)
+    const double FREQ_MAX = (double)cfg.iavconf.maxFrequency; // Maximum frequency in Hz (for example, 20 kHz)
+    int SR = cfg.audconf.sampleRate.load();
+    int W = cfg.dispconf.dispResW.load();
+    int H = cfg.dispconf.dispResH.load();
+    int numAudioSamples = spectrogram.get_numAudioSamples();
+
+    float min_magnitude,max_magnitude;
+    spectrogram.readBatch(specMagnitude,min_magnitude,max_magnitude);
+
+    for (size_t i = 0; i < specMagnitude.size() ; ++i) {
+
+        float magnitude = specMagnitude[i];
+        
+        // Normalize magnitude to a reasonable range based on the highest value
+        int normalized_magnitude = static_cast<int>( 
+                                        std::min( 
+                                            (float)((magnitude - min_magnitude) / (max_magnitude - min_magnitude) * H * 0.5), 
+                                            static_cast<float>(H)/2.f
+                                        )
+                                    );
+        // int normalized_magnitude = std::min((int)((magnitude - min_magnitude) / (max_magnitude - min_magnitude) * H * 0.5), H/2.f);
+        // int normalized_magnitude = static_cast<int>((magnitude - min_magnitude) / (max_magnitude - min_magnitude) * H * 0.5);
+
+        // Calculate the frequency for each bin
+        // double freq_bin = (SR / 2.0) * (i / static_cast<double>( numAudioSamples / 2.0)); // Frequency of the current bin
+        double freq_bin = (SR / 2.0) * (static_cast<double>(i) / static_cast<double>(numAudioSamples / 2.0)); // Frequency of the current bin
+
+        // filtering the frequencies outside the scope of the iav application
+        if (freq_bin >= FREQ_MIN && freq_bin <= FREQ_MAX) {
+            
+            int x = static_cast<int>((freq_bin - FREQ_MIN) / (FREQ_MAX - FREQ_MIN) * W);
+            
+            // Create a the drawing line
+            int line_length = normalized_magnitude;
+            int top = H / 2 - line_length;
+            int bottom = H / 2 + line_length;
+
+            // Set the pixel values in the image to form the line
+            for (int y = top; y <= bottom; ++y) {
+                // Ensure we don't access out-of-bounds pixels
+                if (y >= 0 && y < H && x >= 0 && x < W) {
+                    // eq_image.at<uchar>(y, column) = 255; // Set maximum brightness for this line
+                    visualFrame.at<cv::Vec3b>(y,x)[0] = 250;
+                    visualFrame.at<cv::Vec3b>(y,x)[1] = 250;
+                    visualFrame.at<cv::Vec3b>(y,x)[2] = 250;
+
+                }
+            }
+
+        }
+    }
+    
+}
 
 
 /*
@@ -461,25 +520,6 @@ int Visualizer::and_Sound_into_Image(float* left, float* right,cv::Mat videofram
     return exit_msg;
 }
 */
-
-// int Visualizer::update_spectrogram(){
-//     /***
-//      * Old structured kept. Requires new implementation...
-//      * Code below is provided as an example for accessing fft data
-//      */ 
-    // double minf,maxf;
-    // sp.computeFFT(dft,minf,maxf);
-    // for (int i=0;i<H;i++){
-    //     int f_y_trans=i;
-        //normalize min max in range [0,1]
-        // dft[i]=(dft[i]-minf)/(maxf-minf);
-        // std::cout<<"visualFrame[y:"<<f_y_trans<<"][x:"<<f_x_trans<<"]="<<dft[i]<<"-------------->*255="<<(int)(dft[i]*255)<<" made "<<(int)(dft[i]*255)%255<<std::endl;
-        // visualFrame.at<cv::Vec3b>(f_y_trans,f_x_trans)[0] = (int)(dft[i]*255)%255;//newval[0]; *0.7
-        // visualFrame.at<cv::Vec3b>(f_y_trans,f_x_trans)[1] = (int)(dft[i]*255)%255;//newval[1]; *0.3
-        // visualFrame.at<cv::Vec3b>(f_y_trans,f_x_trans)[2] = (int)(dft[i]*255)%255;//newval[2]; *0.2
-//     }
-//     return 1;
-// }
 
 /* efficient but does not iterate in an ordered sequence over all perimeter pixels - probably requires mapping from midpoint-out to waveform i and j coordinates
 // https://www.geeksforgeeks.org/mid-point-circle-drawing-algorithm/
