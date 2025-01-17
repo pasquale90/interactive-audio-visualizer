@@ -8,7 +8,6 @@ Audiolizer::Audiolizer():cameracfg(Config::getInstance().camconf),iavcfg(Config:
     // @TEMPORARY DISABLED
     // init_log_freq_scale(); // currently not used. Use _int2log_freq (currently not used either) is affected by this method..
 
-    // maxH = cameracfg.camResH.load();
     frequencyRange = iavcfg.maxFrequency - iavcfg.minFrequency;
     prev_freq=0;
     volume = 0.f;

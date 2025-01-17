@@ -16,19 +16,20 @@ public:
 
     Spectrogram();
     ~Spectrogram();
-
-    int get_numAudioSamples();
-    int get_numFFTPoints();
-    
-    bool write(const float&);
-
-    bool readBatch(std::vector<float>&, float&, float&);
     
     Spectrogram (const Spectrogram&) = delete;
     Spectrogram (Spectrogram&&) = delete;
     Spectrogram& operator=(const Spectrogram&) = delete;
     Spectrogram& operator=(Spectrogram&&) = delete;
     
+    int get_numAudioSamples();
+    
+    int get_numFFTPoints();
+    
+    bool write(const float&);
+
+    bool readBatch(std::vector<float>&, float&, float&);
+
 private:
     Config &cfg = Config::getInstance();
     
@@ -39,8 +40,7 @@ private:
     std::atomic<size_t> readpos;
     std::atomic<size_t> writepos;
 
-    // std::vector<double> fft_in;
-    // double *fft_in;
+    // fftw_complex *fft_in;
     std::vector<double> fft_in;
     fftw_complex *fft_out;
     fftw_plan plan;

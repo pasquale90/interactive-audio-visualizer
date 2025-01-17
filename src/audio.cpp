@@ -133,8 +133,6 @@ int AudioStream::streamBuffer(){
     
     (sine.*make_sound)(tone,outputBuffers); 
     
-    // audioBufferCallback(left,right);
-    // here, sharing of the data is required..
 
     return 0;
 }

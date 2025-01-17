@@ -3,7 +3,6 @@
 
 IAV::IAV()
 {
-    // Here setup everything
     audioServer.setup_server();
 
     audiolizer.setAudioUpdater(std::bind(&AudioStream::update,&audioStream,std::placeholders::_1,std::placeholders::_2));
@@ -25,9 +24,9 @@ IAV::~IAV(){
 }
 
 void IAV::start(){
-    // Here run all threads
-    std::cout<<"Hello IAV!"<<std::endl;
+    
     audServerThread.detach();
     audioThread.detach();
     visualThread.join();
+
 }

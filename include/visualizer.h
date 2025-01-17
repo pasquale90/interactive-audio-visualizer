@@ -21,6 +21,7 @@ public:
 
     /*! @brief Class destructor */
     ~Visualizer();
+
     Visualizer(const Visualizer&) = delete;
     Visualizer(Visualizer&&) = delete;
     Visualizer& operator=(const Visualizer&) = delete;
@@ -33,7 +34,9 @@ public:
     void updateAudioSignal(float);
 
 private:
+
     const Config &cfg = Config::getInstance();
+
     Camera camera;
     VideoTracker videoTracker;
     Trigger trigger;
@@ -49,23 +52,19 @@ private:
     int LR,TB;
     int numPointsPerimeter;
 
-//working on them
+
     void _setToCamera(float);
     void _show_timer(float);
+
     bool trackingToggle;
     void updateTrackingMode(bool);
-    // method to update audioLizer
     std::function<void(const bool, const bool, const RegionOfInterest&, int&)> updateAudioLizer ;
-
     
-// later ..
-    void _set_BG_manually(int,bool);
+    void _set_BG_manually(int);
     void _set_FG_manually(const RegionOfInterest&);
     void _create_camMask();    
     bool _showFrame();
 
-    // void midPointCircleDraw(int x_centre, int y_centre, int r);
-    // int update_spectrogram();
     void draWaveform();
     void drawSpectrogram();
     void drawSmallcircle(const RegionOfInterest &);

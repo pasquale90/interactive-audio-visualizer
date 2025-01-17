@@ -75,19 +75,13 @@ bool Spectrogram::write(const float& arg){ // T&& arg --> rvalue reference
 
 bool Spectrogram::readBatch(std::vector<float>& result, float &min_magnitude, float &max_magnitude) {
     
-    // if (!availableForReading())
-    //   return false;
-
     // Calculate the start index for reading the last N samples in a forward manner
     size_t startIndex = (writepos.load() - numAudioSamples + 1 + ringBuffer.size()) % ringBuffer.size();
-
-    // std::cout<<
 
     // Read the N samples starting from startIndex
     size_t readPos = startIndex;
     for (size_t i = 0; i < (size_t)numAudioSamples; ++i) {
         
-        // signal[i] = ringBuffer[readPos] * hamming_window[i];
         // fft_in[i][0]=ringBuffer[readPos] * hamming_window[i];
         // fft_in[i][1]=0;
         fft_in[i]=ringBuffer[readPos] * hamming_window[i];

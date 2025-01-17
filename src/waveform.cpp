@@ -35,7 +35,7 @@ bool Waveform::write(const float& arg){ // T&& arg --> rvalue reference
 
 bool Waveform::read(float& result){
 
-    auto readPos = readpos.load(); // ????
+    auto readPos = readpos.load();
 
     // if buffer is empty return false  
     if (readPos == writepos.load()){
