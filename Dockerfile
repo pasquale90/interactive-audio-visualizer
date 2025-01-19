@@ -24,8 +24,7 @@ RUN apt-get update -y \
 # install jack audio
 RUN ln -s /usr/bin/python3 /usr/bin/python
 RUN git clone https://github.com/jackaudio/jack2.git && cd jack2 && ./waf configure --prefix /usr && ./waf && ./waf install 
-# add real-time leave for latter
-# https://jackaudio.org/faq/linux_rt_config.html
+# configure system to allow JACK to use realtime scheduling : https://jackaudio.org/faq/linux_rt_config.html
 RUN touch  /etc/security/limits.d/audio.conf \
     && echo -e '@audio   -  rtprio     95 \n@audio   -  memlock    unlimited' > /etc/security/limits.d/audio.conf
 # RUN usermod -a -G audio root
@@ -46,7 +45,7 @@ RUN wget https://codeload.github.com/opencv/opencv/zip/refs/tags/4.10.0 \
 RUN rm -r ./jack2 ./opencv* ./4.10.0*
 
 # install iav
-RUN mkdir ./src ./include ./data
+RUN mkdir ./src ./include 
 COPY src ./src
 COPY include ./include
 COPY CMakeLists.txt .
@@ -55,5 +54,7 @@ RUN mkdir build && cd build \
     && cmake ../ \
     && cmake --build . \
     && cp interactive-audio-visualizer ../
+
+RUN ldconfig
 
 ENTRYPOINT ["./interactive-audio-visualizer"]
