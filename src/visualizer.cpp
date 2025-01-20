@@ -188,7 +188,7 @@ void Visualizer::_set_BG_manually(int tone){
 
     float percent;
 
-    int B {0},G {0},R {0};
+    B = G = R = 0; 
     if (tone> cfg.iavconf.minFrequency && tone<=300){                // keep blue             
         percent = static_cast<float>(tone)/300.0f;  // high trans
         B = 255;
@@ -395,9 +395,9 @@ void Visualizer::drawSpectrogram(){
             for (int y = top; y <= bottom; ++y) {
                 // Ensure not out-of-bounds 
                 if (y >= 0 && y < H && x >= 0 && x < W) {
-                    visualFrame.at<cv::Vec3b>(y,x)[0] = 250;
-                    visualFrame.at<cv::Vec3b>(y,x)[1] = 250;
-                    visualFrame.at<cv::Vec3b>(y,x)[2] = 250;
+                    visualFrame.at<cv::Vec3b>(y,x)[0] = 255 - B;
+                    visualFrame.at<cv::Vec3b>(y,x)[1] = 255 - G;
+                    visualFrame.at<cv::Vec3b>(y,x)[2] = 255 - R;
 
                 }
             }
