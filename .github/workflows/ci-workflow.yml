@@ -4,47 +4,70 @@ on:
   push:
     branches:
       - refactor
+      - dev
 
 jobs:
-
-  Static-Analysis:
+  CICD:
     runs-on: ubuntu-latest
     steps:
-
-      # - name: Checkout code
-      #   uses: actions/checkout@v4
-    
-      # - name: Install cppcheck and clang-tidy
-      #   run: sudo apt-get update && sudo apt-get install -y cppcheck clang-tidy
-
-      # - name: Static analysis with cppcheck
-      #   run: bash ${PWD}/scripts/genStaticAnalysisLogs.sh
-
-      # - name: Upload cppcheck and clang-tidy output as artifacts
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: static-analysis-log-files
-      #     path: ${PWD}/checks/cppcheck.log ${PWD}/checks/clang-tidy.log
-
-      - name: Static analysis message
-        run: echo "Natively supported."
-
-  Building:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Building message
-        run: echo "maybe in the future..."
-
-
-  Testing:
-    runs-on: ubuntu-latest
-    steps:
-
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Build tests
-        run: bash ${PWD}/scripts/compileTests.sh
+      - name: Install dependencies
+        run: |
+  
+          # "Installing wget, build-essential, cmake, pkg-config, python3, git, clang-tidy, cppcheck..."
+          sudo apt-get install -y wget build-essential cmake pkg-config python3 git clang-tidy cppcheck
+          
+          # Install sqlite3
+          sudo apt-get install -y libsqlite3-dev
 
+          # Install libsamplerate
+          sudo apt-get install -y libsamplerate0 libsamplerate-dev
+          
+          # Install asound
+          sudo apt-get install -y libasound2-dev
+        
+          # Install libx11
+          sudo apt-get install -y libx11-dev
+        
+          # Install libxrandr
+          sudo apt-get install -y libxrandr-dev
+        
+          # Install qt6-base
+          sudo apt-get install -y qt6-base-dev
+        
+          # Install fftw3
+          sudo apt-get install -y libfftw3-dev
+        
+          # Install libv4l
+          sudo apt-get install -y libv4l-dev
+        
+          # Install jack-audio      
+          git clone https://github.com/jackaudio/jack2.git && cd jack2 && ./waf configure --prefix /usr && ./waf && sudo ./waf install && cd ..
+       
+          # Install opencv
+          sudo apt-get install -y libopencv-dev
+          sudo apt-get install qt6-base-dev
+
+          
+      - name: Build project
+        run: |
+          mkdir build
+          cd build
+          cmake -DBUILD_TESTS=ON ..
+          cmake --build .
+
+      - name: Static Analysis
+        run: bash ${PWD}/scripts/genStaticAnalysisLogs.sh
+
+      - name: Upload analysis reports as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: static-analysis-reports
+          path: |
+            checks/clang-tidy.log
+            checks/cppcheck.log
+            
       - name: Apply tests
-        run: ${PWD}/test/build/test_all
+        run: ${PWD}/build/test/test_all
