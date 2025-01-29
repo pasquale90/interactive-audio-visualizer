@@ -23,6 +23,7 @@ set(SOURCE_FILES
     ../src/config.cpp
     ../src/trigger.cpp
     ../src/timer.cpp
+    ../src/sine.cpp
 )
 add_executable(test_all ${SOURCE_FILES})
 
