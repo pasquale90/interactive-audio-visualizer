@@ -3,7 +3,6 @@
 #include <cstddef>
 #include <math.h>
 
-#include "waveform.h"
 #include "tone.h"
 
 #ifndef M_PI

@@ -4,7 +4,6 @@
 #include <memory>
 #include <functional>
 
-#include "waveform.h"
 class Config;
 struct AudioConfig;
 struct Tone;
