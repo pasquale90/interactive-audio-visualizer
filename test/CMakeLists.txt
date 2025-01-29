@@ -21,6 +21,8 @@ set(SOURCE_FILES
     allTests.cpp
     ../src/settings.cpp
     ../src/config.cpp
+    ../src/trigger.cpp
+    ../src/timer.cpp
 )
 add_executable(test_all ${SOURCE_FILES})
 

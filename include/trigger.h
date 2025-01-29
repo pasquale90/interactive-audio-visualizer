@@ -17,6 +17,7 @@ class Trigger {
 
         void reset();
         
+        Timer* getTimer();
     private:
         IAVConfig& iavcfg;
         Timer timer;

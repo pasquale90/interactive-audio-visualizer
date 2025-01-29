@@ -35,3 +35,7 @@ void Trigger::reset(){
     mode = 0;
     timeDurationSec = photo_countdown_sec;
 }
+
+Timer* Trigger::getTimer(){
+    return &timer;
+}
