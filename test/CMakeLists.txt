@@ -24,6 +24,7 @@ set(SOURCE_FILES
     ../src/trigger.cpp
     ../src/timer.cpp
     ../src/sine.cpp
+    ../src/audiolizer.cpp
 )
 add_executable(test_all ${SOURCE_FILES})
 

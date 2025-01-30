@@ -3,6 +3,7 @@
 #include "triggerTest.cpp"
 #include "timerTest.cpp"
 #include "sineTest.cpp"
+#include "audiolizerTest.cpp"
 
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc, argv);
