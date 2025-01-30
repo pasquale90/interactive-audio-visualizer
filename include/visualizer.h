@@ -52,7 +52,7 @@ private:
     int R,G,B;
     int LR,TB;
     int numPointsPerimeter;
-
+    int leftMidFreq, rightMidFreq;
 
     void _setToCamera(float);
     void _show_timer(float);
@@ -65,6 +65,7 @@ private:
     void _set_FG_manually(const RegionOfInterest&);
     void _create_camMask();    
     bool _showFrame();
+    void _set_freq_midBoundaries();
 
     void draWaveform();
     void drawSpectrogram();

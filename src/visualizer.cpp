@@ -31,6 +31,8 @@ Visualizer::Visualizer(){
     int nfft = spectrogram.get_numFFTPoints();
     specMagnitude.reserve(nfft);
     specMagnitude.resize(nfft);
+
+    _set_freq_midBoundaries();
 }
 
 void Visualizer::setAudiolizerUpdater(std::function<void(const bool, const bool, const RegionOfInterest&, Tone&)> function){
@@ -126,11 +128,20 @@ void Visualizer::_create_camMask(){
     }
 }
 
+void Visualizer::_set_freq_midBoundaries(){
+    // set mid frequencies
+    int minFreq  = cfg.iavconf.minFrequency;
+    int maxFreq = cfg.iavconf.maxFrequency;
+
+    int frange = maxFreq - minFreq;
+    leftMidFreq  = minFreq + (frange/3);
+    rightMidFreq = minFreq + (2*frange/3);
+}
+
 void Visualizer::broadcast(){
 
     bool trackingEnabled,trackingUpdated;
     RegionOfInterest trackingSig;
-    // int frequency {0};
     Tone tone;
 
     while(true){
@@ -190,28 +201,28 @@ bool Visualizer::_showFrame(){
 void Visualizer::_set_BG_manually(Tone &tone){
 
     int frequency = tone.frequency.load();
-    // float volume = tone.volume.load();
+    float volume = tone.volume.load();
 
     float percent;
 
     B = G = R = 0; 
-    if (frequency> cfg.iavconf.minFrequency && frequency<=300){                // keep blue             
-        percent = static_cast<float>(frequency)/300.0f;  // high trans
-        B = 255;
-        G = static_cast<int>(255.*percent);
+    if (frequency> cfg.iavconf.minFrequency && frequency<=leftMidFreq){                // keep blue             
+        percent = static_cast<float>(frequency)/ static_cast<float>(leftMidFreq);  // high trans
+        B = static_cast<int>(255.f * volume );
+        G = static_cast<int>(255.f * percent);
+        R = static_cast<int>(255.f * (1.-percent));
+    }
+    else if (frequency >leftMidFreq && frequency <= rightMidFreq){       // keep green
+        percent = static_cast<float>(frequency)/ static_cast<float>(rightMidFreq); // low trans
+        B = static_cast<int>(255.f * percent);
+        G = static_cast<int>(255.f * volume);
         R = static_cast<int>(255.*(1.-percent));
     }
-    else if (frequency >300 && frequency <=700){       // keep green
-        percent = static_cast<float>(frequency)/700.0f; // low trans
-        B = static_cast<int>(255.*percent);
-        G = 255;
-        R = static_cast<int>(255.*(1.-percent));
-    }
-    else if (frequency >700 && frequency <= cfg.iavconf.maxFrequency) {    // keep red
+    else if (frequency > rightMidFreq && frequency <= cfg.iavconf.maxFrequency) {    // keep red
         percent = static_cast<float>(frequency)/static_cast<float>(cfg.iavconf.maxFrequency);            
         B = static_cast<int>(255.*percent);
         G = static_cast<int>(255.*(1.-percent));
-        R = 255;
+        R = static_cast<int>(255.f * volume);
     }
     visualFrame.setTo( cv::Scalar( B, G, R ) );
 }
