@@ -2,6 +2,7 @@
 #include <math.h>
 #include "config.h"
 #include "roi.h"
+#include "tone.h"
 
 Audiolizer::Audiolizer():cameracfg(Config::getInstance().camconf),iavcfg(Config::getInstance().iavconf){
 
@@ -17,35 +18,40 @@ void Audiolizer::setAudioUpdater(std::function<void(int, float)> func){
     updateAudio = std::move(func);
 }
 
-bool Audiolizer::turn_Image_into_Sound(const bool tracking_updated, const bool pattern_locked , const RegionOfInterest &roi, int& freq){
+bool Audiolizer::turn_Image_into_Sound(const bool tracking_updated, const bool pattern_locked , const RegionOfInterest &roi, Tone &tone){
 
    /***
     * returns by reference the frequency that will be streamed on the next audio buffer
    */
-   
+    
+    int frequency = tone.frequency.load();
     int prevFreq = prev_freq;
 
     if (pattern_locked){
         if (tracking_updated)          // if tracking updated --> new x,y --> new freq
-            translate(roi, freq);      
+            translate(roi, frequency);      
         else{                          // else --> previous frequency
-            freq=prev_freq;
+            frequency=prev_freq;
         } 
     }else{                            // gradualy fade frequency to zero --> if frequency > 0 , slowly decline
-        if (freq>1){ 
-            gradualy_fade(freq); // gradualy fade frequency to zero --> if frequency > 0 , slowly decline
+        if (frequency>1){ 
+            gradualy_fade(frequency); // gradualy fade frequency to zero --> if frequency > 0 , slowly decline
         }else{
-            freq=0;
+            frequency=0;
             volume = 0.f;
         }
     }
 
     // update audioStream with the newFrequency
-    bool frequencyChanged = freq != prevFreq;
+    bool frequencyChanged = frequency != prevFreq;
     if (frequencyChanged){
-        updateAudio(freq , volume);
-    }
+        updateAudio(frequency , volume);
+
+        tone.frequency.store(frequency);
+        tone.volume.store(volume);
     
+    }
+
     return frequencyChanged;
 
 }

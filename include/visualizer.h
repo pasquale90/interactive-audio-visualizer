@@ -12,6 +12,7 @@
 #include "trigger.h"
 #include "waveform.h"
 #include "spectrogram.h"
+class Tone;
 
 class Visualizer{
 public:
@@ -29,7 +30,7 @@ public:
 
     void broadcast();
 
-    void setAudiolizerUpdater(std::function<void(const bool, const bool, const RegionOfInterest&, int&)>);
+    void setAudiolizerUpdater(std::function<void(const bool, const bool, const RegionOfInterest&, Tone&)>);
 
     void updateAudioSignal(float);
 
@@ -58,9 +59,9 @@ private:
 
     bool trackingToggle;
     void updateTrackingMode(bool);
-    std::function<void(const bool, const bool, const RegionOfInterest&, int&)> updateAudioLizer ;
+    std::function<void(const bool, const bool, const RegionOfInterest&, Tone&)> updateAudioLizer ;
     
-    void _set_BG_manually(int);
+    void _set_BG_manually(Tone&);
     void _set_FG_manually(const RegionOfInterest&);
     void _create_camMask();    
     bool _showFrame();

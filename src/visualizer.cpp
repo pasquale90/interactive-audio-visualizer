@@ -1,6 +1,8 @@
 #include "visualizer.h"
+#include "tone.h"
 #include <cstddef>
 #include <iostream>
+
 
 constexpr int qASCII {113}; // 113 q
 // constexpr int spaceASCII {32};// 32 space
@@ -31,7 +33,7 @@ Visualizer::Visualizer(){
     specMagnitude.resize(nfft);
 }
 
-void Visualizer::setAudiolizerUpdater(std::function<void(const bool, const bool, const RegionOfInterest&, int&)> function){
+void Visualizer::setAudiolizerUpdater(std::function<void(const bool, const bool, const RegionOfInterest&, Tone&)> function){
     updateAudioLizer = std::move(function);
 }
 
@@ -128,7 +130,8 @@ void Visualizer::broadcast(){
 
     bool trackingEnabled,trackingUpdated;
     RegionOfInterest trackingSig;
-    int frequency {0};
+    // int frequency {0};
+    Tone tone;
 
     while(true){
 
@@ -152,7 +155,7 @@ void Visualizer::broadcast(){
             }            
                 
             // update the current visualframe according to the changing of the tracking stimulus
-            _set_BG_manually(frequency);
+            _set_BG_manually(tone);
             _set_FG_manually(trackingSig);
 
 
@@ -161,7 +164,7 @@ void Visualizer::broadcast(){
             trackingUpdated = trackingEnabled = false;
         }
 
-        updateAudioLizer(trackingUpdated, trackingEnabled, trackingSig, frequency);
+        updateAudioLizer(trackingUpdated, trackingEnabled, trackingSig, tone);
 
         bool exit_msg = _showFrame();
         if (exit_msg)
@@ -184,25 +187,28 @@ bool Visualizer::_showFrame(){
     return false;
 }
 
-void Visualizer::_set_BG_manually(int tone){
+void Visualizer::_set_BG_manually(Tone &tone){
+
+    int frequency = tone.frequency.load();
+    // float volume = tone.volume.load();
 
     float percent;
 
     B = G = R = 0; 
-    if (tone> cfg.iavconf.minFrequency && tone<=300){                // keep blue             
-        percent = static_cast<float>(tone)/300.0f;  // high trans
+    if (frequency> cfg.iavconf.minFrequency && frequency<=300){                // keep blue             
+        percent = static_cast<float>(frequency)/300.0f;  // high trans
         B = 255;
         G = static_cast<int>(255.*percent);
         R = static_cast<int>(255.*(1.-percent));
     }
-    else if (tone >300 && tone <=700){       // keep green
-        percent = static_cast<float>(tone)/700.0f; // low trans
+    else if (frequency >300 && frequency <=700){       // keep green
+        percent = static_cast<float>(frequency)/700.0f; // low trans
         B = static_cast<int>(255.*percent);
         G = 255;
         R = static_cast<int>(255.*(1.-percent));
     }
-    else if (tone >700 && tone <= cfg.iavconf.maxFrequency) {    // keep red
-        percent = static_cast<float>(tone)/static_cast<float>(cfg.iavconf.maxFrequency);            
+    else if (frequency >700 && frequency <= cfg.iavconf.maxFrequency) {    // keep red
+        percent = static_cast<float>(frequency)/static_cast<float>(cfg.iavconf.maxFrequency);            
         B = static_cast<int>(255.*percent);
         G = static_cast<int>(255.*(1.-percent));
         R = 255;

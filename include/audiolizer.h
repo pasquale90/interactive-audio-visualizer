@@ -9,6 +9,7 @@
 
 #include "config_types.h"
 struct RegionOfInterest;
+class Tone;
 
 class Audiolizer{
 
@@ -28,7 +29,7 @@ public:
     * @param[out] float* right - variable passed as a pointer for filling the right channel of the sine wave.
     * @return bool - if a new frame has elapsed
     */
-    bool turn_Image_into_Sound(const bool, const bool, const RegionOfInterest&, int&);
+    bool turn_Image_into_Sound(const bool, const bool, const RegionOfInterest&, Tone&);
 
     void setAudioUpdater(std::function<void(int,float)>);
 private:
