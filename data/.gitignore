@@ -2,3 +2,6 @@
 *
 # Except this file
 !.gitignore
+
+# .. and settings.db. It is needed for the tests. 
+!settings.db
