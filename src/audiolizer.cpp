@@ -46,11 +46,9 @@ bool Audiolizer::turn_Image_into_Sound(const bool tracking_updated, const bool p
     bool frequencyChanged = frequency != prevFreq;
     if (frequencyChanged){
         updateAudio(frequency , volume);
-
-        tone.frequency.store(frequency);
-        tone.volume.store(volume);
-    
     }
+    tone.frequency.store(frequency);
+    tone.volume.store(volume);
 
     return frequencyChanged;
 
