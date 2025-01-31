@@ -16,7 +16,7 @@ TEST(WaveFIFOtest, isEmptyFunction) {
 
 TEST(WaveFIFOtest, isFullFunction) {
     Waveform waveform;
-    for(int i = 0; i < waveform.size()-2 ; i++){
+    for(size_t i = 0; i < waveform.size()-2 ; i++){
         waveform.write(static_cast<float>(i));
         EXPECT_FALSE(waveform.isFull());
     }
