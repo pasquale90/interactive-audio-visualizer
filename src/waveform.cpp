@@ -10,6 +10,7 @@ Waveform::Waveform(): readpos(0), writepos(0){
     waveTable.reserve(audioSamplesPerFrame);
     waveTable.resize(audioSamplesPerFrame);
     
+    capacity = (size_t)audioSamplesPerFrame;
     min = INT_MAX, max = 0.;
 }
 
@@ -60,9 +61,7 @@ bool Waveform::isFull() const {
 }
 
 size_t Waveform::size() const { 
-    size_t writePos = writepos.load();
-    size_t readPos = readpos.load();
-    return (writePos - readPos + waveTable.size()) % waveTable.size();
+    return capacity;
 }
 
 size_t Waveform::availableForReading() const {
@@ -83,4 +82,4 @@ size_t Waveform::availableForReading() const {
 void Waveform::getMinMax(float minMax[2]){
     minMax[0] = this->min;
     minMax[1] = this->max;
-} 
+}

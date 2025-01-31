@@ -30,6 +30,7 @@ private:
     std::atomic<size_t> readpos;
     std::atomic<size_t> writepos;
     float min,max;
+    size_t capacity;
 };
 
 #endif
