@@ -57,3 +57,7 @@ TEST(SpectrumFIFOtest, ShortTimeFourierTransformLessPeaks) {
         EXPECT_EQ(fftResult[targetBin], maxMagnitude);
     }
 }
+
+TEST(SpectrumFIFOtest, CICDTest_TestsIfCIfails) {
+    EXPECT_TRUE(false);
+}
