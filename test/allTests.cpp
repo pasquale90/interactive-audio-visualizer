@@ -4,6 +4,8 @@
 #include "timerTest.cpp"
 #include "sineTest.cpp"
 #include "audiolizerTest.cpp"
+#include "waveformTest.cpp"
+#include "spectrogramTest.cpp"
 
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc, argv);

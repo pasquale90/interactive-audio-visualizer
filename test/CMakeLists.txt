@@ -25,6 +25,8 @@ set(SOURCE_FILES
     ../src/timer.cpp
     ../src/sine.cpp
     ../src/audiolizer.cpp
+    ../src/waveform.cpp
+    ../src/spectrogram.cpp
 )
 add_executable(test_all ${SOURCE_FILES})
 
@@ -34,4 +36,5 @@ target_link_libraries(
     test_all
     GTest::gtest_main
     sqlite3
+    fftw3
 )
