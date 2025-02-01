@@ -15,7 +15,10 @@ jobs:
 
       - name: Install dependencies
         run: |
-  
+
+          sudo apt update
+          sudo apt-get update
+
           # "Installing wget, build-essential, cmake, pkg-config, python3, git, clang-tidy, cppcheck..."
           sudo apt-get install -y wget build-essential cmake pkg-config python3 git clang-tidy cppcheck
           
