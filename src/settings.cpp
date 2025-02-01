@@ -1,4 +1,6 @@
+#include "sqlite3.h"
 #include "settings.h"
+#include "config.h"
 
 SettingsDB::SettingsDB(const std::string& db_path) : dbPath(db_path) {
    

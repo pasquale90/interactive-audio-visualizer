@@ -1,10 +1,5 @@
 #ifndef AUDIOSERVER_H
 #define AUDIOSERVER_H
-#include <stdio.h>
-#include <errno.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <cstring>
 #include <mutex>
 #include <condition_variable>
 #include <jack/jack.h>
@@ -15,6 +10,7 @@
 struct AudioConfig;
 
 const char supported_driver[5] = "alsa";
+
 /*! @brief The jack-audio server running on the alsa drivers*/
 class AudioServer{
 public:

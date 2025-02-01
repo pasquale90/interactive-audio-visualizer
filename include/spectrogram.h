@@ -1,12 +1,9 @@
 #ifndef SPECTROGRAM_H
 #define SPECTROGRAM_H
 
-#include <stdlib.h>
-#include <math.h>
-#include <fftw3.h>
-#include <iostream>
-#include <vector>
 
+#include <fftw3.h>
+#include <vector>
 #include "config.h"
 
 #define PI 3.14159

@@ -1,11 +1,8 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-// #include "console.h"
-// #include "config_defaults.h"
-#include "config_types.h"
 #include <unordered_map>
-#include "settings.h"
+#include "config_types.h"
 
 class Config{
 

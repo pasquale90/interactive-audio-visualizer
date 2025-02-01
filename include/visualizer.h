@@ -2,16 +2,13 @@
 #define VISUALIZER_H
 
 #include <functional>
-#include <memory>
 #include <vector>
-
-#include "roi.h"
-
-#include "videotracker.h"
 #include "camera.h"
+#include "videotracker.h"
 #include "trigger.h"
 #include "waveform.h"
 #include "spectrogram.h"
+class RegionOfInterest;
 class Tone;
 
 class Visualizer{

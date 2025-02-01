@@ -1,7 +1,8 @@
-#include "visualizer.h"
-#include "tone.h"
-#include <cstddef>
 #include <iostream>
+#include <opencv2/highgui/highgui.hpp>
+#include "visualizer.h"
+#include "roi.h"
+#include "tone.h"
 
 
 constexpr int qASCII {113}; // 113 q

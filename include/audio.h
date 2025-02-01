@@ -1,30 +1,16 @@
 #ifndef AUDIO_H
 #define AUDIO_H
 
-// #include "config.h"
-#include <jack/jack.h>
-#include <jack/types.h>
-#include <iostream>
-#include <cstring>
-#include <unistd.h>
 #include <atomic>
 #include <mutex>
 #include <condition_variable>
+#include <jack/jack.h>
+#include <jack/types.h>
 #include "sine.h"
 #include "tone.h"
 
 class Config;
 class Waveform;
-
-/*! @brief Callback method - process called when a new audio buffer occurs
-  * It forces the Auiolizer and Visualizer classes to provide controlling methods for synchronizing audio (streaming) and image (both capturing & visualization).
-  * Two pointers are passed to fill a sine signal using the Audiolizer, which is then passed into the Visualizer for controling image properties using audio analysis tools.
-  * @param[out] jack_default_audio_sample_t* left - left sine signal is a pointer to float array for the left channel
-  * @param[out] jack_default_audio_sample_t* right - right sine signal is a pointer to float array for the right channel
-  * @return void
-  */
-//@TEMP_COMMENTED
-// void audioBufferCallback(jack_default_audio_sample_t* left,jack_default_audio_sample_t* right);
 
 // Class for routing audio signal. Uses the jack audio API.
 class AudioStream{

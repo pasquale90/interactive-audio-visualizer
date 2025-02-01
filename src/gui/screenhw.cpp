@@ -1,5 +1,11 @@
-#include "gui/screenhw.h"
+#include <iostream>
 #include <unordered_set>
+#include <string>
+#include <X11/Xlib.h>
+#include <X11/extensions/Xrandr.h>
+#include "gui/screenhw.h"
+
+
 
 std::vector<std::pair<int,int>> get_screen_resolution() {
 

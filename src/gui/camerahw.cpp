@@ -1,7 +1,12 @@
-#include "gui/camerahw.h"
-#include <cstddef>
-
 #include <algorithm>
+#include <unordered_set>
+#include <cstring>
+#include <linux/videodev2.h>
+#include <sys/ioctl.h>
+#include <fcntl.h>
+#include <unistd.h>
+// #include <errno.h>
+#include "gui/camerahw.h"
 
 static bool compareResolutions(std::pair<int, int> r1,std::pair<int, int> r2){
     return (r1.first > r2.first) ? true : (r1.second > r2.second);

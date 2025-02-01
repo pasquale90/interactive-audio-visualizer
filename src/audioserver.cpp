@@ -1,6 +1,10 @@
-#include "audioserver.h"
+#include <stdio.h>
+#include <errno.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <cstring>
 #include <sys/types.h>
-
+#include "audioserver.h"
 #include "config.h"
 
 AudioServer::AudioServer(const char* driverName):driver_name(driverName),audiocfg (Config::getInstance().audconf){

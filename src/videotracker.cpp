@@ -1,5 +1,4 @@
 #include "videotracker.h"
-
 #include "roi.h"
 
 VideoTracker::VideoTracker(){

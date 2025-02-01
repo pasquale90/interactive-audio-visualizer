@@ -1,3 +1,4 @@
+#include <iostream>
 #include "timer.h"
 
 Timer::Timer() : initialSeconds(0), remainingTimeMilliseconds(0){}

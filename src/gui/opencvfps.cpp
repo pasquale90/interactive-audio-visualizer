@@ -1,3 +1,4 @@
+#include "opencv2/opencv.hpp"
 #include "gui/opencvfps.h"
 
 double getCVfps_approx(const char* cameraDevice){

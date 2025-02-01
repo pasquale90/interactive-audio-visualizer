@@ -1,5 +1,7 @@
+#include <string>
+#include <climits>
+#include <alsa/asoundlib.h>
 #include "gui/audiohw.h"
-#include <utility>
 
 // using namespace AudioHardware;
 

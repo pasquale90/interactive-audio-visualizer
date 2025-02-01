@@ -2,9 +2,8 @@
 #define SETTINGS_H
 
 #include <unordered_map>
-#include <sqlite3.h>
-#include "config.h"
 #include "paths.h"
+class sqlite3;
 
 class SettingsDB {
 public:

@@ -1,9 +1,7 @@
 #ifndef SINE_H
 #define SINE_H
 
-#include <memory>
 #include <functional>
-
 class Config;
 struct AudioConfig;
 struct Tone;

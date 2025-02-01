@@ -1,8 +1,5 @@
-
-#include "sine.h"
-#include <cstddef>
 #include <math.h>
-
+#include "sine.h"
 #include "tone.h"
 
 #ifndef M_PI

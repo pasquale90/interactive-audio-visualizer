@@ -2,7 +2,6 @@
 #define IAV_H
 
 #include <thread>
-
 #include "config.h"
 #include "audioserver.h"
 #include "audio.h"

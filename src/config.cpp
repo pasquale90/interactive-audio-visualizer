@@ -1,5 +1,6 @@
-#include "config.h"
 #include <iostream>
+#include "config.h"
+#include "settings.h"
 
 Config::Config(){
     

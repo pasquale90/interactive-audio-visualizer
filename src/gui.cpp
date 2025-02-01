@@ -1,12 +1,10 @@
-#include "gui.h"
 #include <cstddef>
 #include <string>
-
+#include "gui.h"
 #include "gui/opencvfps.h"
 #include "gui/audiohw.h"
 #include "gui/camerahw.h"
 #include "gui/screenhw.h"
-
 
 void GUI::initializeComponents(){
     

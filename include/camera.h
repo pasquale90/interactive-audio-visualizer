@@ -3,14 +3,10 @@
 
 #include <atomic>
 #include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
 #include <opencv2/videoio.hpp>
-#include <opencv2/core/hal/interface.h>
-
-#include "config.h"
 #include "unused_defines.h"
-
 struct CameraConfig;
+
 
 class Camera{
 public:

@@ -1,5 +1,6 @@
-#include "waveform.h"
 #include <climits>
+#include <math.h>
+#include "waveform.h"
 
 Waveform::Waveform(): readpos(0), writepos(0){
     // calculate num of buffers per display frame;

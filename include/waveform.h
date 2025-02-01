@@ -1,12 +1,9 @@
 #ifndef RAW_H
 #define RAW_H
 
-#include "config.h"
-#include <math.h>
-
-#include <atomic>
 #include <vector>
-#include <iostream>
+#include <atomic>
+#include "config.h"
 
 class Waveform{
 public:

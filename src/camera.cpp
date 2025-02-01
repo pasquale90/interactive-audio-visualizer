@@ -1,11 +1,11 @@
 // https://learnopencv.com/object-tracking-using-opencv-cpp-python/
 
-
-
-#include "camera.h"
-
-
 #include <iostream>
+#include <opencv2/core/hal/interface.h>
+#include "camera.h"
+#include "config.h"
+
+
 Camera::Camera() : cameracfg(Config::getInstance().camconf){
     frameToggle.store(false);
     toggleFrame=false;

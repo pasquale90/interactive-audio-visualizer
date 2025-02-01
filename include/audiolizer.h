@@ -6,7 +6,6 @@
 */
 
 #include <functional>
-
 #include "config_types.h"
 struct RegionOfInterest;
 class Tone;

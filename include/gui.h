@@ -12,7 +12,6 @@
 #include <QMap>
 #include <QPair>
 #include <QSlider>
-
 #include "settings.h"
 
 class GUI{

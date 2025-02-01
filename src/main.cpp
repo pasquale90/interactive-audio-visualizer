@@ -1,7 +1,7 @@
 /*!*******************************************//**
  * @file
  * @author Melissas Paschalis <melissaspaschalis@gmail.com>
- * @version 1.0 - demo
+ * @version 2.0
  *
  * @section LICENSE
  *

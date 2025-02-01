@@ -1,13 +1,8 @@
 #ifndef AUDIO_HW
 #define AUDIO_HW
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <alsa/asoundlib.h>
 #include <utility>
 #include <vector>
-#include <string>
-#include <climits>
 
 namespace AudioHardware{
 

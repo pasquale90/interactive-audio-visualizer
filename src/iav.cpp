@@ -1,5 +1,4 @@
 #include "iav.h"
-#include "visualizer.h"
 
 IAV::IAV()
 {

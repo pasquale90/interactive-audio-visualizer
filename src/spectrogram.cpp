@@ -1,8 +1,6 @@
-#include "spectrogram.h"
 #include <cmath>
-#include <cstddef>
-
 #include <climits>
+#include "spectrogram.h"
 
 Spectrogram::Spectrogram(): readpos(0), writepos(0), fft_in(700){
   
