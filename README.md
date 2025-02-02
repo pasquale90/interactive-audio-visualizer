@@ -73,23 +73,37 @@ mkdir build && cd build
 ```bash
 cmake ..
 ```
-4.Compile the project:
+4. Compile the project:
 ```bash
 cmake --build .
 ```
 
-##### Additional Configuration Options
+### Additional Configuration Options
 
 You can customize the build process with the following CMake options:
+
+##### Tests
 
 - To build the tests:
 ```bash
 cmake -DBUILD_TESTS=ON ..
 ```
+- To run the tests:
+```bash
+./test/test_all
+```
+
+##### Static analysis
+
 - To enable static analysis using cppcheck and clang-tidy:
 ```bash
 cmake -DSTATIC_ANALYSIS=ON ..
 ```
+Otherwise, to conduct analytic checks run:
+```bash
+bash scripts/genStaticAnalysisLogs.sh
+```
+to generate the `checks/cppcheck.log` and `checks/clang-tidy.log` files within the `checks` directory.
 
 ## Docker
 
