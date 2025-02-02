@@ -1,4 +1,3 @@
 xhost +local:docker
-#docker run --rm --privileged -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix --device /dev/snd -v /dev:/dev -v ${pwd}/data/:/home/iav/interactive-audio-visualizer/data iav:latest
 docker run --rm --privileged --security-opt seccomp=unconfined -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix --device /dev/snd -v /dev:/dev -v $(pwd)/data:/home/iav/interactive-audio-visualizer/data iav:latest
 xhost -local:docker

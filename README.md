@@ -243,6 +243,5 @@ If you liked this project, you may also like:
 <br>
 <br>
 <br>
-
-<a href="https://github.com/pasquale90/interactive-audio-visualizer"><img src="files/imgs/thanks-for-your-interest.svg" width="650"></a>
+<a href="https://github.com/pasquale90/interactive-audio-visualizer"><img src="files/imgs/thanks.svg" width="1200"></a>
 

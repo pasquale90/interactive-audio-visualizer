@@ -5,7 +5,6 @@ on:
   push:
     branches:
       - main
-      - refactor
       - dev
 
 jobs:
@@ -64,7 +63,7 @@ jobs:
           cmake --build .
 
       - name: Static Analysis
-        run: bash ${PWD}/scripts/genStaticAnalysisLogs.sh
+        run: bash ${PWD}/files/scripts/genStaticAnalysisLogs.sh
 
       - name: Upload analysis reports as artifacts
         uses: actions/upload-artifact@v4
