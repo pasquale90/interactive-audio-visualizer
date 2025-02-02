@@ -1,15 +1,15 @@
 #ifndef AUDIOLIZER_H
 #define AUDIOLIZER_H
 
-/*
-* translates the tracking signal into audio frequency
-*/
-
 #include <functional>
 #include "config_types.h"
 struct RegionOfInterest;
 class Tone;
 
+/*!
+ * @brief A class responsible for translating tracking signal into audio frequency.
+ * @note This class is responsible for managing the conversion from image to audio.
+ */
 class Audiolizer{
 
 public:
@@ -19,18 +19,22 @@ public:
     Audiolizer();
     
    /*! @brief Member function responsible for obtaining image signal and converting it into sound of a certain frequency.
-    * comment method ....
-    * @param bool& trackEnabled - variable passed by reference to indicate whether there is a user interaction update.
-    * @param int& freq - variable passed by reference that sets a current value to the current generating frequency responce.
-    * @param cv::Mat& frame - variable passed by reference that sets a current value to the current generating frequency responce.
+    * @param[in] bool trackingUpdated - variable that indicates whether there is a new tracking signal.
+    * @param[in] bool trackingEnabled - variable that indicates whether the tracking is enabled or not.
     * @param RegionOfInterest& roi - variable passed by reference that updates the value of the current tracking signal.
-    * @param[out] float* left - variable passed as a pointer for filling the left channel of the sine wave.
-    * @param[out] float* right - variable passed as a pointer for filling the right channel of the sine wave.
-    * @return bool - if a new frame has elapsed
+    * @param[in] Tone& - the tone object for storing the current frequency and volume
+    * @return bool - returns true if frequency has changed
     */
     bool turn_Image_into_Sound(const bool, const bool, const RegionOfInterest&, Tone&);
 
+    /**
+     * @brief Method that sets the audio updater function.
+     * @param std::function<void(int,float)> - the audio updater function that receives as parameters the current frequency and volume.
+     * @return void
+     */
+    
     void setAudioUpdater(std::function<void(int,float)>);
+
 private:
 
     CameraConfig &cameracfg;

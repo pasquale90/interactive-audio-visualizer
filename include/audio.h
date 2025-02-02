@@ -12,7 +12,13 @@
 class Config;
 class Waveform;
 
+/*!
 // Class for routing audio signal. Uses the jack audio API.
+ * @brief A class representing the audio streaming functionality.
+ * @note This class manages the audio streaming process, including connecting to the server, creating the connection graph, and streaming the audio buffer.
+ * @see the jack library documentation : https://jackaudio.org/api/
+ * @see jack client example : https://github.com/jackaudio/example-clients/blob/master/simple_client.c
+*/
 class AudioStream{
 public:
 
@@ -26,9 +32,10 @@ public:
     */
     ~AudioStream();
 
-  void setup_client(const Config& cfg);
-
     /*! @brief Starts a connection to the server and creates the connection graph which connects the inputs with the outputs
+    * @param mutex& - mutex for synchronization with the server
+    * @param condition_variable& - condition variable for synchronization with the server
+    * @param bool& - boolean indicating whether the server has started
     * @return void
     */
     void clientConnect(std::mutex&, std::condition_variable&, bool&);
@@ -38,22 +45,46 @@ public:
     */
     void closeStream();
 
-    /*! @brief Method for streaming the audio buffer.
-    * Calls the audioBufferCallback to stream pulses of audio data using a float buffer to the rest of the working program.
-    * Through the audioBufferCallback, it passes a left and a right buffer as an input to the Audiolizer for filling a buffer of sinuisodal waves of varying frequencies.
-    * ... the filled signal is later passed to the Visualizer for audio analysis before visualization, but Visualizer does not change the values of the signal.
-    * @param jack_nframes_t nframes - the audio buffer size. Should be replaced with member variable using the Config instance as a parameter
+    /*! @brief Member function for streaming the audio buffer. It is a Callback function called implicitly via the static AudioStream::streamAudio function.
+    * Inside the function, the sine wave generator is called to fill the audio buffers with the generated sine waves.
     * @return int - success message
     */
     int streamBuffer();
 
+    /*!
+     * @brief Updates the tone member variable with a new frequency and volume.
+     * @param int frequency - the current frequency of the tone
+     * @param float volume - the volume of the tone
+     * @return void
+     */
     void update(int,  float);
 
+    /*!
+     * @brief Sets the visualizer updater function.
+     * @param std::<void(float)> - the visualizer updater function
+     * @return void
+     * @note The visualizer updater function takes one by one an audio sample as a float parameter to write on the FIFO-based data structures of Waveform and Spectrogram.
+     */
     void setVisualizerUpdater(std::function<void(float)>);
     
-    AudioStream(const AudioStream&) = delete;
+    /*!
+     * @brief Copy constructor is deleted to prevent accidental use.
+    */
+     AudioStream(const AudioStream&) = delete;
+    
+    /*!
+     * @brief Move constructor is deleted to prevent accidental use.
+    */
     AudioStream(AudioStream&&)  = delete;
+    
+    /*!
+     * @brief Copy assignment operator is deleted to prevent accidental use.
+    */
     AudioStream& operator=(const AudioStream&) = delete;
+    
+    /*!
+     * @brief Move assignment operator is deleted to prevent accidental use.
+    */
     AudioStream& operator=(AudioStream&&) = delete;
 
 private:

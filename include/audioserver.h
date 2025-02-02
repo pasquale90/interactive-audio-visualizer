@@ -11,31 +11,62 @@ struct AudioConfig;
 
 const char supported_driver[5] = "alsa";
 
-/*! @brief The jack-audio server running on the alsa drivers*/
+/*! 
+ * @brief The jack-audio server running on the alsa drivers.
+ * @note This class encapsulates the functionality for managing the jack audio server and its associated resources
+ * It is responsible for setting up the jack audio server, starting it, and stopping it.
+ * @note The AudioServer class uses the jack library for managing the jack audio server.
+ * @see the jack library documentation : https://jackaudio.org/api/
+ * @see jack server example : https://github.com/jackaudio/example-clients/blob/master/server_control.c
+*/
 class AudioServer{
 public:
     /*! @brief Default constructor
     */
     explicit AudioServer(const char* driverName = supported_driver);
     
+    /*! @brief Class destructor
+    * Destroys the jack audio server and its associated resources.
+    */
     ~AudioServer();
     
     /*! @brief Setup the jack audio server by changing server parameters and alsa driver parameters
     * @return void
     */
     void setup_server();
+    
     /*! @brief Starts the jack audio server
+    * @param std::mutex& - a mutex object to control synchronization with the client.
+    * @param std::condition_variable& - a condition variable object to signal when the server is ready
     * @return void
+    * @warning The server has to be started before the audio client attempts to connect.
     */
     void start_server(std::mutex&, std::condition_variable&, bool&);
+
     /*! @brief Stops the jack audio server
     * @return void
     */
     void stop_server();
 
+    // Rule of five (5)
+    /*!
+     * @brief Copy constructor is deleted to prevent accidental use.
+    */
     AudioServer (const AudioServer&) = delete;
+
+    /*!
+     * @brief Move constructor is deleted to prevent accidental use.
+    */
     AudioServer (AudioServer&&) = delete;
+
+    /*!
+     * @brief Copy assignment operator is deleted to prevent accidental use.
+    */
     AudioServer& operator=(const AudioServer&) = delete;
+    
+    /*!
+     * @brief Move assignment operator is deleted to prevent accidental use.
+    */
     AudioServer& operator=(AudioServer&&) = delete;
     
 private:

@@ -1,10 +1,7 @@
-// https://learnopencv.com/object-tracking-using-opencv-cpp-python/
-
 #include <iostream>
 #include <opencv2/core/hal/interface.h>
 #include "camera.h"
 #include "config.h"
-
 
 Camera::Camera() : cameracfg(Config::getInstance().camconf){
     frameToggle.store(false);
@@ -49,18 +46,12 @@ Camera::~Camera(){
 }
 
 bool Camera::frame_elapsed(){
-
     atomicChange = frameToggle.load();
-    
     if (frameToggle.load()!=toggleFrame){     // process the current input from camera
         toggleFrame=atomicChange;
         return true;
     }else
         return false;
-
-}
-void Camera::get_current_frame(cv::Mat& f){
-    f=frame;
 }
 
 bool Camera::capture(cv::Mat& frame){

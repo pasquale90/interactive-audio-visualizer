@@ -27,7 +27,7 @@ TEST(TimerTest, GetCurrentTimeFunction) {
     timer.setTimer(5);
     timer.start();
     int secondsElapsed;
-    EXPECT_EQ(timer.getCurrentTime(secondsElapsed), false);
+    EXPECT_EQ(timer.update(secondsElapsed), false);
 }
 
 TEST(TimerTest, GetCurrentTimeFunction_Finished) {
@@ -35,6 +35,6 @@ TEST(TimerTest, GetCurrentTimeFunction_Finished) {
     timer.setTimer(-1);
     timer.start();
     int secondsElapsed;
-    EXPECT_EQ(timer.getCurrentTime(secondsElapsed), true);
+    EXPECT_EQ(timer.update(secondsElapsed), true);
 }
 

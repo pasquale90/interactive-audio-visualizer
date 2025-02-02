@@ -17,7 +17,6 @@ void Trigger::_modeToggle(){
 
 bool Trigger::isTrackingEnabled(float &remaining_percentage){
 
-
         if (timer.isTimerFinished()){
             _modeToggle();
             timer.setTimer(timeDurationSec);
@@ -25,7 +24,7 @@ bool Trigger::isTrackingEnabled(float &remaining_percentage){
         
         int millisecondsElapsed;
         
-        timer.getCurrentTime(millisecondsElapsed);
+        timer.update(millisecondsElapsed);
         remaining_percentage = (static_cast<float> (millisecondsElapsed) / static_cast<float>(timeDurationSec*1000)); 
         
         return mode;

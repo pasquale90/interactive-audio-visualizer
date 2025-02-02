@@ -13,7 +13,7 @@ void Timer::start(){
     lastUpdateTime = std::chrono::steady_clock::now(); 
 }
 
-bool Timer::getCurrentTime(int& secondsElapsed) {
+bool Timer::update(int& secondsElapsed) {
 
     // Calculate time passed since last update
     auto now = std::chrono::steady_clock::now();
@@ -45,6 +45,3 @@ bool Timer::isTimerFinished() const {
     return remainingTimeMilliseconds <= 0;
 }
 
-void Timer::pauseTimer() {
-    remainingTimeMilliseconds = 1;
-}

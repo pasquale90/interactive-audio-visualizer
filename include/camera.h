@@ -7,30 +7,50 @@
 #include "unused_defines.h"
 struct CameraConfig;
 
-
+/*!
+ * @brief Class representing a camera object.
+ * @note This class encapsulates the functionality for capturing frames from a camera.
+ * @note The Camera class is responsible for initializing the camera and capturing frames.
+ * @note The Camera class uses OpenCV library.
+*/
 class Camera{
 public:
     
     /*! @brief Default constructor.*/
     Camera();
 
+    /*! @brief Destructor for the camera class. It closes the camera and releases any resources.*/
     ~Camera();
 
-    /*! @brief Method for capturing frames received from the camera. It is called by Audiolizer*/
+    /*! @brief Method for capturing frames received from the camera.
+    * @param[out] cv::Mat& - the output frame from the camera.
+    */
     bool capture(cv::Mat&);
 
-    /*! @brief Method that make use of std::atomic variable frameToggle to indicate whether a new frame elapsed.*/
+    /*! @brief Method that make use of std::atomic variable frameToggle to indicate whether a new frame elapsed
+    * @return bool - true if a frame has elapsed.
+    * @note This method is never used in this code.
+    */
     bool frame_elapsed();
 
-    /*! @brief Method for returning the captured camera frame.*/
-    void get_current_frame(cv::Mat&);
-
-    /*! @brief Method for returning the value of actual frames per second, based on hardware capacity*/
-    int get_actual_fps();
-
+    /*!
+     * @brief Copy constructor is deleted to prevent accidental use.
+    */
     Camera (const Camera&) = delete;
+    
+    /*!
+     * @brief Move constructor is deleted to prevent accidental use.
+    */
     Camera (Camera&&) = delete;
+
+    /*!
+     * @brief Copy assignment operator is deleted to prevent accidental use.
+    */
     Camera& operator=(const Camera&) = delete;
+
+    /*!
+     * @brief Move assignment operator is deleted to prevent accidental use.
+    */    
     Camera& operator=(Camera&&) = delete;
     
 private:

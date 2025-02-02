@@ -14,10 +14,21 @@
 #include <QSlider>
 #include "settings.h"
 
+/*!
+ * @brief Class to manage the GUI components and settings.
+ * @note It uses Qt for creating the GUI and the SettingsDB class for managing settings.
+*/
 class GUI{
 public:
 
+    /*! @brief Constructor for the GUI class.
+    * It creates all the GUI components, initializes settings, and sets up connections.
+    */
     GUI();
+
+    /*! @brief Method that handles the application's exit event.
+    * @return bool - true if the application should exit.
+    */
     bool onExit();
 
 private:

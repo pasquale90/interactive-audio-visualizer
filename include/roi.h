@@ -4,6 +4,12 @@
 
 #include <atomic>
 
+/*!
+ * @brief Struct to hold the region of interest (ROI) data.
+ * @details Contains atomic variables for centerX, centerY, volumeW, and volumeH that allow the efficient 
+ *          and concurrent access and modification of the ROI data. 
+ *          This struct is used to store and manipulate the image image frame used for tracking in the videoTracker and Visualizer classes.
+*/
 struct RegionOfInterest{
     /*! the x coordinate of the center of the box */
     std::atomic<int> centerX {0};
