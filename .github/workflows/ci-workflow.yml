@@ -1,8 +1,10 @@
-name: Continuous Integration and Static Analysis for IAV
-run-name: "🚀 IAV CI Build | Repo: ${{ github.repository }} | Commit: ${{ github.sha }} 🛠️"
+# name: Continuous Integration and Static Analysis for IAV
+name: 🚀 IAV CI 🛠️
+run-name: "🚀 IAV Continuous Integration | Install | Build | Static Analysis | Tests | Commit: ${{ github.sha }} 🛠️"
 on:
   push:
     branches:
+      - main
       - refactor
       - dev
 
