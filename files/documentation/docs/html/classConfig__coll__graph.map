@@ -1,7 +1,0 @@
-<map id="Config" name="Config">
-<area shape="rect" id="node1" title="Singleton class to manage configuration settings, providing a unique point of access to the configura..." alt="" coords="224,95,287,121"/>
-<area shape="rect" id="node2" href="$structAudioConfig.html" title="Struct to hold audio configuration settings." alt="" coords="5,5,105,32"/>
-<area shape="rect" id="node3" href="$structCameraConfig.html" title="Struct to hold camera configuration settings." alt="" coords="130,5,245,32"/>
-<area shape="rect" id="node4" href="$structDisplayConfig.html" title="Struct to hold display configuration settings." alt="" coords="269,5,381,32"/>
-<area shape="rect" id="node5" href="$structIAVConfig.html" title="Struct to hold IAV configuration settings." alt="" coords="405,5,489,32"/>
-</map>
