@@ -7,7 +7,7 @@
 ### *Bringing Sound to Life with Interactive Real-Time Audio-Visual Experience*
 
 [![CI Status](https://github.com/pasquale90/interactive-audio-visualizer/actions/workflows/ci-workflow.yml/badge.svg)](https://github.com/pasquale90/interactive-audio-visualizer/actions/workflows/ci-workflow.yml)
-[![Licence](https://img.shields.io/badge/licence%20-%20MIT-blue)](https://github.com/pasquale90/interactive-audio-visualizer/tree/licence)
+[![Licence](https://img.shields.io/badge/licence%20-%20MIT-blue)](https://github.com/pasquale90/interactive-audio-visualizer?tab=MIT-1-ov-file)
 [![Version](https://img.shields.io/badge/version-2.0-green)](https://github.com/pasquale90/interactive-audio-visualizer)
 [![Demo](https://img.shields.io/badge/demo-youtube-red)](https://www.youtube.com/watch?v=y8mJdEyd31Y&ab_channel=PasxalisMelissas)
 [![Gitter](https://img.shields.io/badge/chat-Gitter-yellow)](https://matrix.to/#/#interactive-audio-visualizer:gitter.im)
