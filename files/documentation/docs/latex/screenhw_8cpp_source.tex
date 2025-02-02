@@ -1,0 +1,56 @@
+\hypertarget{screenhw_8cpp_source}{}\doxysection{screenhw.\+cpp}
+\label{screenhw_8cpp_source}\index{src/gui/screenhw.cpp@{src/gui/screenhw.cpp}}
+\mbox{\hyperlink{screenhw_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00001}00001 \textcolor{preprocessor}{\#include <iostream>}}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00002}00002 \textcolor{preprocessor}{\#include <unordered\_set>}}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00003}00003 \textcolor{preprocessor}{\#include <string>}}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00004}00004 \textcolor{preprocessor}{\#include <X11/Xlib.h>}}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00005}00005 \textcolor{preprocessor}{\#include <X11/extensions/Xrandr.h>}}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00006}00006 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{screenhw_8h}{gui/screenhw.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00007}00007 }
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00008}00008 }
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00009}00009 }
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00010}\mbox{\hyperlink{screenhw_8cpp_a0fab6e35135db44188b8fd3c9e4b9a5a}{00010}} std::vector<std::pair<int,int>> \mbox{\hyperlink{screenhw_8cpp_a0fab6e35135db44188b8fd3c9e4b9a5a}{get\_screen\_resolution}}() \{}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00011}00011 }
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00012}00012     std::vector<std::pair<int,int>> screen\_resolutions;}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00013}00013     std::unordered\_set<std::string> uniquesValues;}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00014}00014 }
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00015}00015     Display* display = XOpenDisplay(NULL);}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00016}00016     \textcolor{keywordflow}{if} (!display) \{}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00017}00017         std::cerr << \textcolor{stringliteral}{"{}Error: Couldn't open display."{}} << std::endl;}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00018}00018         \textcolor{keywordflow}{return} \{\};}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00019}00019     \}}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00020}00020 }
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00021}00021     \textcolor{keywordtype}{int} screen = DefaultScreen(display);}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00022}00022     Window root = RootWindow(display, screen);}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00023}00023 }
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00024}00024     XRRScreenResources* resources = XRRGetScreenResourcesCurrent(display, root);}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00025}00025     \textcolor{keywordflow}{if} (!resources) \{}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00026}00026         std::cerr << \textcolor{stringliteral}{"{}Error: Could not get screen resources."{}} << std::endl;}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00027}00027         XCloseDisplay(display);}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00028}00028         \textcolor{keywordflow}{return} \{\};}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00029}00029     \}}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00030}00030 }
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00031}00031     \textcolor{comment}{// std::cout << "{}Available Screen Resolutions:"{} << std::endl;}}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00032}00032 }
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00033}00033     \textcolor{comment}{// Iterate through all modes and display valid resolutions}}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00034}00034     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < resources-\/>nmode; ++i) \{}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00035}00035         XRRModeInfo* mode = \&resources-\/>modes[i];}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00036}00036         \textcolor{keywordflow}{if} (mode-\/>width > 0 \&\& mode-\/>height > 0) \{ \textcolor{comment}{// Ensure valid dimensions}}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00037}00037             \textcolor{comment}{// std::cout << mode-\/>width << "{}x"{} << mode-\/>height << std::endl;}}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00038}00038             std::string resVal = std::to\_string(mode-\/>width) +\textcolor{stringliteral}{"{}x"{}}+ std::to\_string(mode-\/>height);}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00039}00039             \textcolor{keywordflow}{if}(uniquesValues.find(resVal)== uniquesValues.end())\{}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00040}00040                 screen\_resolutions.push\_back(\{mode-\/>width, mode-\/>height\});}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00041}00041                 uniquesValues.insert(resVal);}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00042}00042             \}}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00043}00043         \}}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00044}00044     \}}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00045}00045 }
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00046}00046     XRRFreeScreenResources(resources);}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00047}00047     XCloseDisplay(display);}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00048}00048 }
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00049}00049     \textcolor{keywordflow}{return} screen\_resolutions;}
+\DoxyCodeLine{\Hypertarget{screenhw_8cpp_source_l00050}00050 \}}
+
+\end{DoxyCode}

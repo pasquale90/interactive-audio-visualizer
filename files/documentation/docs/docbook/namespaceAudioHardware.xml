@@ -1,0 +1,338 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_namespaceAudioHardware" xml:lang="en-US">
+<title>AudioHardware Namespace Reference</title>
+<indexterm><primary>AudioHardware</primary></indexterm>
+<para>
+
+<para>Audio hardware namespace provides functions to interact with audio hardware devices. </para>
+ 
+</para>
+<simplesect>
+    <title>Classes    </title>
+        <itemizedlist>
+            <listitem><para>struct <link linkend="_structAudioHardware_1_1Info">Info</link></para>
+
+<para>Structure representing audio hardware information. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Functions    </title>
+        <itemizedlist>
+            <listitem><para>const std::vector&lt; unsigned int &gt; <link linkend="_namespaceAudioHardware_1a8bee9daf0ac390a7556c7c0d4b97fb3e">supportedRates</link> ({8000, 11025, 16000, 22050, 32000, 44100, 48000, 88200, 96000, 176000, 192000, 352800, 384000})</para>
+
+<para>List of supported sample rates. </para>
+</listitem>
+            <listitem><para>bool <link linkend="_namespaceAudioHardware_1a874a8ed7643bcea6d94a01b94ec544db">get_audio_device_info</link> (int, int, std::pair&lt; unsigned int, unsigned int &gt; &amp;, unsigned int &amp;)</para>
+
+<para>Retrieves information about available audio devices related to a specific audio card. </para>
+</listitem>
+            <listitem><para>void <link linkend="_namespaceAudioHardware_1a906e6749cef4efdd304dbc28530159c6">get_audio_hardware_info</link> (std::vector&lt; <link linkend="_structAudioHardware_1_1Info">Info</link> &gt; &amp;)</para>
+
+<para>Retrieves information about available audio cards and their supported audio devices. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Variables    </title>
+        <itemizedlist>
+            <listitem><para>const short int <link linkend="_namespaceAudioHardware_1a84c7c3993b3b664afab90913a55fba58">MAX_POTENTIAL_AUDIO_DEVICES</link> = 32</para>
+
+<para>Custom defined - maximum number of potential audio devices that can be retrieved. </para>
+</listitem>
+            <listitem><para>constexpr int <link linkend="_namespaceAudioHardware_1abd0d01ecfb85ee51cdc1c04fb15d39c5">quantizationRatio</link> { sizeof(float) * CHAR_BIT }</para>
+
+<para>Bit size of the floating-point samples in bits. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Detailed Description</title>
+
+<para>Audio hardware namespace provides functions to interact with audio hardware devices. </para>
+
+<para><note><title>Note</title>
+
+<para>This namespace encapsulates the functionality to retrieve information about available audio devices, sample rates, and number of channels. </para>
+</note>
+</para>
+</section>
+<section>
+<title>Function Documentation</title>
+<anchor xml:id="_namespaceAudioHardware_1a874a8ed7643bcea6d94a01b94ec544db"/><section>
+    <title>get_audio_device_info()</title>
+<indexterm><primary>get_audio_device_info</primary><secondary>AudioHardware</secondary></indexterm>
+<indexterm><primary>AudioHardware</primary><secondary>get_audio_device_info</secondary></indexterm>
+<para><computeroutput>bool AudioHardware::get_audio_device_info (int card, int device, std::pair&lt; unsigned int, unsigned int &gt; &amp; sample_rate, unsigned int &amp; numChannels)</computeroutput></para><para>
+
+<para>Retrieves information about available audio devices related to a specific audio card. </para>
+</para>
+
+<para>
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>int</entry><entry>
+<para>card - audio card index </para>
+</entry>
+                            </row>
+                            <row>
+<entry>int</entry><entry>
+<para>device - audio device index </para>
+</entry>
+                            </row>
+                            <row>
+<entry>std::pair&lt;unsigned</entry><entry>
+<para>int, unsigned int&gt; &amp;sample_rate - sample rate range (min, max) </para>
+</entry>
+                            </row>
+                            <row>
+<entry>unsigned</entry><entry>
+<para>int &amp;numChannels - number of audio channels </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <formalpara><title>Returns</title>
+
+<para>bool - true if information related to the specific audio card is successfully retrieved </para>
+</formalpara>
+</para>
+<para>
+Definition at line <link linkend="_audiohw_8cpp_source_1l00008">8</link> of file <link linkend="_audiohw_8cpp_source">audiohw.cpp</link>.</para>
+<programlisting linenumbering="unnumbered">00009 {
+00010 &#32;&#32;&#32;&#32;snd_pcm_t&#32;*handle;
+00011 &#32;&#32;&#32;&#32;snd_pcm_hw_params_t&#32;*params;
+00012 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;err;
+00013 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>&#32;name[32];
+00014 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;<emphasis role="keywordtype">int</emphasis>&#32;sample_rate_min,
+00015 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;sample_rate_max;
+00016 
+00017 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Open&#32;the&#32;PCM&#32;device&#32;&#32;&#32;&#32;</emphasis>
+00018 &#32;&#32;&#32;&#32;sprintf(name,&#32;<emphasis role="stringliteral">&quot;hw:%d,%d&quot;</emphasis>,&#32;card,&#32;device);
+00019 &#32;&#32;&#32;&#32;err&#32;=&#32;snd_pcm_open(&amp;handle,&#32;name,&#32;SND_PCM_STREAM_PLAYBACK,&#32;0);
+00020 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(err&#32;&lt;&#32;0)&#32;{
+00021 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Error&#32;opening&#32;PCM&#32;device</emphasis>
+00022 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+00023 &#32;&#32;&#32;&#32;}
+00024 
+00025 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Allocate&#32;hardware&#32;parameters&#32;object</emphasis>
+00026 &#32;&#32;&#32;&#32;snd_pcm_hw_params_alloca(&amp;params);
+00027 
+00028 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Initialize&#32;hwparams&#32;with&#32;full&#32;configuration&#32;space</emphasis>
+00029 &#32;&#32;&#32;&#32;err&#32;=&#32;snd_pcm_hw_params_any(handle,&#32;params);
+00030 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(err&#32;&lt;&#32;0)&#32;{
+00031 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Error&#32;setting&#32;hwparams&#32;</emphasis>
+00032 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;snd_pcm_close(handle);
+00033 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+00034 &#32;&#32;&#32;&#32;}
+00035 
+00036 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Get&#32;sample&#32;rate&#32;range</emphasis>
+00037 &#32;&#32;&#32;&#32;err&#32;=&#32;snd_pcm_hw_params_get_rate_min(params,&#32;&amp;sample_rate_min,&#32;<emphasis role="keyword">nullptr</emphasis>);
+00038 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(err&#32;&lt;&#32;0)&#32;{
+00039 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Error&#32;getting&#32;sample&#32;rate&#32;min&#32;</emphasis>
+00040 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;snd_pcm_close(handle);
+00041 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+00042 &#32;&#32;&#32;&#32;}
+00043 &#32;&#32;&#32;&#32;err&#32;=&#32;snd_pcm_hw_params_get_rate_max(params,&#32;&amp;sample_rate_max,&#32;<emphasis role="keyword">nullptr</emphasis>);
+00044 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(err&#32;&lt;&#32;0)&#32;{
+00045 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Error&#32;getting&#32;sample&#32;rate&#32;max</emphasis>
+00046 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;snd_pcm_close(handle);
+00047 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+00048 &#32;&#32;&#32;&#32;}
+00049 
+00050 &#32;&#32;&#32;&#32;sample_rate.first&#32;=&#32;sample_rate_min;
+00051 &#32;&#32;&#32;&#32;sample_rate.second&#32;=&#32;sample_rate_max;
+00052 
+00053 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;get&#32;number&#32;of&#32;output&#32;channels</emphasis>
+00054 &#32;&#32;&#32;&#32;err&#32;=&#32;snd_pcm_hw_params_get_channels(params,&#32;&amp;numChannels);<emphasis role="comment">//&#32;channels&#32;now&#32;holds&#32;the&#32;number&#32;of&#32;channels&#32;(outputs)</emphasis>
+00055 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(err&#32;&lt;&#32;0&#32;||&#32;numChannels&#32;==0&#32;)&#32;{
+00056 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Set&#32;the&#32;desired&#32;number&#32;of&#32;channels&#32;(e.g.,&#32;2&#32;for&#32;stereo)</emphasis>
+00057 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;<emphasis role="keywordtype">int</emphasis>&#32;atLeastStereo&#32;=&#32;2;
+00058 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;err&#32;=&#32;snd_pcm_hw_params_set_channels(handle,&#32;params,&#32;atLeastStereo);
+00059 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(err&#32;&lt;&#32;0&#32;||&#32;numChannels&#32;==0&#32;)&#32;{
+00060 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+00061 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;<emphasis role="keywordtype">int</emphasis>&#32;atLeastMono&#32;=&#32;1;
+00062 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;err&#32;=&#32;snd_pcm_hw_params_set_channels(handle,&#32;params,&#32;atLeastMono);
+00063 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(err&#32;&lt;&#32;0&#32;||&#32;numChannels&#32;==0)&#32;{
+00064 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Error&#32;setting&#32;channels</emphasis>
+00065 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;snd_pcm_close(handle);
+00066 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+00067 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}&#32;
+00068 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;set&#32;numChannels&#32;to&#32;mono</emphasis>
+00069 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;snd_pcm_hw_params_get_channels(params,&#32;&amp;numChannels);
+00070 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}&#32;<emphasis role="keywordflow">else</emphasis>&#32;{
+00071 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//set&#32;numChannels&#32;to&#32;stereo</emphasis>
+00072 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;snd_pcm_hw_params_get_channels(params,&#32;&amp;numChannels);
+00073 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+00074 &#32;&#32;&#32;&#32;}
+00075 
+00076 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Close&#32;the&#32;PCM&#32;device</emphasis>
+00077 &#32;&#32;&#32;&#32;snd_pcm_close(handle);
+00078 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+00079 }
+</programlisting></section>
+<anchor xml:id="_namespaceAudioHardware_1a906e6749cef4efdd304dbc28530159c6"/><section>
+    <title>get_audio_hardware_info()</title>
+<indexterm><primary>get_audio_hardware_info</primary><secondary>AudioHardware</secondary></indexterm>
+<indexterm><primary>AudioHardware</primary><secondary>get_audio_hardware_info</secondary></indexterm>
+<para><computeroutput>void AudioHardware::get_audio_hardware_info (std::vector&lt; <link linkend="_structAudioHardware_1_1Info">Info</link> &gt; &amp; audio_hw_info)</computeroutput></para><para>
+
+<para>Retrieves information about available audio cards and their supported audio devices. </para>
+</para>
+
+<para>This function scans the system for connected audio devices and gathers information about each one of them, including its name id, the sample rate range supported and the number of output channels.</para>
+
+<para>
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>std::vector&lt;Info&gt;</entry><entry>
+<para>&amp;audio_hw_info - vector to store audio hardware information </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <formalpara><title>Returns</title>
+
+<para>void </para>
+</formalpara>
+</para>
+<para>
+Definition at line <link linkend="_audiohw_8cpp_source_1l00081">81</link> of file <link linkend="_audiohw_8cpp_source">audiohw.cpp</link>.</para>
+<programlisting linenumbering="unnumbered">00081 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+00082 
+00083 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;card&#32;=&#32;-1;
+00084 &#32;&#32;&#32;&#32;
+00085 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Loop&#32;through&#32;all&#32;available&#32;cards</emphasis>
+00086 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(<emphasis role="keyword">true</emphasis>)&#32;{
+00087 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+00088 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Find&#32;the&#32;next&#32;card</emphasis>
+00089 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;err&#32;=&#32;snd_card_next(&amp;card);
+00090 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(err&#32;&lt;&#32;0)&#32;{
+00091 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Error&#32;getting&#32;next&#32;card</emphasis>
+00092 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
+00093 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+00094 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(card&#32;&lt;&#32;0)&#32;{
+00095 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;No&#32;more&#32;cards</emphasis>
+00096 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
+00097 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+00098 
+00099 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Open&#32;the&#32;card&#32;control&#32;interface</emphasis>
+00100 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;snd_ctl_t&#32;*ctl_handle;
+00101 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>&#32;ctl_name[32];
+00102 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;sprintf(ctl_name,&#32;<emphasis role="stringliteral">&quot;hw:%d&quot;</emphasis>,&#32;card);
+00103 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;err&#32;=&#32;snd_ctl_open(&amp;ctl_handle,&#32;ctl_name,&#32;0);
+00104 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(err&#32;&lt;&#32;0)&#32;{
+00105 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Error&#32;opening&#32;card</emphasis>
+00106 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">continue</emphasis>;
+00107 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+00108 
+00109 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Get&#32;the&#32;card&#32;info</emphasis>
+00110 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;snd_ctl_card_info_t&#32;*info;
+00111 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;snd_ctl_card_info_malloc(&amp;info);
+00112 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;err&#32;=&#32;snd_ctl_card_info(ctl_handle,&#32;info);
+00113 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(err&#32;&lt;&#32;0)&#32;{
+00114 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Error&#32;getting&#32;card&#32;info</emphasis>
+00115 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;snd_ctl_close(ctl_handle);
+00116 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;snd_ctl_card_info_free(info);
+00117 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">continue</emphasis>;
+00118 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+00119 
+00120 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::string&#32;card_id&#32;=&#32;snd_ctl_card_info_get_id(info)&#32;;&#32;
+00121 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::string&#32;mixer&#32;=&#32;snd_ctl_card_info_get_mixername(info);
+00122 <emphasis role="comment">//&#32;card_id&#32;=&#32;card_id&#32;+&#32;&quot;(&quot;+mixer+&quot;)&quot;;</emphasis>
+00123 
+00124 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Check&#32;if&#32;it&#32;is&#32;an&#32;output&#32;device&#32;and&#32;if&#32;it&#32;can&#32;be&#32;opened</emphasis>
+00125 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;snd_pcm_t&#32;*handle;
+00126 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::string&#32;card_name_str&#32;=<emphasis role="stringliteral">&quot;hw:&quot;</emphasis>&#32;+&#32;std::to_string(card)&#32;+&#32;<emphasis role="stringliteral">&quot;,0&quot;</emphasis>;&#32;
+00127 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;card_name&#32;=&#32;card_name_str.c_str();
+00128 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(snd_pcm_open(&amp;handle,&#32;card_name,&#32;SND_PCM_STREAM_PLAYBACK,&#32;0)&#32;&gt;=&#32;0)&#32;{
+00129 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;snd_pcm_close(handle);
+00130 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}&#32;<emphasis role="keywordflow">else</emphasis>&#32;{
+00131 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">continue</emphasis>;&#32;<emphasis role="comment">//&#32;Skip&#32;this&#32;card&#32;if&#32;it&#32;doesn&apos;t&#32;support&#32;output.</emphasis>
+00132 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+00133 
+00134 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Free&#32;the&#32;card&#32;info</emphasis>
+00135 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;snd_ctl_card_info_free(info);
+00136 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;snd_ctl_close(ctl_handle);
+00137 
+00138 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Get&#32;PCM&#32;device&#32;info</emphasis>
+00139 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;device&#32;=&#32;0;
+00140 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;<emphasis role="keywordtype">int</emphasis>&#32;numChannels&#32;=&#32;0;
+00141 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::pair&lt;unsigned&#32;int,&#32;unsigned&#32;int&gt;&#32;sample_rate_range;
+00142 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>(!<link linkend="_namespaceAudioHardware_1a874a8ed7643bcea6d94a01b94ec544db">AudioHardware::get_audio_device_info</link>(card,&#32;device,sample_rate_range,numChannels)&#32;&amp;&amp;&#32;device&#32;&lt;&#32;<link linkend="_namespaceAudioHardware_1a84c7c3993b3b664afab90913a55fba58">MAX_POTENTIAL_AUDIO_DEVICES</link>&#32;){
+00143 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;++device;
+00144 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+00145 
+00146 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;Info&#32;deviceInfo;
+00147 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;deviceInfo.card_info&#32;=&#32;std::make_pair(card_id,mixer);
+00148 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;deviceInfo.sample_rate_range&#32;=&#32;sample_rate_range;
+00149 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;deviceInfo.numberOfChannels&#32;=&#32;numChannels;
+00150 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;audio_hw_info.push_back(deviceInfo);
+00151 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+00152 &#32;&#32;&#32;&#32;}
+00153 }
+</programlisting></section>
+<anchor xml:id="_namespaceAudioHardware_1a8bee9daf0ac390a7556c7c0d4b97fb3e"/><section>
+    <title>supportedRates()</title>
+<indexterm><primary>supportedRates</primary><secondary>AudioHardware</secondary></indexterm>
+<indexterm><primary>AudioHardware</primary><secondary>supportedRates</secondary></indexterm>
+<para><computeroutput>const std::vector&lt; unsigned int &gt; AudioHardware::supportedRates ({8000, 11025, 16000, 22050, 32000, 44100, 48000, 88200, 96000, 176000, 192000, 352800, 384000} )</computeroutput></para><para>
+
+<para>List of supported sample rates. </para>
+</para>
+
+<para><formalpara><title>See also</title>
+
+<para>for detailed info see : <link xlink:href="https://en.wikipedia.org/wiki/Sampling_(signal_processing)#Audio_sampling">https://en.wikipedia.org/wiki/Sampling_(signal_processing)#Audio_sampling</link> </para>
+</formalpara>
+</para>
+</section>
+</section>
+<section>
+<title>Variable Documentation</title>
+<anchor xml:id="_namespaceAudioHardware_1a84c7c3993b3b664afab90913a55fba58"/><section>
+    <title>MAX_POTENTIAL_AUDIO_DEVICES</title>
+<indexterm><primary>MAX_POTENTIAL_AUDIO_DEVICES</primary><secondary>AudioHardware</secondary></indexterm>
+<indexterm><primary>AudioHardware</primary><secondary>MAX_POTENTIAL_AUDIO_DEVICES</secondary></indexterm>
+<para><computeroutput>const short int AudioHardware::MAX_POTENTIAL_AUDIO_DEVICES = 32</computeroutput></para><para>
+
+<para>Custom defined - maximum number of potential audio devices that can be retrieved. </para>
+</para>
+<para>
+Definition at line <link linkend="_audiohw_8h_source_1l00016">16</link> of file <link linkend="_audiohw_8h_source">audiohw.h</link>.</para>
+</section>
+<anchor xml:id="_namespaceAudioHardware_1abd0d01ecfb85ee51cdc1c04fb15d39c5"/><section>
+    <title>quantizationRatio</title>
+<indexterm><primary>quantizationRatio</primary><secondary>AudioHardware</secondary></indexterm>
+<indexterm><primary>AudioHardware</primary><secondary>quantizationRatio</secondary></indexterm>
+<para><computeroutput>constexpr int AudioHardware::quantizationRatio { sizeof(float) * CHAR_BIT }<computeroutput>[constexpr]</computeroutput></computeroutput></para><para>
+
+<para>Bit size of the floating-point samples in bits. </para>
+</para>
+<para>
+Definition at line <link linkend="_audiohw_8h_source_1l00027">27</link> of file <link linkend="_audiohw_8h_source">audiohw.h</link>.</para>
+</section>
+</section>
+</section>

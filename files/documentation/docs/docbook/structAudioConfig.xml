@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_structAudioConfig" xml:lang="en-US">
+<title>AudioConfig Struct Reference</title>
+<indexterm><primary>AudioConfig</primary></indexterm>
+<para>
+
+<para>Struct to hold audio configuration settings. </para>
+ 
+</para>
+<para>
+<computeroutput>#include &lt;config_types.h&gt;</computeroutput>
+</para>
+<simplesect>
+    <title>Public Attributes    </title>
+        <itemizedlist>
+            <listitem><para>std::string <link linkend="_structAudioConfig_1a9f06f009be657b8e4197808c765ee56d">audioDevice</link></para>
+
+<para>audioDevice - the name of the audio device. </para>
+</listitem>
+            <listitem><para>std::atomic&lt; int &gt; <link linkend="_structAudioConfig_1aa893cf0e18009ba2aeb67a105d42aa71">sampleRate</link></para>
+
+<para>sampleRate - the sample rate of the audio data. </para>
+</listitem>
+            <listitem><para>int <link linkend="_structAudioConfig_1a561cff08db18dcd86b07826f06c99c83">quantization</link></para>
+</listitem>
+            <listitem><para>std::atomic&lt; int &gt; <link linkend="_structAudioConfig_1ae81381142d99bc1845cb33bd048643df">bufferSize</link></para>
+</listitem>
+            <listitem><para>std::atomic&lt; unsigned int &gt; <link linkend="_structAudioConfig_1ae2854185c92301b90a7775242fe6c629">numChannels</link></para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Detailed Description</title>
+
+<para>Struct to hold audio configuration settings. </para>
+
+
+
+<para><note><title>Note</title>
+
+<para>It uses atomic types for thread-safe access to these values. </para>
+
+<para>This struct is used in the <link linkend="_classConfig">Config</link> class to define audio configuration settings. </para>
+</note>
+<formalpara><title>See also</title>
+
+<para><link linkend="_classConfig">Config</link> class for managing configuration settings. </para>
+
+<para><link linkend="_structAudioConfig_1a9f06f009be657b8e4197808c765ee56d">audioDevice</link>.- the name of the audio device. </para>
+
+<para><link linkend="_structAudioConfig_1aa893cf0e18009ba2aeb67a105d42aa71">sampleRate</link> - the sample rate of the audio data. </para>
+
+<para><link linkend="_structAudioConfig_1a561cff08db18dcd86b07826f06c99c83">quantization</link> - the <link linkend="_structAudioConfig_1a561cff08db18dcd86b07826f06c99c83">quantization</link> of the audio data. </para>
+
+<para><link linkend="_structAudioConfig_1ae81381142d99bc1845cb33bd048643df">bufferSize</link> - the buffer size for audio data. </para>
+
+<para><link linkend="_structAudioConfig_1ae2854185c92301b90a7775242fe6c629">numChannels</link> - the number of output audio channels. </para>
+</formalpara>
+</para>
+<para>
+Definition at line <link linkend="_config__types_8h_source_1l00018">18</link> of file <link linkend="_config__types_8h_source">config_types.h</link>.</para>
+</section>
+<section>
+<title>Member Data Documentation</title>
+<anchor xml:id="_structAudioConfig_1a9f06f009be657b8e4197808c765ee56d"/><section>
+    <title>audioDevice</title>
+<indexterm><primary>audioDevice</primary><secondary>AudioConfig</secondary></indexterm>
+<indexterm><primary>AudioConfig</primary><secondary>audioDevice</secondary></indexterm>
+<para><computeroutput>std::string AudioConfig::audioDevice</computeroutput></para><para>
+
+<para>audioDevice - the name of the audio device. </para>
+</para>
+<para>
+Definition at line <link linkend="_config__types_8h_source_1l00020">20</link> of file <link linkend="_config__types_8h_source">config_types.h</link>.</para>
+</section>
+<anchor xml:id="_structAudioConfig_1ae81381142d99bc1845cb33bd048643df"/><section>
+    <title>bufferSize</title>
+<indexterm><primary>bufferSize</primary><secondary>AudioConfig</secondary></indexterm>
+<indexterm><primary>AudioConfig</primary><secondary>bufferSize</secondary></indexterm>
+<para><computeroutput>std::atomic&lt;int&gt; AudioConfig::bufferSize</computeroutput></para><para>
+Definition at line <link linkend="_config__types_8h_source_1l00026">26</link> of file <link linkend="_config__types_8h_source">config_types.h</link>.</para>
+</section>
+<anchor xml:id="_structAudioConfig_1ae2854185c92301b90a7775242fe6c629"/><section>
+    <title>numChannels</title>
+<indexterm><primary>numChannels</primary><secondary>AudioConfig</secondary></indexterm>
+<indexterm><primary>AudioConfig</primary><secondary>numChannels</secondary></indexterm>
+<para><computeroutput>std::atomic&lt;unsigned int&gt; AudioConfig::numChannels</computeroutput></para><para>
+Definition at line <link linkend="_config__types_8h_source_1l00028">28</link> of file <link linkend="_config__types_8h_source">config_types.h</link>.</para>
+</section>
+<anchor xml:id="_structAudioConfig_1a561cff08db18dcd86b07826f06c99c83"/><section>
+    <title>quantization</title>
+<indexterm><primary>quantization</primary><secondary>AudioConfig</secondary></indexterm>
+<indexterm><primary>AudioConfig</primary><secondary>quantization</secondary></indexterm>
+<para><computeroutput>int AudioConfig::quantization</computeroutput></para><para>
+Definition at line <link linkend="_config__types_8h_source_1l00024">24</link> of file <link linkend="_config__types_8h_source">config_types.h</link>.</para>
+</section>
+<anchor xml:id="_structAudioConfig_1aa893cf0e18009ba2aeb67a105d42aa71"/><section>
+    <title>sampleRate</title>
+<indexterm><primary>sampleRate</primary><secondary>AudioConfig</secondary></indexterm>
+<indexterm><primary>AudioConfig</primary><secondary>sampleRate</secondary></indexterm>
+<para><computeroutput>std::atomic&lt;int&gt; AudioConfig::sampleRate</computeroutput></para><para>
+
+<para>sampleRate - the sample rate of the audio data. </para>
+</para>
+<para>
+Definition at line <link linkend="_config__types_8h_source_1l00022">22</link> of file <link linkend="_config__types_8h_source">config_types.h</link>.</para>
+</section>
+<para>
+The documentation for this struct was generated from the following file:</para>
+include/<link linkend="_config__types_8h">config_types.h</link></section>
+</section>

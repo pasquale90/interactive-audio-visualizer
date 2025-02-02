@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_structRegionOfInterest" xml:lang="en-US">
+<title>RegionOfInterest Struct Reference</title>
+<indexterm><primary>RegionOfInterest</primary></indexterm>
+<para>
+
+<para>Struct to hold the region of interest (ROI) data. </para>
+ 
+</para>
+<para>
+<computeroutput>#include &lt;roi.h&gt;</computeroutput>
+</para>
+<simplesect>
+    <title>Public Attributes    </title>
+        <itemizedlist>
+            <listitem><para>std::atomic&lt; int &gt; <link linkend="_structRegionOfInterest_1a7c05ee763a1dbcea5d7722c8611e6bc7">centerX</link> {0}</para>
+</listitem>
+            <listitem><para>std::atomic&lt; int &gt; <link linkend="_structRegionOfInterest_1a9a5c08c619eb5383833aabae962490df">centerY</link> {0}</para>
+</listitem>
+            <listitem><para>std::atomic&lt; int &gt; <link linkend="_structRegionOfInterest_1a0272d3fbebc59f034dd2de9e89d50598">volumeW</link> {0}</para>
+</listitem>
+            <listitem><para>std::atomic&lt; int &gt; <link linkend="_structRegionOfInterest_1a33377fff7783a831c2b373c2194e7afb">volumeH</link> {0}</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Detailed Description</title>
+
+<para>Struct to hold the region of interest (ROI) data. </para>
+
+
+
+<para>Contains atomic variables for centerX, centerY, volumeW, and volumeH that allow the efficient and concurrent access and modification of the ROI data. This struct is used to store and manipulate the image image frame used for tracking in the videoTracker and <link linkend="_classVisualizer">Visualizer</link> classes. </para>
+<para>
+Definition at line <link linkend="_roi_8h_source_1l00013">13</link> of file <link linkend="_roi_8h_source">roi.h</link>.</para>
+</section>
+<section>
+<title>Member Data Documentation</title>
+<anchor xml:id="_structRegionOfInterest_1a7c05ee763a1dbcea5d7722c8611e6bc7"/><section>
+    <title>centerX</title>
+<indexterm><primary>centerX</primary><secondary>RegionOfInterest</secondary></indexterm>
+<indexterm><primary>RegionOfInterest</primary><secondary>centerX</secondary></indexterm>
+<para><computeroutput>std::atomic&lt;int&gt; RegionOfInterest::centerX {0}</computeroutput></para>
+<para>the x coordinate of the center of the box </para>
+<para>
+Definition at line <link linkend="_roi_8h_source_1l00015">15</link> of file <link linkend="_roi_8h_source">roi.h</link>.</para>
+</section>
+<anchor xml:id="_structRegionOfInterest_1a9a5c08c619eb5383833aabae962490df"/><section>
+    <title>centerY</title>
+<indexterm><primary>centerY</primary><secondary>RegionOfInterest</secondary></indexterm>
+<indexterm><primary>RegionOfInterest</primary><secondary>centerY</secondary></indexterm>
+<para><computeroutput>std::atomic&lt;int&gt; RegionOfInterest::centerY {0}</computeroutput></para>
+<para>the y coordinate of the center of the box </para>
+<para>
+Definition at line <link linkend="_roi_8h_source_1l00017">17</link> of file <link linkend="_roi_8h_source">roi.h</link>.</para>
+</section>
+<anchor xml:id="_structRegionOfInterest_1a33377fff7783a831c2b373c2194e7afb"/><section>
+    <title>volumeH</title>
+<indexterm><primary>volumeH</primary><secondary>RegionOfInterest</secondary></indexterm>
+<indexterm><primary>RegionOfInterest</primary><secondary>volumeH</secondary></indexterm>
+<para><computeroutput>std::atomic&lt;int&gt; RegionOfInterest::volumeH {0}</computeroutput></para>
+<para>the height of the box </para>
+<para>
+Definition at line <link linkend="_roi_8h_source_1l00021">21</link> of file <link linkend="_roi_8h_source">roi.h</link>.</para>
+</section>
+<anchor xml:id="_structRegionOfInterest_1a0272d3fbebc59f034dd2de9e89d50598"/><section>
+    <title>volumeW</title>
+<indexterm><primary>volumeW</primary><secondary>RegionOfInterest</secondary></indexterm>
+<indexterm><primary>RegionOfInterest</primary><secondary>volumeW</secondary></indexterm>
+<para><computeroutput>std::atomic&lt;int&gt; RegionOfInterest::volumeW {0}</computeroutput></para>
+<para>the width of the box </para>
+<para>
+Definition at line <link linkend="_roi_8h_source_1l00019">19</link> of file <link linkend="_roi_8h_source">roi.h</link>.</para>
+</section>
+<para>
+The documentation for this struct was generated from the following file:</para>
+include/<link linkend="_roi_8h">roi.h</link></section>
+</section>

@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_trigger_8h_source" xml:lang="en-US">
+<title>trigger.h</title>
+<indexterm><primary>include/trigger.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered"><anchor xml:id="_trigger_8h_source_1l00001"/>00001 <emphasis role="preprocessor">#ifndef&#32;TRIGGER_H</emphasis>
+<anchor xml:id="_trigger_8h_source_1l00002"/>00002 <emphasis role="preprocessor">#define&#32;TRIGGER_H</emphasis>
+<anchor xml:id="_trigger_8h_source_1l00003"/>00003 
+<anchor xml:id="_trigger_8h_source_1l00004"/>00004 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_config__types_8h">config_types.h</link>&quot;</emphasis>
+<anchor xml:id="_trigger_8h_source_1l00005"/>00005 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_timer_8h">timer.h</link>&quot;</emphasis>
+<anchor xml:id="_trigger_8h_source_1l00006"/>00006 <emphasis role="keyword">struct&#32;</emphasis><link linkend="_structIAVConfig">IAVConfig</link>;
+<anchor xml:id="_trigger_8h_source_1l00007"/>00007 
+<anchor xml:id="_trigger_8h_source_1l00008"/><link linkend="_trigger_8h_1a33e55dcdf0ec6598a7a7e4db79b1636e">00008</link> <emphasis role="keyword">constexpr</emphasis>&#32;<emphasis role="keywordtype">int</emphasis>&#32;<link linkend="_trigger_8h_1a33e55dcdf0ec6598a7a7e4db79b1636e">experience_duration_sec</link>&#32;=&#32;10;
+<anchor xml:id="_trigger_8h_source_1l00009"/><link linkend="_trigger_8h_1ab5d9a356db05331fcb8c6c8882a528bc">00009</link> <emphasis role="keyword">constexpr</emphasis>&#32;<emphasis role="keywordtype">int</emphasis>&#32;<link linkend="_trigger_8h_1ab5d9a356db05331fcb8c6c8882a528bc">photo_countdown_sec</link>&#32;=&#32;5;
+<anchor xml:id="_trigger_8h_source_1l00010"/>00010 
+<anchor xml:id="_trigger_8h_source_1l00015"/><link linkend="_classTrigger">00015</link> <emphasis role="keyword">class&#32;</emphasis><link linkend="_classTrigger">Trigger</link>&#32;{
+<anchor xml:id="_trigger_8h_source_1l00016"/>00016 
+<anchor xml:id="_trigger_8h_source_1l00017"/>00017 &#32;&#32;&#32;&#32;<emphasis role="keyword">public</emphasis>:
+<anchor xml:id="_trigger_8h_source_1l00018"/>00018 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+<anchor xml:id="_trigger_8h_source_1l00024"/>00024 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classTrigger_1afcf974790b6e846cd89eba5a802e7fa5">Trigger</link>();
+<anchor xml:id="_trigger_8h_source_1l00025"/>00025 
+<anchor xml:id="_trigger_8h_source_1l00036"/>00036 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classTrigger_1a0f1b544e6fdc6ed75b2888113fc413a2">isTrackingEnabled</link>(<emphasis role="keywordtype">float</emphasis>&amp;);
+<anchor xml:id="_trigger_8h_source_1l00037"/>00037 
+<anchor xml:id="_trigger_8h_source_1l00042"/>00042 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_classTrigger_1a465a643de1ace6e23b5d4e0f8c94d5a0">reset</link>();
+<anchor xml:id="_trigger_8h_source_1l00043"/>00043 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+<anchor xml:id="_trigger_8h_source_1l00049"/>00049 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classTimer">Timer</link>*&#32;<link linkend="_classTrigger_1a007133df14feb0397c0a095542c7acb1">getTimer</link>();
+<anchor xml:id="_trigger_8h_source_1l00050"/>00050 &#32;&#32;&#32;&#32;<emphasis role="keyword">private</emphasis>:
+<anchor xml:id="_trigger_8h_source_1l00051"/>00051 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_structIAVConfig">IAVConfig</link>&amp;&#32;iavcfg;
+<anchor xml:id="_trigger_8h_source_1l00052"/>00052 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classTimer">Timer</link>&#32;timer;
+<anchor xml:id="_trigger_8h_source_1l00053"/>00053 
+<anchor xml:id="_trigger_8h_source_1l00054"/>00054 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;timeDurationSec;
+<anchor xml:id="_trigger_8h_source_1l00055"/>00055 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;mode;&#32;<emphasis role="comment">//&#32;tracking&#32;mode&#32;or&#32;not</emphasis>
+<anchor xml:id="_trigger_8h_source_1l00056"/>00056 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+<anchor xml:id="_trigger_8h_source_1l00057"/>00057 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;_modeToggle();
+<anchor xml:id="_trigger_8h_source_1l00058"/>00058 };
+<anchor xml:id="_trigger_8h_source_1l00059"/>00059 
+<anchor xml:id="_trigger_8h_source_1l00060"/>00060 
+<anchor xml:id="_trigger_8h_source_1l00061"/>00061 
+<anchor xml:id="_trigger_8h_source_1l00062"/>00062 <emphasis role="preprocessor">#endif</emphasis>
+</programlisting></section>

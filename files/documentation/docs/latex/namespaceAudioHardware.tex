@@ -1,0 +1,287 @@
+\hypertarget{namespaceAudioHardware}{}\doxysection{Audio\+Hardware Namespace Reference}
+\label{namespaceAudioHardware}\index{AudioHardware@{AudioHardware}}
+
+
+Audio hardware namespace provides functions to interact with audio hardware devices.  
+
+
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structAudioHardware_1_1Info}{Info}}
+\begin{DoxyCompactList}\small\item\em Structure representing audio hardware information. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+const std\+::vector$<$ unsigned int $>$ \mbox{\hyperlink{namespaceAudioHardware_a8bee9daf0ac390a7556c7c0d4b97fb3e}{supported\+Rates}} (\{8000, 11025, 16000, 22050, 32000, 44100, 48000, 88200, 96000, 176000, 192000, 352800, 384000\})
+\begin{DoxyCompactList}\small\item\em List of supported sample rates. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{namespaceAudioHardware_a874a8ed7643bcea6d94a01b94ec544db}{get\+\_\+audio\+\_\+device\+\_\+info}} (int, int, std\+::pair$<$ unsigned int, unsigned int $>$ \&, unsigned int \&)
+\begin{DoxyCompactList}\small\item\em Retrieves information about available audio devices related to a specific audio card. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{namespaceAudioHardware_a906e6749cef4efdd304dbc28530159c6}{get\+\_\+audio\+\_\+hardware\+\_\+info}} (std\+::vector$<$ \mbox{\hyperlink{structAudioHardware_1_1Info}{Info}} $>$ \&)
+\begin{DoxyCompactList}\small\item\em Retrieves information about available audio cards and their supported audio devices. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const short int \mbox{\hyperlink{namespaceAudioHardware_a84c7c3993b3b664afab90913a55fba58}{MAX\+\_\+\+POTENTIAL\+\_\+\+AUDIO\+\_\+\+DEVICES}} = 32
+\begin{DoxyCompactList}\small\item\em Custom defined -\/ maximum number of potential audio devices that can be retrieved. \end{DoxyCompactList}\item 
+constexpr int \mbox{\hyperlink{namespaceAudioHardware_abd0d01ecfb85ee51cdc1c04fb15d39c5}{quantization\+Ratio}} \{ sizeof(float) $\ast$ CHAR\+\_\+\+BIT \}
+\begin{DoxyCompactList}\small\item\em Bit size of the floating-\/point samples in bits. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Audio hardware namespace provides functions to interact with audio hardware devices. 
+
+\begin{DoxyNote}{Note}
+This namespace encapsulates the functionality to retrieve information about available audio devices, sample rates, and number of channels. 
+\end{DoxyNote}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespaceAudioHardware_a874a8ed7643bcea6d94a01b94ec544db}\label{namespaceAudioHardware_a874a8ed7643bcea6d94a01b94ec544db}} 
+\index{AudioHardware@{AudioHardware}!get\_audio\_device\_info@{get\_audio\_device\_info}}
+\index{get\_audio\_device\_info@{get\_audio\_device\_info}!AudioHardware@{AudioHardware}}
+\doxysubsubsection{\texorpdfstring{get\_audio\_device\_info()}{get\_audio\_device\_info()}}
+{\footnotesize\ttfamily bool Audio\+Hardware\+::get\+\_\+audio\+\_\+device\+\_\+info (\begin{DoxyParamCaption}\item[{int}]{card,  }\item[{int}]{device,  }\item[{std\+::pair$<$ unsigned int, unsigned int $>$ \&}]{sample\+\_\+rate,  }\item[{unsigned int \&}]{num\+Channels }\end{DoxyParamCaption})}
+
+
+
+Retrieves information about available audio devices related to a specific audio card. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em int} & card -\/ audio card index \\
+\hline
+{\em int} & device -\/ audio device index \\
+\hline
+{\em std\+::pair$<$unsigned} & int, unsigned int\texorpdfstring{$>$}{>} \&sample\+\_\+rate -\/ sample rate range (min, max) \\
+\hline
+{\em unsigned} & int \&num\+Channels -\/ number of audio channels \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bool -\/ true if information related to the specific audio card is successfully retrieved 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{audiohw_8cpp_source_l00008}{8}} of file \mbox{\hyperlink{audiohw_8cpp_source}{audiohw.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00009 \{}
+\DoxyCodeLine{00010     snd\_pcm\_t *handle;}
+\DoxyCodeLine{00011     snd\_pcm\_hw\_params\_t *params;}
+\DoxyCodeLine{00012     \textcolor{keywordtype}{int} err;}
+\DoxyCodeLine{00013     \textcolor{keywordtype}{char} name[32];}
+\DoxyCodeLine{00014     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} sample\_rate\_min,}
+\DoxyCodeLine{00015                  sample\_rate\_max;}
+\DoxyCodeLine{00016 }
+\DoxyCodeLine{00017     \textcolor{comment}{// Open the PCM device    }}
+\DoxyCodeLine{00018     sprintf(name, \textcolor{stringliteral}{"{}hw:\%d,\%d"{}}, card, device);}
+\DoxyCodeLine{00019     err = snd\_pcm\_open(\&handle, name, SND\_PCM\_STREAM\_PLAYBACK, 0);}
+\DoxyCodeLine{00020     \textcolor{keywordflow}{if} (err < 0) \{}
+\DoxyCodeLine{00021         \textcolor{comment}{// Error opening PCM device}}
+\DoxyCodeLine{00022         \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{00023     \}}
+\DoxyCodeLine{00024 }
+\DoxyCodeLine{00025     \textcolor{comment}{// Allocate hardware parameters object}}
+\DoxyCodeLine{00026     snd\_pcm\_hw\_params\_alloca(\&params);}
+\DoxyCodeLine{00027 }
+\DoxyCodeLine{00028     \textcolor{comment}{// Initialize hwparams with full configuration space}}
+\DoxyCodeLine{00029     err = snd\_pcm\_hw\_params\_any(handle, params);}
+\DoxyCodeLine{00030     \textcolor{keywordflow}{if} (err < 0) \{}
+\DoxyCodeLine{00031         \textcolor{comment}{// Error setting hwparams }}
+\DoxyCodeLine{00032         snd\_pcm\_close(handle);}
+\DoxyCodeLine{00033         \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{00034     \}}
+\DoxyCodeLine{00035 }
+\DoxyCodeLine{00036     \textcolor{comment}{// Get sample rate range}}
+\DoxyCodeLine{00037     err = snd\_pcm\_hw\_params\_get\_rate\_min(params, \&sample\_rate\_min, \textcolor{keyword}{nullptr});}
+\DoxyCodeLine{00038     \textcolor{keywordflow}{if} (err < 0) \{}
+\DoxyCodeLine{00039         \textcolor{comment}{// Error getting sample rate min }}
+\DoxyCodeLine{00040         snd\_pcm\_close(handle);}
+\DoxyCodeLine{00041         \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{00042     \}}
+\DoxyCodeLine{00043     err = snd\_pcm\_hw\_params\_get\_rate\_max(params, \&sample\_rate\_max, \textcolor{keyword}{nullptr});}
+\DoxyCodeLine{00044     \textcolor{keywordflow}{if} (err < 0) \{}
+\DoxyCodeLine{00045         \textcolor{comment}{// Error getting sample rate max}}
+\DoxyCodeLine{00046         snd\_pcm\_close(handle);}
+\DoxyCodeLine{00047         \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{00048     \}}
+\DoxyCodeLine{00049 }
+\DoxyCodeLine{00050     sample\_rate.first = sample\_rate\_min;}
+\DoxyCodeLine{00051     sample\_rate.second = sample\_rate\_max;}
+\DoxyCodeLine{00052 }
+\DoxyCodeLine{00053     \textcolor{comment}{// get number of output channels}}
+\DoxyCodeLine{00054     err = snd\_pcm\_hw\_params\_get\_channels(params, \&numChannels);\textcolor{comment}{// channels now holds the number of channels (outputs)}}
+\DoxyCodeLine{00055     \textcolor{keywordflow}{if} (err < 0 || numChannels ==0 ) \{}
+\DoxyCodeLine{00056         \textcolor{comment}{// Set the desired number of channels (e.g., 2 for stereo)}}
+\DoxyCodeLine{00057         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} atLeastStereo = 2;}
+\DoxyCodeLine{00058         err = snd\_pcm\_hw\_params\_set\_channels(handle, params, atLeastStereo);}
+\DoxyCodeLine{00059         \textcolor{keywordflow}{if} (err < 0 || numChannels ==0 ) \{}
+\DoxyCodeLine{00060             }
+\DoxyCodeLine{00061             \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} atLeastMono = 1;}
+\DoxyCodeLine{00062             err = snd\_pcm\_hw\_params\_set\_channels(handle, params, atLeastMono);}
+\DoxyCodeLine{00063             \textcolor{keywordflow}{if} (err < 0 || numChannels ==0) \{}
+\DoxyCodeLine{00064                 \textcolor{comment}{// Error setting channels}}
+\DoxyCodeLine{00065                 snd\_pcm\_close(handle);}
+\DoxyCodeLine{00066                 \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{00067             \} }
+\DoxyCodeLine{00068             \textcolor{comment}{// set numChannels to mono}}
+\DoxyCodeLine{00069             snd\_pcm\_hw\_params\_get\_channels(params, \&numChannels);}
+\DoxyCodeLine{00070         \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{00071             \textcolor{comment}{//set numChannels to stereo}}
+\DoxyCodeLine{00072             snd\_pcm\_hw\_params\_get\_channels(params, \&numChannels);}
+\DoxyCodeLine{00073         \}}
+\DoxyCodeLine{00074     \}}
+\DoxyCodeLine{00075 }
+\DoxyCodeLine{00076     \textcolor{comment}{// Close the PCM device}}
+\DoxyCodeLine{00077     snd\_pcm\_close(handle);}
+\DoxyCodeLine{00078     \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{00079 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{namespaceAudioHardware_a906e6749cef4efdd304dbc28530159c6}\label{namespaceAudioHardware_a906e6749cef4efdd304dbc28530159c6}} 
+\index{AudioHardware@{AudioHardware}!get\_audio\_hardware\_info@{get\_audio\_hardware\_info}}
+\index{get\_audio\_hardware\_info@{get\_audio\_hardware\_info}!AudioHardware@{AudioHardware}}
+\doxysubsubsection{\texorpdfstring{get\_audio\_hardware\_info()}{get\_audio\_hardware\_info()}}
+{\footnotesize\ttfamily void Audio\+Hardware\+::get\+\_\+audio\+\_\+hardware\+\_\+info (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{structAudioHardware_1_1Info}{Info}} $>$ \&}]{audio\+\_\+hw\+\_\+info }\end{DoxyParamCaption})}
+
+
+
+Retrieves information about available audio cards and their supported audio devices. 
+
+This function scans the system for connected audio devices and gathers information about each one of them, including its name id, the sample rate range supported and the number of output channels.
+
+
+\begin{DoxyParams}{Parameters}
+{\em std\+::vector$<$\+Info$>$} & \&audio\+\_\+hw\+\_\+info -\/ vector to store audio hardware information \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{audiohw_8cpp_source_l00081}{81}} of file \mbox{\hyperlink{audiohw_8cpp_source}{audiohw.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00081                                                                          \{}
+\DoxyCodeLine{00082 }
+\DoxyCodeLine{00083     \textcolor{keywordtype}{int} card = -\/1;}
+\DoxyCodeLine{00084     }
+\DoxyCodeLine{00085     \textcolor{comment}{// Loop through all available cards}}
+\DoxyCodeLine{00086     \textcolor{keywordflow}{while} (\textcolor{keyword}{true}) \{}
+\DoxyCodeLine{00087         }
+\DoxyCodeLine{00088         \textcolor{comment}{// Find the next card}}
+\DoxyCodeLine{00089         \textcolor{keywordtype}{int} err = snd\_card\_next(\&card);}
+\DoxyCodeLine{00090         \textcolor{keywordflow}{if} (err < 0) \{}
+\DoxyCodeLine{00091             \textcolor{comment}{// Error getting next card}}
+\DoxyCodeLine{00092             \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00093         \}}
+\DoxyCodeLine{00094         \textcolor{keywordflow}{if} (card < 0) \{}
+\DoxyCodeLine{00095             \textcolor{comment}{// No more cards}}
+\DoxyCodeLine{00096             \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00097         \}}
+\DoxyCodeLine{00098 }
+\DoxyCodeLine{00099         \textcolor{comment}{// Open the card control interface}}
+\DoxyCodeLine{00100         snd\_ctl\_t *ctl\_handle;}
+\DoxyCodeLine{00101         \textcolor{keywordtype}{char} ctl\_name[32];}
+\DoxyCodeLine{00102         sprintf(ctl\_name, \textcolor{stringliteral}{"{}hw:\%d"{}}, card);}
+\DoxyCodeLine{00103         err = snd\_ctl\_open(\&ctl\_handle, ctl\_name, 0);}
+\DoxyCodeLine{00104         \textcolor{keywordflow}{if} (err < 0) \{}
+\DoxyCodeLine{00105             \textcolor{comment}{// Error opening card}}
+\DoxyCodeLine{00106             \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{00107         \}}
+\DoxyCodeLine{00108 }
+\DoxyCodeLine{00109         \textcolor{comment}{// Get the card info}}
+\DoxyCodeLine{00110         snd\_ctl\_card\_info\_t *info;}
+\DoxyCodeLine{00111         snd\_ctl\_card\_info\_malloc(\&info);}
+\DoxyCodeLine{00112         err = snd\_ctl\_card\_info(ctl\_handle, info);}
+\DoxyCodeLine{00113         \textcolor{keywordflow}{if} (err < 0) \{}
+\DoxyCodeLine{00114             \textcolor{comment}{// Error getting card info}}
+\DoxyCodeLine{00115             snd\_ctl\_close(ctl\_handle);}
+\DoxyCodeLine{00116             snd\_ctl\_card\_info\_free(info);}
+\DoxyCodeLine{00117             \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{00118         \}}
+\DoxyCodeLine{00119 }
+\DoxyCodeLine{00120         std::string card\_id = snd\_ctl\_card\_info\_get\_id(info) ; }
+\DoxyCodeLine{00121         std::string mixer = snd\_ctl\_card\_info\_get\_mixername(info);}
+\DoxyCodeLine{00122 \textcolor{comment}{// card\_id = card\_id + "{}("{}+mixer+"{})"{};}}
+\DoxyCodeLine{00123 }
+\DoxyCodeLine{00124         \textcolor{comment}{// Check if it is an output device and if it can be opened}}
+\DoxyCodeLine{00125         snd\_pcm\_t *handle;}
+\DoxyCodeLine{00126         std::string card\_name\_str =\textcolor{stringliteral}{"{}hw:"{}} + std::to\_string(card) + \textcolor{stringliteral}{"{},0"{}}; }
+\DoxyCodeLine{00127         \textcolor{keyword}{const} \textcolor{keywordtype}{char}* card\_name = card\_name\_str.c\_str();}
+\DoxyCodeLine{00128         \textcolor{keywordflow}{if} (snd\_pcm\_open(\&handle, card\_name, SND\_PCM\_STREAM\_PLAYBACK, 0) >= 0) \{}
+\DoxyCodeLine{00129             snd\_pcm\_close(handle);}
+\DoxyCodeLine{00130         \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{00131             \textcolor{keywordflow}{continue}; \textcolor{comment}{// Skip this card if it doesn't support output.}}
+\DoxyCodeLine{00132         \}}
+\DoxyCodeLine{00133 }
+\DoxyCodeLine{00134         \textcolor{comment}{// Free the card info}}
+\DoxyCodeLine{00135         snd\_ctl\_card\_info\_free(info);}
+\DoxyCodeLine{00136         snd\_ctl\_close(ctl\_handle);}
+\DoxyCodeLine{00137 }
+\DoxyCodeLine{00138         \textcolor{comment}{// Get PCM device info}}
+\DoxyCodeLine{00139         \textcolor{keywordtype}{int} device = 0;}
+\DoxyCodeLine{00140         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} numChannels = 0;}
+\DoxyCodeLine{00141         std::pair<unsigned int, unsigned int> sample\_rate\_range;}
+\DoxyCodeLine{00142         \textcolor{keywordflow}{while}(!\mbox{\hyperlink{namespaceAudioHardware_a874a8ed7643bcea6d94a01b94ec544db}{AudioHardware::get\_audio\_device\_info}}(card, device,sample\_rate\_range,numChannels) \&\& device < \mbox{\hyperlink{namespaceAudioHardware_a84c7c3993b3b664afab90913a55fba58}{MAX\_POTENTIAL\_AUDIO\_DEVICES}} )\{}
+\DoxyCodeLine{00143             ++device;}
+\DoxyCodeLine{00144         \}}
+\DoxyCodeLine{00145 }
+\DoxyCodeLine{00146         Info deviceInfo;}
+\DoxyCodeLine{00147         deviceInfo.card\_info = std::make\_pair(card\_id,mixer);}
+\DoxyCodeLine{00148         deviceInfo.sample\_rate\_range = sample\_rate\_range;}
+\DoxyCodeLine{00149         deviceInfo.numberOfChannels = numChannels;}
+\DoxyCodeLine{00150         audio\_hw\_info.push\_back(deviceInfo);}
+\DoxyCodeLine{00151         }
+\DoxyCodeLine{00152     \}}
+\DoxyCodeLine{00153 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{namespaceAudioHardware_a8bee9daf0ac390a7556c7c0d4b97fb3e}\label{namespaceAudioHardware_a8bee9daf0ac390a7556c7c0d4b97fb3e}} 
+\index{AudioHardware@{AudioHardware}!supportedRates@{supportedRates}}
+\index{supportedRates@{supportedRates}!AudioHardware@{AudioHardware}}
+\doxysubsubsection{\texorpdfstring{supportedRates()}{supportedRates()}}
+{\footnotesize\ttfamily const std\+::vector$<$ unsigned int $>$ Audio\+Hardware\+::supported\+Rates (\begin{DoxyParamCaption}\item[{\{8000, 11025, 16000, 22050, 32000, 44100, 48000, 88200, 96000, 176000, 192000, 352800, 384000\}}]{ }\end{DoxyParamCaption})}
+
+
+
+List of supported sample rates. 
+
+\begin{DoxySeeAlso}{See also}
+for detailed info see \+: \href{https://en.wikipedia.org/wiki/Sampling_(signal_processing)\#Audio_sampling}{\texttt{ https\+://en.\+wikipedia.\+org/wiki/\+Sampling\+\_\+(signal\+\_\+processing)\#\+Audio\+\_\+sampling}} 
+\end{DoxySeeAlso}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespaceAudioHardware_a84c7c3993b3b664afab90913a55fba58}\label{namespaceAudioHardware_a84c7c3993b3b664afab90913a55fba58}} 
+\index{AudioHardware@{AudioHardware}!MAX\_POTENTIAL\_AUDIO\_DEVICES@{MAX\_POTENTIAL\_AUDIO\_DEVICES}}
+\index{MAX\_POTENTIAL\_AUDIO\_DEVICES@{MAX\_POTENTIAL\_AUDIO\_DEVICES}!AudioHardware@{AudioHardware}}
+\doxysubsubsection{\texorpdfstring{MAX\_POTENTIAL\_AUDIO\_DEVICES}{MAX\_POTENTIAL\_AUDIO\_DEVICES}}
+{\footnotesize\ttfamily const short int Audio\+Hardware\+::\+MAX\+\_\+\+POTENTIAL\+\_\+\+AUDIO\+\_\+\+DEVICES = 32}
+
+
+
+Custom defined -\/ maximum number of potential audio devices that can be retrieved. 
+
+
+
+Definition at line \mbox{\hyperlink{audiohw_8h_source_l00016}{16}} of file \mbox{\hyperlink{audiohw_8h_source}{audiohw.\+h}}.
+
+\mbox{\Hypertarget{namespaceAudioHardware_abd0d01ecfb85ee51cdc1c04fb15d39c5}\label{namespaceAudioHardware_abd0d01ecfb85ee51cdc1c04fb15d39c5}} 
+\index{AudioHardware@{AudioHardware}!quantizationRatio@{quantizationRatio}}
+\index{quantizationRatio@{quantizationRatio}!AudioHardware@{AudioHardware}}
+\doxysubsubsection{\texorpdfstring{quantizationRatio}{quantizationRatio}}
+{\footnotesize\ttfamily constexpr int Audio\+Hardware\+::quantization\+Ratio \{ sizeof(float) $\ast$ CHAR\+\_\+\+BIT \}\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Bit size of the floating-\/point samples in bits. 
+
+
+
+Definition at line \mbox{\hyperlink{audiohw_8h_source_l00027}{27}} of file \mbox{\hyperlink{audiohw_8h_source}{audiohw.\+h}}.
+

@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_structCameraInfo" xml:lang="en-US">
+<title>CameraInfo Struct Reference</title>
+<indexterm><primary>CameraInfo</primary></indexterm>
+<para>
+
+<para>Represents information about a camera. </para>
+ 
+</para>
+<para>
+<computeroutput>#include &lt;camerahw.h&gt;</computeroutput>
+</para>
+<simplesect>
+    <title>Public Attributes    </title>
+        <itemizedlist>
+            <listitem><para>std::string <link linkend="_structCameraInfo_1aae33d6b66dff390f7de58e343745cf22">devicePath</link></para>
+</listitem>
+            <listitem><para>std::vector&lt; std::pair&lt; int, int &gt; &gt; <link linkend="_structCameraInfo_1a3d087eed7588f561a3fc89d4420aba53">resolutions</link></para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Detailed Description</title>
+
+<para>Represents information about a camera. </para>
+
+
+
+<para>This structure contains the device path of the camera and a vector of pairs representing supported resolutions. Each pair contains the width and height of the resolution. <formalpara><title>See also</title>
+
+<para><link linkend="_camerahw_8h_1a3d0a95992cb94b91094a9251b01b821c">getAvailableCameras</link> for more information about retrieving camera information. </para>
+</formalpara>
+</para>
+<para>
+Definition at line <link linkend="_camerahw_8h_source_1l00015">15</link> of file <link linkend="_camerahw_8h_source">camerahw.h</link>.</para>
+</section>
+<section>
+<title>Member Data Documentation</title>
+<anchor xml:id="_structCameraInfo_1aae33d6b66dff390f7de58e343745cf22"/><section>
+    <title>devicePath</title>
+<indexterm><primary>devicePath</primary><secondary>CameraInfo</secondary></indexterm>
+<indexterm><primary>CameraInfo</primary><secondary>devicePath</secondary></indexterm>
+<para><computeroutput>std::string CameraInfo::devicePath</computeroutput></para><para>
+Definition at line <link linkend="_camerahw_8h_source_1l00016">16</link> of file <link linkend="_camerahw_8h_source">camerahw.h</link>.</para>
+</section>
+<anchor xml:id="_structCameraInfo_1a3d087eed7588f561a3fc89d4420aba53"/><section>
+    <title>resolutions</title>
+<indexterm><primary>resolutions</primary><secondary>CameraInfo</secondary></indexterm>
+<indexterm><primary>CameraInfo</primary><secondary>resolutions</secondary></indexterm>
+<para><computeroutput>std::vector&lt;std::pair&lt;int, int&gt; &gt; CameraInfo::resolutions</computeroutput></para><para>
+Definition at line <link linkend="_camerahw_8h_source_1l00017">17</link> of file <link linkend="_camerahw_8h_source">camerahw.h</link>.</para>
+</section>
+<para>
+The documentation for this struct was generated from the following file:</para>
+include/gui/<link linkend="_camerahw_8h">camerahw.h</link></section>
+</section>

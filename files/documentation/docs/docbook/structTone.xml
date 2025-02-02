@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_structTone" xml:lang="en-US">
+<title>Tone Struct Reference</title>
+<indexterm><primary>Tone</primary></indexterm>
+<para>
+
+<para>A structure to represent a tone with its frequency and volume. </para>
+ 
+</para>
+<para>
+<computeroutput>#include &lt;tone.h&gt;</computeroutput>
+</para>
+<simplesect>
+    <title>Public Attributes    </title>
+        <itemizedlist>
+            <listitem><para>std::atomic&lt; int &gt; <link linkend="_structTone_1a8c28a65c858594e410d94921d7abc1fa">frequency</link> {0}</para>
+
+<para>the frequency of the tone in Hz </para>
+</listitem>
+            <listitem><para>std::atomic&lt; float &gt; <link linkend="_structTone_1ad643b37d799caa83f6a80dc2f001aa4a">volume</link> {0.f}</para>
+
+<para>the volume of the tone, ranging from 0.0 to 1.0 </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Detailed Description</title>
+
+<para>A structure to represent a tone with its frequency and volume. </para>
+
+
+
+<para><note><title>Note</title>
+
+<para>The frequency is in Hz, and the volume is in a range from 0.0 to 1.0. </para>
+
+<para>The default frequency and volume are both set to 0. </para>
+</note>
+<formalpara><title>See also</title>
+
+<para><link linkend="_structTone_1a8c28a65c858594e410d94921d7abc1fa">frequency</link> and <link linkend="_structTone_1ad643b37d799caa83f6a80dc2f001aa4a">volume</link> </para>
+</formalpara>
+</para>
+<para>
+Definition at line <link linkend="_tone_8h_source_1l00012">12</link> of file <link linkend="_tone_8h_source">tone.h</link>.</para>
+</section>
+<section>
+<title>Member Data Documentation</title>
+<anchor xml:id="_structTone_1a8c28a65c858594e410d94921d7abc1fa"/><section>
+    <title>frequency</title>
+<indexterm><primary>frequency</primary><secondary>Tone</secondary></indexterm>
+<indexterm><primary>Tone</primary><secondary>frequency</secondary></indexterm>
+<para><computeroutput>std::atomic&lt;int&gt; Tone::frequency {0}</computeroutput></para><para>
+
+<para>the frequency of the tone in Hz </para>
+</para>
+<para>
+Definition at line <link linkend="_tone_8h_source_1l00014">14</link> of file <link linkend="_tone_8h_source">tone.h</link>.</para>
+</section>
+<anchor xml:id="_structTone_1ad643b37d799caa83f6a80dc2f001aa4a"/><section>
+    <title>volume</title>
+<indexterm><primary>volume</primary><secondary>Tone</secondary></indexterm>
+<indexterm><primary>Tone</primary><secondary>volume</secondary></indexterm>
+<para><computeroutput>std::atomic&lt;float&gt; Tone::volume {0.f}</computeroutput></para><para>
+
+<para>the volume of the tone, ranging from 0.0 to 1.0 </para>
+</para>
+<para>
+Definition at line <link linkend="_tone_8h_source_1l00016">16</link> of file <link linkend="_tone_8h_source">tone.h</link>.</para>
+</section>
+<para>
+The documentation for this struct was generated from the following file:</para>
+include/<link linkend="_tone_8h">tone.h</link></section>
+</section>

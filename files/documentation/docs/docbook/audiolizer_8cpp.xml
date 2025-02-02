@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_audiolizer_8cpp" xml:lang="en-US">
+<title>src/audiolizer.cpp File Reference</title>
+<indexterm><primary>src/audiolizer.cpp</primary></indexterm>
+<programlisting linenumbering="unnumbered">#include &quot;audiolizer.h&quot;
+#include &lt;math.h&gt;
+#include &quot;config.h&quot;
+#include &quot;roi.h&quot;
+#include &quot;tone.h&quot;
+</programlisting>Include dependency graph for audiolizer.cpp:<para>
+    <informalfigure>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="0" fileref="audiolizer_8cpp__incl.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </informalfigure>
+</para>
+</section>

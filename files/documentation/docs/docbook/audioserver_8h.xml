@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_audioserver_8h" xml:lang="en-US">
+<title>include/audioserver.h File Reference</title>
+<indexterm><primary>include/audioserver.h</primary></indexterm>
+<programlisting linenumbering="unnumbered">#include &lt;mutex&gt;
+#include &lt;condition_variable&gt;
+#include &lt;jack/jack.h&gt;
+#include &lt;jack/control.h&gt;
+</programlisting>Include dependency graph for audioserver.h:<para>
+    <informalfigure>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="0" fileref="audioserver_8h__incl.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </informalfigure>
+</para>
+This graph shows which files directly or indirectly include this file:<para>
+    <informalfigure>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="0" fileref="audioserver_8h__dep__incl.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </informalfigure>
+</para>
+<simplesect>
+    <title>Classes    </title>
+        <itemizedlist>
+            <listitem><para>class <link linkend="_classAudioServer">AudioServer</link></para>
+
+<para>The jack-audio server running on the alsa drivers. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Variables    </title>
+        <itemizedlist>
+            <listitem><para>const char <link linkend="_audioserver_8h_1acec480b06d69cadd02c28e6ebb9e2412">supported_driver</link> [5] = &quot;alsa&quot;</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Variable Documentation</title>
+<anchor xml:id="_audioserver_8h_1acec480b06d69cadd02c28e6ebb9e2412"/><section>
+    <title>supported_driver</title>
+<indexterm><primary>supported_driver</primary><secondary>audioserver.h</secondary></indexterm>
+<indexterm><primary>audioserver.h</primary><secondary>supported_driver</secondary></indexterm>
+<para><computeroutput>const char supported_driver[5] = &quot;alsa&quot;</computeroutput></para><para>
+Definition at line <link linkend="_audioserver_8h_source_1l00012">12</link> of file <link linkend="_audioserver_8h_source">audioserver.h</link>.</para>
+</section>
+</section>
+</section>

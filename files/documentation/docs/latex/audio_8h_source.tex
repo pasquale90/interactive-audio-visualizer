@@ -1,0 +1,71 @@
+\hypertarget{audio_8h_source}{}\doxysection{audio.\+h}
+\label{audio_8h_source}\index{include/audio.h@{include/audio.h}}
+\mbox{\hyperlink{audio_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00001}00001 \textcolor{preprocessor}{\#ifndef AUDIO\_H}}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00002}00002 \textcolor{preprocessor}{\#define AUDIO\_H}}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00003}00003 }
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00004}00004 \textcolor{preprocessor}{\#include <atomic>}}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00005}00005 \textcolor{preprocessor}{\#include <mutex>}}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00006}00006 \textcolor{preprocessor}{\#include <condition\_variable>}}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00007}00007 \textcolor{preprocessor}{\#include <jack/jack.h>}}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00008}00008 \textcolor{preprocessor}{\#include <jack/types.h>}}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00009}00009 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{sine_8h}{sine.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00010}00010 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{tone_8h}{tone.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00011}00011 }
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00012}00012 \textcolor{keyword}{class }\mbox{\hyperlink{classConfig}{Config}};}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00013}00013 \textcolor{keyword}{class }\mbox{\hyperlink{classWaveform}{Waveform}};}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00014}00014 }
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00022}\mbox{\hyperlink{classAudioStream}{00022}} \textcolor{keyword}{class }\mbox{\hyperlink{classAudioStream}{AudioStream}}\{}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00023}00023 \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00024}00024 }
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00028}00028     \mbox{\hyperlink{classAudioStream_ab2e106f7e2f70f0cfb1d7b171da71f16}{AudioStream}}(); }
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00029}00029 }
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00033}00033     \mbox{\hyperlink{classAudioStream_a480e5d3468bfe9357dd6c40649b1e449}{\string~AudioStream}}();}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00034}00034 }
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00041}00041     \textcolor{keywordtype}{void} \mbox{\hyperlink{classAudioStream_ab4f577911f9c1b1ae64de56e6b2b96af}{clientConnect}}(std::mutex\&, std::condition\_variable\&, \textcolor{keywordtype}{bool}\&);}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00042}00042 }
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00046}00046     \textcolor{keywordtype}{void} \mbox{\hyperlink{classAudioStream_a86a07551cb80ac8248ad0b1953ffb81d}{closeStream}}();}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00047}00047 }
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00052}00052     \textcolor{keywordtype}{int} \mbox{\hyperlink{classAudioStream_ac6b5d301d25e74b9b18a58cf5d854385}{streamBuffer}}();}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00053}00053 }
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00060}00060     \textcolor{keywordtype}{void} \mbox{\hyperlink{classAudioStream_a79ba2b085605b367698a204bb28fc6e7}{update}}(\textcolor{keywordtype}{int},  \textcolor{keywordtype}{float});}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00061}00061 }
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00068}00068     \textcolor{keywordtype}{void} \mbox{\hyperlink{classAudioStream_a0f4ac8181f32c9b1466eb35ed723b167}{setVisualizerUpdater}}(std::function<\textcolor{keywordtype}{void}(\textcolor{keywordtype}{float})>);}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00069}00069     }
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00073}\mbox{\hyperlink{classAudioStream_a2e8501a76d4801c9f91bda8bfba583e4}{00073}}      \mbox{\hyperlink{classAudioStream_a2e8501a76d4801c9f91bda8bfba583e4}{AudioStream}}(\textcolor{keyword}{const} \mbox{\hyperlink{classAudioStream}{AudioStream}}\&) = \textcolor{keyword}{delete};}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00074}00074     }
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00078}\mbox{\hyperlink{classAudioStream_aad83ff2805214222217732d8acc76ff9}{00078}}     \mbox{\hyperlink{classAudioStream_aad83ff2805214222217732d8acc76ff9}{AudioStream}}(\mbox{\hyperlink{classAudioStream}{AudioStream}}\&\&)  = \textcolor{keyword}{delete};}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00079}00079     }
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00083}\mbox{\hyperlink{classAudioStream_a012dba5698b8dab4d86d23f531a97181}{00083}}     \mbox{\hyperlink{classAudioStream}{AudioStream}}\& \mbox{\hyperlink{classAudioStream_a012dba5698b8dab4d86d23f531a97181}{operator=}}(\textcolor{keyword}{const} \mbox{\hyperlink{classAudioStream}{AudioStream}}\&) = \textcolor{keyword}{delete};}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00084}00084     }
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00088}\mbox{\hyperlink{classAudioStream_aa193e5e2a4946523712422a6503a87c1}{00088}}     \mbox{\hyperlink{classAudioStream}{AudioStream}}\& \mbox{\hyperlink{classAudioStream_aa193e5e2a4946523712422a6503a87c1}{operator=}}(\mbox{\hyperlink{classAudioStream}{AudioStream}}\&\&) = \textcolor{keyword}{delete};}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00089}00089 }
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00090}00090 \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00091}00091 }
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00092}00092     \textcolor{keyword}{const} \mbox{\hyperlink{structAudioConfig}{AudioConfig}}\& audiocfg;}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00093}00093     }
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00094}00094     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *client\_name ;}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00095}00095     \textcolor{keyword}{const} \textcolor{keywordtype}{char} **todevice;}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00096}00096     jack\_client\_t *client;}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00097}00097     jack\_port\_t * output\_ports[2];}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00098}00098     \textcolor{keywordtype}{float} *outputBuffers[2];}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00099}00099 }
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00100}00100     \mbox{\hyperlink{classSine}{Sine}} sine;}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00101}00101     void (\mbox{\hyperlink{classSine}{Sine}}::*make\_sound)(\mbox{\hyperlink{structTone}{Tone}}\&,\textcolor{keywordtype}{float}*[2]) = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00102}00102     \mbox{\hyperlink{structTone}{Tone}} tone;}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00103}00103 }
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00108}00108     \textcolor{keyword}{static} \textcolor{keywordtype}{int} streamAudio (jack\_nframes\_t nframes, \textcolor{keywordtype}{void} *arg);}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00109}00109 }
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00110}00110 }
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00113}00113     \textcolor{keyword}{static} \textcolor{keywordtype}{void} jack\_shutdown (\textcolor{keywordtype}{void} *arg);}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00114}00114 \};}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00115}00115 }
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00116}00116 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00117}00117 }
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00118}00118 }
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00119}00119 }
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00120}00120 }
+\DoxyCodeLine{\Hypertarget{audio_8h_source_l00121}00121 }
+
+\end{DoxyCode}

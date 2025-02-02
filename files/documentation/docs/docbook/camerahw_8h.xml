@@ -1,0 +1,144 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_camerahw_8h" xml:lang="en-US">
+<title>include/gui/camerahw.h File Reference</title>
+<indexterm><primary>include/gui/camerahw.h</primary></indexterm>
+<programlisting linenumbering="unnumbered">#include &lt;string&gt;
+#include &lt;vector&gt;
+</programlisting>Include dependency graph for camerahw.h:<para>
+    <informalfigure>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="0" fileref="camerahw_8h__incl.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </informalfigure>
+</para>
+This graph shows which files directly or indirectly include this file:<para>
+    <informalfigure>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="0" fileref="camerahw_8h__dep__incl.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </informalfigure>
+</para>
+<simplesect>
+    <title>Classes    </title>
+        <itemizedlist>
+            <listitem><para>struct <link linkend="_structCameraInfo">CameraInfo</link></para>
+
+<para>Represents information about a camera. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Functions    </title>
+        <itemizedlist>
+            <listitem><para>std::vector&lt; <link linkend="_structCameraInfo">CameraInfo</link> &gt; <link linkend="_camerahw_8h_1a3d0a95992cb94b91094a9251b01b821c">getAvailableCameras</link> ()</para>
+
+<para>Retrieves information about available cameras on the system. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Function Documentation</title>
+<anchor xml:id="_camerahw_8h_1a3d0a95992cb94b91094a9251b01b821c"/><section>
+    <title>getAvailableCameras()</title>
+<indexterm><primary>getAvailableCameras</primary><secondary>camerahw.h</secondary></indexterm>
+<indexterm><primary>camerahw.h</primary><secondary>getAvailableCameras</secondary></indexterm>
+<para><computeroutput>std::vector&lt; <link linkend="_structCameraInfo">CameraInfo</link> &gt; getAvailableCameras ( )</computeroutput></para><para>
+
+<para>Retrieves information about available cameras on the system. </para>
+</para>
+
+<para>This function scans the system for connected cameras and gathers information about each camera, including its device path and supported resolutions.</para>
+
+<para><formalpara><title>Returns</title>
+
+<para>A vector of <link linkend="_structCameraInfo">CameraInfo</link> structures, where each structure contains information about a single camera. If no cameras are found, an empty vector is returned. </para>
+</formalpara>
+</para>
+<para>
+Definition at line <link linkend="_camerahw_8cpp_source_1l00015">15</link> of file <link linkend="_camerahw_8cpp_source">camerahw.cpp</link>.</para>
+<programlisting linenumbering="unnumbered">00015 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+00016 &#32;&#32;&#32;&#32;std::vector&lt;CameraInfo&gt;&#32;cameras;
+00017 &#32;&#32;&#32;&#32;std::unordered_set&lt;std::string&gt;&#32;uniquesResolutionValues;
+00018 
+00019 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">int</emphasis>&#32;i&#32;=&#32;0;&#32;i&#32;&lt;&#32;16;&#32;++i)&#32;{&#32;<emphasis role="comment">//&#32;Check&#32;up&#32;to&#32;16&#32;potential&#32;camera&#32;devices</emphasis>
+00020 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::string&#32;devicePath&#32;=&#32;<emphasis role="stringliteral">&quot;/dev/video&quot;</emphasis>&#32;+&#32;std::to_string(i);
+00021 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;fd&#32;=&#32;open(devicePath.c_str(),&#32;O_RDWR&#32;|&#32;O_NONBLOCK,&#32;0);
+00022 
+00023 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(fd&#32;==&#32;-1)&#32;{
+00024 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(errno&#32;==&#32;ENOENT&#32;||&#32;errno&#32;==&#32;EACCES)&#32;{
+00025 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">continue</emphasis>;&#32;<emphasis role="comment">//&#32;Device&#32;doesn&apos;t&#32;exist&#32;or&#32;no&#32;permission,&#32;try&#32;next</emphasis>
+00026 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}&#32;<emphasis role="keywordflow">else</emphasis>&#32;{
+00027 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;perror(<emphasis role="stringliteral">&quot;open&quot;</emphasis>);
+00028 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">continue</emphasis>;&#32;<emphasis role="comment">//&#32;Some&#32;other&#32;error,&#32;try&#32;next</emphasis>
+00029 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+00030 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+00031 
+00032 
+00033 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">struct&#32;</emphasis>v4l2_capability&#32;cap;
+00034 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(ioctl(fd,&#32;VIDIOC_QUERYCAP,&#32;&amp;cap)&#32;==&#32;-1)&#32;{
+00035 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;perror(<emphasis role="stringliteral">&quot;VIDIOC_QUERYCAP&quot;</emphasis>);
+00036 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;close(fd);
+00037 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">continue</emphasis>;
+00038 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+00039 
+00040 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!(cap.capabilities&#32;&amp;&#32;V4L2_CAP_VIDEO_CAPTURE))&#32;{
+00041 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//Not&#32;a&#32;video&#32;capture&#32;device</emphasis>
+00042 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;close(fd);
+00043 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">continue</emphasis>;
+00044 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+00045 
+00046 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_structCameraInfo">CameraInfo</link>&#32;camera;
+00047 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;camera.<link linkend="_structCameraInfo_1aae33d6b66dff390f7de58e343745cf22">devicePath</link>&#32;=&#32;devicePath;
+00048 
+00049 
+00050 
+00051 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">struct&#32;</emphasis>v4l2_fmtdesc&#32;fmtdesc;
+00052 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;memset(&amp;fmtdesc,&#32;0,&#32;<emphasis role="keyword">sizeof</emphasis>(fmtdesc));
+00053 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;fmtdesc.index&#32;=&#32;0;
+00054 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;fmtdesc.type&#32;=&#32;V4L2_BUF_TYPE_VIDEO_CAPTURE;
+00055 
+00056 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(ioctl(fd,&#32;VIDIOC_ENUM_FMT,&#32;&amp;fmtdesc)&#32;==&#32;0)&#32;{
+00057 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">struct&#32;</emphasis>v4l2_frmsizeenum&#32;frmsizeenum;
+00058 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;memset(&amp;frmsizeenum,&#32;0,&#32;<emphasis role="keyword">sizeof</emphasis>(frmsizeenum));
+00059 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;frmsizeenum.index&#32;=&#32;0;
+00060 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;frmsizeenum.pixel_format&#32;=&#32;fmtdesc.pixelformat;
+00061 
+00062 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(ioctl(fd,&#32;VIDIOC_ENUM_FRAMESIZES,&#32;&amp;frmsizeenum)&#32;==&#32;0)&#32;{
+00063 
+00064 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(frmsizeenum.type&#32;==&#32;V4L2_FRMSIZE_TYPE_DISCRETE)&#32;{
+00065 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::string&#32;resVal&#32;=&#32;std::to_string(frmsizeenum.discrete.width)&#32;+<emphasis role="stringliteral">&quot;x&quot;</emphasis>+&#32;std::to_string(frmsizeenum.discrete.height);
+00066 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>(uniquesResolutionValues.find(resVal)==&#32;uniquesResolutionValues.end()){
+00067 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;camera.<link linkend="_structCameraInfo_1a3d087eed7588f561a3fc89d4420aba53">resolutions</link>.push_back({frmsizeenum.discrete.width,&#32;frmsizeenum.discrete.height});
+00068 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;uniquesResolutionValues.insert(resVal);
+00069 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+00070 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(frmsizeenum.type&#32;==&#32;V4L2_FRMSIZE_TYPE_STEPWISE)&#32;{
+00071 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">size_t</emphasis>&#32;w&#32;=&#32;frmsizeenum.stepwise.min_width;&#32;w&#32;&lt;=&#32;frmsizeenum.stepwise.max_width;&#32;w&#32;+=&#32;frmsizeenum.stepwise.step_width)&#32;{
+00072 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">size_t</emphasis>&#32;h&#32;=&#32;frmsizeenum.stepwise.min_height;&#32;h&#32;&lt;=&#32;frmsizeenum.stepwise.max_height;&#32;h&#32;+=&#32;frmsizeenum.stepwise.step_height)&#32;{
+00073 
+00074 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::string&#32;resVal&#32;=&#32;std::to_string(w)&#32;+<emphasis role="stringliteral">&quot;x&quot;</emphasis>+&#32;std::to_string(h);
+00075 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>(uniquesResolutionValues.find(resVal)==&#32;uniquesResolutionValues.end()){
+00076 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;camera.<link linkend="_structCameraInfo_1a3d087eed7588f561a3fc89d4420aba53">resolutions</link>.push_back({w,h});
+00077 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;uniquesResolutionValues.insert(resVal);
+00078 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+00079 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+00080 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+00081 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+00082 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+00083 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;frmsizeenum.index++;
+00084 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+00085 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;fmtdesc.index++;
+00086 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+00087 
+00088 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::sort(camera.<link linkend="_structCameraInfo_1a3d087eed7588f561a3fc89d4420aba53">resolutions</link>.begin(),camera.<link linkend="_structCameraInfo_1a3d087eed7588f561a3fc89d4420aba53">resolutions</link>.end(),compareResolutions);
+00089 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;cameras.push_back(camera);
+00090 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;close(fd);
+00091 &#32;&#32;&#32;&#32;}
+00092 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;cameras;
+00093 }
+</programlisting></section>
+</section>
+</section>

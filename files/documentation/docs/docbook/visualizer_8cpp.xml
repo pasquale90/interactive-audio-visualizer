@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_visualizer_8cpp" xml:lang="en-US">
+<title>src/visualizer.cpp File Reference</title>
+<indexterm><primary>src/visualizer.cpp</primary></indexterm>
+<programlisting linenumbering="unnumbered">#include &lt;iostream&gt;
+#include &lt;opencv2/highgui/highgui.hpp&gt;
+#include &quot;visualizer.h&quot;
+#include &quot;roi.h&quot;
+#include &quot;tone.h&quot;
+</programlisting>Include dependency graph for visualizer.cpp:<para>
+    <informalfigure>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="0" fileref="visualizer_8cpp__incl.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </informalfigure>
+</para>
+<simplesect>
+    <title>Variables    </title>
+        <itemizedlist>
+            <listitem><para>constexpr int <link linkend="_visualizer_8cpp_1a3f329f01ab431f5a51cdfa2810b5f4db">qASCII</link> {113}</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Variable Documentation</title>
+<anchor xml:id="_visualizer_8cpp_1a3f329f01ab431f5a51cdfa2810b5f4db"/><section>
+    <title>qASCII</title>
+<indexterm><primary>qASCII</primary><secondary>visualizer.cpp</secondary></indexterm>
+<indexterm><primary>visualizer.cpp</primary><secondary>qASCII</secondary></indexterm>
+<para><computeroutput>constexpr int qASCII {113}<computeroutput>[constexpr]</computeroutput></computeroutput></para><para>
+Definition at line <link linkend="_visualizer_8cpp_source_1l00008">8</link> of file <link linkend="_visualizer_8cpp_source">visualizer.cpp</link>.</para>
+</section>
+</section>
+</section>

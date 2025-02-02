@@ -1,0 +1,27 @@
+\hypertarget{paths_8h_source}{}\doxysection{paths.\+h}
+\label{paths_8h_source}\index{include/paths.h@{include/paths.h}}
+\mbox{\hyperlink{paths_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{paths_8h_source_l00001}00001 \textcolor{preprocessor}{\#ifndef PATHS\_H}}
+\DoxyCodeLine{\Hypertarget{paths_8h_source_l00002}00002 \textcolor{preprocessor}{\#define PATHS\_H}}
+\DoxyCodeLine{\Hypertarget{paths_8h_source_l00003}00003 }
+\DoxyCodeLine{\Hypertarget{paths_8h_source_l00004}00004 \textcolor{preprocessor}{\#include <string>}}
+\DoxyCodeLine{\Hypertarget{paths_8h_source_l00005}00005 \textcolor{preprocessor}{\#include <filesystem>}}
+\DoxyCodeLine{\Hypertarget{paths_8h_source_l00006}00006 }
+\DoxyCodeLine{\Hypertarget{paths_8h_source_l00014}\mbox{\hyperlink{paths_8h_ae088841b314dc5d872b1d357d250823c}{00014}} \textcolor{keyword}{inline} \textcolor{keyword}{auto} \mbox{\hyperlink{paths_8h_ae088841b314dc5d872b1d357d250823c}{getAbsPath}}(\textcolor{keyword}{const} std::string\& relativePath) -\/> std::string \{}
+\DoxyCodeLine{\Hypertarget{paths_8h_source_l00015}00015     std::filesystem::path rootDir = std::filesystem::absolute(\_\_FILE\_\_).parent\_path();}
+\DoxyCodeLine{\Hypertarget{paths_8h_source_l00016}00016     std::filesystem::path targetPath = rootDir / relativePath;}
+\DoxyCodeLine{\Hypertarget{paths_8h_source_l00017}00017     \textcolor{keywordflow}{return} targetPath.lexically\_normal().string();}
+\DoxyCodeLine{\Hypertarget{paths_8h_source_l00018}00018 \}}
+\DoxyCodeLine{\Hypertarget{paths_8h_source_l00019}00019 }
+\DoxyCodeLine{\Hypertarget{paths_8h_source_l00024}\mbox{\hyperlink{namespacePaths}{00024}} \textcolor{keyword}{namespace }\mbox{\hyperlink{namespacePaths}{Paths}}\{}
+\DoxyCodeLine{\Hypertarget{paths_8h_source_l00025}\mbox{\hyperlink{namespacePaths_a9a34ad13812f905ddf7ef5d2e7b8df1b}{00025}}     \textcolor{keyword}{const} std::string \mbox{\hyperlink{namespacePaths_a9a34ad13812f905ddf7ef5d2e7b8df1b}{databasePath}} \{\mbox{\hyperlink{paths_8h_ae088841b314dc5d872b1d357d250823c}{getAbsPath}}(\textcolor{stringliteral}{"{}../data/settings.db"{}})\};}
+\DoxyCodeLine{\Hypertarget{paths_8h_source_l00026}00026 \}}
+\DoxyCodeLine{\Hypertarget{paths_8h_source_l00027}00027 }
+\DoxyCodeLine{\Hypertarget{paths_8h_source_l00035}\mbox{\hyperlink{namespacePathsTest}{00035}} \textcolor{keyword}{namespace }\mbox{\hyperlink{namespacePathsTest}{PathsTest}}\{}
+\DoxyCodeLine{\Hypertarget{paths_8h_source_l00036}\mbox{\hyperlink{namespacePathsTest_ad04cef1a1cbe80419b8ce66fb4665ab6}{00036}}     \textcolor{keyword}{const} std::string \mbox{\hyperlink{namespacePathsTest_ad04cef1a1cbe80419b8ce66fb4665ab6}{databasePath}} \{\mbox{\hyperlink{paths_8h_ae088841b314dc5d872b1d357d250823c}{getAbsPath}}(\textcolor{stringliteral}{"{}../data/test.db"{}})\};}
+\DoxyCodeLine{\Hypertarget{paths_8h_source_l00037}00037 \}}
+\DoxyCodeLine{\Hypertarget{paths_8h_source_l00038}00038 }
+\DoxyCodeLine{\Hypertarget{paths_8h_source_l00039}00039 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

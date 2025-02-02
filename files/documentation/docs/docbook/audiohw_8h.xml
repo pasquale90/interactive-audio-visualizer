@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_audiohw_8h" xml:lang="en-US">
+<title>include/gui/audiohw.h File Reference</title>
+<indexterm><primary>include/gui/audiohw.h</primary></indexterm>
+<programlisting linenumbering="unnumbered">#include &lt;utility&gt;
+#include &lt;vector&gt;
+</programlisting>Include dependency graph for audiohw.h:<para>
+    <informalfigure>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="0" fileref="audiohw_8h__incl.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </informalfigure>
+</para>
+This graph shows which files directly or indirectly include this file:<para>
+    <informalfigure>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="0" fileref="audiohw_8h__dep__incl.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </informalfigure>
+</para>
+<simplesect>
+    <title>Classes    </title>
+        <itemizedlist>
+            <listitem><para>struct <link linkend="_structAudioHardware_1_1Info">AudioHardware::Info</link></para>
+
+<para>Structure representing audio hardware information. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Namespaces    </title>
+        <itemizedlist>
+            <listitem><para>namespace <link linkend="_namespaceAudioHardware">AudioHardware</link></para>
+
+<para>Audio hardware namespace provides functions to interact with audio hardware devices. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Functions    </title>
+        <itemizedlist>
+            <listitem><para>const std::vector&lt; unsigned int &gt; <link linkend="_namespaceAudioHardware_1a8bee9daf0ac390a7556c7c0d4b97fb3e">AudioHardware::supportedRates</link> ({8000, 11025, 16000, 22050, 32000, 44100, 48000, 88200, 96000, 176000, 192000, 352800, 384000})</para>
+
+<para>List of supported sample rates. </para>
+</listitem>
+            <listitem><para>bool <link linkend="_namespaceAudioHardware_1a874a8ed7643bcea6d94a01b94ec544db">AudioHardware::get_audio_device_info</link> (int, int, std::pair&lt; unsigned int, unsigned int &gt; &amp;, unsigned int &amp;)</para>
+
+<para>Retrieves information about available audio devices related to a specific audio card. </para>
+</listitem>
+            <listitem><para>void <link linkend="_namespaceAudioHardware_1a906e6749cef4efdd304dbc28530159c6">AudioHardware::get_audio_hardware_info</link> (std::vector&lt; Info &gt; &amp;)</para>
+
+<para>Retrieves information about available audio cards and their supported audio devices. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<simplesect>
+    <title>Variables    </title>
+        <itemizedlist>
+            <listitem><para>const short int <link linkend="_namespaceAudioHardware_1a84c7c3993b3b664afab90913a55fba58">AudioHardware::MAX_POTENTIAL_AUDIO_DEVICES</link> = 32</para>
+
+<para>Custom defined - maximum number of potential audio devices that can be retrieved. </para>
+</listitem>
+            <listitem><para>constexpr int <link linkend="_namespaceAudioHardware_1abd0d01ecfb85ee51cdc1c04fb15d39c5">AudioHardware::quantizationRatio</link> { sizeof(float) * CHAR_BIT }</para>
+
+<para>Bit size of the floating-point samples in bits. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+</section>

@@ -1,0 +1,87 @@
+\hypertarget{waveform_8cpp_source}{}\doxysection{waveform.\+cpp}
+\label{waveform_8cpp_source}\index{src/waveform.cpp@{src/waveform.cpp}}
+\mbox{\hyperlink{waveform_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00001}00001 \textcolor{preprocessor}{\#include <climits>}}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00002}00002 \textcolor{preprocessor}{\#include <math.h>}}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00003}00003 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{waveform_8h}{waveform.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00004}00004 }
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00005}\mbox{\hyperlink{classWaveform_a4a10db706dde8126a190a650f0b639fb}{00005}} \mbox{\hyperlink{classWaveform_a4a10db706dde8126a190a650f0b639fb}{Waveform::Waveform}}(): readpos(0), writepos(0)\{}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00006}00006     \textcolor{comment}{// calculate num of buffers per display frame;}}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00007}00007     \textcolor{keywordtype}{int} audioSamplesPerFrame = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(cfg.\mbox{\hyperlink{classConfig_a9f58fb425653b02d94a2961f7bdd9e45}{audconf}}.\mbox{\hyperlink{structAudioConfig_aa893cf0e18009ba2aeb67a105d42aa71}{sampleRate}}.load() / cfg.\mbox{\hyperlink{classConfig_ab6692268f819ce3f8474d1d791f3aaee}{dispconf}}.\mbox{\hyperlink{structDisplayConfig_aefdc15d97fa0d2e067d5efcfda0f4947}{fps}}.load());}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00008}00008     \textcolor{keywordtype}{int} buffersPerFrame = std::ceil( \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(audioSamplesPerFrame) / \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(cfg.\mbox{\hyperlink{classConfig_a9f58fb425653b02d94a2961f7bdd9e45}{audconf}}.\mbox{\hyperlink{structAudioConfig_ae81381142d99bc1845cb33bd048643df}{bufferSize}}.load()));}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00009}00009     audioSamplesPerFrame = (buffersPerFrame+1) * cfg.\mbox{\hyperlink{classConfig_a9f58fb425653b02d94a2961f7bdd9e45}{audconf}}.\mbox{\hyperlink{structAudioConfig_ae81381142d99bc1845cb33bd048643df}{bufferSize}}.load(); \textcolor{comment}{// add 1 and make it divisible by bufferSize.}}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00010}00010 }
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00011}00011     waveTable.reserve(audioSamplesPerFrame);}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00012}00012     waveTable.resize(audioSamplesPerFrame);}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00013}00013     }
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00014}00014     capacity = (size\_t)audioSamplesPerFrame;}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00015}00015     min = INT\_MAX, max = 0.;}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00016}00016 \}}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00017}00017 }
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00018}\mbox{\hyperlink{classWaveform_a6b4f4455a6a8ae2222f967e88b80460b}{00018}} \textcolor{keywordtype}{bool} \mbox{\hyperlink{classWaveform_a6b4f4455a6a8ae2222f967e88b80460b}{Waveform::write}}(\textcolor{keyword}{const} \textcolor{keywordtype}{float}\& arg)\{ \textcolor{comment}{// T\&\& arg -\/-\/> rvalue reference}}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00019}00019     \textcolor{keyword}{auto} writePos = writepos.load(); \textcolor{comment}{//??}}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00020}00020     \textcolor{keyword}{auto} nextWritePos = (writePos + 1) \% waveTable.size();}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00021}00021 }
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00022}00022     \textcolor{comment}{// if the buffer is full, overwrite the oldest data}}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00023}00023     \textcolor{keywordflow}{if} (nextWritePos == readpos.load()) \{}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00024}00024         \textcolor{keyword}{auto} readPos = (readpos.load() + 1) \% waveTable.size();}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00025}00025         readpos.store(readPos, std::memory\_order\_release);}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00026}00026     \}}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00027}00027 }
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00028}00028     min = std::min(min,arg);}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00029}00029     max = std::max(max,arg);}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00030}00030     }
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00031}00031     \textcolor{comment}{// write data to the buffer}}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00032}00032     waveTable[writePos] = arg;}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00033}00033     writepos.store(nextWritePos);}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00034}00034     \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00035}00035 }
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00036}00036 \}}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00037}00037 }
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00038}\mbox{\hyperlink{classWaveform_ad4309d03c34e0b7ebe173ee8bd536116}{00038}} \textcolor{keywordtype}{bool} \mbox{\hyperlink{classWaveform_ad4309d03c34e0b7ebe173ee8bd536116}{Waveform::read}}(\textcolor{keywordtype}{float}\& result)\{}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00039}00039 }
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00040}00040     \textcolor{keyword}{auto} readPos = readpos.load();}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00041}00041 }
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00042}00042     \textcolor{comment}{// if buffer is empty return false  }}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00043}00043     \textcolor{keywordflow}{if} (readPos == writepos.load())\{}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00044}00044         \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00045}00045     \}}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00046}00046 }
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00047}00047     \textcolor{comment}{// move data out of the buffer;}}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00048}00048     result = waveTable[readPos];}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00049}00049 }
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00050}00050     \textcolor{comment}{// advance the read pointer}}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00051}00051     \textcolor{keyword}{auto} nextReadPos = (readPos + 1) \% waveTable.size();}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00052}00052     readpos.store(nextReadPos);}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00053}00053     \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00054}00054 \}}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00055}00055 }
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00056}\mbox{\hyperlink{classWaveform_ab6511211e5b81756a2a6a502ba1f0d4b}{00056}} \textcolor{keywordtype}{bool} \mbox{\hyperlink{classWaveform_ab6511211e5b81756a2a6a502ba1f0d4b}{Waveform::isEmpty}}()\textcolor{keyword}{ const }\{}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00057}00057     \textcolor{keywordflow}{return} readpos.load() == writepos.load();}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00058}00058 \}}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00059}00059 }
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00060}\mbox{\hyperlink{classWaveform_ac92843770623eb8e7d4d3b34bb5eef7a}{00060}} \textcolor{keywordtype}{bool} \mbox{\hyperlink{classWaveform_ac92843770623eb8e7d4d3b34bb5eef7a}{Waveform::isFull}}()\textcolor{keyword}{ const }\{}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00061}00061     \textcolor{keywordflow}{return} (( writepos.load() + 1 ) \% waveTable.size()) == readpos.load();}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00062}00062 \}}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00063}00063 }
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00064}\mbox{\hyperlink{classWaveform_a55aadc54c0329bb9e25fecbf895b71f2}{00064}} \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{classWaveform_a55aadc54c0329bb9e25fecbf895b71f2}{Waveform::size}}()\textcolor{keyword}{ const }\{ }
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00065}00065     \textcolor{keywordflow}{return} capacity;}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00066}00066 \}}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00067}00067 }
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00068}\mbox{\hyperlink{classWaveform_affe280dcbbde4ed935db6ad3f5d6cc80}{00068}} \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{classWaveform_affe280dcbbde4ed935db6ad3f5d6cc80}{Waveform::availableForReading}}()\textcolor{keyword}{ const }\{}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00069}00069     \textcolor{keywordtype}{size\_t} writePos = writepos.load();}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00070}00070     \textcolor{keywordtype}{size\_t} readPos = readpos.load();}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00071}00071     \textcolor{keywordflow}{if} (writePos >= readPos) \{}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00072}00072         \textcolor{keywordflow}{return} writePos -\/ readPos;  \textcolor{comment}{// Normal case, no wraparound}}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00073}00073     \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00074}00074         \textcolor{keywordflow}{return} waveTable.size() -\/ (readPos -\/ writePos);  \textcolor{comment}{// Wraparound case}}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00075}00075     \}}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00076}00076 \}}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00077}00077 }
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00083}\mbox{\hyperlink{classWaveform_a57d9f5fae074ff6e3d7d1f687442e427}{00083}} \textcolor{keywordtype}{void} \mbox{\hyperlink{classWaveform_a57d9f5fae074ff6e3d7d1f687442e427}{Waveform::getMinMax}}(\textcolor{keywordtype}{float} minMax[2])\{}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00084}00084     minMax[0] = this-\/>min;}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00085}00085     minMax[1] = this-\/>max;}
+\DoxyCodeLine{\Hypertarget{waveform_8cpp_source_l00086}00086 \}}
+
+\end{DoxyCode}

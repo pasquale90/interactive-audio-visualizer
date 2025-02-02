@@ -1,0 +1,47 @@
+\hypertarget{waveform_8h_source}{}\doxysection{waveform.\+h}
+\label{waveform_8h_source}\index{include/waveform.h@{include/waveform.h}}
+\mbox{\hyperlink{waveform_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00001}00001 \textcolor{preprocessor}{\#ifndef RAW\_H}}
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00002}00002 \textcolor{preprocessor}{\#define RAW\_H}}
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00003}00003 }
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00004}00004 \textcolor{preprocessor}{\#include <vector>}}
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00005}00005 \textcolor{preprocessor}{\#include <atomic>}}
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00006}00006 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{config_8h}{config.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00007}00007 }
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00012}\mbox{\hyperlink{classWaveform}{00012}} \textcolor{keyword}{class }\mbox{\hyperlink{classWaveform}{Waveform}}\{}
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00013}00013 \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00014}00014     }
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00016}00016     \mbox{\hyperlink{classWaveform_a4a10db706dde8126a190a650f0b639fb}{Waveform}}();}
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00017}00017 }
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00023}00023     \textcolor{keywordtype}{bool} \mbox{\hyperlink{classWaveform_a6b4f4455a6a8ae2222f967e88b80460b}{write}}(\textcolor{keyword}{const} \textcolor{keywordtype}{float}\&);}
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00024}00024 }
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00030}00030     \textcolor{keywordtype}{bool} \mbox{\hyperlink{classWaveform_ad4309d03c34e0b7ebe173ee8bd536116}{read}}(\textcolor{keywordtype}{float}\&);}
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00031}00031     }
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00036}00036     \textcolor{keywordtype}{bool} \mbox{\hyperlink{classWaveform_ab6511211e5b81756a2a6a502ba1f0d4b}{isEmpty}}() \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00037}00037     }
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00038}00038     \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00039}00039 \textcolor{comment}{     * @brief Checks if the buffer is full.}}
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00040}00040 \textcolor{comment}{     * @return bool -\/ true if the buffer is full, false otherwise.}}
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00041}00041 \textcolor{comment}{     */}}
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00042}00042     \textcolor{keywordtype}{bool} \mbox{\hyperlink{classWaveform_ac92843770623eb8e7d4d3b34bb5eef7a}{isFull}}() \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00043}00043     }
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00048}00048     \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{classWaveform_a55aadc54c0329bb9e25fecbf895b71f2}{size}}() \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00049}00049     }
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00054}00054     \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{classWaveform_affe280dcbbde4ed935db6ad3f5d6cc80}{availableForReading}}() \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00055}00055     }
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00061}00061     \textcolor{keywordtype}{void} \mbox{\hyperlink{classWaveform_a57d9f5fae074ff6e3d7d1f687442e427}{getMinMax}}(\textcolor{keywordtype}{float}[2]);}
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00062}00062     }
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00063}00063 \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00064}00064 }
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00065}00065     \mbox{\hyperlink{classConfig}{Config}} \&cfg = \mbox{\hyperlink{classConfig_a2d423929da9ed51425ac0cf219b36f5e}{Config::getInstance}}();}
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00066}00066     std::vector<float> waveTable; \textcolor{comment}{// The actual buffer; }}
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00067}00067     std::atomic<size\_t> readpos;}
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00068}00068     std::atomic<size\_t> writepos;}
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00069}00069     \textcolor{keywordtype}{float} min,max;}
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00070}00070     \textcolor{keywordtype}{size\_t} capacity;}
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00071}00071 \};}
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00072}00072 }
+\DoxyCodeLine{\Hypertarget{waveform_8h_source_l00073}00073 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

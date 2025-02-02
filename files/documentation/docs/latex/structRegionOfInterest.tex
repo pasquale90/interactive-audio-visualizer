@@ -1,0 +1,79 @@
+\hypertarget{structRegionOfInterest}{}\doxysection{Region\+Of\+Interest Struct Reference}
+\label{structRegionOfInterest}\index{RegionOfInterest@{RegionOfInterest}}
+
+
+Struct to hold the region of interest (ROI) data.  
+
+
+
+
+{\ttfamily \#include $<$roi.\+h$>$}
+
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::atomic$<$ int $>$ \mbox{\hyperlink{structRegionOfInterest_a7c05ee763a1dbcea5d7722c8611e6bc7}{centerX}} \{0\}
+\item 
+std\+::atomic$<$ int $>$ \mbox{\hyperlink{structRegionOfInterest_a9a5c08c619eb5383833aabae962490df}{centerY}} \{0\}
+\item 
+std\+::atomic$<$ int $>$ \mbox{\hyperlink{structRegionOfInterest_a0272d3fbebc59f034dd2de9e89d50598}{volumeW}} \{0\}
+\item 
+std\+::atomic$<$ int $>$ \mbox{\hyperlink{structRegionOfInterest_a33377fff7783a831c2b373c2194e7afb}{volumeH}} \{0\}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Struct to hold the region of interest (ROI) data. 
+
+Contains atomic variables for centerX, centerY, volumeW, and volumeH that allow the efficient and concurrent access and modification of the ROI data. This struct is used to store and manipulate the image image frame used for tracking in the video\+Tracker and \mbox{\hyperlink{classVisualizer}{Visualizer}} classes. 
+
+Definition at line \mbox{\hyperlink{roi_8h_source_l00013}{13}} of file \mbox{\hyperlink{roi_8h_source}{roi.\+h}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{structRegionOfInterest_a7c05ee763a1dbcea5d7722c8611e6bc7}\label{structRegionOfInterest_a7c05ee763a1dbcea5d7722c8611e6bc7}} 
+\index{RegionOfInterest@{RegionOfInterest}!centerX@{centerX}}
+\index{centerX@{centerX}!RegionOfInterest@{RegionOfInterest}}
+\doxysubsubsection{\texorpdfstring{centerX}{centerX}}
+{\footnotesize\ttfamily std\+::atomic$<$int$>$ Region\+Of\+Interest\+::centerX \{0\}}
+
+the x coordinate of the center of the box 
+
+Definition at line \mbox{\hyperlink{roi_8h_source_l00015}{15}} of file \mbox{\hyperlink{roi_8h_source}{roi.\+h}}.
+
+\mbox{\Hypertarget{structRegionOfInterest_a9a5c08c619eb5383833aabae962490df}\label{structRegionOfInterest_a9a5c08c619eb5383833aabae962490df}} 
+\index{RegionOfInterest@{RegionOfInterest}!centerY@{centerY}}
+\index{centerY@{centerY}!RegionOfInterest@{RegionOfInterest}}
+\doxysubsubsection{\texorpdfstring{centerY}{centerY}}
+{\footnotesize\ttfamily std\+::atomic$<$int$>$ Region\+Of\+Interest\+::centerY \{0\}}
+
+the y coordinate of the center of the box 
+
+Definition at line \mbox{\hyperlink{roi_8h_source_l00017}{17}} of file \mbox{\hyperlink{roi_8h_source}{roi.\+h}}.
+
+\mbox{\Hypertarget{structRegionOfInterest_a33377fff7783a831c2b373c2194e7afb}\label{structRegionOfInterest_a33377fff7783a831c2b373c2194e7afb}} 
+\index{RegionOfInterest@{RegionOfInterest}!volumeH@{volumeH}}
+\index{volumeH@{volumeH}!RegionOfInterest@{RegionOfInterest}}
+\doxysubsubsection{\texorpdfstring{volumeH}{volumeH}}
+{\footnotesize\ttfamily std\+::atomic$<$int$>$ Region\+Of\+Interest\+::volumeH \{0\}}
+
+the height of the box 
+
+Definition at line \mbox{\hyperlink{roi_8h_source_l00021}{21}} of file \mbox{\hyperlink{roi_8h_source}{roi.\+h}}.
+
+\mbox{\Hypertarget{structRegionOfInterest_a0272d3fbebc59f034dd2de9e89d50598}\label{structRegionOfInterest_a0272d3fbebc59f034dd2de9e89d50598}} 
+\index{RegionOfInterest@{RegionOfInterest}!volumeW@{volumeW}}
+\index{volumeW@{volumeW}!RegionOfInterest@{RegionOfInterest}}
+\doxysubsubsection{\texorpdfstring{volumeW}{volumeW}}
+{\footnotesize\ttfamily std\+::atomic$<$int$>$ Region\+Of\+Interest\+::volumeW \{0\}}
+
+the width of the box 
+
+Definition at line \mbox{\hyperlink{roi_8h_source_l00019}{19}} of file \mbox{\hyperlink{roi_8h_source}{roi.\+h}}.
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{roi_8h}{roi.\+h}}\end{DoxyCompactItemize}

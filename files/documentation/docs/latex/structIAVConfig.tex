@@ -1,0 +1,129 @@
+\hypertarget{structIAVConfig}{}\doxysection{IAVConfig Struct Reference}
+\label{structIAVConfig}\index{IAVConfig@{IAVConfig}}
+
+
+Struct to hold \mbox{\hyperlink{classIAV}{IAV}} configuration settings.  
+
+
+
+
+{\ttfamily \#include $<$config\+\_\+types.\+h$>$}
+
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{structIAVConfig_ad171cfdbc06a2403eb3dad6636a59cf0}{min\+Frequency}}
+\begin{DoxyCompactList}\small\item\em min\+Frequency -\/ the minimum frequency for sound generation. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{structIAVConfig_a00eb72c5d6c59eb3d3308bdb1d337a10}{max\+Frequency}}
+\begin{DoxyCompactList}\small\item\em max\+Frequency -\/ the maximum frequency for sound generation. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{structIAVConfig_ab61ab68c3f8855d2b5b71c8ffcf9844e}{roi\+Radius}}
+\item 
+std\+::string \mbox{\hyperlink{structIAVConfig_a8edbd681463f6d01bc579a4b5e1d9b5b}{trigger}}
+\begin{DoxyCompactList}\small\item\em trigger -\/ the type of trigger used for tracking. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{structIAVConfig_a429208ba4ff9c592ec985055adeef13e}{tracking\+Alg}}
+\begin{DoxyCompactList}\small\item\em tracking\+Alg -\/ the algorithm used for tracking. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Struct to hold \mbox{\hyperlink{classIAV}{IAV}} configuration settings. 
+
+\begin{DoxyNote}{Note}
+This struct is used in the \mbox{\hyperlink{classConfig}{Config}} class to define some custom configuration settings based on \mbox{\hyperlink{classIAV}{IAV}} application needs. 
+\end{DoxyNote}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{structIAVConfig_ad171cfdbc06a2403eb3dad6636a59cf0}{min\+Frequency}} -\/ the minimum frequency for sound generation. 
+
+\mbox{\hyperlink{structIAVConfig_a00eb72c5d6c59eb3d3308bdb1d337a10}{max\+Frequency}} -\/ the maximum frequency for sound generation. 
+
+\mbox{\hyperlink{structIAVConfig_ab61ab68c3f8855d2b5b71c8ffcf9844e}{roi\+Radius}} -\/ the radius of the region that is used for tracking. It defines the size of it. 
+\end{DoxySeeAlso}
+\begin{DoxyWarning}{Warning}
+trigger \mbox{[}currently unsupported\mbox{]} -\/ the type of trigger used for tracking. 
+\end{DoxyWarning}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{structIAVConfig_a429208ba4ff9c592ec985055adeef13e}{tracking\+Alg}} -\/ the algorithm used for tracking. 
+\end{DoxySeeAlso}
+\begin{DoxyWarning}{Warning}
+skip\+Frames\+Ratio \mbox{[}currently unsupported\mbox{]} -\/ the ratio of frames to skip during tracking. 
+\end{DoxyWarning}
+
+
+Definition at line \mbox{\hyperlink{config__types_8h_source_l00078}{78}} of file \mbox{\hyperlink{config__types_8h_source}{config\+\_\+types.\+h}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{structIAVConfig_a00eb72c5d6c59eb3d3308bdb1d337a10}\label{structIAVConfig_a00eb72c5d6c59eb3d3308bdb1d337a10}} 
+\index{IAVConfig@{IAVConfig}!maxFrequency@{maxFrequency}}
+\index{maxFrequency@{maxFrequency}!IAVConfig@{IAVConfig}}
+\doxysubsubsection{\texorpdfstring{maxFrequency}{maxFrequency}}
+{\footnotesize\ttfamily int IAVConfig\+::max\+Frequency}
+
+
+
+max\+Frequency -\/ the maximum frequency for sound generation. 
+
+
+
+Definition at line \mbox{\hyperlink{config__types_8h_source_l00082}{82}} of file \mbox{\hyperlink{config__types_8h_source}{config\+\_\+types.\+h}}.
+
+\mbox{\Hypertarget{structIAVConfig_ad171cfdbc06a2403eb3dad6636a59cf0}\label{structIAVConfig_ad171cfdbc06a2403eb3dad6636a59cf0}} 
+\index{IAVConfig@{IAVConfig}!minFrequency@{minFrequency}}
+\index{minFrequency@{minFrequency}!IAVConfig@{IAVConfig}}
+\doxysubsubsection{\texorpdfstring{minFrequency}{minFrequency}}
+{\footnotesize\ttfamily int IAVConfig\+::min\+Frequency}
+
+
+
+min\+Frequency -\/ the minimum frequency for sound generation. 
+
+
+
+Definition at line \mbox{\hyperlink{config__types_8h_source_l00080}{80}} of file \mbox{\hyperlink{config__types_8h_source}{config\+\_\+types.\+h}}.
+
+\mbox{\Hypertarget{structIAVConfig_ab61ab68c3f8855d2b5b71c8ffcf9844e}\label{structIAVConfig_ab61ab68c3f8855d2b5b71c8ffcf9844e}} 
+\index{IAVConfig@{IAVConfig}!roiRadius@{roiRadius}}
+\index{roiRadius@{roiRadius}!IAVConfig@{IAVConfig}}
+\doxysubsubsection{\texorpdfstring{roiRadius}{roiRadius}}
+{\footnotesize\ttfamily int IAVConfig\+::roi\+Radius}
+
+
+
+Definition at line \mbox{\hyperlink{config__types_8h_source_l00084}{84}} of file \mbox{\hyperlink{config__types_8h_source}{config\+\_\+types.\+h}}.
+
+\mbox{\Hypertarget{structIAVConfig_a429208ba4ff9c592ec985055adeef13e}\label{structIAVConfig_a429208ba4ff9c592ec985055adeef13e}} 
+\index{IAVConfig@{IAVConfig}!trackingAlg@{trackingAlg}}
+\index{trackingAlg@{trackingAlg}!IAVConfig@{IAVConfig}}
+\doxysubsubsection{\texorpdfstring{trackingAlg}{trackingAlg}}
+{\footnotesize\ttfamily std\+::string IAVConfig\+::tracking\+Alg}
+
+
+
+tracking\+Alg -\/ the algorithm used for tracking. 
+
+
+
+Definition at line \mbox{\hyperlink{config__types_8h_source_l00089}{89}} of file \mbox{\hyperlink{config__types_8h_source}{config\+\_\+types.\+h}}.
+
+\mbox{\Hypertarget{structIAVConfig_a8edbd681463f6d01bc579a4b5e1d9b5b}\label{structIAVConfig_a8edbd681463f6d01bc579a4b5e1d9b5b}} 
+\index{IAVConfig@{IAVConfig}!trigger@{trigger}}
+\index{trigger@{trigger}!IAVConfig@{IAVConfig}}
+\doxysubsubsection{\texorpdfstring{trigger}{trigger}}
+{\footnotesize\ttfamily std\+::string IAVConfig\+::trigger}
+
+
+
+trigger -\/ the type of trigger used for tracking. 
+
+\begin{DoxyWarning}{Warning}
+CURRENTLY UNSUPPORTED. 
+\end{DoxyWarning}
+
+
+Definition at line \mbox{\hyperlink{config__types_8h_source_l00087}{87}} of file \mbox{\hyperlink{config__types_8h_source}{config\+\_\+types.\+h}}.
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{config__types_8h}{config\+\_\+types.\+h}}\end{DoxyCompactItemize}

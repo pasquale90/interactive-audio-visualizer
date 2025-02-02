@@ -1,0 +1,72 @@
+\hypertarget{camera_8cpp_source}{}\doxysection{camera.\+cpp}
+\label{camera_8cpp_source}\index{src/camera.cpp@{src/camera.cpp}}
+\mbox{\hyperlink{camera_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00001}00001 \textcolor{preprocessor}{\#include <iostream>}}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00002}00002 \textcolor{preprocessor}{\#include <opencv2/core/hal/interface.h>}}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00003}00003 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{camera_8h}{camera.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00004}00004 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{config_8h}{config.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00005}00005 }
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00006}\mbox{\hyperlink{classCamera_a01f94c3543f56ede7af49dc778f19331}{00006}} \mbox{\hyperlink{classCamera_a01f94c3543f56ede7af49dc778f19331}{Camera::Camera}}() : cameracfg(\mbox{\hyperlink{classConfig}{Config}}::getInstance().camconf)\{}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00007}00007     frameToggle.store(\textcolor{keyword}{false});}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00008}00008     toggleFrame=\textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00009}00009     cv::Mat frame(cameracfg.\mbox{\hyperlink{structCameraConfig_a5aacf3ba605a2c6bfa6a88b971557fa2}{camResH}}.load(),cameracfg.\mbox{\hyperlink{structCameraConfig_a53d5be43d6362ca145c56a64fe475bb9}{camResW}}.load(),CV\_8UC3);}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00010}00010     initialize\_camera();}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00011}00011 \}}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00012}00012 }
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00013}00013 \textcolor{keywordtype}{void} Camera::initialize\_camera()\{}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00014}00014 }
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00015}00015     \textcolor{keywordtype}{int} device = cameracfg.\mbox{\hyperlink{structCameraConfig_aec8bc46dada3293af2cfa3339887bc34}{device}}.back()-\/\textcolor{charliteral}{'0'};}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00016}00016     \textcolor{keywordtype}{int} width = cameracfg.\mbox{\hyperlink{structCameraConfig_a53d5be43d6362ca145c56a64fe475bb9}{camResW}}.load();}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00017}00017     \textcolor{keywordtype}{int} height = cameracfg.\mbox{\hyperlink{structCameraConfig_a5aacf3ba605a2c6bfa6a88b971557fa2}{camResH}}.load();}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00018}00018     \textcolor{keywordtype}{int} fps = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(cameracfg.\mbox{\hyperlink{structCameraConfig_a941b878bdf22ecbced58522a314bd971}{frameRate}}.load());}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00019}00019 }
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00020}00020     \textcolor{keywordflow}{if} (!cap.open(device, cv::CAP\_V4L2)) \{}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00021}00021         std::cerr << \textcolor{stringliteral}{"{}Error: Could not open camera "{}} << device << std::endl;}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00022}00022     \}}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00023}00023 }
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00024}00024     cap.set(cv::CAP\_PROP\_FRAME\_WIDTH, width);}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00025}00025     cap.set(cv::CAP\_PROP\_FRAME\_HEIGHT, height);}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00026}00026     cap.set(cv::CAP\_PROP\_FPS, fps);}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00027}00027 }
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00028}00028     \textcolor{keywordtype}{int} actualWidth = (int)cap.get(cv::CAP\_PROP\_FRAME\_WIDTH);}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00029}00029     \textcolor{keywordtype}{int} actualHeight = (int)cap.get(cv::CAP\_PROP\_FRAME\_HEIGHT);}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00030}00030     \textcolor{keywordtype}{double} actualFps = cap.get(cv::CAP\_PROP\_FPS);}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00031}00031 }
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00032}00032     \textcolor{keywordflow}{if} (actualWidth != width || actualHeight != height || actualFps != fps) \{}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00033}00033         }
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00034}00034         std::cerr << \textcolor{stringliteral}{"{}Warning: Camera properties might not be set correctly!"{}} << std::endl;}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00035}00035         }
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00036}00036         cameracfg.\mbox{\hyperlink{structCameraConfig_a53d5be43d6362ca145c56a64fe475bb9}{camResW}}.store(actualWidth);}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00037}00037         cameracfg.\mbox{\hyperlink{structCameraConfig_a5aacf3ba605a2c6bfa6a88b971557fa2}{camResH}}.store(actualHeight);}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00038}00038         cameracfg.\mbox{\hyperlink{structCameraConfig_a941b878bdf22ecbced58522a314bd971}{frameRate}}.store(actualFps);}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00039}00039     \}}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00040}00040 \}}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00041}00041 }
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00042}\mbox{\hyperlink{classCamera_ad1897942d0ccf91052386388a497349f}{00042}} \mbox{\hyperlink{classCamera_ad1897942d0ccf91052386388a497349f}{Camera::\string~Camera}}()\{}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00043}00043     frame.release();}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00044}00044     cap.release();}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00045}00045     std::cout<<\textcolor{stringliteral}{"{}Camera object destructed"{}}<<std::endl;}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00046}00046 \}}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00047}00047 }
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00048}\mbox{\hyperlink{classCamera_ab1640e09af17f9b84c6635a94be9d5c0}{00048}} \textcolor{keywordtype}{bool} \mbox{\hyperlink{classCamera_ab1640e09af17f9b84c6635a94be9d5c0}{Camera::frame\_elapsed}}()\{}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00049}00049     atomicChange = frameToggle.load();}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00050}00050     \textcolor{keywordflow}{if} (frameToggle.load()!=toggleFrame)\{     \textcolor{comment}{// process the current input from camera}}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00051}00051         toggleFrame=atomicChange;}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00052}00052         \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00053}00053     \}\textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00054}00054         \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00055}00055 \}}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00056}00056 }
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00057}\mbox{\hyperlink{classCamera_abf92424200235ed48ec2d7135f02127e}{00057}} \textcolor{keywordtype}{bool} \mbox{\hyperlink{classCamera_abf92424200235ed48ec2d7135f02127e}{Camera::capture}}(cv::Mat\& frame)\{}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00058}00058 }
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00059}00059     cap.read(frame);}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00060}00060 }
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00061}00061     \textcolor{keywordflow}{if}(!(frame.empty()))\{}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00062}00062         frameToggle.store(!frameToggle.load());}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00063}00063         \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00064}00064     \}}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00065}00065     \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{camera_8cpp_source_l00066}00066 \}}
+
+\end{DoxyCode}

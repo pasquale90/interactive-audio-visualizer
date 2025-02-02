@@ -1,0 +1,71 @@
+\hypertarget{main_8cpp}{}\doxysection{src/main.cpp File Reference}
+\label{main_8cpp}\index{src/main.cpp@{src/main.cpp}}
+{\ttfamily \#include \char`\"{}iav.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}gui.\+h\char`\"{}}\newline
+Include dependency graph for main.\+cpp\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{main_8cpp__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{main_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}{main}} ()
+\begin{DoxyCompactList}\small\item\em main function. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyAuthor}{Author}
+Melissas Paschalis \href{mailto:melissaspaschalis@gmail.com}{\texttt{ melissaspaschalis@gmail.\+com}} 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+2.\+0
+\end{DoxyVersion}
+\hypertarget{main_8cpp_LICENSE}{}\doxysubsection{LICENSE}\label{main_8cpp_LICENSE}
+This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version. 
+
+Definition in file \mbox{\hyperlink{main_8cpp_source}{main.\+cpp}}.
+
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{main_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}\label{main_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}} 
+\index{main.cpp@{main.cpp}!main@{main}}
+\index{main@{main}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+main function. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em int} & argc -\/ number of input arguments. \\
+\hline
+{\em char} & $\ast$$\ast$argv -\/ arguments. No additional arguments are required. These variables are only used to initialize the QT application instance. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int -\/ success / failure of program 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{main_8cpp_source_l00021}{21}} of file \mbox{\hyperlink{main_8cpp_source}{main.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00021           \{}
+\DoxyCodeLine{00022     }
+\DoxyCodeLine{00023     \mbox{\hyperlink{classGUI}{GUI}} gui;}
+\DoxyCodeLine{00024     \textcolor{keywordflow}{if} (!gui.\mbox{\hyperlink{classGUI_a9f85de0bbf11e4ba7c9de1ab38f62433}{onExit}}())\{}
+\DoxyCodeLine{00025       \mbox{\hyperlink{classIAV}{IAV}} interactiveAudioVisualizer;}
+\DoxyCodeLine{00026       interactiveAudioVisualizer.\mbox{\hyperlink{classIAV_a750609975b3e4153e79c1fd012b430f3}{start}}();}
+\DoxyCodeLine{00027     \}}
+\DoxyCodeLine{00028     }
+\DoxyCodeLine{00029     \textcolor{keywordflow}{return} 0;}
+\DoxyCodeLine{00030 \}}
+
+\end{DoxyCode}

@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_config__types_8h_source" xml:lang="en-US">
+<title>config_types.h</title>
+<indexterm><primary>include/config_types.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered"><anchor xml:id="_config__types_8h_source_1l00001"/>00001 <emphasis role="preprocessor">#ifndef&#32;CONFIG_TYPES_H</emphasis>
+<anchor xml:id="_config__types_8h_source_1l00002"/>00002 <emphasis role="preprocessor">#define&#32;CONFIG_TYPES_H</emphasis>
+<anchor xml:id="_config__types_8h_source_1l00003"/>00003 
+<anchor xml:id="_config__types_8h_source_1l00004"/>00004 <emphasis role="preprocessor">#include&#32;&lt;string&gt;</emphasis>
+<anchor xml:id="_config__types_8h_source_1l00005"/>00005 <emphasis role="preprocessor">#include&#32;&lt;atomic&gt;</emphasis>
+<anchor xml:id="_config__types_8h_source_1l00006"/>00006 
+<anchor xml:id="_config__types_8h_source_1l00018"/><link linkend="_structAudioConfig">00018</link> <emphasis role="keyword">struct&#32;</emphasis><link linkend="_structAudioConfig">AudioConfig</link>{
+<anchor xml:id="_config__types_8h_source_1l00020"/><link linkend="_structAudioConfig_1a9f06f009be657b8e4197808c765ee56d">00020</link> &#32;&#32;&#32;&#32;std::string&#32;<link linkend="_structAudioConfig_1a9f06f009be657b8e4197808c765ee56d">audioDevice</link>;
+<anchor xml:id="_config__types_8h_source_1l00022"/><link linkend="_structAudioConfig_1aa893cf0e18009ba2aeb67a105d42aa71">00022</link> &#32;&#32;&#32;&#32;std::atomic&lt;int&gt;&#32;<link linkend="_structAudioConfig_1aa893cf0e18009ba2aeb67a105d42aa71">sampleRate</link>;
+<anchor xml:id="_config__types_8h_source_1l00023"/>00023 &#32;&#32;&#32;&#32;<emphasis role="comment">/*&#32;@brief&#32;quantization&#32;-&#32;the&#32;quantization&#32;of&#32;the&#32;audio&#32;data.*/</emphasis>
+<anchor xml:id="_config__types_8h_source_1l00024"/><link linkend="_structAudioConfig_1a561cff08db18dcd86b07826f06c99c83">00024</link> &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;<link linkend="_structAudioConfig_1a561cff08db18dcd86b07826f06c99c83">quantization</link>;
+<anchor xml:id="_config__types_8h_source_1l00025"/>00025 &#32;&#32;&#32;&#32;<emphasis role="comment">/*&#32;@brief&#32;bufferSize&#32;-&#32;the&#32;buffer&#32;size&#32;for&#32;audio&#32;data.*/</emphasis>
+<anchor xml:id="_config__types_8h_source_1l00026"/><link linkend="_structAudioConfig_1ae81381142d99bc1845cb33bd048643df">00026</link> &#32;&#32;&#32;&#32;std::atomic&lt;int&gt;&#32;<link linkend="_structAudioConfig_1ae81381142d99bc1845cb33bd048643df">bufferSize</link>;
+<anchor xml:id="_config__types_8h_source_1l00027"/>00027 &#32;&#32;&#32;&#32;<emphasis role="comment">/*&#32;@brief&#32;numChannels&#32;-&#32;the&#32;number&#32;of&#32;output&#32;audio&#32;channels.*/</emphasis>
+<anchor xml:id="_config__types_8h_source_1l00028"/><link linkend="_structAudioConfig_1ae2854185c92301b90a7775242fe6c629">00028</link> &#32;&#32;&#32;&#32;std::atomic&lt;unsigned&#32;int&gt;&#32;<link linkend="_structAudioConfig_1ae2854185c92301b90a7775242fe6c629">numChannels</link>;
+<anchor xml:id="_config__types_8h_source_1l00029"/>00029 };
+<anchor xml:id="_config__types_8h_source_1l00030"/>00030 
+<anchor xml:id="_config__types_8h_source_1l00040"/><link linkend="_structCameraConfig">00040</link> <emphasis role="keyword">struct&#32;</emphasis><link linkend="_structCameraConfig">CameraConfig</link>{
+<anchor xml:id="_config__types_8h_source_1l00042"/><link linkend="_structCameraConfig_1aec8bc46dada3293af2cfa3339887bc34">00042</link> &#32;&#32;&#32;&#32;std::string&#32;<link linkend="_structCameraConfig_1aec8bc46dada3293af2cfa3339887bc34">device</link>;
+<anchor xml:id="_config__types_8h_source_1l00043"/>00043 &#32;&#32;&#32;&#32;<emphasis role="comment">/*&#32;@brief&#32;frameRate&#32;-&#32;the&#32;frame&#32;rate&#32;of&#32;the&#32;camera.*/</emphasis>
+<anchor xml:id="_config__types_8h_source_1l00044"/><link linkend="_structCameraConfig_1a941b878bdf22ecbced58522a314bd971">00044</link> &#32;&#32;&#32;&#32;std::atomic&lt;double&gt;&#32;<link linkend="_structCameraConfig_1a941b878bdf22ecbced58522a314bd971">frameRate</link>;
+<anchor xml:id="_config__types_8h_source_1l00045"/>00045 &#32;&#32;&#32;&#32;<emphasis role="comment">/*&#32;@brief&#32;camResW&#32;-&#32;the&#32;width&#32;of&#32;the&#32;camera&#32;resolution.*/</emphasis>
+<anchor xml:id="_config__types_8h_source_1l00046"/><link linkend="_structCameraConfig_1a53d5be43d6362ca145c56a64fe475bb9">00046</link> &#32;&#32;&#32;&#32;std::atomic&lt;int&gt;&#32;<link linkend="_structCameraConfig_1a53d5be43d6362ca145c56a64fe475bb9">camResW</link>;
+<anchor xml:id="_config__types_8h_source_1l00047"/>00047 &#32;&#32;&#32;&#32;<emphasis role="comment">/*&#32;@brief&#32;camResH&#32;-&#32;the&#32;height&#32;of&#32;the&#32;camera&#32;resolution.*/</emphasis>
+<anchor xml:id="_config__types_8h_source_1l00048"/><link linkend="_structCameraConfig_1a5aacf3ba605a2c6bfa6a88b971557fa2">00048</link> &#32;&#32;&#32;&#32;std::atomic&lt;int&gt;&#32;<link linkend="_structCameraConfig_1a5aacf3ba605a2c6bfa6a88b971557fa2">camResH</link>;
+<anchor xml:id="_config__types_8h_source_1l00049"/>00049 };
+<anchor xml:id="_config__types_8h_source_1l00050"/>00050 
+<anchor xml:id="_config__types_8h_source_1l00059"/><link linkend="_structDisplayConfig">00059</link> <emphasis role="keyword">struct&#32;</emphasis><link linkend="_structDisplayConfig">DisplayConfig</link>{
+<anchor xml:id="_config__types_8h_source_1l00061"/><link linkend="_structDisplayConfig_1a633402e1095e221e678ce55fee7f3f9e">00061</link> &#32;&#32;&#32;&#32;std::atomic&lt;int&gt;&#32;<link linkend="_structDisplayConfig_1a633402e1095e221e678ce55fee7f3f9e">dispResW</link>;
+<anchor xml:id="_config__types_8h_source_1l00063"/><link linkend="_structDisplayConfig_1ae781f975c0fac0c92d0f1802468ee578">00063</link> &#32;&#32;&#32;&#32;std::atomic&lt;int&gt;&#32;<link linkend="_structDisplayConfig_1ae781f975c0fac0c92d0f1802468ee578">dispResH</link>;
+<anchor xml:id="_config__types_8h_source_1l00064"/>00064 &#32;&#32;&#32;&#32;<emphasis role="comment">/*&#32;@brief&#32;fps&#32;-&#32;the&#32;frames&#32;per&#32;second&#32;of&#32;the&#32;display.*/</emphasis>
+<anchor xml:id="_config__types_8h_source_1l00065"/><link linkend="_structDisplayConfig_1aefdc15d97fa0d2e067d5efcfda0f4947">00065</link> &#32;&#32;&#32;&#32;std::atomic&lt;double&gt;&#32;<link linkend="_structDisplayConfig_1aefdc15d97fa0d2e067d5efcfda0f4947">fps</link>;
+<anchor xml:id="_config__types_8h_source_1l00066"/>00066 };
+<anchor xml:id="_config__types_8h_source_1l00067"/>00067 
+<anchor xml:id="_config__types_8h_source_1l00078"/><link linkend="_structIAVConfig">00078</link> <emphasis role="keyword">struct&#32;</emphasis><link linkend="_structIAVConfig">IAVConfig</link>{
+<anchor xml:id="_config__types_8h_source_1l00080"/><link linkend="_structIAVConfig_1ad171cfdbc06a2403eb3dad6636a59cf0">00080</link> &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;<link linkend="_structIAVConfig_1ad171cfdbc06a2403eb3dad6636a59cf0">minFrequency</link>;
+<anchor xml:id="_config__types_8h_source_1l00082"/><link linkend="_structIAVConfig_1a00eb72c5d6c59eb3d3308bdb1d337a10">00082</link> &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;<link linkend="_structIAVConfig_1a00eb72c5d6c59eb3d3308bdb1d337a10">maxFrequency</link>;&#32;&#32;
+<anchor xml:id="_config__types_8h_source_1l00083"/>00083 &#32;&#32;&#32;&#32;<emphasis role="comment">/*&#32;@brief&#32;roiRadius&#32;-&#32;the&#32;radius&#32;of&#32;the&#32;region&#32;that&#32;is&#32;used&#32;for&#32;tracking.&#32;It&#32;defines&#32;the&#32;size&#32;of&#32;it.*/</emphasis>
+<anchor xml:id="_config__types_8h_source_1l00084"/><link linkend="_structIAVConfig_1ab61ab68c3f8855d2b5b71c8ffcf9844e">00084</link> &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;<link linkend="_structIAVConfig_1ab61ab68c3f8855d2b5b71c8ffcf9844e">roiRadius</link>;
+<anchor xml:id="_config__types_8h_source_1l00087"/><link linkend="_structIAVConfig_1a8edbd681463f6d01bc579a4b5e1d9b5b">00087</link> &#32;&#32;&#32;&#32;std::string&#32;<link linkend="_structIAVConfig_1a8edbd681463f6d01bc579a4b5e1d9b5b">trigger</link>;
+<anchor xml:id="_config__types_8h_source_1l00089"/><link linkend="_structIAVConfig_1a429208ba4ff9c592ec985055adeef13e">00089</link> &#32;&#32;&#32;&#32;std::string&#32;<link linkend="_structIAVConfig_1a429208ba4ff9c592ec985055adeef13e">trackingAlg</link>;
+<anchor xml:id="_config__types_8h_source_1l00090"/>00090 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;int&#32;skipFramesRatio;</emphasis>
+<anchor xml:id="_config__types_8h_source_1l00091"/>00091 };
+<anchor xml:id="_config__types_8h_source_1l00092"/>00092 
+<anchor xml:id="_config__types_8h_source_1l00093"/>00093 
+<anchor xml:id="_config__types_8h_source_1l00094"/>00094 <emphasis role="preprocessor">#endif</emphasis>
+</programlisting></section>

@@ -1,0 +1,158 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_audiohw_8cpp_source" xml:lang="en-US">
+<title>audiohw.cpp</title>
+<indexterm><primary>src/gui/audiohw.cpp</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered"><anchor xml:id="_audiohw_8cpp_source_1l00001"/>00001 <emphasis role="preprocessor">#include&#32;&lt;string&gt;</emphasis>
+<anchor xml:id="_audiohw_8cpp_source_1l00002"/>00002 <emphasis role="preprocessor">#include&#32;&lt;climits&gt;</emphasis>
+<anchor xml:id="_audiohw_8cpp_source_1l00003"/>00003 <emphasis role="preprocessor">#include&#32;&lt;alsa/asoundlib.h&gt;</emphasis>
+<anchor xml:id="_audiohw_8cpp_source_1l00004"/>00004 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_audiohw_8h">gui/audiohw.h</link>&quot;</emphasis>
+<anchor xml:id="_audiohw_8cpp_source_1l00005"/>00005 
+<anchor xml:id="_audiohw_8cpp_source_1l00006"/>00006 <emphasis role="comment">//&#32;using&#32;namespace&#32;AudioHardware;</emphasis>
+<anchor xml:id="_audiohw_8cpp_source_1l00007"/>00007 
+<anchor xml:id="_audiohw_8cpp_source_1l00008"/><link linkend="_namespaceAudioHardware_1a874a8ed7643bcea6d94a01b94ec544db">00008</link> <emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_namespaceAudioHardware_1a874a8ed7643bcea6d94a01b94ec544db">AudioHardware::get_audio_device_info</link>(<emphasis role="keywordtype">int</emphasis>&#32;card,&#32;<emphasis role="keywordtype">int</emphasis>&#32;device,&#32;std::pair&lt;unsigned&#32;int,&#32;unsigned&#32;int&gt;&#32;&amp;sample_rate,<emphasis role="keywordtype">unsigned</emphasis>&#32;<emphasis role="keywordtype">int</emphasis>&#32;&amp;numChannels)
+<anchor xml:id="_audiohw_8cpp_source_1l00009"/>00009 {
+<anchor xml:id="_audiohw_8cpp_source_1l00010"/>00010 &#32;&#32;&#32;&#32;snd_pcm_t&#32;*handle;
+<anchor xml:id="_audiohw_8cpp_source_1l00011"/>00011 &#32;&#32;&#32;&#32;snd_pcm_hw_params_t&#32;*params;
+<anchor xml:id="_audiohw_8cpp_source_1l00012"/>00012 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;err;
+<anchor xml:id="_audiohw_8cpp_source_1l00013"/>00013 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>&#32;name[32];
+<anchor xml:id="_audiohw_8cpp_source_1l00014"/>00014 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;<emphasis role="keywordtype">int</emphasis>&#32;sample_rate_min,
+<anchor xml:id="_audiohw_8cpp_source_1l00015"/>00015 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;sample_rate_max;
+<anchor xml:id="_audiohw_8cpp_source_1l00016"/>00016 
+<anchor xml:id="_audiohw_8cpp_source_1l00017"/>00017 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Open&#32;the&#32;PCM&#32;device&#32;&#32;&#32;&#32;</emphasis>
+<anchor xml:id="_audiohw_8cpp_source_1l00018"/>00018 &#32;&#32;&#32;&#32;sprintf(name,&#32;<emphasis role="stringliteral">&quot;hw:%d,%d&quot;</emphasis>,&#32;card,&#32;device);
+<anchor xml:id="_audiohw_8cpp_source_1l00019"/>00019 &#32;&#32;&#32;&#32;err&#32;=&#32;snd_pcm_open(&amp;handle,&#32;name,&#32;SND_PCM_STREAM_PLAYBACK,&#32;0);
+<anchor xml:id="_audiohw_8cpp_source_1l00020"/>00020 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(err&#32;&lt;&#32;0)&#32;{
+<anchor xml:id="_audiohw_8cpp_source_1l00021"/>00021 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Error&#32;opening&#32;PCM&#32;device</emphasis>
+<anchor xml:id="_audiohw_8cpp_source_1l00022"/>00022 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+<anchor xml:id="_audiohw_8cpp_source_1l00023"/>00023 &#32;&#32;&#32;&#32;}
+<anchor xml:id="_audiohw_8cpp_source_1l00024"/>00024 
+<anchor xml:id="_audiohw_8cpp_source_1l00025"/>00025 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Allocate&#32;hardware&#32;parameters&#32;object</emphasis>
+<anchor xml:id="_audiohw_8cpp_source_1l00026"/>00026 &#32;&#32;&#32;&#32;snd_pcm_hw_params_alloca(&amp;params);
+<anchor xml:id="_audiohw_8cpp_source_1l00027"/>00027 
+<anchor xml:id="_audiohw_8cpp_source_1l00028"/>00028 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Initialize&#32;hwparams&#32;with&#32;full&#32;configuration&#32;space</emphasis>
+<anchor xml:id="_audiohw_8cpp_source_1l00029"/>00029 &#32;&#32;&#32;&#32;err&#32;=&#32;snd_pcm_hw_params_any(handle,&#32;params);
+<anchor xml:id="_audiohw_8cpp_source_1l00030"/>00030 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(err&#32;&lt;&#32;0)&#32;{
+<anchor xml:id="_audiohw_8cpp_source_1l00031"/>00031 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Error&#32;setting&#32;hwparams&#32;</emphasis>
+<anchor xml:id="_audiohw_8cpp_source_1l00032"/>00032 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;snd_pcm_close(handle);
+<anchor xml:id="_audiohw_8cpp_source_1l00033"/>00033 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+<anchor xml:id="_audiohw_8cpp_source_1l00034"/>00034 &#32;&#32;&#32;&#32;}
+<anchor xml:id="_audiohw_8cpp_source_1l00035"/>00035 
+<anchor xml:id="_audiohw_8cpp_source_1l00036"/>00036 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Get&#32;sample&#32;rate&#32;range</emphasis>
+<anchor xml:id="_audiohw_8cpp_source_1l00037"/>00037 &#32;&#32;&#32;&#32;err&#32;=&#32;snd_pcm_hw_params_get_rate_min(params,&#32;&amp;sample_rate_min,&#32;<emphasis role="keyword">nullptr</emphasis>);
+<anchor xml:id="_audiohw_8cpp_source_1l00038"/>00038 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(err&#32;&lt;&#32;0)&#32;{
+<anchor xml:id="_audiohw_8cpp_source_1l00039"/>00039 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Error&#32;getting&#32;sample&#32;rate&#32;min&#32;</emphasis>
+<anchor xml:id="_audiohw_8cpp_source_1l00040"/>00040 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;snd_pcm_close(handle);
+<anchor xml:id="_audiohw_8cpp_source_1l00041"/>00041 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+<anchor xml:id="_audiohw_8cpp_source_1l00042"/>00042 &#32;&#32;&#32;&#32;}
+<anchor xml:id="_audiohw_8cpp_source_1l00043"/>00043 &#32;&#32;&#32;&#32;err&#32;=&#32;snd_pcm_hw_params_get_rate_max(params,&#32;&amp;sample_rate_max,&#32;<emphasis role="keyword">nullptr</emphasis>);
+<anchor xml:id="_audiohw_8cpp_source_1l00044"/>00044 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(err&#32;&lt;&#32;0)&#32;{
+<anchor xml:id="_audiohw_8cpp_source_1l00045"/>00045 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Error&#32;getting&#32;sample&#32;rate&#32;max</emphasis>
+<anchor xml:id="_audiohw_8cpp_source_1l00046"/>00046 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;snd_pcm_close(handle);
+<anchor xml:id="_audiohw_8cpp_source_1l00047"/>00047 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+<anchor xml:id="_audiohw_8cpp_source_1l00048"/>00048 &#32;&#32;&#32;&#32;}
+<anchor xml:id="_audiohw_8cpp_source_1l00049"/>00049 
+<anchor xml:id="_audiohw_8cpp_source_1l00050"/>00050 &#32;&#32;&#32;&#32;sample_rate.first&#32;=&#32;sample_rate_min;
+<anchor xml:id="_audiohw_8cpp_source_1l00051"/>00051 &#32;&#32;&#32;&#32;sample_rate.second&#32;=&#32;sample_rate_max;
+<anchor xml:id="_audiohw_8cpp_source_1l00052"/>00052 
+<anchor xml:id="_audiohw_8cpp_source_1l00053"/>00053 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;get&#32;number&#32;of&#32;output&#32;channels</emphasis>
+<anchor xml:id="_audiohw_8cpp_source_1l00054"/>00054 &#32;&#32;&#32;&#32;err&#32;=&#32;snd_pcm_hw_params_get_channels(params,&#32;&amp;numChannels);<emphasis role="comment">//&#32;channels&#32;now&#32;holds&#32;the&#32;number&#32;of&#32;channels&#32;(outputs)</emphasis>
+<anchor xml:id="_audiohw_8cpp_source_1l00055"/>00055 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(err&#32;&lt;&#32;0&#32;||&#32;numChannels&#32;==0&#32;)&#32;{
+<anchor xml:id="_audiohw_8cpp_source_1l00056"/>00056 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Set&#32;the&#32;desired&#32;number&#32;of&#32;channels&#32;(e.g.,&#32;2&#32;for&#32;stereo)</emphasis>
+<anchor xml:id="_audiohw_8cpp_source_1l00057"/>00057 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;<emphasis role="keywordtype">int</emphasis>&#32;atLeastStereo&#32;=&#32;2;
+<anchor xml:id="_audiohw_8cpp_source_1l00058"/>00058 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;err&#32;=&#32;snd_pcm_hw_params_set_channels(handle,&#32;params,&#32;atLeastStereo);
+<anchor xml:id="_audiohw_8cpp_source_1l00059"/>00059 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(err&#32;&lt;&#32;0&#32;||&#32;numChannels&#32;==0&#32;)&#32;{
+<anchor xml:id="_audiohw_8cpp_source_1l00060"/>00060 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+<anchor xml:id="_audiohw_8cpp_source_1l00061"/>00061 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;<emphasis role="keywordtype">int</emphasis>&#32;atLeastMono&#32;=&#32;1;
+<anchor xml:id="_audiohw_8cpp_source_1l00062"/>00062 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;err&#32;=&#32;snd_pcm_hw_params_set_channels(handle,&#32;params,&#32;atLeastMono);
+<anchor xml:id="_audiohw_8cpp_source_1l00063"/>00063 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(err&#32;&lt;&#32;0&#32;||&#32;numChannels&#32;==0)&#32;{
+<anchor xml:id="_audiohw_8cpp_source_1l00064"/>00064 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Error&#32;setting&#32;channels</emphasis>
+<anchor xml:id="_audiohw_8cpp_source_1l00065"/>00065 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;snd_pcm_close(handle);
+<anchor xml:id="_audiohw_8cpp_source_1l00066"/>00066 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+<anchor xml:id="_audiohw_8cpp_source_1l00067"/>00067 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}&#32;
+<anchor xml:id="_audiohw_8cpp_source_1l00068"/>00068 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;set&#32;numChannels&#32;to&#32;mono</emphasis>
+<anchor xml:id="_audiohw_8cpp_source_1l00069"/>00069 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;snd_pcm_hw_params_get_channels(params,&#32;&amp;numChannels);
+<anchor xml:id="_audiohw_8cpp_source_1l00070"/>00070 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}&#32;<emphasis role="keywordflow">else</emphasis>&#32;{
+<anchor xml:id="_audiohw_8cpp_source_1l00071"/>00071 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//set&#32;numChannels&#32;to&#32;stereo</emphasis>
+<anchor xml:id="_audiohw_8cpp_source_1l00072"/>00072 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;snd_pcm_hw_params_get_channels(params,&#32;&amp;numChannels);
+<anchor xml:id="_audiohw_8cpp_source_1l00073"/>00073 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+<anchor xml:id="_audiohw_8cpp_source_1l00074"/>00074 &#32;&#32;&#32;&#32;}
+<anchor xml:id="_audiohw_8cpp_source_1l00075"/>00075 
+<anchor xml:id="_audiohw_8cpp_source_1l00076"/>00076 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Close&#32;the&#32;PCM&#32;device</emphasis>
+<anchor xml:id="_audiohw_8cpp_source_1l00077"/>00077 &#32;&#32;&#32;&#32;snd_pcm_close(handle);
+<anchor xml:id="_audiohw_8cpp_source_1l00078"/>00078 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+<anchor xml:id="_audiohw_8cpp_source_1l00079"/>00079 }
+<anchor xml:id="_audiohw_8cpp_source_1l00080"/>00080 
+<anchor xml:id="_audiohw_8cpp_source_1l00081"/><link linkend="_namespaceAudioHardware_1a906e6749cef4efdd304dbc28530159c6">00081</link> <emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_namespaceAudioHardware_1a906e6749cef4efdd304dbc28530159c6">AudioHardware::get_audio_hardware_info</link>(std::vector&lt;Info&gt;&#32;&amp;audio_hw_info){
+<anchor xml:id="_audiohw_8cpp_source_1l00082"/>00082 
+<anchor xml:id="_audiohw_8cpp_source_1l00083"/>00083 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;card&#32;=&#32;-1;
+<anchor xml:id="_audiohw_8cpp_source_1l00084"/>00084 &#32;&#32;&#32;&#32;
+<anchor xml:id="_audiohw_8cpp_source_1l00085"/>00085 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Loop&#32;through&#32;all&#32;available&#32;cards</emphasis>
+<anchor xml:id="_audiohw_8cpp_source_1l00086"/>00086 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>&#32;(<emphasis role="keyword">true</emphasis>)&#32;{
+<anchor xml:id="_audiohw_8cpp_source_1l00087"/>00087 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+<anchor xml:id="_audiohw_8cpp_source_1l00088"/>00088 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Find&#32;the&#32;next&#32;card</emphasis>
+<anchor xml:id="_audiohw_8cpp_source_1l00089"/>00089 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;err&#32;=&#32;snd_card_next(&amp;card);
+<anchor xml:id="_audiohw_8cpp_source_1l00090"/>00090 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(err&#32;&lt;&#32;0)&#32;{
+<anchor xml:id="_audiohw_8cpp_source_1l00091"/>00091 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Error&#32;getting&#32;next&#32;card</emphasis>
+<anchor xml:id="_audiohw_8cpp_source_1l00092"/>00092 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
+<anchor xml:id="_audiohw_8cpp_source_1l00093"/>00093 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+<anchor xml:id="_audiohw_8cpp_source_1l00094"/>00094 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(card&#32;&lt;&#32;0)&#32;{
+<anchor xml:id="_audiohw_8cpp_source_1l00095"/>00095 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;No&#32;more&#32;cards</emphasis>
+<anchor xml:id="_audiohw_8cpp_source_1l00096"/>00096 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">break</emphasis>;
+<anchor xml:id="_audiohw_8cpp_source_1l00097"/>00097 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+<anchor xml:id="_audiohw_8cpp_source_1l00098"/>00098 
+<anchor xml:id="_audiohw_8cpp_source_1l00099"/>00099 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Open&#32;the&#32;card&#32;control&#32;interface</emphasis>
+<anchor xml:id="_audiohw_8cpp_source_1l00100"/>00100 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;snd_ctl_t&#32;*ctl_handle;
+<anchor xml:id="_audiohw_8cpp_source_1l00101"/>00101 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">char</emphasis>&#32;ctl_name[32];
+<anchor xml:id="_audiohw_8cpp_source_1l00102"/>00102 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;sprintf(ctl_name,&#32;<emphasis role="stringliteral">&quot;hw:%d&quot;</emphasis>,&#32;card);
+<anchor xml:id="_audiohw_8cpp_source_1l00103"/>00103 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;err&#32;=&#32;snd_ctl_open(&amp;ctl_handle,&#32;ctl_name,&#32;0);
+<anchor xml:id="_audiohw_8cpp_source_1l00104"/>00104 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(err&#32;&lt;&#32;0)&#32;{
+<anchor xml:id="_audiohw_8cpp_source_1l00105"/>00105 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Error&#32;opening&#32;card</emphasis>
+<anchor xml:id="_audiohw_8cpp_source_1l00106"/>00106 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">continue</emphasis>;
+<anchor xml:id="_audiohw_8cpp_source_1l00107"/>00107 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+<anchor xml:id="_audiohw_8cpp_source_1l00108"/>00108 
+<anchor xml:id="_audiohw_8cpp_source_1l00109"/>00109 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Get&#32;the&#32;card&#32;info</emphasis>
+<anchor xml:id="_audiohw_8cpp_source_1l00110"/>00110 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;snd_ctl_card_info_t&#32;*info;
+<anchor xml:id="_audiohw_8cpp_source_1l00111"/>00111 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;snd_ctl_card_info_malloc(&amp;info);
+<anchor xml:id="_audiohw_8cpp_source_1l00112"/>00112 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;err&#32;=&#32;snd_ctl_card_info(ctl_handle,&#32;info);
+<anchor xml:id="_audiohw_8cpp_source_1l00113"/>00113 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(err&#32;&lt;&#32;0)&#32;{
+<anchor xml:id="_audiohw_8cpp_source_1l00114"/>00114 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Error&#32;getting&#32;card&#32;info</emphasis>
+<anchor xml:id="_audiohw_8cpp_source_1l00115"/>00115 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;snd_ctl_close(ctl_handle);
+<anchor xml:id="_audiohw_8cpp_source_1l00116"/>00116 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;snd_ctl_card_info_free(info);
+<anchor xml:id="_audiohw_8cpp_source_1l00117"/>00117 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">continue</emphasis>;
+<anchor xml:id="_audiohw_8cpp_source_1l00118"/>00118 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+<anchor xml:id="_audiohw_8cpp_source_1l00119"/>00119 
+<anchor xml:id="_audiohw_8cpp_source_1l00120"/>00120 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::string&#32;card_id&#32;=&#32;snd_ctl_card_info_get_id(info)&#32;;&#32;
+<anchor xml:id="_audiohw_8cpp_source_1l00121"/>00121 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::string&#32;mixer&#32;=&#32;snd_ctl_card_info_get_mixername(info);
+<anchor xml:id="_audiohw_8cpp_source_1l00122"/>00122 <emphasis role="comment">//&#32;card_id&#32;=&#32;card_id&#32;+&#32;&quot;(&quot;+mixer+&quot;)&quot;;</emphasis>
+<anchor xml:id="_audiohw_8cpp_source_1l00123"/>00123 
+<anchor xml:id="_audiohw_8cpp_source_1l00124"/>00124 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Check&#32;if&#32;it&#32;is&#32;an&#32;output&#32;device&#32;and&#32;if&#32;it&#32;can&#32;be&#32;opened</emphasis>
+<anchor xml:id="_audiohw_8cpp_source_1l00125"/>00125 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;snd_pcm_t&#32;*handle;
+<anchor xml:id="_audiohw_8cpp_source_1l00126"/>00126 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::string&#32;card_name_str&#32;=<emphasis role="stringliteral">&quot;hw:&quot;</emphasis>&#32;+&#32;std::to_string(card)&#32;+&#32;<emphasis role="stringliteral">&quot;,0&quot;</emphasis>;&#32;
+<anchor xml:id="_audiohw_8cpp_source_1l00127"/>00127 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*&#32;card_name&#32;=&#32;card_name_str.c_str();
+<anchor xml:id="_audiohw_8cpp_source_1l00128"/>00128 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(snd_pcm_open(&amp;handle,&#32;card_name,&#32;SND_PCM_STREAM_PLAYBACK,&#32;0)&#32;&gt;=&#32;0)&#32;{
+<anchor xml:id="_audiohw_8cpp_source_1l00129"/>00129 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;snd_pcm_close(handle);
+<anchor xml:id="_audiohw_8cpp_source_1l00130"/>00130 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}&#32;<emphasis role="keywordflow">else</emphasis>&#32;{
+<anchor xml:id="_audiohw_8cpp_source_1l00131"/>00131 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">continue</emphasis>;&#32;<emphasis role="comment">//&#32;Skip&#32;this&#32;card&#32;if&#32;it&#32;doesn&apos;t&#32;support&#32;output.</emphasis>
+<anchor xml:id="_audiohw_8cpp_source_1l00132"/>00132 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+<anchor xml:id="_audiohw_8cpp_source_1l00133"/>00133 
+<anchor xml:id="_audiohw_8cpp_source_1l00134"/>00134 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Free&#32;the&#32;card&#32;info</emphasis>
+<anchor xml:id="_audiohw_8cpp_source_1l00135"/>00135 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;snd_ctl_card_info_free(info);
+<anchor xml:id="_audiohw_8cpp_source_1l00136"/>00136 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;snd_ctl_close(ctl_handle);
+<anchor xml:id="_audiohw_8cpp_source_1l00137"/>00137 
+<anchor xml:id="_audiohw_8cpp_source_1l00138"/>00138 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Get&#32;PCM&#32;device&#32;info</emphasis>
+<anchor xml:id="_audiohw_8cpp_source_1l00139"/>00139 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;device&#32;=&#32;0;
+<anchor xml:id="_audiohw_8cpp_source_1l00140"/>00140 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">unsigned</emphasis>&#32;<emphasis role="keywordtype">int</emphasis>&#32;numChannels&#32;=&#32;0;
+<anchor xml:id="_audiohw_8cpp_source_1l00141"/>00141 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::pair&lt;unsigned&#32;int,&#32;unsigned&#32;int&gt;&#32;sample_rate_range;
+<anchor xml:id="_audiohw_8cpp_source_1l00142"/>00142 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">while</emphasis>(!<link linkend="_namespaceAudioHardware_1a874a8ed7643bcea6d94a01b94ec544db">AudioHardware::get_audio_device_info</link>(card,&#32;device,sample_rate_range,numChannels)&#32;&amp;&amp;&#32;device&#32;&lt;&#32;<link linkend="_namespaceAudioHardware_1a84c7c3993b3b664afab90913a55fba58">MAX_POTENTIAL_AUDIO_DEVICES</link>&#32;){
+<anchor xml:id="_audiohw_8cpp_source_1l00143"/>00143 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;++device;
+<anchor xml:id="_audiohw_8cpp_source_1l00144"/>00144 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+<anchor xml:id="_audiohw_8cpp_source_1l00145"/>00145 
+<anchor xml:id="_audiohw_8cpp_source_1l00146"/>00146 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_structAudioHardware_1_1Info">Info</link>&#32;deviceInfo;
+<anchor xml:id="_audiohw_8cpp_source_1l00147"/>00147 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;deviceInfo.<link linkend="_structAudioHardware_1_1Info_1a112ef5634ce51165d2f8700b380254ae">card_info</link>&#32;=&#32;std::make_pair(card_id,mixer);
+<anchor xml:id="_audiohw_8cpp_source_1l00148"/>00148 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;deviceInfo.<link linkend="_structAudioHardware_1_1Info_1aaa5f8196bc5724542852d12ba96aebc0">sample_rate_range</link>&#32;=&#32;sample_rate_range;
+<anchor xml:id="_audiohw_8cpp_source_1l00149"/>00149 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;deviceInfo.<link linkend="_structAudioHardware_1_1Info_1a985cf3a4bceb2485eece9ae857b63e8a">numberOfChannels</link>&#32;=&#32;numChannels;
+<anchor xml:id="_audiohw_8cpp_source_1l00150"/>00150 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;audio_hw_info.push_back(deviceInfo);
+<anchor xml:id="_audiohw_8cpp_source_1l00151"/>00151 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+<anchor xml:id="_audiohw_8cpp_source_1l00152"/>00152 &#32;&#32;&#32;&#32;}
+<anchor xml:id="_audiohw_8cpp_source_1l00153"/>00153 }
+</programlisting></section>

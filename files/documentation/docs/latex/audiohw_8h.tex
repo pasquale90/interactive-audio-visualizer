@@ -1,0 +1,44 @@
+\hypertarget{audiohw_8h}{}\doxysection{include/gui/audiohw.h File Reference}
+\label{audiohw_8h}\index{include/gui/audiohw.h@{include/gui/audiohw.h}}
+{\ttfamily \#include $<$utility$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+Include dependency graph for audiohw.\+h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=202pt]{audiohw_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=280pt]{audiohw_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structAudioHardware_1_1Info}{Audio\+Hardware\+::\+Info}}
+\begin{DoxyCompactList}\small\item\em Structure representing audio hardware information. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespaceAudioHardware}{Audio\+Hardware}}
+\begin{DoxyCompactList}\small\item\em Audio hardware namespace provides functions to interact with audio hardware devices. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+const std\+::vector$<$ unsigned int $>$ \mbox{\hyperlink{namespaceAudioHardware_a8bee9daf0ac390a7556c7c0d4b97fb3e}{Audio\+Hardware\+::supported\+Rates}} (\{8000, 11025, 16000, 22050, 32000, 44100, 48000, 88200, 96000, 176000, 192000, 352800, 384000\})
+\begin{DoxyCompactList}\small\item\em List of supported sample rates. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{namespaceAudioHardware_a874a8ed7643bcea6d94a01b94ec544db}{Audio\+Hardware\+::get\+\_\+audio\+\_\+device\+\_\+info}} (int, int, std\+::pair$<$ unsigned int, unsigned int $>$ \&, unsigned int \&)
+\begin{DoxyCompactList}\small\item\em Retrieves information about available audio devices related to a specific audio card. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{namespaceAudioHardware_a906e6749cef4efdd304dbc28530159c6}{Audio\+Hardware\+::get\+\_\+audio\+\_\+hardware\+\_\+info}} (std\+::vector$<$ Info $>$ \&)
+\begin{DoxyCompactList}\small\item\em Retrieves information about available audio cards and their supported audio devices. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const short int \mbox{\hyperlink{namespaceAudioHardware_a84c7c3993b3b664afab90913a55fba58}{Audio\+Hardware\+::\+MAX\+\_\+\+POTENTIAL\+\_\+\+AUDIO\+\_\+\+DEVICES}} = 32
+\begin{DoxyCompactList}\small\item\em Custom defined -\/ maximum number of potential audio devices that can be retrieved. \end{DoxyCompactList}\item 
+constexpr int \mbox{\hyperlink{namespaceAudioHardware_abd0d01ecfb85ee51cdc1c04fb15d39c5}{Audio\+Hardware\+::quantization\+Ratio}} \{ sizeof(float) $\ast$ CHAR\+\_\+\+BIT \}
+\begin{DoxyCompactList}\small\item\em Bit size of the floating-\/point samples in bits. \end{DoxyCompactList}\end{DoxyCompactItemize}

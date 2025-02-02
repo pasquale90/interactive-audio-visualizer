@@ -1,0 +1,65 @@
+\hypertarget{sine_8cpp_source}{}\doxysection{sine.\+cpp}
+\label{sine_8cpp_source}\index{src/sine.cpp@{src/sine.cpp}}
+\mbox{\hyperlink{sine_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00001}00001 \textcolor{preprocessor}{\#include <math.h>}}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00002}00002 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{sine_8h}{sine.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00003}00003 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{tone_8h}{tone.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00004}00004 }
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00005}00005 \textcolor{preprocessor}{\#ifndef M\_PI}}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00006}\mbox{\hyperlink{sine_8cpp_ae71449b1cc6e6250b91f539153a7a0d3}{00006}} \textcolor{preprocessor}{\#define M\_PI  (3.14159265)}}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00007}00007 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00008}00008 }
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00009}00009 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{config_8h}{config.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00010}\mbox{\hyperlink{classSine_ac6f77168f7f50d200dc4b2d222c00608}{00010}} \mbox{\hyperlink{classSine_ac6f77168f7f50d200dc4b2d222c00608}{Sine::Sine}}():audiocfg(\mbox{\hyperlink{classConfig}{Config}}::getInstance().audconf)\{}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00011}00011     rads\_per\_sample = 0.;}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00012}00012     prevfreq=0;}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00013}00013     phase=0.0;}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00014}00014 \}}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00015}00015 }
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00016}\mbox{\hyperlink{classSine_a4623d350f103d9dafd5ce29908e59332}{00016}} \textcolor{keywordtype}{void} \mbox{\hyperlink{classSine_a4623d350f103d9dafd5ce29908e59332}{Sine::setVisualizerUpdater}}(std::function<\textcolor{keywordtype}{void}(\textcolor{keywordtype}{float})> updater)\{}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00017}00017     updateVisualizer = std::move(updater);}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00018}00018 \}}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00019}00019 }
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00020}\mbox{\hyperlink{classSine_abfd05b20115daa6b486ac26c3cb25129}{00020}} \textcolor{keywordtype}{void} \mbox{\hyperlink{classSine_abfd05b20115daa6b486ac26c3cb25129}{Sine::setMonoSignal}}(\mbox{\hyperlink{structTone}{Tone}}\& tone, \textcolor{keywordtype}{float}* monoBuffer[2])\{}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00021}00021     }
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00022}00022     \textcolor{keywordtype}{int} frequency = tone.\mbox{\hyperlink{structTone_a8c28a65c858594e410d94921d7abc1fa}{frequency}}.load();}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00023}00023     \textcolor{keywordtype}{float} amplitude = tone.\mbox{\hyperlink{structTone_ad643b37d799caa83f6a80dc2f001aa4a}{volume}}.load();}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00024}00024     }
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00025}00025     \textcolor{keywordflow}{if} (frequency != prevfreq)\{ \textcolor{comment}{// reduce number of calculations}}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00026}00026         rads\_per\_sample = (\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(frequency * 2.* \mbox{\hyperlink{sine_8cpp_ae71449b1cc6e6250b91f539153a7a0d3}{M\_PI}})) / \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(audiocfg.\mbox{\hyperlink{structAudioConfig_aa893cf0e18009ba2aeb67a105d42aa71}{sampleRate}}.load()); \textcolor{comment}{//radians traspotition per time unit}}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00027}00027         prevfreq = frequency;   }
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00028}00028     \}}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00029}00029 }
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00030}00030     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=0;i<audiocfg.\mbox{\hyperlink{structAudioConfig_ae81381142d99bc1845cb33bd048643df}{bufferSize}}.load();i++)\{}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00031}00031         \textcolor{keywordtype}{float} value = amplitude*(float)sin(phase);}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00032}00032         monoBuffer[0][i] = value;}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00033}00033         phase+=rads\_per\_sample;                 \textcolor{comment}{// shift phase by amount of rads\_per\_sample}}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00034}00034         \textcolor{keywordflow}{if} (phase >= 2*\mbox{\hyperlink{sine_8cpp_ae71449b1cc6e6250b91f539153a7a0d3}{M\_PI}}) phase=0;           \textcolor{comment}{// if phase reaches 2pi , zero it down.}}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00035}00035         }
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00036}00036         updateVisualizer(value); \textcolor{comment}{// fill the shareable ring buffer}}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00037}00037     \}   }
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00038}00038 \}}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00039}00039 }
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00040}\mbox{\hyperlink{classSine_ae08432c7ada69cff0dd386c1c6b81bf8}{00040}} \textcolor{keywordtype}{void} \mbox{\hyperlink{classSine_ae08432c7ada69cff0dd386c1c6b81bf8}{Sine::setStereoSignal}}(\mbox{\hyperlink{structTone}{Tone}}\& tone, \textcolor{keywordtype}{float}* stereoBuffer[2])\{}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00041}00041 }
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00042}00042     \textcolor{keywordtype}{int} frequency = tone.\mbox{\hyperlink{structTone_a8c28a65c858594e410d94921d7abc1fa}{frequency}}.load();}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00043}00043     \textcolor{keywordtype}{float} amplitude = tone.\mbox{\hyperlink{structTone_ad643b37d799caa83f6a80dc2f001aa4a}{volume}}.load();}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00044}00044 }
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00045}00045     \textcolor{keywordflow}{if} (frequency != prevfreq)\{ \textcolor{comment}{// reduce number of calculations}}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00046}00046         rads\_per\_sample = (\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(frequency * 2. * \mbox{\hyperlink{sine_8cpp_ae71449b1cc6e6250b91f539153a7a0d3}{M\_PI}})) / \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(audiocfg.\mbox{\hyperlink{structAudioConfig_aa893cf0e18009ba2aeb67a105d42aa71}{sampleRate}}.load()); \textcolor{comment}{//radians traspotition per time unit}}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00047}00047         prevfreq = frequency;   }
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00048}00048     \}}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00049}00049 }
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00050}00050     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=0;i<audiocfg.\mbox{\hyperlink{structAudioConfig_ae81381142d99bc1845cb33bd048643df}{bufferSize}}.load();i++)\{}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00051}00051         \textcolor{keywordtype}{float} value = amplitude*(float)sin(phase);}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00052}00052         stereoBuffer[0][i] = value;}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00053}00053         stereoBuffer[1][i] = value;}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00054}00054         phase+=rads\_per\_sample;                 \textcolor{comment}{// shift phase by amount of rads\_per\_sample}}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00055}00055         \textcolor{keywordflow}{if} (phase >= 2*\mbox{\hyperlink{sine_8cpp_ae71449b1cc6e6250b91f539153a7a0d3}{M\_PI}}) phase=0;           \textcolor{comment}{// if phase reaches 2pi , zero it down.}}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00056}00056 }
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00057}00057         updateVisualizer(value); \textcolor{comment}{// fill the shareable ring buffer}}
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00058}00058     \}   }
+\DoxyCodeLine{\Hypertarget{sine_8cpp_source_l00059}00059 \}}
+
+\end{DoxyCode}

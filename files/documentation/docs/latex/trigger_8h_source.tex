@@ -1,0 +1,40 @@
+\hypertarget{trigger_8h_source}{}\doxysection{trigger.\+h}
+\label{trigger_8h_source}\index{include/trigger.h@{include/trigger.h}}
+\mbox{\hyperlink{trigger_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{trigger_8h_source_l00001}00001 \textcolor{preprocessor}{\#ifndef TRIGGER\_H}}
+\DoxyCodeLine{\Hypertarget{trigger_8h_source_l00002}00002 \textcolor{preprocessor}{\#define TRIGGER\_H}}
+\DoxyCodeLine{\Hypertarget{trigger_8h_source_l00003}00003 }
+\DoxyCodeLine{\Hypertarget{trigger_8h_source_l00004}00004 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{config__types_8h}{config\_types.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{trigger_8h_source_l00005}00005 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{timer_8h}{timer.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{trigger_8h_source_l00006}00006 \textcolor{keyword}{struct }\mbox{\hyperlink{structIAVConfig}{IAVConfig}};}
+\DoxyCodeLine{\Hypertarget{trigger_8h_source_l00007}00007 }
+\DoxyCodeLine{\Hypertarget{trigger_8h_source_l00008}\mbox{\hyperlink{trigger_8h_a33e55dcdf0ec6598a7a7e4db79b1636e}{00008}} \textcolor{keyword}{constexpr} \textcolor{keywordtype}{int} \mbox{\hyperlink{trigger_8h_a33e55dcdf0ec6598a7a7e4db79b1636e}{experience\_duration\_sec}} = 10;}
+\DoxyCodeLine{\Hypertarget{trigger_8h_source_l00009}\mbox{\hyperlink{trigger_8h_ab5d9a356db05331fcb8c6c8882a528bc}{00009}} \textcolor{keyword}{constexpr} \textcolor{keywordtype}{int} \mbox{\hyperlink{trigger_8h_ab5d9a356db05331fcb8c6c8882a528bc}{photo\_countdown\_sec}} = 5;}
+\DoxyCodeLine{\Hypertarget{trigger_8h_source_l00010}00010 }
+\DoxyCodeLine{\Hypertarget{trigger_8h_source_l00015}\mbox{\hyperlink{classTrigger}{00015}} \textcolor{keyword}{class }\mbox{\hyperlink{classTrigger}{Trigger}} \{}
+\DoxyCodeLine{\Hypertarget{trigger_8h_source_l00016}00016 }
+\DoxyCodeLine{\Hypertarget{trigger_8h_source_l00017}00017     \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{trigger_8h_source_l00018}00018         }
+\DoxyCodeLine{\Hypertarget{trigger_8h_source_l00024}00024         \mbox{\hyperlink{classTrigger_afcf974790b6e846cd89eba5a802e7fa5}{Trigger}}();}
+\DoxyCodeLine{\Hypertarget{trigger_8h_source_l00025}00025 }
+\DoxyCodeLine{\Hypertarget{trigger_8h_source_l00036}00036         \textcolor{keywordtype}{bool} \mbox{\hyperlink{classTrigger_a0f1b544e6fdc6ed75b2888113fc413a2}{isTrackingEnabled}}(\textcolor{keywordtype}{float}\&);}
+\DoxyCodeLine{\Hypertarget{trigger_8h_source_l00037}00037 }
+\DoxyCodeLine{\Hypertarget{trigger_8h_source_l00042}00042         \textcolor{keywordtype}{void} \mbox{\hyperlink{classTrigger_a465a643de1ace6e23b5d4e0f8c94d5a0}{reset}}();}
+\DoxyCodeLine{\Hypertarget{trigger_8h_source_l00043}00043         }
+\DoxyCodeLine{\Hypertarget{trigger_8h_source_l00049}00049         \mbox{\hyperlink{classTimer}{Timer}}* \mbox{\hyperlink{classTrigger_a007133df14feb0397c0a095542c7acb1}{getTimer}}();}
+\DoxyCodeLine{\Hypertarget{trigger_8h_source_l00050}00050     \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{trigger_8h_source_l00051}00051         \mbox{\hyperlink{structIAVConfig}{IAVConfig}}\& iavcfg;}
+\DoxyCodeLine{\Hypertarget{trigger_8h_source_l00052}00052         \mbox{\hyperlink{classTimer}{Timer}} timer;}
+\DoxyCodeLine{\Hypertarget{trigger_8h_source_l00053}00053 }
+\DoxyCodeLine{\Hypertarget{trigger_8h_source_l00054}00054         \textcolor{keywordtype}{int} timeDurationSec;}
+\DoxyCodeLine{\Hypertarget{trigger_8h_source_l00055}00055         \textcolor{keywordtype}{bool} mode; \textcolor{comment}{// tracking mode or not}}
+\DoxyCodeLine{\Hypertarget{trigger_8h_source_l00056}00056         }
+\DoxyCodeLine{\Hypertarget{trigger_8h_source_l00057}00057         \textcolor{keywordtype}{void} \_modeToggle();}
+\DoxyCodeLine{\Hypertarget{trigger_8h_source_l00058}00058 \};}
+\DoxyCodeLine{\Hypertarget{trigger_8h_source_l00059}00059 }
+\DoxyCodeLine{\Hypertarget{trigger_8h_source_l00060}00060 }
+\DoxyCodeLine{\Hypertarget{trigger_8h_source_l00061}00061 }
+\DoxyCodeLine{\Hypertarget{trigger_8h_source_l00062}00062 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

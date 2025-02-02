@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_audiolizer_8h_source" xml:lang="en-US">
+<title>audiolizer.h</title>
+<indexterm><primary>include/audiolizer.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered"><anchor xml:id="_audiolizer_8h_source_1l00001"/>00001 <emphasis role="preprocessor">#ifndef&#32;AUDIOLIZER_H</emphasis>
+<anchor xml:id="_audiolizer_8h_source_1l00002"/>00002 <emphasis role="preprocessor">#define&#32;AUDIOLIZER_H</emphasis>
+<anchor xml:id="_audiolizer_8h_source_1l00003"/>00003 
+<anchor xml:id="_audiolizer_8h_source_1l00004"/>00004 <emphasis role="preprocessor">#include&#32;&lt;functional&gt;</emphasis>
+<anchor xml:id="_audiolizer_8h_source_1l00005"/>00005 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_config__types_8h">config_types.h</link>&quot;</emphasis>
+<anchor xml:id="_audiolizer_8h_source_1l00006"/>00006 <emphasis role="keyword">struct&#32;</emphasis><link linkend="_structRegionOfInterest">RegionOfInterest</link>;
+<anchor xml:id="_audiolizer_8h_source_1l00007"/>00007 <emphasis role="keyword">class&#32;</emphasis><link linkend="_structTone">Tone</link>;
+<anchor xml:id="_audiolizer_8h_source_1l00008"/>00008 
+<anchor xml:id="_audiolizer_8h_source_1l00013"/><link linkend="_classAudiolizer">00013</link> <emphasis role="keyword">class&#32;</emphasis><link linkend="_classAudiolizer">Audiolizer</link>{
+<anchor xml:id="_audiolizer_8h_source_1l00014"/>00014 
+<anchor xml:id="_audiolizer_8h_source_1l00015"/>00015 <emphasis role="keyword">public</emphasis>:
+<anchor xml:id="_audiolizer_8h_source_1l00016"/>00016 
+<anchor xml:id="_audiolizer_8h_source_1l00019"/>00019 &#32;&#32;&#32;&#32;<link linkend="_classAudiolizer_1a416bdbc7e4c303d921cf8a1995a08c9a">Audiolizer</link>();
+<anchor xml:id="_audiolizer_8h_source_1l00020"/>00020 &#32;&#32;&#32;&#32;
+<anchor xml:id="_audiolizer_8h_source_1l00028"/>00028 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classAudiolizer_1a2b9a26bd1486ebf2bdae14d7edd370c0">turn_Image_into_Sound</link>(<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">bool</emphasis>,&#32;<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">bool</emphasis>,&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_structRegionOfInterest">RegionOfInterest</link>&amp;,&#32;<link linkend="_structTone">Tone</link>&amp;);
+<anchor xml:id="_audiolizer_8h_source_1l00029"/>00029 
+<anchor xml:id="_audiolizer_8h_source_1l00036"/>00036 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_classAudiolizer_1a615968fb43d145079d06521ad7634946">setAudioUpdater</link>(std::function&lt;<emphasis role="keywordtype">void</emphasis>(<emphasis role="keywordtype">int</emphasis>,<emphasis role="keywordtype">float</emphasis>)&gt;);
+<anchor xml:id="_audiolizer_8h_source_1l00037"/>00037 
+<anchor xml:id="_audiolizer_8h_source_1l00038"/>00038 <emphasis role="keyword">private</emphasis>:
+<anchor xml:id="_audiolizer_8h_source_1l00039"/>00039 
+<anchor xml:id="_audiolizer_8h_source_1l00040"/>00040 &#32;&#32;&#32;&#32;<link linkend="_structCameraConfig">CameraConfig</link>&#32;&amp;cameracfg;
+<anchor xml:id="_audiolizer_8h_source_1l00041"/>00041 &#32;&#32;&#32;&#32;<link linkend="_structIAVConfig">IAVConfig</link>&#32;&amp;iavcfg;
+<anchor xml:id="_audiolizer_8h_source_1l00042"/>00042 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;frequencyRange,prev_freq;
+<anchor xml:id="_audiolizer_8h_source_1l00043"/>00043 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;volume;
+<anchor xml:id="_audiolizer_8h_source_1l00044"/>00044 
+<anchor xml:id="_audiolizer_8h_source_1l00045"/>00045 &#32;&#32;&#32;&#32;std::function&lt;void(<emphasis role="keywordtype">int</emphasis>,<emphasis role="keywordtype">float</emphasis>)&gt;&#32;updateAudio;
+<anchor xml:id="_audiolizer_8h_source_1l00046"/>00046 
+<anchor xml:id="_audiolizer_8h_source_1l00053"/>00053 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;translate(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_structRegionOfInterest">RegionOfInterest</link>&amp;,<emphasis role="keywordtype">int</emphasis>&amp;);
+<anchor xml:id="_audiolizer_8h_source_1l00054"/>00054 &#32;&#32;&#32;&#32;
+<anchor xml:id="_audiolizer_8h_source_1l00059"/>00059 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;gradualy_fade(<emphasis role="keywordtype">int</emphasis>&amp;);
+<anchor xml:id="_audiolizer_8h_source_1l00060"/>00060 
+<anchor xml:id="_audiolizer_8h_source_1l00061"/>00061 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;@TEMPORARY&#32;DISABLED</emphasis>
+<anchor xml:id="_audiolizer_8h_source_1l00062"/>00062 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;/*!&#32;@brief&#32;Method&#32;that&#32;is&#32;called&#32;once&#32;during&#32;implicit&#32;construction&#32;to&#32;calculate&#32;2&#32;terms&#32;(a&#32;and&#32;b).&#32;</emphasis>
+<anchor xml:id="_audiolizer_8h_source_1l00063"/>00063 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;&#32;*a&#32;and&#32;b&#32;are&#32;latter&#32;used&#32;for&#32;converting&#32;frequency&#32;range&#32;into&#32;a&#32;logarithic&#32;scale</emphasis>
+<anchor xml:id="_audiolizer_8h_source_1l00064"/>00064 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;&#32;*Currently&#32;not&#32;used.&#32;&#32;&#32;&#32;</emphasis>
+<anchor xml:id="_audiolizer_8h_source_1l00065"/>00065 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;&#32;*&#32;@param&#32;int&#32;-&#32;the&#32;minimum&#32;value&#32;of&#32;the&#32;frequency&#32;range&#32;defined.</emphasis>
+<anchor xml:id="_audiolizer_8h_source_1l00066"/>00066 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;&#32;*&#32;@param&#32;int&#32;-&#32;the&#32;maximum&#32;value&#32;of&#32;the&#32;frequency&#32;range&#32;defined.</emphasis>
+<anchor xml:id="_audiolizer_8h_source_1l00067"/>00067 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;&#32;*&#32;@returns&#32;void</emphasis>
+<anchor xml:id="_audiolizer_8h_source_1l00068"/>00068 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;&#32;*/</emphasis>
+<anchor xml:id="_audiolizer_8h_source_1l00069"/>00069 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;void&#32;init_log_freq_scale();</emphasis>
+<anchor xml:id="_audiolizer_8h_source_1l00070"/>00070 
+<anchor xml:id="_audiolizer_8h_source_1l00071"/>00071 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;/*!&#32;@brief&#32;Method&#32;to&#32;map&#32;the&#32;linear&#32;values&#32;of&#32;a&#32;predifined&#32;frequency&#32;range&#32;into&#32;a&#32;logarithmic&#32;range.</emphasis>
+<anchor xml:id="_audiolizer_8h_source_1l00072"/>00072 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;*&#32;Currently&#32;not&#32;used.</emphasis>
+<anchor xml:id="_audiolizer_8h_source_1l00073"/>00073 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;*&#32;@param&#32;int&amp;&#32;-&#32;frequency&#32;variable&#32;passed&#32;by&#32;reference.</emphasis>
+<anchor xml:id="_audiolizer_8h_source_1l00074"/>00074 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;*/</emphasis>
+<anchor xml:id="_audiolizer_8h_source_1l00075"/>00075 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;void&#32;int2log_freq(int&amp;);&#32;&#32;//&#32;currently&#32;not&#32;used</emphasis>
+<anchor xml:id="_audiolizer_8h_source_1l00076"/>00076 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;double&#32;a,b;</emphasis>
+<anchor xml:id="_audiolizer_8h_source_1l00077"/>00077 };
+<anchor xml:id="_audiolizer_8h_source_1l00078"/>00078 
+<anchor xml:id="_audiolizer_8h_source_1l00079"/>00079 <emphasis role="preprocessor">#endif</emphasis>
+</programlisting></section>

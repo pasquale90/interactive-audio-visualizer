@@ -1,0 +1,192 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_classGUI" xml:lang="en-US">
+<title>GUI Class Reference</title>
+<indexterm><primary>GUI</primary></indexterm>
+<para>
+
+<para>Class to manage the <link linkend="_classGUI">GUI</link> components and settings. </para>
+ 
+</para>
+<para>
+<computeroutput>#include &lt;gui.h&gt;</computeroutput>
+</para>
+<simplesect>
+    <title>Public Member Functions    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_classGUI_1a8cbb3140b7d3c9d8e942d6ce6b60a0e8">GUI</link> ()</para>
+
+<para>Constructor for the <link linkend="_classGUI">GUI</link> class. It creates all the <link linkend="_classGUI">GUI</link> components, initializes settings, and sets up connections. </para>
+</listitem>
+            <listitem><para>bool <link linkend="_classGUI_1a9f85de0bbf11e4ba7c9de1ab38f62433">onExit</link> ()</para>
+
+<para>Method that handles the application&apos;s exit event. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Detailed Description</title>
+
+<para>Class to manage the <link linkend="_classGUI">GUI</link> components and settings. </para>
+
+
+
+<para><note><title>Note</title>
+
+<para>It uses Qt for creating the <link linkend="_classGUI">GUI</link> and the <link linkend="_classSettingsDB">SettingsDB</link> class for managing settings. </para>
+</note>
+</para>
+<para>
+Definition at line <link linkend="_gui_8h_source_1l00021">21</link> of file <link linkend="_gui_8h_source">gui.h</link>.</para>
+</section>
+<section>
+<title>Constructor &amp; Destructor Documentation</title>
+<anchor xml:id="_classGUI_1a8cbb3140b7d3c9d8e942d6ce6b60a0e8"/><section>
+    <title>GUI()</title>
+<indexterm><primary>GUI</primary><secondary>GUI</secondary></indexterm>
+<indexterm><primary>GUI</primary><secondary>GUI</secondary></indexterm>
+<para><computeroutput>GUI::GUI ( )</computeroutput></para><para>
+
+<para>Constructor for the <link linkend="_classGUI">GUI</link> class. It creates all the <link linkend="_classGUI">GUI</link> components, initializes settings, and sets up connections. </para>
+</para>
+<para>
+Definition at line <link linkend="_gui_8cpp_source_1l00101">101</link> of file <link linkend="_gui_8cpp_source">gui.cpp</link>.</para>
+<programlisting linenumbering="unnumbered">00101 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{&#32;&#32;&#32;&#32;
+00102 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;argc&#32;=&#32;0;
+00103 &#32;&#32;&#32;&#32;applicationStart&#32;=&#32;<emphasis role="keyword">false</emphasis>;
+00104 &#32;&#32;&#32;&#32;
+00105 &#32;&#32;&#32;&#32;QApplication&#32;app(argc,<emphasis role="keyword">nullptr</emphasis>);
+00106 
+00107 &#32;&#32;&#32;&#32;QWidget&#32;window;
+00108 &#32;&#32;&#32;&#32;window.setWindowTitle(<emphasis role="stringliteral">&quot;Interactive&#32;Audio&#32;Visualizer&quot;</emphasis>);
+00109 &#32;&#32;&#32;&#32;
+00110 &#32;&#32;&#32;&#32;QVBoxLayout&#32;mainLayout;
+00111 
+00112 &#32;&#32;&#32;&#32;initializeComponents();
+00113 
+00114 &#32;&#32;&#32;&#32;initializeTexts();
+00115 
+00116 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Audio&#32;Settings</emphasis>
+00117 &#32;&#32;&#32;&#32;QGroupBox&#32;audioSettings(<emphasis role="stringliteral">&quot;Audio&#32;Settings&quot;</emphasis>);
+00118 &#32;&#32;&#32;&#32;QVBoxLayout&#32;audioLayout;
+00119 &#32;&#32;&#32;&#32;deviceComboBox-&gt;addItems(audioDevices);
+00120 &#32;&#32;&#32;&#32;audioLayout.addWidget(audioDeviceLabel);
+00121 &#32;&#32;&#32;&#32;audioLayout.addWidget(deviceComboBox);
+00122 
+00123 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Sample&#32;Rate&#32;ComboBox</emphasis>
+00124 &#32;&#32;&#32;&#32;updateSampleRates(deviceComboBox-&gt;currentText());
+00125 &#32;&#32;&#32;&#32;audioLayout.addWidget(sampleRateLabel);
+00126 &#32;&#32;&#32;&#32;audioLayout.addWidget(sampleRateComboBox);
+00127 
+00128 &#32;&#32;&#32;&#32;QObject::connect(deviceComboBox,&#32;&amp;QComboBox::currentTextChanged,&#32;
+00129 &#32;&#32;&#32;&#32;[<emphasis role="keyword">this</emphasis>](<emphasis role="keyword">const</emphasis>&#32;QString&#32;&amp;text){
+00130 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;updateSampleRates(text);
+00131 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;updateNumChannelsInfo(text);
+00132 &#32;&#32;&#32;&#32;});
+00133 &#32;&#32;&#32;&#32;
+00134 &#32;&#32;&#32;&#32;audioLayout.addWidget(createDropDownList(bufferSizeComboBox,bufferSizeLabel,&#32;{<emphasis role="stringliteral">&quot;32&quot;</emphasis>,&#32;<emphasis role="stringliteral">&quot;64&quot;</emphasis>,&#32;<emphasis role="stringliteral">&quot;128&quot;</emphasis>,&#32;<emphasis role="stringliteral">&quot;256&quot;</emphasis>,&#32;<emphasis role="stringliteral">&quot;512&quot;</emphasis>,&#32;<emphasis role="stringliteral">&quot;1024&quot;</emphasis>,&#32;<emphasis role="stringliteral">&quot;2048&quot;</emphasis>,&#32;<emphasis role="stringliteral">&quot;4096&quot;</emphasis>}));
+00135 &#32;&#32;&#32;&#32;audioLayout.addWidget(createDropDownList(quantizationComboBox,quantizationLabel,&#32;{QString::number(&#32;<link linkend="_namespaceAudioHardware_1abd0d01ecfb85ee51cdc1c04fb15d39c5">AudioHardware::quantizationRatio</link>&#32;)}&#32;));
+00136 &#32;&#32;&#32;&#32;audioLayout.addLayout(numChannelsLayout);
+00137 &#32;&#32;&#32;&#32;audioSettings.setLayout(&amp;audioLayout);
+00138 &#32;&#32;&#32;&#32;mainLayout.addWidget(&amp;audioSettings);
+00139 
+00140 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Camera&#32;Settings</emphasis>
+00141 &#32;&#32;&#32;&#32;QGroupBox&#32;cameraSettings(<emphasis role="stringliteral">&quot;Camera&#32;Settings&quot;</emphasis>);
+00142 &#32;&#32;&#32;&#32;QVBoxLayout&#32;cameraLayout;
+00143 
+00144 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Camera&#32;Device&#32;ComboBox</emphasis>
+00145 &#32;&#32;&#32;&#32;cameraDeviceComboBox-&gt;addItems(cameraDevices);
+00146 &#32;&#32;&#32;&#32;cameraLayout.addWidget(cameraDeviceLabel);
+00147 &#32;&#32;&#32;&#32;cameraLayout.addWidget(cameraDeviceComboBox);
+00148 
+00149 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Resolution&#32;ComboBox</emphasis>
+00150 &#32;&#32;&#32;&#32;updateResolution(cameraDeviceComboBox-&gt;currentText());
+00151 &#32;&#32;&#32;&#32;cameraLayout.addWidget(cameraResolutionLabel);
+00152 &#32;&#32;&#32;&#32;cameraLayout.addWidget(resolutionComboBox);
+00153 
+00154 &#32;&#32;&#32;&#32;QObject::connect(cameraDeviceComboBox,&#32;&amp;QComboBox::currentTextChanged,&#32;
+00155 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;[<emphasis role="keyword">this</emphasis>](<emphasis role="keyword">const</emphasis>&#32;QString&#32;&amp;text){
+00156 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;updateResolution(text);
+00157 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;});
+00158 
+00159 &#32;&#32;&#32;&#32;cameraLayout.addWidget(createDropDownList(frameRateComboBox,cameraFrameRateLabel,&#32;{<emphasis role="stringliteral">&quot;Auto&quot;</emphasis>}));
+00160 &#32;&#32;&#32;&#32;cameraSettings.setLayout(&amp;cameraLayout);
+00161 &#32;&#32;&#32;&#32;mainLayout.addWidget(&amp;cameraSettings);
+00162 
+00163 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Display&#32;Settings</emphasis>
+00164 &#32;&#32;&#32;&#32;QGroupBox&#32;displaySettings(<emphasis role="stringliteral">&quot;Display&#32;Settings&quot;</emphasis>);
+00165 &#32;&#32;&#32;&#32;QVBoxLayout&#32;displayLayout;
+00166 &#32;&#32;&#32;&#32;displayLayout.addWidget(createDropDownList(displayResolutionComboBox,screenResolutionLabel,&#32;displayResolutions));
+00167 &#32;&#32;&#32;&#32;displayLayout.addWidget(createDropDownList(displayFrameRateComboBox,screenFrameRateLabel,&#32;{<emphasis role="stringliteral">&quot;Auto&quot;</emphasis>}));
+00168 &#32;&#32;&#32;&#32;displaySettings.setLayout(&amp;displayLayout);
+00169 &#32;&#32;&#32;&#32;mainLayout.addWidget(&amp;displaySettings);
+00170 
+00171 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;IAV&#32;Settings</emphasis>
+00172 &#32;&#32;&#32;&#32;QGroupBox&#32;iavSettings(<emphasis role="stringliteral">&quot;IAV&#32;Settings&quot;</emphasis>);
+00173 &#32;&#32;&#32;&#32;QVBoxLayout&#32;iavLayout;
+00174 &#32;&#32;&#32;&#32;iavLayout.addWidget(createDropDownList(frequencyRangeComboBox,iavFrequencyRangeLabel,&#32;{<emphasis role="stringliteral">&quot;Narrow&quot;</emphasis>,&#32;<emphasis role="stringliteral">&quot;Normal&quot;</emphasis>,&#32;<emphasis role="stringliteral">&quot;Wide&quot;</emphasis>}));
+00175 &#32;&#32;&#32;&#32;iavLayout.addWidget(createDropDownList(roiComboBox,iavRegionOfInterestLabel,&#32;{<emphasis role="stringliteral">&quot;Small&quot;</emphasis>,<emphasis role="stringliteral">&quot;Medium&quot;</emphasis>,<emphasis role="stringliteral">&quot;Large&quot;</emphasis>}));
+00176 &#32;&#32;&#32;&#32;iavLayout.addWidget(createDropDownList(triggerComboBox,iavTriggerLabel,&#32;{<emphasis role="stringliteral">&quot;Auto&quot;</emphasis>}));&#32;<emphasis role="comment">//&quot;Manual&quot;,</emphasis>
+00177 &#32;&#32;&#32;&#32;iavLayout.addWidget(createDropDownList(trackingAlgorithmComboBox,iavTrackingAlgLabel,&#32;{<emphasis role="stringliteral">&quot;CSRT&quot;</emphasis>,&#32;<emphasis role="stringliteral">&quot;KCF&quot;</emphasis>}));
+00178 &#32;&#32;&#32;&#32;iavLayout.addWidget(createSkipFramesSlider(accuracyLabel,&#32;cpuLoadLabel));
+00179 &#32;&#32;&#32;&#32;iavSettings.setLayout(&amp;iavLayout);
+00180 &#32;&#32;&#32;&#32;mainLayout.addWidget(&amp;iavSettings);
+00181 
+00182 &#32;&#32;&#32;&#32;addExplanations();
+00183 &#32;&#32;&#32;&#32;
+00184 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Initialize&#32;errorLabel</emphasis>
+00185 &#32;&#32;&#32;&#32;errorLabel&#32;=&#32;<emphasis role="keyword">new</emphasis>&#32;QLabel();
+00186 &#32;&#32;&#32;&#32;errorLabel-&gt;setStyleSheet(<emphasis role="stringliteral">&quot;color:&#32;red;&quot;</emphasis>);
+00187 &#32;&#32;&#32;&#32;errorLabel-&gt;setText(<emphasis role="stringliteral">&quot;Camera&#32;resolution&#32;cannot&#32;exceed&#32;display&#32;resolution.&quot;</emphasis>);
+00188 &#32;&#32;&#32;&#32;errorLabel-&gt;hide();&#32;<emphasis role="comment">//&#32;Initially&#32;hidden</emphasis>
+00189 &#32;&#32;&#32;&#32;mainLayout.addWidget(errorLabel);
+00190 &#32;&#32;&#32;&#32;
+00191 &#32;&#32;&#32;&#32;QPushButton&#32;startButton(<emphasis role="stringliteral">&quot;Start&quot;</emphasis>);
+00192 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;QObject::connect(&amp;startButton,&#32;&amp;QPushButton::clicked,&#32;[<emphasis role="keyword">this</emphasis>]()&#32;{
+00193 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>(checkResolutionCompatibility())&#32;{
+00194 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;errorLabel-&gt;hide();&#32;<emphasis role="comment">//&#32;Hide&#32;if&#32;resolutions&#32;are&#32;compatible</emphasis>
+00195 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;saveCurrentStates();
+00196 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;applicationStart&#32;=&#32;<emphasis role="keyword">true</emphasis>;
+00197 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;QApplication::quit();
+00198 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;exiting&#32;to&#32;start_iav();</emphasis>
+00199 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}&#32;<emphasis role="keywordflow">else</emphasis>&#32;{
+00200 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;errorLabel-&gt;show();&#32;<emphasis role="comment">//&#32;Show&#32;error&#32;message&#32;if&#32;not&#32;compatible</emphasis>
+00201 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+00202 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;});
+00203 
+00204 &#32;&#32;&#32;&#32;mainLayout.addWidget(&amp;startButton);
+00205 
+00206 &#32;&#32;&#32;&#32;loadCurrentStates();
+00207 &#32;&#32;&#32;&#32;
+00208 &#32;&#32;&#32;&#32;window.setLayout(&amp;mainLayout);
+00209 &#32;&#32;&#32;&#32;window.show();
+00210 
+00211 &#32;&#32;&#32;&#32;QApplication::exec();
+00212 }
+</programlisting></section>
+</section>
+<section>
+<title>Member Function Documentation</title>
+<anchor xml:id="_classGUI_1a9f85de0bbf11e4ba7c9de1ab38f62433"/><section>
+    <title>onExit()</title>
+<indexterm><primary>onExit</primary><secondary>GUI</secondary></indexterm>
+<indexterm><primary>GUI</primary><secondary>onExit</secondary></indexterm>
+<para><computeroutput>bool GUI::onExit ( )</computeroutput></para><para>
+
+<para>Method that handles the application&apos;s exit event. </para>
+</para>
+
+<para><formalpara><title>Returns</title>
+
+<para>bool - true if the application should exit. </para>
+</formalpara>
+</para>
+<para>
+Definition at line <link linkend="_gui_8cpp_source_1l00374">374</link> of file <link linkend="_gui_8cpp_source">gui.cpp</link>.</para>
+<programlisting linenumbering="unnumbered">00374 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+00375 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;!applicationStart;
+00376 }
+</programlisting></section>
+<para>
+The documentation for this class was generated from the following files:</para>
+include/<link linkend="_gui_8h">gui.h</link>src/<link linkend="_gui_8cpp">gui.cpp</link></section>
+</section>

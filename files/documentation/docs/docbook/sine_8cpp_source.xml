@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_sine_8cpp_source" xml:lang="en-US">
+<title>sine.cpp</title>
+<indexterm><primary>src/sine.cpp</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered"><anchor xml:id="_sine_8cpp_source_1l00001"/>00001 <emphasis role="preprocessor">#include&#32;&lt;math.h&gt;</emphasis>
+<anchor xml:id="_sine_8cpp_source_1l00002"/>00002 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_sine_8h">sine.h</link>&quot;</emphasis>
+<anchor xml:id="_sine_8cpp_source_1l00003"/>00003 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_tone_8h">tone.h</link>&quot;</emphasis>
+<anchor xml:id="_sine_8cpp_source_1l00004"/>00004 
+<anchor xml:id="_sine_8cpp_source_1l00005"/>00005 <emphasis role="preprocessor">#ifndef&#32;M_PI</emphasis>
+<anchor xml:id="_sine_8cpp_source_1l00006"/><link linkend="_sine_8cpp_1ae71449b1cc6e6250b91f539153a7a0d3">00006</link> <emphasis role="preprocessor">#define&#32;M_PI&#32;&#32;(3.14159265)</emphasis>
+<anchor xml:id="_sine_8cpp_source_1l00007"/>00007 <emphasis role="preprocessor">#endif</emphasis>
+<anchor xml:id="_sine_8cpp_source_1l00008"/>00008 
+<anchor xml:id="_sine_8cpp_source_1l00009"/>00009 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_config_8h">config.h</link>&quot;</emphasis>
+<anchor xml:id="_sine_8cpp_source_1l00010"/><link linkend="_classSine_1ac6f77168f7f50d200dc4b2d222c00608">00010</link> <link linkend="_classSine_1ac6f77168f7f50d200dc4b2d222c00608">Sine::Sine</link>():audiocfg(<link linkend="_classConfig">Config</link>::getInstance().audconf){
+<anchor xml:id="_sine_8cpp_source_1l00011"/>00011 &#32;&#32;&#32;&#32;rads_per_sample&#32;=&#32;0.;
+<anchor xml:id="_sine_8cpp_source_1l00012"/>00012 &#32;&#32;&#32;&#32;prevfreq=0;
+<anchor xml:id="_sine_8cpp_source_1l00013"/>00013 &#32;&#32;&#32;&#32;phase=0.0;
+<anchor xml:id="_sine_8cpp_source_1l00014"/>00014 }
+<anchor xml:id="_sine_8cpp_source_1l00015"/>00015 
+<anchor xml:id="_sine_8cpp_source_1l00016"/><link linkend="_classSine_1a4623d350f103d9dafd5ce29908e59332">00016</link> <emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_classSine_1a4623d350f103d9dafd5ce29908e59332">Sine::setVisualizerUpdater</link>(std::function&lt;<emphasis role="keywordtype">void</emphasis>(<emphasis role="keywordtype">float</emphasis>)&gt;&#32;updater){
+<anchor xml:id="_sine_8cpp_source_1l00017"/>00017 &#32;&#32;&#32;&#32;updateVisualizer&#32;=&#32;std::move(updater);
+<anchor xml:id="_sine_8cpp_source_1l00018"/>00018 }
+<anchor xml:id="_sine_8cpp_source_1l00019"/>00019 
+<anchor xml:id="_sine_8cpp_source_1l00020"/><link linkend="_classSine_1abfd05b20115daa6b486ac26c3cb25129">00020</link> <emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_classSine_1abfd05b20115daa6b486ac26c3cb25129">Sine::setMonoSignal</link>(<link linkend="_structTone">Tone</link>&amp;&#32;tone,&#32;<emphasis role="keywordtype">float</emphasis>*&#32;monoBuffer[2]){
+<anchor xml:id="_sine_8cpp_source_1l00021"/>00021 &#32;&#32;&#32;&#32;
+<anchor xml:id="_sine_8cpp_source_1l00022"/>00022 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;frequency&#32;=&#32;tone.<link linkend="_structTone_1a8c28a65c858594e410d94921d7abc1fa">frequency</link>.load();
+<anchor xml:id="_sine_8cpp_source_1l00023"/>00023 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;amplitude&#32;=&#32;tone.<link linkend="_structTone_1ad643b37d799caa83f6a80dc2f001aa4a">volume</link>.load();
+<anchor xml:id="_sine_8cpp_source_1l00024"/>00024 &#32;&#32;&#32;&#32;
+<anchor xml:id="_sine_8cpp_source_1l00025"/>00025 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(frequency&#32;!=&#32;prevfreq){&#32;<emphasis role="comment">//&#32;reduce&#32;number&#32;of&#32;calculations</emphasis>
+<anchor xml:id="_sine_8cpp_source_1l00026"/>00026 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;rads_per_sample&#32;=&#32;(<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">float</emphasis><emphasis role="keyword">&gt;</emphasis>(frequency&#32;*&#32;2.*&#32;<link linkend="_sine_8cpp_1ae71449b1cc6e6250b91f539153a7a0d3">M_PI</link>))&#32;/&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">float</emphasis><emphasis role="keyword">&gt;</emphasis>(audiocfg.<link linkend="_structAudioConfig_1aa893cf0e18009ba2aeb67a105d42aa71">sampleRate</link>.load());&#32;<emphasis role="comment">//radians&#32;traspotition&#32;per&#32;time&#32;unit</emphasis>
+<anchor xml:id="_sine_8cpp_source_1l00027"/>00027 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;prevfreq&#32;=&#32;frequency;&#32;&#32;&#32;
+<anchor xml:id="_sine_8cpp_source_1l00028"/>00028 &#32;&#32;&#32;&#32;}
+<anchor xml:id="_sine_8cpp_source_1l00029"/>00029 
+<anchor xml:id="_sine_8cpp_source_1l00030"/>00030 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">int</emphasis>&#32;i=0;i&lt;audiocfg.<link linkend="_structAudioConfig_1ae81381142d99bc1845cb33bd048643df">bufferSize</link>.load();i++){
+<anchor xml:id="_sine_8cpp_source_1l00031"/>00031 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;value&#32;=&#32;amplitude*(float)sin(phase);
+<anchor xml:id="_sine_8cpp_source_1l00032"/>00032 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;monoBuffer[0][i]&#32;=&#32;value;
+<anchor xml:id="_sine_8cpp_source_1l00033"/>00033 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;phase+=rads_per_sample;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;shift&#32;phase&#32;by&#32;amount&#32;of&#32;rads_per_sample</emphasis>
+<anchor xml:id="_sine_8cpp_source_1l00034"/>00034 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(phase&#32;&gt;=&#32;2*<link linkend="_sine_8cpp_1ae71449b1cc6e6250b91f539153a7a0d3">M_PI</link>)&#32;phase=0;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;if&#32;phase&#32;reaches&#32;2pi&#32;,&#32;zero&#32;it&#32;down.</emphasis>
+<anchor xml:id="_sine_8cpp_source_1l00035"/>00035 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+<anchor xml:id="_sine_8cpp_source_1l00036"/>00036 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;updateVisualizer(value);&#32;<emphasis role="comment">//&#32;fill&#32;the&#32;shareable&#32;ring&#32;buffer</emphasis>
+<anchor xml:id="_sine_8cpp_source_1l00037"/>00037 &#32;&#32;&#32;&#32;}&#32;&#32;&#32;
+<anchor xml:id="_sine_8cpp_source_1l00038"/>00038 }
+<anchor xml:id="_sine_8cpp_source_1l00039"/>00039 
+<anchor xml:id="_sine_8cpp_source_1l00040"/><link linkend="_classSine_1ae08432c7ada69cff0dd386c1c6b81bf8">00040</link> <emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_classSine_1ae08432c7ada69cff0dd386c1c6b81bf8">Sine::setStereoSignal</link>(<link linkend="_structTone">Tone</link>&amp;&#32;tone,&#32;<emphasis role="keywordtype">float</emphasis>*&#32;stereoBuffer[2]){
+<anchor xml:id="_sine_8cpp_source_1l00041"/>00041 
+<anchor xml:id="_sine_8cpp_source_1l00042"/>00042 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;frequency&#32;=&#32;tone.<link linkend="_structTone_1a8c28a65c858594e410d94921d7abc1fa">frequency</link>.load();
+<anchor xml:id="_sine_8cpp_source_1l00043"/>00043 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;amplitude&#32;=&#32;tone.<link linkend="_structTone_1ad643b37d799caa83f6a80dc2f001aa4a">volume</link>.load();
+<anchor xml:id="_sine_8cpp_source_1l00044"/>00044 
+<anchor xml:id="_sine_8cpp_source_1l00045"/>00045 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(frequency&#32;!=&#32;prevfreq){&#32;<emphasis role="comment">//&#32;reduce&#32;number&#32;of&#32;calculations</emphasis>
+<anchor xml:id="_sine_8cpp_source_1l00046"/>00046 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;rads_per_sample&#32;=&#32;(<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">float</emphasis><emphasis role="keyword">&gt;</emphasis>(frequency&#32;*&#32;2.&#32;*&#32;<link linkend="_sine_8cpp_1ae71449b1cc6e6250b91f539153a7a0d3">M_PI</link>))&#32;/&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">float</emphasis><emphasis role="keyword">&gt;</emphasis>(audiocfg.<link linkend="_structAudioConfig_1aa893cf0e18009ba2aeb67a105d42aa71">sampleRate</link>.load());&#32;<emphasis role="comment">//radians&#32;traspotition&#32;per&#32;time&#32;unit</emphasis>
+<anchor xml:id="_sine_8cpp_source_1l00047"/>00047 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;prevfreq&#32;=&#32;frequency;&#32;&#32;&#32;
+<anchor xml:id="_sine_8cpp_source_1l00048"/>00048 &#32;&#32;&#32;&#32;}
+<anchor xml:id="_sine_8cpp_source_1l00049"/>00049 
+<anchor xml:id="_sine_8cpp_source_1l00050"/>00050 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">int</emphasis>&#32;i=0;i&lt;audiocfg.<link linkend="_structAudioConfig_1ae81381142d99bc1845cb33bd048643df">bufferSize</link>.load();i++){
+<anchor xml:id="_sine_8cpp_source_1l00051"/>00051 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;value&#32;=&#32;amplitude*(float)sin(phase);
+<anchor xml:id="_sine_8cpp_source_1l00052"/>00052 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;stereoBuffer[0][i]&#32;=&#32;value;
+<anchor xml:id="_sine_8cpp_source_1l00053"/>00053 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;stereoBuffer[1][i]&#32;=&#32;value;
+<anchor xml:id="_sine_8cpp_source_1l00054"/>00054 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;phase+=rads_per_sample;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;shift&#32;phase&#32;by&#32;amount&#32;of&#32;rads_per_sample</emphasis>
+<anchor xml:id="_sine_8cpp_source_1l00055"/>00055 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(phase&#32;&gt;=&#32;2*<link linkend="_sine_8cpp_1ae71449b1cc6e6250b91f539153a7a0d3">M_PI</link>)&#32;phase=0;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;if&#32;phase&#32;reaches&#32;2pi&#32;,&#32;zero&#32;it&#32;down.</emphasis>
+<anchor xml:id="_sine_8cpp_source_1l00056"/>00056 
+<anchor xml:id="_sine_8cpp_source_1l00057"/>00057 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;updateVisualizer(value);&#32;<emphasis role="comment">//&#32;fill&#32;the&#32;shareable&#32;ring&#32;buffer</emphasis>
+<anchor xml:id="_sine_8cpp_source_1l00058"/>00058 &#32;&#32;&#32;&#32;}&#32;&#32;&#32;
+<anchor xml:id="_sine_8cpp_source_1l00059"/>00059 }
+</programlisting></section>

@@ -1,0 +1,115 @@
+\hypertarget{audiolizer_8cpp_source}{}\doxysection{audiolizer.\+cpp}
+\label{audiolizer_8cpp_source}\index{src/audiolizer.cpp@{src/audiolizer.cpp}}
+\mbox{\hyperlink{audiolizer_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00001}00001 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{audiolizer_8h}{audiolizer.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00002}00002 \textcolor{preprocessor}{\#include <math.h>}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00003}00003 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{config_8h}{config.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00004}00004 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{roi_8h}{roi.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00005}00005 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{tone_8h}{tone.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00006}00006 }
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00007}\mbox{\hyperlink{classAudiolizer_a416bdbc7e4c303d921cf8a1995a08c9a}{00007}} \mbox{\hyperlink{classAudiolizer_a416bdbc7e4c303d921cf8a1995a08c9a}{Audiolizer::Audiolizer}}():cameracfg(\mbox{\hyperlink{classConfig}{Config}}::getInstance().camconf),iavcfg(\mbox{\hyperlink{classConfig}{Config}}::getInstance().iavconf)\{}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00008}00008 }
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00009}00009     \textcolor{comment}{// @TEMPORARY DISABLED}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00010}00010     \textcolor{comment}{// init\_log\_freq\_scale(); // currently not used. Use \_int2log\_freq (currently not used either) is affected by this method..}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00011}00011 }
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00012}00012     frequencyRange = iavcfg.\mbox{\hyperlink{structIAVConfig_a00eb72c5d6c59eb3d3308bdb1d337a10}{maxFrequency}} -\/ iavcfg.\mbox{\hyperlink{structIAVConfig_ad171cfdbc06a2403eb3dad6636a59cf0}{minFrequency}};}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00013}00013     prev\_freq=0;}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00014}00014     volume = 0.f;}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00015}00015 \}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00016}00016 }
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00017}\mbox{\hyperlink{classAudiolizer_a615968fb43d145079d06521ad7634946}{00017}} \textcolor{keywordtype}{void} \mbox{\hyperlink{classAudiolizer_a615968fb43d145079d06521ad7634946}{Audiolizer::setAudioUpdater}}(std::function<\textcolor{keywordtype}{void}(\textcolor{keywordtype}{int}, \textcolor{keywordtype}{float})> func)\{}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00018}00018     updateAudio = std::move(func);}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00019}00019 \}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00020}00020 }
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00021}\mbox{\hyperlink{classAudiolizer_a2b9a26bd1486ebf2bdae14d7edd370c0}{00021}} \textcolor{keywordtype}{bool} \mbox{\hyperlink{classAudiolizer_a2b9a26bd1486ebf2bdae14d7edd370c0}{Audiolizer::turn\_Image\_into\_Sound}}(\textcolor{keyword}{const} \textcolor{keywordtype}{bool} tracking\_updated, \textcolor{keyword}{const} \textcolor{keywordtype}{bool} pattern\_locked , \textcolor{keyword}{const} \mbox{\hyperlink{structRegionOfInterest}{RegionOfInterest}} \&roi, \mbox{\hyperlink{structTone}{Tone}} \&tone)\{}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00022}00022 }
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00023}00023 \textcolor{comment}{   /***}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00024}00024 \textcolor{comment}{    * returns by reference the frequency that will be streamed on the next audio buffer}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00025}00025 \textcolor{comment}{   */}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00026}00026     }
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00027}00027     \textcolor{keywordtype}{int} frequency = tone.\mbox{\hyperlink{structTone_a8c28a65c858594e410d94921d7abc1fa}{frequency}}.load();}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00028}00028     \textcolor{keywordtype}{int} prevFreq = prev\_freq;}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00029}00029 }
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00030}00030     \textcolor{keywordflow}{if} (pattern\_locked)\{}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00031}00031         \textcolor{keywordflow}{if} (tracking\_updated)          \textcolor{comment}{// if tracking updated -\/-\/> new x,y -\/-\/> new freq}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00032}00032             translate(roi, frequency);      }
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00033}00033         \textcolor{keywordflow}{else}\{                          \textcolor{comment}{// else -\/-\/> previous frequency}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00034}00034             frequency=prev\_freq;}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00035}00035         \} }
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00036}00036     \}\textcolor{keywordflow}{else}\{                            \textcolor{comment}{// gradualy fade frequency to zero -\/-\/> if frequency > 0 , slowly decline}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00037}00037         \textcolor{keywordflow}{if} (frequency>1)\{ }
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00038}00038             gradualy\_fade(frequency); \textcolor{comment}{// gradualy fade frequency to zero -\/-\/> if frequency > 0 , slowly decline}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00039}00039         \}\textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00040}00040             frequency=0;}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00041}00041             volume = 0.f;}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00042}00042         \}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00043}00043     \}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00044}00044 }
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00045}00045     \textcolor{comment}{// update audioStream with the newFrequency}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00046}00046     \textcolor{keywordtype}{bool} frequencyChanged = frequency != prevFreq;}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00047}00047     \textcolor{keywordflow}{if} (frequencyChanged)\{}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00048}00048         updateAudio(frequency , volume);}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00049}00049     \}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00050}00050     tone.\mbox{\hyperlink{structTone_a8c28a65c858594e410d94921d7abc1fa}{frequency}}.store(frequency);}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00051}00051     tone.\mbox{\hyperlink{structTone_ad643b37d799caa83f6a80dc2f001aa4a}{volume}}.store(volume);}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00052}00052 }
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00053}00053     \textcolor{keywordflow}{return} frequencyChanged;}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00054}00054 }
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00055}00055 \}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00056}00056 }
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00057}00057 \textcolor{keywordtype}{bool} Audiolizer::translate(\textcolor{keyword}{const} \mbox{\hyperlink{structRegionOfInterest}{RegionOfInterest}} \&roi, \textcolor{keywordtype}{int}\& freq)\{}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00058}00058 }
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00059}00059     \textcolor{comment}{// translate the x coordinate.}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00060}00060     \textcolor{keywordtype}{float} roiCenterX = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(roi.\mbox{\hyperlink{structRegionOfInterest_a7c05ee763a1dbcea5d7722c8611e6bc7}{centerX}}.load());}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00061}00061     \textcolor{comment}{// normalize x, y position }}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00062}00062     \textcolor{keywordtype}{float} spatial\_percent = roiCenterX / \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(cameracfg.\mbox{\hyperlink{structCameraConfig_a53d5be43d6362ca145c56a64fe475bb9}{camResW}}.load());}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00063}00063     \textcolor{comment}{//apply translation from x,y to Hz}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00064}00064     freq = iavcfg.\mbox{\hyperlink{structIAVConfig_ad171cfdbc06a2403eb3dad6636a59cf0}{minFrequency}} + \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(spatial\_percent* \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}( frequencyRange ));}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00065}00065     \textcolor{comment}{// @TEMPORARY DISABLED}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00066}00066     \textcolor{comment}{// int2log\_freq(freq); // define here the logarthmic tranformation of the input freq}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00067}00067 }
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00068}00068     \textcolor{comment}{// translate the y coordinate }}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00069}00069     \textcolor{keywordtype}{float} roiCenterY = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(roi.\mbox{\hyperlink{structRegionOfInterest_a9a5c08c619eb5383833aabae962490df}{centerY}}.load());}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00070}00070     \textcolor{comment}{// volume ranges from 0.1 up to 0.7 ==> percentage=0.1+(sample×(0.7−0.1)/maxVal)​}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00071}00071     \textcolor{comment}{// volume = 0.1f + (( roiCenterY * 0.6f) / static\_cast<float>(cameracfg.camResH.load()));}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00072}00072     \textcolor{comment}{// volume ranges from 1.0 down to 0.1 ==> percentage=1.0 -\/ (sample×(1.0−0.1)/maxVal)​}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00073}00073     volume= 1.0f -\/ (( roiCenterY * 0.9f) / \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(cameracfg.\mbox{\hyperlink{structCameraConfig_a5aacf3ba605a2c6bfa6a88b971557fa2}{camResH}}.load()));}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00074}00074 }
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00075}00075     \textcolor{keywordflow}{if} (freq!=prev\_freq)\{ \textcolor{comment}{// if previous frequency has the same value as before it returns the previous frequency}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00076}00076         prev\_freq = freq;}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00077}00077         \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00078}00078     \}\textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00079}00079         \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00080}00080 \}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00081}00081 }
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00082}00082 \textcolor{keywordtype}{void} Audiolizer::gradualy\_fade(\textcolor{keywordtype}{int}\& freq)\{}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00083}00083     \textcolor{keywordflow}{if} (freq>( frequencyRange )/2) freq -\/= \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(2*log(freq));}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00084}00084     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (freq<( frequencyRange )/2) freq -\/= \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(log(freq));}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00085}00085     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (freq<0) freq=0;}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00086}00086 \}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00087}00087 }
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00088}00088 }
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00089}00089 \textcolor{comment}{/* @TEMPORARY DISABLED}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00090}00090 \textcolor{comment}{void Audiolizer::init\_log\_freq\_scale()\{}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00091}00091 \textcolor{comment}{    }}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00092}00092 \textcolor{comment}{    double minfreq = static\_cast<double>(iavcfg.minFrequency);}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00093}00093 \textcolor{comment}{    double maxfreq = static\_cast<double>(iavcfg.maxFrequency);}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00094}00094 \textcolor{comment}{    double maxW = static\_cast<double>(cameracfg.camResW.load());}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00095}00095 \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00096}00096 \textcolor{comment}{    // b = log (y2/y1) / (x2-\/x1) -\/-\/-\/> where x1 (minW ==0), x2 (maxW), y1 (minFreq) and y2 (maxFreq)}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00097}00097 \textcolor{comment}{    b = log (maxfreq / minfreq) / (double)(maxW -\/ 0);}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00098}00098 \textcolor{comment}{    // a = y2 / exp bx2}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00099}00099 \textcolor{comment}{    a = maxfreq / (exp(b*(double)maxW));}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00100}00100 \textcolor{comment}{    }}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00101}00101 \textcolor{comment}{    // given x, find log freq by solving : y = a exp bx}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00102}00102 \textcolor{comment}{    // ...  (    definition in this-\/>\_int2log\_freq()     )}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00103}00103 \textcolor{comment}{\}}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00104}00104 \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00105}00105 \textcolor{comment}{void Audiolizer::int2log\_freq(int \&freq)\{}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00106}00106 \textcolor{comment}{    // given x, find log freq by solving : y = a exp bx}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00107}00107 \textcolor{comment}{    freq = a * exp(b * static\_cast<double>(freq));}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00108}00108 \textcolor{comment}{\}}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8cpp_source_l00109}00109 \textcolor{comment}{*/}}
+
+\end{DoxyCode}

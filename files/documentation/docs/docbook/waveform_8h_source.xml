@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_waveform_8h_source" xml:lang="en-US">
+<title>waveform.h</title>
+<indexterm><primary>include/waveform.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered"><anchor xml:id="_waveform_8h_source_1l00001"/>00001 <emphasis role="preprocessor">#ifndef&#32;RAW_H</emphasis>
+<anchor xml:id="_waveform_8h_source_1l00002"/>00002 <emphasis role="preprocessor">#define&#32;RAW_H</emphasis>
+<anchor xml:id="_waveform_8h_source_1l00003"/>00003 
+<anchor xml:id="_waveform_8h_source_1l00004"/>00004 <emphasis role="preprocessor">#include&#32;&lt;vector&gt;</emphasis>
+<anchor xml:id="_waveform_8h_source_1l00005"/>00005 <emphasis role="preprocessor">#include&#32;&lt;atomic&gt;</emphasis>
+<anchor xml:id="_waveform_8h_source_1l00006"/>00006 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_config_8h">config.h</link>&quot;</emphasis>
+<anchor xml:id="_waveform_8h_source_1l00007"/>00007 
+<anchor xml:id="_waveform_8h_source_1l00012"/><link linkend="_classWaveform">00012</link> <emphasis role="keyword">class&#32;</emphasis><link linkend="_classWaveform">Waveform</link>{
+<anchor xml:id="_waveform_8h_source_1l00013"/>00013 <emphasis role="keyword">public</emphasis>:
+<anchor xml:id="_waveform_8h_source_1l00014"/>00014 &#32;&#32;&#32;&#32;
+<anchor xml:id="_waveform_8h_source_1l00016"/>00016 &#32;&#32;&#32;&#32;<link linkend="_classWaveform_1a4a10db706dde8126a190a650f0b639fb">Waveform</link>();
+<anchor xml:id="_waveform_8h_source_1l00017"/>00017 
+<anchor xml:id="_waveform_8h_source_1l00023"/>00023 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classWaveform_1a6b4f4455a6a8ae2222f967e88b80460b">write</link>(<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">float</emphasis>&amp;);
+<anchor xml:id="_waveform_8h_source_1l00024"/>00024 
+<anchor xml:id="_waveform_8h_source_1l00030"/>00030 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classWaveform_1ad4309d03c34e0b7ebe173ee8bd536116">read</link>(<emphasis role="keywordtype">float</emphasis>&amp;);
+<anchor xml:id="_waveform_8h_source_1l00031"/>00031 &#32;&#32;&#32;&#32;
+<anchor xml:id="_waveform_8h_source_1l00036"/>00036 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classWaveform_1ab6511211e5b81756a2a6a502ba1f0d4b">isEmpty</link>()&#32;<emphasis role="keyword">const</emphasis>;
+<anchor xml:id="_waveform_8h_source_1l00037"/>00037 &#32;&#32;&#32;&#32;
+<anchor xml:id="_waveform_8h_source_1l00038"/>00038 &#32;&#32;&#32;&#32;<emphasis role="comment">/*</emphasis>
+<anchor xml:id="_waveform_8h_source_1l00039"/>00039 <emphasis role="comment">&#32;&#32;&#32;&#32;&#32;*&#32;@brief&#32;Checks&#32;if&#32;the&#32;buffer&#32;is&#32;full.</emphasis>
+<anchor xml:id="_waveform_8h_source_1l00040"/>00040 <emphasis role="comment">&#32;&#32;&#32;&#32;&#32;*&#32;@return&#32;bool&#32;-&#32;true&#32;if&#32;the&#32;buffer&#32;is&#32;full,&#32;false&#32;otherwise.</emphasis>
+<anchor xml:id="_waveform_8h_source_1l00041"/>00041 <emphasis role="comment">&#32;&#32;&#32;&#32;&#32;*/</emphasis>
+<anchor xml:id="_waveform_8h_source_1l00042"/>00042 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classWaveform_1ac92843770623eb8e7d4d3b34bb5eef7a">isFull</link>()&#32;<emphasis role="keyword">const</emphasis>;
+<anchor xml:id="_waveform_8h_source_1l00043"/>00043 &#32;&#32;&#32;&#32;
+<anchor xml:id="_waveform_8h_source_1l00048"/>00048 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_classWaveform_1a55aadc54c0329bb9e25fecbf895b71f2">size</link>()&#32;<emphasis role="keyword">const</emphasis>;
+<anchor xml:id="_waveform_8h_source_1l00049"/>00049 &#32;&#32;&#32;&#32;
+<anchor xml:id="_waveform_8h_source_1l00054"/>00054 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;<link linkend="_classWaveform_1affe280dcbbde4ed935db6ad3f5d6cc80">availableForReading</link>()&#32;<emphasis role="keyword">const</emphasis>;
+<anchor xml:id="_waveform_8h_source_1l00055"/>00055 &#32;&#32;&#32;&#32;
+<anchor xml:id="_waveform_8h_source_1l00061"/>00061 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_classWaveform_1a57d9f5fae074ff6e3d7d1f687442e427">getMinMax</link>(<emphasis role="keywordtype">float</emphasis>[2]);
+<anchor xml:id="_waveform_8h_source_1l00062"/>00062 &#32;&#32;&#32;&#32;
+<anchor xml:id="_waveform_8h_source_1l00063"/>00063 <emphasis role="keyword">private</emphasis>:
+<anchor xml:id="_waveform_8h_source_1l00064"/>00064 
+<anchor xml:id="_waveform_8h_source_1l00065"/>00065 &#32;&#32;&#32;&#32;<link linkend="_classConfig">Config</link>&#32;&amp;cfg&#32;=&#32;<link linkend="_classConfig_1a2d423929da9ed51425ac0cf219b36f5e">Config::getInstance</link>();
+<anchor xml:id="_waveform_8h_source_1l00066"/>00066 &#32;&#32;&#32;&#32;std::vector&lt;float&gt;&#32;waveTable;&#32;<emphasis role="comment">//&#32;The&#32;actual&#32;buffer;&#32;</emphasis>
+<anchor xml:id="_waveform_8h_source_1l00067"/>00067 &#32;&#32;&#32;&#32;std::atomic&lt;size_t&gt;&#32;readpos;
+<anchor xml:id="_waveform_8h_source_1l00068"/>00068 &#32;&#32;&#32;&#32;std::atomic&lt;size_t&gt;&#32;writepos;
+<anchor xml:id="_waveform_8h_source_1l00069"/>00069 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;min,max;
+<anchor xml:id="_waveform_8h_source_1l00070"/>00070 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">size_t</emphasis>&#32;capacity;
+<anchor xml:id="_waveform_8h_source_1l00071"/>00071 };
+<anchor xml:id="_waveform_8h_source_1l00072"/>00072 
+<anchor xml:id="_waveform_8h_source_1l00073"/>00073 <emphasis role="preprocessor">#endif</emphasis>
+</programlisting></section>

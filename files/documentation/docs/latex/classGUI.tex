@@ -1,0 +1,196 @@
+\hypertarget{classGUI}{}\doxysection{GUI Class Reference}
+\label{classGUI}\index{GUI@{GUI}}
+
+
+Class to manage the \mbox{\hyperlink{classGUI}{GUI}} components and settings.  
+
+
+
+
+{\ttfamily \#include $<$gui.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classGUI_a8cbb3140b7d3c9d8e942d6ce6b60a0e8}{GUI}} ()
+\begin{DoxyCompactList}\small\item\em Constructor for the \mbox{\hyperlink{classGUI}{GUI}} class. It creates all the \mbox{\hyperlink{classGUI}{GUI}} components, initializes settings, and sets up connections. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classGUI_a9f85de0bbf11e4ba7c9de1ab38f62433}{on\+Exit}} ()
+\begin{DoxyCompactList}\small\item\em Method that handles the application\textquotesingle{}s exit event. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class to manage the \mbox{\hyperlink{classGUI}{GUI}} components and settings. 
+
+\begin{DoxyNote}{Note}
+It uses Qt for creating the \mbox{\hyperlink{classGUI}{GUI}} and the \mbox{\hyperlink{classSettingsDB}{Settings\+DB}} class for managing settings. 
+\end{DoxyNote}
+
+
+Definition at line \mbox{\hyperlink{gui_8h_source_l00021}{21}} of file \mbox{\hyperlink{gui_8h_source}{gui.\+h}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classGUI_a8cbb3140b7d3c9d8e942d6ce6b60a0e8}\label{classGUI_a8cbb3140b7d3c9d8e942d6ce6b60a0e8}} 
+\index{GUI@{GUI}!GUI@{GUI}}
+\index{GUI@{GUI}!GUI@{GUI}}
+\doxysubsubsection{\texorpdfstring{GUI()}{GUI()}}
+{\footnotesize\ttfamily GUI\+::\+GUI (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Constructor for the \mbox{\hyperlink{classGUI}{GUI}} class. It creates all the \mbox{\hyperlink{classGUI}{GUI}} components, initializes settings, and sets up connections. 
+
+
+
+Definition at line \mbox{\hyperlink{gui_8cpp_source_l00101}{101}} of file \mbox{\hyperlink{gui_8cpp_source}{gui.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00101          \{    }
+\DoxyCodeLine{00102     \textcolor{keywordtype}{int} argc = 0;}
+\DoxyCodeLine{00103     applicationStart = \textcolor{keyword}{false};}
+\DoxyCodeLine{00104     }
+\DoxyCodeLine{00105     QApplication app(argc,\textcolor{keyword}{nullptr});}
+\DoxyCodeLine{00106 }
+\DoxyCodeLine{00107     QWidget window;}
+\DoxyCodeLine{00108     window.setWindowTitle(\textcolor{stringliteral}{"{}Interactive Audio Visualizer"{}});}
+\DoxyCodeLine{00109     }
+\DoxyCodeLine{00110     QVBoxLayout mainLayout;}
+\DoxyCodeLine{00111 }
+\DoxyCodeLine{00112     initializeComponents();}
+\DoxyCodeLine{00113 }
+\DoxyCodeLine{00114     initializeTexts();}
+\DoxyCodeLine{00115 }
+\DoxyCodeLine{00116     \textcolor{comment}{// Audio Settings}}
+\DoxyCodeLine{00117     QGroupBox audioSettings(\textcolor{stringliteral}{"{}Audio Settings"{}});}
+\DoxyCodeLine{00118     QVBoxLayout audioLayout;}
+\DoxyCodeLine{00119     deviceComboBox-\/>addItems(audioDevices);}
+\DoxyCodeLine{00120     audioLayout.addWidget(audioDeviceLabel);}
+\DoxyCodeLine{00121     audioLayout.addWidget(deviceComboBox);}
+\DoxyCodeLine{00122 }
+\DoxyCodeLine{00123     \textcolor{comment}{// Sample Rate ComboBox}}
+\DoxyCodeLine{00124     updateSampleRates(deviceComboBox-\/>currentText());}
+\DoxyCodeLine{00125     audioLayout.addWidget(sampleRateLabel);}
+\DoxyCodeLine{00126     audioLayout.addWidget(sampleRateComboBox);}
+\DoxyCodeLine{00127 }
+\DoxyCodeLine{00128     QObject::connect(deviceComboBox, \&QComboBox::currentTextChanged, }
+\DoxyCodeLine{00129     [\textcolor{keyword}{this}](\textcolor{keyword}{const} QString \&text)\{}
+\DoxyCodeLine{00130         updateSampleRates(text);}
+\DoxyCodeLine{00131         updateNumChannelsInfo(text);}
+\DoxyCodeLine{00132     \});}
+\DoxyCodeLine{00133     }
+\DoxyCodeLine{00134     audioLayout.addWidget(createDropDownList(bufferSizeComboBox,bufferSizeLabel, \{\textcolor{stringliteral}{"{}32"{}}, \textcolor{stringliteral}{"{}64"{}}, \textcolor{stringliteral}{"{}128"{}}, \textcolor{stringliteral}{"{}256"{}}, \textcolor{stringliteral}{"{}512"{}}, \textcolor{stringliteral}{"{}1024"{}}, \textcolor{stringliteral}{"{}2048"{}}, \textcolor{stringliteral}{"{}4096"{}}\}));}
+\DoxyCodeLine{00135     audioLayout.addWidget(createDropDownList(quantizationComboBox,quantizationLabel, \{QString::number( \mbox{\hyperlink{namespaceAudioHardware_abd0d01ecfb85ee51cdc1c04fb15d39c5}{AudioHardware::quantizationRatio}} )\} ));}
+\DoxyCodeLine{00136     audioLayout.addLayout(numChannelsLayout);}
+\DoxyCodeLine{00137     audioSettings.setLayout(\&audioLayout);}
+\DoxyCodeLine{00138     mainLayout.addWidget(\&audioSettings);}
+\DoxyCodeLine{00139 }
+\DoxyCodeLine{00140     \textcolor{comment}{// Camera Settings}}
+\DoxyCodeLine{00141     QGroupBox cameraSettings(\textcolor{stringliteral}{"{}Camera Settings"{}});}
+\DoxyCodeLine{00142     QVBoxLayout cameraLayout;}
+\DoxyCodeLine{00143 }
+\DoxyCodeLine{00144     \textcolor{comment}{// Camera Device ComboBox}}
+\DoxyCodeLine{00145     cameraDeviceComboBox-\/>addItems(cameraDevices);}
+\DoxyCodeLine{00146     cameraLayout.addWidget(cameraDeviceLabel);}
+\DoxyCodeLine{00147     cameraLayout.addWidget(cameraDeviceComboBox);}
+\DoxyCodeLine{00148 }
+\DoxyCodeLine{00149     \textcolor{comment}{// Resolution ComboBox}}
+\DoxyCodeLine{00150     updateResolution(cameraDeviceComboBox-\/>currentText());}
+\DoxyCodeLine{00151     cameraLayout.addWidget(cameraResolutionLabel);}
+\DoxyCodeLine{00152     cameraLayout.addWidget(resolutionComboBox);}
+\DoxyCodeLine{00153 }
+\DoxyCodeLine{00154     QObject::connect(cameraDeviceComboBox, \&QComboBox::currentTextChanged, }
+\DoxyCodeLine{00155         [\textcolor{keyword}{this}](\textcolor{keyword}{const} QString \&text)\{}
+\DoxyCodeLine{00156             updateResolution(text);}
+\DoxyCodeLine{00157         \});}
+\DoxyCodeLine{00158 }
+\DoxyCodeLine{00159     cameraLayout.addWidget(createDropDownList(frameRateComboBox,cameraFrameRateLabel, \{\textcolor{stringliteral}{"{}Auto"{}}\}));}
+\DoxyCodeLine{00160     cameraSettings.setLayout(\&cameraLayout);}
+\DoxyCodeLine{00161     mainLayout.addWidget(\&cameraSettings);}
+\DoxyCodeLine{00162 }
+\DoxyCodeLine{00163     \textcolor{comment}{// Display Settings}}
+\DoxyCodeLine{00164     QGroupBox displaySettings(\textcolor{stringliteral}{"{}Display Settings"{}});}
+\DoxyCodeLine{00165     QVBoxLayout displayLayout;}
+\DoxyCodeLine{00166     displayLayout.addWidget(createDropDownList(displayResolutionComboBox,screenResolutionLabel, displayResolutions));}
+\DoxyCodeLine{00167     displayLayout.addWidget(createDropDownList(displayFrameRateComboBox,screenFrameRateLabel, \{\textcolor{stringliteral}{"{}Auto"{}}\}));}
+\DoxyCodeLine{00168     displaySettings.setLayout(\&displayLayout);}
+\DoxyCodeLine{00169     mainLayout.addWidget(\&displaySettings);}
+\DoxyCodeLine{00170 }
+\DoxyCodeLine{00171     \textcolor{comment}{// IAV Settings}}
+\DoxyCodeLine{00172     QGroupBox iavSettings(\textcolor{stringliteral}{"{}IAV Settings"{}});}
+\DoxyCodeLine{00173     QVBoxLayout iavLayout;}
+\DoxyCodeLine{00174     iavLayout.addWidget(createDropDownList(frequencyRangeComboBox,iavFrequencyRangeLabel, \{\textcolor{stringliteral}{"{}Narrow"{}}, \textcolor{stringliteral}{"{}Normal"{}}, \textcolor{stringliteral}{"{}Wide"{}}\}));}
+\DoxyCodeLine{00175     iavLayout.addWidget(createDropDownList(roiComboBox,iavRegionOfInterestLabel, \{\textcolor{stringliteral}{"{}Small"{}},\textcolor{stringliteral}{"{}Medium"{}},\textcolor{stringliteral}{"{}Large"{}}\}));}
+\DoxyCodeLine{00176     iavLayout.addWidget(createDropDownList(triggerComboBox,iavTriggerLabel, \{\textcolor{stringliteral}{"{}Auto"{}}\})); \textcolor{comment}{//"{}Manual"{},}}
+\DoxyCodeLine{00177     iavLayout.addWidget(createDropDownList(trackingAlgorithmComboBox,iavTrackingAlgLabel, \{\textcolor{stringliteral}{"{}CSRT"{}}, \textcolor{stringliteral}{"{}KCF"{}}\}));}
+\DoxyCodeLine{00178     iavLayout.addWidget(createSkipFramesSlider(accuracyLabel, cpuLoadLabel));}
+\DoxyCodeLine{00179     iavSettings.setLayout(\&iavLayout);}
+\DoxyCodeLine{00180     mainLayout.addWidget(\&iavSettings);}
+\DoxyCodeLine{00181 }
+\DoxyCodeLine{00182     addExplanations();}
+\DoxyCodeLine{00183     }
+\DoxyCodeLine{00184     \textcolor{comment}{// Initialize errorLabel}}
+\DoxyCodeLine{00185     errorLabel = \textcolor{keyword}{new} QLabel();}
+\DoxyCodeLine{00186     errorLabel-\/>setStyleSheet(\textcolor{stringliteral}{"{}color: red;"{}});}
+\DoxyCodeLine{00187     errorLabel-\/>setText(\textcolor{stringliteral}{"{}Camera resolution cannot exceed display resolution."{}});}
+\DoxyCodeLine{00188     errorLabel-\/>hide(); \textcolor{comment}{// Initially hidden}}
+\DoxyCodeLine{00189     mainLayout.addWidget(errorLabel);}
+\DoxyCodeLine{00190     }
+\DoxyCodeLine{00191     QPushButton startButton(\textcolor{stringliteral}{"{}Start"{}});}
+\DoxyCodeLine{00192         QObject::connect(\&startButton, \&QPushButton::clicked, [\textcolor{keyword}{this}]() \{}
+\DoxyCodeLine{00193             \textcolor{keywordflow}{if}(checkResolutionCompatibility()) \{}
+\DoxyCodeLine{00194                 errorLabel-\/>hide(); \textcolor{comment}{// Hide if resolutions are compatible}}
+\DoxyCodeLine{00195                 saveCurrentStates();}
+\DoxyCodeLine{00196                 applicationStart = \textcolor{keyword}{true};}
+\DoxyCodeLine{00197                 QApplication::quit();}
+\DoxyCodeLine{00198                 \textcolor{comment}{// exiting to start\_iav();}}
+\DoxyCodeLine{00199             \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{00200                 errorLabel-\/>show(); \textcolor{comment}{// Show error message if not compatible}}
+\DoxyCodeLine{00201             \}}
+\DoxyCodeLine{00202         \});}
+\DoxyCodeLine{00203 }
+\DoxyCodeLine{00204     mainLayout.addWidget(\&startButton);}
+\DoxyCodeLine{00205 }
+\DoxyCodeLine{00206     loadCurrentStates();}
+\DoxyCodeLine{00207     }
+\DoxyCodeLine{00208     window.setLayout(\&mainLayout);}
+\DoxyCodeLine{00209     window.show();}
+\DoxyCodeLine{00210 }
+\DoxyCodeLine{00211     QApplication::exec();}
+\DoxyCodeLine{00212 \}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classGUI_a9f85de0bbf11e4ba7c9de1ab38f62433}\label{classGUI_a9f85de0bbf11e4ba7c9de1ab38f62433}} 
+\index{GUI@{GUI}!onExit@{onExit}}
+\index{onExit@{onExit}!GUI@{GUI}}
+\doxysubsubsection{\texorpdfstring{onExit()}{onExit()}}
+{\footnotesize\ttfamily bool GUI\+::on\+Exit (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Method that handles the application\textquotesingle{}s exit event. 
+
+\begin{DoxyReturn}{Returns}
+bool -\/ true if the application should exit. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{gui_8cpp_source_l00374}{374}} of file \mbox{\hyperlink{gui_8cpp_source}{gui.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00374                 \{}
+\DoxyCodeLine{00375     \textcolor{keywordflow}{return} !applicationStart;}
+\DoxyCodeLine{00376 \}}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{gui_8h}{gui.\+h}}\item 
+src/\mbox{\hyperlink{gui_8cpp}{gui.\+cpp}}\end{DoxyCompactItemize}

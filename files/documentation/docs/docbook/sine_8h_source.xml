@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_sine_8h_source" xml:lang="en-US">
+<title>sine.h</title>
+<indexterm><primary>include/sine.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered"><anchor xml:id="_sine_8h_source_1l00001"/>00001 <emphasis role="preprocessor">#ifndef&#32;SINE_H</emphasis>
+<anchor xml:id="_sine_8h_source_1l00002"/>00002 <emphasis role="preprocessor">#define&#32;SINE_H</emphasis>
+<anchor xml:id="_sine_8h_source_1l00003"/>00003 
+<anchor xml:id="_sine_8h_source_1l00004"/>00004 <emphasis role="preprocessor">#include&#32;&lt;functional&gt;</emphasis>
+<anchor xml:id="_sine_8h_source_1l00005"/>00005 <emphasis role="keyword">class&#32;</emphasis><link linkend="_classConfig">Config</link>;
+<anchor xml:id="_sine_8h_source_1l00006"/>00006 <emphasis role="keyword">struct&#32;</emphasis><link linkend="_structAudioConfig">AudioConfig</link>;
+<anchor xml:id="_sine_8h_source_1l00007"/>00007 <emphasis role="keyword">struct&#32;</emphasis><link linkend="_structTone">Tone</link>;
+<anchor xml:id="_sine_8h_source_1l00008"/>00008 
+<anchor xml:id="_sine_8h_source_1l00012"/><link linkend="_classSine">00012</link> <emphasis role="keyword">class&#32;</emphasis><link linkend="_classSine">Sine</link>{
+<anchor xml:id="_sine_8h_source_1l00013"/>00013 
+<anchor xml:id="_sine_8h_source_1l00014"/>00014 <emphasis role="keyword">public</emphasis>:
+<anchor xml:id="_sine_8h_source_1l00015"/>00015 
+<anchor xml:id="_sine_8h_source_1l00017"/>00017 &#32;&#32;&#32;&#32;<link linkend="_classSine_1ac6f77168f7f50d200dc4b2d222c00608">Sine</link>();
+<anchor xml:id="_sine_8h_source_1l00018"/>00018 
+<anchor xml:id="_sine_8h_source_1l00024"/>00024 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_classSine_1a4623d350f103d9dafd5ce29908e59332">setVisualizerUpdater</link>(std::function&lt;<emphasis role="keywordtype">void</emphasis>(<emphasis role="keywordtype">float</emphasis>)&gt;);
+<anchor xml:id="_sine_8h_source_1l00025"/>00025 
+<anchor xml:id="_sine_8h_source_1l00032"/>00032 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_classSine_1abfd05b20115daa6b486ac26c3cb25129">setMonoSignal</link>(<link linkend="_structTone">Tone</link>&amp;,&#32;<emphasis role="keywordtype">float</emphasis>*[2]);
+<anchor xml:id="_sine_8h_source_1l00033"/>00033 &#32;&#32;&#32;&#32;
+<anchor xml:id="_sine_8h_source_1l00039"/>00039 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_classSine_1ae08432c7ada69cff0dd386c1c6b81bf8">setStereoSignal</link>(<link linkend="_structTone">Tone</link>&amp;,&#32;<emphasis role="keywordtype">float</emphasis>*[2]);
+<anchor xml:id="_sine_8h_source_1l00040"/>00040 
+<anchor xml:id="_sine_8h_source_1l00041"/>00041 <emphasis role="keyword">private</emphasis>:
+<anchor xml:id="_sine_8h_source_1l00042"/>00042 &#32;&#32;&#32;&#32;<emphasis role="keyword">const</emphasis>&#32;<link linkend="_structAudioConfig">AudioConfig</link>&amp;&#32;audiocfg;
+<anchor xml:id="_sine_8h_source_1l00043"/>00043 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;prevfreq;
+<anchor xml:id="_sine_8h_source_1l00044"/>00044 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;phase;
+<anchor xml:id="_sine_8h_source_1l00045"/>00045 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;rads_per_sample;
+<anchor xml:id="_sine_8h_source_1l00046"/>00046 
+<anchor xml:id="_sine_8h_source_1l00047"/>00047 &#32;&#32;&#32;&#32;std::function&lt;void(<emphasis role="keywordtype">float</emphasis>)&gt;&#32;updateVisualizer;
+<anchor xml:id="_sine_8h_source_1l00048"/>00048 };
+<anchor xml:id="_sine_8h_source_1l00049"/>00049 
+<anchor xml:id="_sine_8h_source_1l00050"/>00050 <emphasis role="preprocessor">#endif</emphasis>
+</programlisting></section>

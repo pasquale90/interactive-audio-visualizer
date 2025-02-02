@@ -1,0 +1,80 @@
+\hypertarget{visualizer_8h_source}{}\doxysection{visualizer.\+h}
+\label{visualizer_8h_source}\index{include/visualizer.h@{include/visualizer.h}}
+\mbox{\hyperlink{visualizer_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00001}00001 \textcolor{preprocessor}{\#ifndef VISUALIZER\_H}}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00002}00002 \textcolor{preprocessor}{\#define VISUALIZER\_H}}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00003}00003 }
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00004}00004 \textcolor{preprocessor}{\#include <functional>}}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00005}00005 \textcolor{preprocessor}{\#include <vector>}}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00006}00006 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{camera_8h}{camera.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00007}00007 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{videotracker_8h}{videotracker.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00008}00008 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{trigger_8h}{trigger.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00009}00009 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{waveform_8h}{waveform.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00010}00010 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{spectrogram_8h}{spectrogram.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00011}00011 \textcolor{keyword}{class }\mbox{\hyperlink{structRegionOfInterest}{RegionOfInterest}};}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00012}00012 \textcolor{keyword}{class }\mbox{\hyperlink{structTone}{Tone}};}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00013}00013 }
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00017}\mbox{\hyperlink{classVisualizer}{00017}} \textcolor{keyword}{class }\mbox{\hyperlink{classVisualizer}{Visualizer}}\{}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00018}00018 \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00019}00019     }
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00021}00021     \mbox{\hyperlink{classVisualizer_a104487003c9fea602e26c072aae27efc}{Visualizer}}();}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00022}00022 }
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00024}00024     \mbox{\hyperlink{classVisualizer_a013ec3101407fbe4805f289bc32d1265}{\string~Visualizer}}();}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00025}00025 }
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00029}\mbox{\hyperlink{classVisualizer_a74e89c75b05f50baeb692fd62437e4e4}{00029}}     \mbox{\hyperlink{classVisualizer_a74e89c75b05f50baeb692fd62437e4e4}{Visualizer}}(\textcolor{keyword}{const} \mbox{\hyperlink{classVisualizer}{Visualizer}}\&) = \textcolor{keyword}{delete};}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00030}00030 }
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00034}\mbox{\hyperlink{classVisualizer_a28d372074c4cacdc426cdcfe56973b1b}{00034}}     \mbox{\hyperlink{classVisualizer_a28d372074c4cacdc426cdcfe56973b1b}{Visualizer}}(\mbox{\hyperlink{classVisualizer}{Visualizer}}\&\&) = \textcolor{keyword}{delete};}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00035}00035 }
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00039}\mbox{\hyperlink{classVisualizer_a82746f3d798c920bf97fe5fcc97588bf}{00039}}     \mbox{\hyperlink{classVisualizer}{Visualizer}}\& \mbox{\hyperlink{classVisualizer_a82746f3d798c920bf97fe5fcc97588bf}{operator=}}(\textcolor{keyword}{const} \mbox{\hyperlink{classVisualizer}{Visualizer}}\&) = \textcolor{keyword}{delete};}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00040}00040 }
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00044}\mbox{\hyperlink{classVisualizer_ac4737c1975ddb0072fab8ffbe942ee9f}{00044}}     \mbox{\hyperlink{classVisualizer}{Visualizer}}\& \mbox{\hyperlink{classVisualizer_ac4737c1975ddb0072fab8ffbe942ee9f}{operator=}}(\mbox{\hyperlink{classVisualizer}{Visualizer}}\&\&) = \textcolor{keyword}{delete};}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00045}00045 }
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00051}00051     \textcolor{keywordtype}{void} \mbox{\hyperlink{classVisualizer_a968f280b3f09b86105bc662021babbe9}{broadcast}}();}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00052}00052 }
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00062}00062     \textcolor{keywordtype}{void} \mbox{\hyperlink{classVisualizer_a2c7e8bfe6cc35f01084ae3aeaae768db}{setAudiolizerUpdater}}(std::function<\textcolor{keywordtype}{void}(\textcolor{keyword}{const} \textcolor{keywordtype}{bool}, \textcolor{keyword}{const} \textcolor{keywordtype}{bool}, \textcolor{keyword}{const} \mbox{\hyperlink{structRegionOfInterest}{RegionOfInterest}}\&, \mbox{\hyperlink{structTone}{Tone}}\&)>);}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00063}00063 }
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00069}00069     \textcolor{keywordtype}{void} \mbox{\hyperlink{classVisualizer_a1e2c66042ba2df8011fe934abad95f7b}{updateAudioSignal}}(\textcolor{keywordtype}{float});}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00070}00070 }
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00071}00071 \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00072}00072 }
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00073}00073     \textcolor{keyword}{const} \mbox{\hyperlink{classConfig}{Config}} \&cfg = \mbox{\hyperlink{classConfig_a2d423929da9ed51425ac0cf219b36f5e}{Config::getInstance}}();}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00074}00074 }
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00075}00075     \mbox{\hyperlink{classCamera}{Camera}} camera;}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00076}00076     \mbox{\hyperlink{classVideoTracker}{VideoTracker}} videoTracker;}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00077}00077     \mbox{\hyperlink{classTrigger}{Trigger}} trigger;}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00078}00078     \mbox{\hyperlink{classWaveform}{Waveform}} waveform;}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00079}00079     \mbox{\hyperlink{classSpectrogram}{Spectrogram}} spectrogram;}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00080}00080     std::vector<float> specMagnitude;}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00081}00081 }
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00082}00082     cv::Mat visualFrame,cameraFrame;}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00083}00083     cv::Mat camBinaryMask;}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00084}00084 }
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00085}00085     \textcolor{keywordtype}{float} transpose\_ratio\_x, transpose\_ratio\_y;}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00086}00086     \textcolor{keywordtype}{int} R,G,B;}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00087}00087     \textcolor{keywordtype}{int} LR,TB;}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00088}00088     \textcolor{keywordtype}{int} numPointsPerimeter;}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00089}00089     \textcolor{keywordtype}{int} leftMidFreq, rightMidFreq;}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00090}00090 }
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00091}00091     \textcolor{keywordtype}{void} \_setToCamera(\textcolor{keywordtype}{float});}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00092}00092     \textcolor{keywordtype}{void} \_show\_timer(\textcolor{keywordtype}{float});}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00093}00093 }
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00094}00094     \textcolor{keywordtype}{bool} trackingToggle;}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00095}00095     \textcolor{keywordtype}{void} updateTrackingMode(\textcolor{keywordtype}{bool});}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00096}00096     std::function<void(\textcolor{keyword}{const} \textcolor{keywordtype}{bool}, \textcolor{keyword}{const} \textcolor{keywordtype}{bool}, \textcolor{keyword}{const} \mbox{\hyperlink{structRegionOfInterest}{RegionOfInterest}}\&, \mbox{\hyperlink{structTone}{Tone}}\&)> updateAudioLizer ;}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00097}00097     }
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00098}00098     \textcolor{keywordtype}{void} \_set\_BG\_manually(\mbox{\hyperlink{structTone}{Tone}}\&);}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00099}00099     \textcolor{keywordtype}{void} \_set\_FG\_manually(\textcolor{keyword}{const} \mbox{\hyperlink{structRegionOfInterest}{RegionOfInterest}}\&);}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00100}00100     \textcolor{keywordtype}{void} \_create\_camMask();    }
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00101}00101     \textcolor{keywordtype}{bool} \_showFrame();}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00102}00102     \textcolor{keywordtype}{void} \_set\_freq\_midBoundaries();}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00103}00103 }
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00104}00104     \textcolor{keywordtype}{void} draWaveform();}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00105}00105     \textcolor{keywordtype}{void} drawSpectrogram();}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00106}00106     \textcolor{keywordtype}{void} drawSmallcircle(\textcolor{keyword}{const} \mbox{\hyperlink{structRegionOfInterest}{RegionOfInterest}} \&);}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00107}00107 \};}
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00108}00108 }
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00109}00109 }
+\DoxyCodeLine{\Hypertarget{visualizer_8h_source_l00110}00110 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

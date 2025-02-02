@@ -1,0 +1,155 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_audio_8cpp_source" xml:lang="en-US">
+<title>audio.cpp</title>
+<indexterm><primary>src/audio.cpp</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered"><anchor xml:id="_audio_8cpp_source_1l00001"/>00001 <emphasis role="preprocessor">#include&#32;&lt;cstddef&gt;</emphasis>
+<anchor xml:id="_audio_8cpp_source_1l00002"/>00002 <emphasis role="preprocessor">#include&#32;&lt;iostream&gt;</emphasis>
+<anchor xml:id="_audio_8cpp_source_1l00003"/>00003 <emphasis role="preprocessor">#include&#32;&lt;cstring&gt;</emphasis>
+<anchor xml:id="_audio_8cpp_source_1l00004"/>00004 <emphasis role="preprocessor">#include&#32;&lt;unistd.h&gt;</emphasis>
+<anchor xml:id="_audio_8cpp_source_1l00005"/>00005 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_audio_8h">audio.h</link>&quot;</emphasis>
+<anchor xml:id="_audio_8cpp_source_1l00006"/>00006 <emphasis role="preprocessor">#include&#32;&quot;unused_defines.h&quot;</emphasis>
+<anchor xml:id="_audio_8cpp_source_1l00007"/>00007 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_config_8h">config.h</link>&quot;</emphasis>
+<anchor xml:id="_audio_8cpp_source_1l00008"/>00008 
+<anchor xml:id="_audio_8cpp_source_1l00009"/>00009 
+<anchor xml:id="_audio_8cpp_source_1l00010"/><link linkend="_audio_8cpp_1a110faf924682c6b22e3526a1f47b0fe9">00010</link> <emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>&#32;*<link linkend="_audio_8cpp_1a110faf924682c6b22e3526a1f47b0fe9">server_name</link>&#32;=&#32;<emphasis role="keyword">nullptr</emphasis>;
+<anchor xml:id="_audio_8cpp_source_1l00011"/><link linkend="_audio_8cpp_1ab44315834bf3a9a5d29b7752aac6c09b">00011</link> <emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>&#32;<link linkend="_audio_8cpp_1ab44315834bf3a9a5d29b7752aac6c09b">clientName</link>[17]&#32;=&#32;<emphasis role="stringliteral">&quot;IAV-audio-client&quot;</emphasis>;
+<anchor xml:id="_audio_8cpp_source_1l00012"/>00012 
+<anchor xml:id="_audio_8cpp_source_1l00013"/>00013 <emphasis role="keywordtype">int</emphasis>&#32;AudioStream::streamAudio&#32;(&#32;jack_nframes_t&#32;UNUSED(nframes),&#32;<emphasis role="keywordtype">void</emphasis>&#32;*arg){&#32;<emphasis role="comment">//,&#32;float&#32;*in,void&#32;(*threading)(float&#32;*sig)</emphasis>
+<anchor xml:id="_audio_8cpp_source_1l00014"/>00014 &#32;&#32;&#32;&#32;
+<anchor xml:id="_audio_8cpp_source_1l00015"/>00015 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">static_cast&lt;</emphasis><link linkend="_classAudioStream">AudioStream</link>*<emphasis role="keyword">&gt;</emphasis>(arg)-&gt;<link linkend="_classAudioStream_1ac6b5d301d25e74b9b18a58cf5d854385">streamBuffer</link>();
+<anchor xml:id="_audio_8cpp_source_1l00016"/>00016 }
+<anchor xml:id="_audio_8cpp_source_1l00017"/>00017 
+<anchor xml:id="_audio_8cpp_source_1l00018"/><link linkend="_classAudioStream_1ab2e106f7e2f70f0cfb1d7b171da71f16">00018</link> <link linkend="_classAudioStream_1ab2e106f7e2f70f0cfb1d7b171da71f16">AudioStream::AudioStream</link>():audiocfg&#32;(<link linkend="_classConfig">Config</link>::getInstance().audconf){
+<anchor xml:id="_audio_8cpp_source_1l00019"/>00019 
+<anchor xml:id="_audio_8cpp_source_1l00020"/>00020 &#32;&#32;&#32;&#32;client_name=<link linkend="_audio_8cpp_1ab44315834bf3a9a5d29b7752aac6c09b">clientName</link>;
+<anchor xml:id="_audio_8cpp_source_1l00021"/>00021 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;nullify&#32;all</emphasis>
+<anchor xml:id="_audio_8cpp_source_1l00022"/>00022 &#32;&#32;&#32;&#32;client&#32;=&#32;<emphasis role="keyword">nullptr</emphasis>;
+<anchor xml:id="_audio_8cpp_source_1l00023"/>00023 &#32;&#32;&#32;&#32;todevice&#32;=&#32;<emphasis role="keyword">nullptr</emphasis>;
+<anchor xml:id="_audio_8cpp_source_1l00024"/>00024 &#32;&#32;&#32;&#32;
+<anchor xml:id="_audio_8cpp_source_1l00025"/>00025 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(audiocfg.<link linkend="_structAudioConfig_1ae2854185c92301b90a7775242fe6c629">numChannels</link>.load()&#32;==&#32;1){
+<anchor xml:id="_audio_8cpp_source_1l00026"/>00026 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;output_ports[1]&#32;=&#32;<emphasis role="keyword">nullptr</emphasis>;
+<anchor xml:id="_audio_8cpp_source_1l00027"/>00027 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;outputBuffers[1]=<emphasis role="keyword">nullptr</emphasis>;
+<anchor xml:id="_audio_8cpp_source_1l00028"/>00028 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;make_sound&#32;=&#32;&amp;<link linkend="_classSine_1abfd05b20115daa6b486ac26c3cb25129">Sine::setMonoSignal</link>;&#32;&#32;<emphasis role="comment">//&#32;Point&#32;to&#32;setMonoSignal&#32;for&#32;processing&#32;1&#32;single&#32;mono&#32;buffer</emphasis>
+<anchor xml:id="_audio_8cpp_source_1l00029"/>00029 &#32;&#32;&#32;&#32;}&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+<anchor xml:id="_audio_8cpp_source_1l00030"/>00030 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>&#32;<emphasis role="keywordflow">if</emphasis>&#32;(audiocfg.<link linkend="_structAudioConfig_1ae2854185c92301b90a7775242fe6c629">numChannels</link>.load()&#32;==&#32;2)&#32;{
+<anchor xml:id="_audio_8cpp_source_1l00031"/>00031 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;make_sound&#32;=&#32;&amp;<link linkend="_classSine_1ae08432c7ada69cff0dd386c1c6b81bf8">Sine::setStereoSignal</link>;&#32;&#32;<emphasis role="comment">//&#32;Point&#32;to&#32;setStereoSignal&#32;for&#32;processing&#32;2&#32;stereo&#32;buffers</emphasis>
+<anchor xml:id="_audio_8cpp_source_1l00032"/>00032 &#32;&#32;&#32;&#32;}
+<anchor xml:id="_audio_8cpp_source_1l00033"/>00033 }
+<anchor xml:id="_audio_8cpp_source_1l00034"/>00034 
+<anchor xml:id="_audio_8cpp_source_1l00035"/><link linkend="_classAudioStream_1a0f4ac8181f32c9b1466eb35ed723b167">00035</link> <emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_classAudioStream_1a0f4ac8181f32c9b1466eb35ed723b167">AudioStream::setVisualizerUpdater</link>(std::function&lt;<emphasis role="keywordtype">void</emphasis>(<emphasis role="keywordtype">float</emphasis>)&gt;&#32;updater){
+<anchor xml:id="_audio_8cpp_source_1l00036"/>00036 &#32;&#32;&#32;&#32;sine.<link linkend="_classSine_1a4623d350f103d9dafd5ce29908e59332">setVisualizerUpdater</link>(std::move(updater));
+<anchor xml:id="_audio_8cpp_source_1l00037"/>00037 }
+<anchor xml:id="_audio_8cpp_source_1l00038"/>00038 
+<anchor xml:id="_audio_8cpp_source_1l00039"/><link linkend="_classAudioStream_1a480e5d3468bfe9357dd6c40649b1e449">00039</link> <link linkend="_classAudioStream_1a480e5d3468bfe9357dd6c40649b1e449">AudioStream::~AudioStream</link>(){
+<anchor xml:id="_audio_8cpp_source_1l00040"/>00040 &#32;&#32;&#32;&#32;<link linkend="_classAudioStream_1a86a07551cb80ac8248ad0b1953ffb81d">closeStream</link>();
+<anchor xml:id="_audio_8cpp_source_1l00041"/>00041 &#32;&#32;&#32;&#32;std::cout&lt;&lt;<emphasis role="stringliteral">&quot;Audio&#32;stream&#32;object&#32;destructed&quot;</emphasis>&lt;&lt;std::endl;
+<anchor xml:id="_audio_8cpp_source_1l00042"/>00042 }
+<anchor xml:id="_audio_8cpp_source_1l00043"/>00043 
+<anchor xml:id="_audio_8cpp_source_1l00044"/><link linkend="_classAudioStream_1ab4f577911f9c1b1ae64de56e6b2b96af">00044</link> <emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_classAudioStream_1ab4f577911f9c1b1ae64de56e6b2b96af">AudioStream::clientConnect</link>(std::mutex&amp;&#32;mtx,&#32;std::condition_variable&amp;&#32;cv,&#32;<emphasis role="keywordtype">bool</emphasis>&amp;&#32;serverStarted){
+<anchor xml:id="_audio_8cpp_source_1l00045"/>00045 
+<anchor xml:id="_audio_8cpp_source_1l00046"/>00046 &#32;&#32;&#32;&#32;std::cout&#32;&lt;&lt;&#32;<emphasis role="stringliteral">&quot;Waiting&#32;for&#32;jack&#32;server&#32;to&#32;start\n&quot;</emphasis>;
+<anchor xml:id="_audio_8cpp_source_1l00047"/>00047 &#32;&#32;&#32;&#32;std::unique_lock&lt;std::mutex&gt;&#32;lock(mtx);
+<anchor xml:id="_audio_8cpp_source_1l00048"/>00048 &#32;&#32;&#32;&#32;cv.wait(lock,&#32;[&amp;]&#32;{&#32;<emphasis role="keywordflow">return</emphasis>&#32;serverStarted;&#32;});
+<anchor xml:id="_audio_8cpp_source_1l00049"/>00049 
+<anchor xml:id="_audio_8cpp_source_1l00050"/>00050 &#32;&#32;&#32;&#32;jack_options_t&#32;options&#32;=&#32;JackNoStartServer;<emphasis role="comment">//(JackSessionID|JackServerName|JackNoStartServer|JackUseExactName|JackNullOption)</emphasis>
+<anchor xml:id="_audio_8cpp_source_1l00051"/>00051 &#32;&#32;&#32;&#32;jack_status_t&#32;status;
+<anchor xml:id="_audio_8cpp_source_1l00052"/>00052 
+<anchor xml:id="_audio_8cpp_source_1l00053"/>00053 &#32;&#32;&#32;&#32;<emphasis role="comment">/*&#32;open&#32;a&#32;client&#32;connection&#32;to&#32;the&#32;JACK&#32;server&#32;*/</emphasis>
+<anchor xml:id="_audio_8cpp_source_1l00054"/>00054 &#32;&#32;&#32;&#32;client&#32;=&#32;jack_client_open&#32;(client_name,&#32;options,&#32;&amp;status,<emphasis role="keyword">nullptr</emphasis>);
+<anchor xml:id="_audio_8cpp_source_1l00055"/>00055 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(status&#32;&amp;&#32;JackNameNotUnique)&#32;{&#32;&#32;&#32;&#32;<emphasis role="comment">//client&#32;name&#32;not&#32;unique,&#32;set&#32;a&#32;client&#32;name;</emphasis>
+<anchor xml:id="_audio_8cpp_source_1l00056"/>00056 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;client_name&#32;=&#32;jack_get_client_name(client);
+<anchor xml:id="_audio_8cpp_source_1l00057"/>00057 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::cerr&lt;&lt;<emphasis role="stringliteral">&quot;\t&gt;&gt;unique&#32;name&#32;&quot;</emphasis>&lt;&lt;client_name&lt;&lt;<emphasis role="stringliteral">&quot;&#32;assigned&#32;to&#32;the&#32;client&#32;obj.&quot;</emphasis>&lt;&lt;std::endl;
+<anchor xml:id="_audio_8cpp_source_1l00058"/>00058 &#32;&#32;&#32;&#32;}
+<anchor xml:id="_audio_8cpp_source_1l00059"/>00059 &#32;&#32;&#32;&#32;
+<anchor xml:id="_audio_8cpp_source_1l00060"/>00060 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(client&#32;==&#32;NULL)&#32;{
+<anchor xml:id="_audio_8cpp_source_1l00061"/>00061 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::cerr&lt;&lt;<emphasis role="stringliteral">&quot;\t&gt;&gt;jack_client_open()&#32;failed,&#32;status&#32;=&#32;&quot;</emphasis>&lt;&lt;status&lt;&lt;std::endl;
+<anchor xml:id="_audio_8cpp_source_1l00062"/>00062 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(status&#32;&amp;&#32;JackServerFailed)&#32;{
+<anchor xml:id="_audio_8cpp_source_1l00063"/>00063 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::cerr&lt;&lt;<emphasis role="stringliteral">&quot;\t&gt;&gt;Unable&#32;to&#32;connect&#32;to&#32;JACK&#32;server&quot;</emphasis>&lt;&lt;std::endl;
+<anchor xml:id="_audio_8cpp_source_1l00064"/>00064 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+<anchor xml:id="_audio_8cpp_source_1l00065"/>00065 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;exit&#32;(1);
+<anchor xml:id="_audio_8cpp_source_1l00066"/>00066 &#32;&#32;&#32;&#32;}
+<anchor xml:id="_audio_8cpp_source_1l00067"/>00067 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(status&#32;&amp;&#32;JackServerStarted)&#32;{
+<anchor xml:id="_audio_8cpp_source_1l00068"/>00068 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::cout&lt;&lt;<emphasis role="stringliteral">&quot;\t&gt;&gt;JACK&#32;server&#32;started&quot;</emphasis>&lt;&lt;std::endl;
+<anchor xml:id="_audio_8cpp_source_1l00069"/>00069 &#32;&#32;&#32;&#32;}
+<anchor xml:id="_audio_8cpp_source_1l00070"/>00070 
+<anchor xml:id="_audio_8cpp_source_1l00071"/>00071 &#32;&#32;&#32;&#32;<emphasis role="comment">//callback</emphasis>
+<anchor xml:id="_audio_8cpp_source_1l00072"/>00072 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(jack_set_process_callback&#32;(client,streamAudio,<emphasis role="keyword">this</emphasis>)){&#32;<emphasis role="comment">//arg</emphasis>
+<anchor xml:id="_audio_8cpp_source_1l00073"/>00073 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::cerr&lt;&lt;<emphasis role="stringliteral">&quot;\t&gt;&gt;Callback&#32;operation&#32;failed&quot;</emphasis>&lt;&lt;std::endl;
+<anchor xml:id="_audio_8cpp_source_1l00074"/>00074 &#32;&#32;&#32;&#32;}
+<anchor xml:id="_audio_8cpp_source_1l00075"/>00075 
+<anchor xml:id="_audio_8cpp_source_1l00076"/>00076 &#32;&#32;&#32;&#32;<emphasis role="comment">//prevent&#32;failure</emphasis>
+<anchor xml:id="_audio_8cpp_source_1l00077"/>00077 &#32;&#32;&#32;&#32;jack_on_shutdown(client,&amp;jack_shutdown,0);
+<anchor xml:id="_audio_8cpp_source_1l00078"/>00078 
+<anchor xml:id="_audio_8cpp_source_1l00079"/>00079 &#32;&#32;&#32;&#32;<emphasis role="comment">//register&#32;physical&#32;ports</emphasis>
+<anchor xml:id="_audio_8cpp_source_1l00080"/>00080 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">size_t</emphasis>&#32;ch=0;&#32;ch&lt;audiocfg.<link linkend="_structAudioConfig_1ae2854185c92301b90a7775242fe6c629">numChannels</link>.load();++ch){
+<anchor xml:id="_audio_8cpp_source_1l00081"/>00081 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::string&#32;portName&#32;=&#32;(ch%2)&#32;?&#32;(<emphasis role="stringliteral">&quot;PortRight&quot;</emphasis>+std::to_string(ch/2))&#32;:&#32;(<emphasis role="stringliteral">&quot;PortLeft&quot;</emphasis>+std::to_string(ch/2));
+<anchor xml:id="_audio_8cpp_source_1l00082"/>00082 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;std::cout&lt;&lt;&quot;portName&#32;=&#32;&quot;&lt;&lt;portName&lt;&lt;std::endl;</emphasis>
+<anchor xml:id="_audio_8cpp_source_1l00083"/>00083 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;output_ports[ch]=jack_port_register&#32;(client,portName.c_str(),JACK_DEFAULT_AUDIO_TYPE,&#32;JackPortIsOutput,&#32;0);
+<anchor xml:id="_audio_8cpp_source_1l00084"/>00084 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;output_port_right=jack_port_register&#32;(client,&quot;rightPort&quot;,JACK_DEFAULT_AUDIO_TYPE,&#32;JackPortIsOutput,&#32;0);</emphasis>
+<anchor xml:id="_audio_8cpp_source_1l00085"/>00085 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(output_ports[ch]&#32;==&#32;NULL){
+<anchor xml:id="_audio_8cpp_source_1l00086"/>00086 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::cerr&lt;&lt;<emphasis role="stringliteral">&quot;\t&gt;&gt;Unable&#32;to&#32;register&#32;output&#32;port&#32;for&#32;{&quot;</emphasis>&lt;&lt;jack_port_name(output_ports[ch])&lt;&lt;<emphasis role="stringliteral">&quot;}&quot;</emphasis>&lt;&lt;std::endl;
+<anchor xml:id="_audio_8cpp_source_1l00087"/>00087 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;exit&#32;(1);}
+<anchor xml:id="_audio_8cpp_source_1l00088"/>00088 &#32;&#32;&#32;&#32;}
+<anchor xml:id="_audio_8cpp_source_1l00089"/>00089 &#32;&#32;&#32;&#32;
+<anchor xml:id="_audio_8cpp_source_1l00090"/>00090 &#32;&#32;&#32;&#32;<emphasis role="comment">//activate&#32;client</emphasis>
+<anchor xml:id="_audio_8cpp_source_1l00091"/>00091 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(jack_activate&#32;(client))&#32;{
+<anchor xml:id="_audio_8cpp_source_1l00092"/>00092 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::cerr&lt;&lt;<emphasis role="stringliteral">&quot;\t&gt;&gt;cannot&#32;activate&#32;client&#32;{&quot;</emphasis>&lt;&lt;client_name&lt;&lt;<emphasis role="stringliteral">&quot;}&quot;</emphasis>&lt;&lt;std::endl;
+<anchor xml:id="_audio_8cpp_source_1l00093"/>00093 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;exit&#32;(1);
+<anchor xml:id="_audio_8cpp_source_1l00094"/>00094 &#32;&#32;&#32;&#32;}
+<anchor xml:id="_audio_8cpp_source_1l00095"/>00095 
+<anchor xml:id="_audio_8cpp_source_1l00096"/>00096 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;Getting&#32;acces&#32;to&#32;destination&#32;ports</emphasis>
+<anchor xml:id="_audio_8cpp_source_1l00097"/>00097 &#32;&#32;&#32;&#32;todevice&#32;=&#32;jack_get_ports&#32;(client,&#32;NULL,&#32;NULL,&#32;JackPortIsPhysical|JackPortIsInput);
+<anchor xml:id="_audio_8cpp_source_1l00098"/>00098 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(todevice&#32;==&#32;NULL)&#32;{
+<anchor xml:id="_audio_8cpp_source_1l00099"/>00099 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::cerr&lt;&lt;<emphasis role="stringliteral">&quot;\t&gt;&gt;no&#32;physical&#32;playback&#32;devices&quot;</emphasis>&lt;&lt;std::endl;
+<anchor xml:id="_audio_8cpp_source_1l00100"/>00100 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;exit&#32;(1);
+<anchor xml:id="_audio_8cpp_source_1l00101"/>00101 &#32;&#32;&#32;&#32;}
+<anchor xml:id="_audio_8cpp_source_1l00102"/>00102 
+<anchor xml:id="_audio_8cpp_source_1l00103"/>00103 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">size_t</emphasis>&#32;ch=0;&#32;ch&#32;&lt;audiocfg.<link linkend="_structAudioConfig_1ae2854185c92301b90a7775242fe6c629">numChannels</link>.load();++ch){
+<anchor xml:id="_audio_8cpp_source_1l00104"/>00104 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(output_ports[ch]!=NULL){
+<anchor xml:id="_audio_8cpp_source_1l00105"/>00105 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(jack_connect&#32;(client,&#32;jack_port_name(output_ports[ch]),&#32;todevice[ch])){<emphasis role="comment">//returns&#32;full&#32;name</emphasis>
+<anchor xml:id="_audio_8cpp_source_1l00106"/>00106 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::cerr&lt;&lt;<emphasis role="stringliteral">&quot;\t&gt;&gt;cannot&#32;connect&#32;left&#32;plysical&#32;output&#32;port&#32;{&quot;</emphasis>&lt;&lt;todevice[ch]&lt;&lt;<emphasis role="stringliteral">&quot;}&#32;with&#32;input&#32;port&#32;{&quot;</emphasis>&lt;&lt;jack_port_name(output_ports[ch])&lt;&lt;<emphasis role="stringliteral">&quot;}&quot;</emphasis>&lt;&lt;std::endl;
+<anchor xml:id="_audio_8cpp_source_1l00107"/>00107 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+<anchor xml:id="_audio_8cpp_source_1l00108"/>00108 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+<anchor xml:id="_audio_8cpp_source_1l00109"/>00109 &#32;&#32;&#32;&#32;}
+<anchor xml:id="_audio_8cpp_source_1l00110"/>00110 
+<anchor xml:id="_audio_8cpp_source_1l00111"/>00111 &#32;&#32;&#32;&#32;free&#32;(todevice);
+<anchor xml:id="_audio_8cpp_source_1l00112"/>00112 }
+<anchor xml:id="_audio_8cpp_source_1l00113"/>00113 
+<anchor xml:id="_audio_8cpp_source_1l00114"/>00114 
+<anchor xml:id="_audio_8cpp_source_1l00115"/><link linkend="_classAudioStream_1a86a07551cb80ac8248ad0b1953ffb81d">00115</link> <emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_classAudioStream_1a86a07551cb80ac8248ad0b1953ffb81d">AudioStream::closeStream</link>(){
+<anchor xml:id="_audio_8cpp_source_1l00116"/>00116 &#32;&#32;&#32;&#32;
+<anchor xml:id="_audio_8cpp_source_1l00117"/>00117 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">size_t</emphasis>&#32;i=0;&#32;i&lt;audiocfg.<link linkend="_structAudioConfig_1ae2854185c92301b90a7775242fe6c629">numChannels</link>.load();++i){
+<anchor xml:id="_audio_8cpp_source_1l00118"/>00118 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(jack_port_connected(output_ports[i])){
+<anchor xml:id="_audio_8cpp_source_1l00119"/>00119 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>(jack_port_disconnect(client,output_ports[i])){
+<anchor xml:id="_audio_8cpp_source_1l00120"/>00120 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::cerr&lt;&lt;<emphasis role="stringliteral">&quot;Couldnt&#32;disconnect&#32;the&#32;&quot;</emphasis>&lt;&lt;jack_port_name(output_ports[i])&lt;&lt;<emphasis role="stringliteral">&quot;&#32;output&#32;port&#32;from&#32;the&#32;main&#32;stream&quot;</emphasis>&lt;&lt;std::endl;
+<anchor xml:id="_audio_8cpp_source_1l00121"/>00121 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+<anchor xml:id="_audio_8cpp_source_1l00122"/>00122 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+<anchor xml:id="_audio_8cpp_source_1l00123"/>00123 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+<anchor xml:id="_audio_8cpp_source_1l00124"/>00124 &#32;&#32;&#32;&#32;}
+<anchor xml:id="_audio_8cpp_source_1l00125"/>00125 
+<anchor xml:id="_audio_8cpp_source_1l00126"/>00126 &#32;&#32;&#32;&#32;std::cout&lt;&lt;<emphasis role="stringliteral">&quot;Closing&#32;stream&#32;-&#32;turning&#32;off&#32;audio&#32;client..&quot;</emphasis>&lt;&lt;std::endl;
+<anchor xml:id="_audio_8cpp_source_1l00127"/>00127 &#32;&#32;&#32;&#32;jack_client_close&#32;(client);
+<anchor xml:id="_audio_8cpp_source_1l00128"/>00128 }
+<anchor xml:id="_audio_8cpp_source_1l00129"/>00129 
+<anchor xml:id="_audio_8cpp_source_1l00130"/><link linkend="_classAudioStream_1ac6b5d301d25e74b9b18a58cf5d854385">00130</link> <emphasis role="keywordtype">int</emphasis>&#32;<link linkend="_classAudioStream_1ac6b5d301d25e74b9b18a58cf5d854385">AudioStream::streamBuffer</link>(){
+<anchor xml:id="_audio_8cpp_source_1l00131"/>00131 
+<anchor xml:id="_audio_8cpp_source_1l00132"/>00132 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">size_t</emphasis>&#32;ch&#32;=&#32;0&#32;;&#32;ch&#32;&lt;&#32;audiocfg.<link linkend="_structAudioConfig_1ae2854185c92301b90a7775242fe6c629">numChannels</link>.load();&#32;++ch){
+<anchor xml:id="_audio_8cpp_source_1l00133"/>00133 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;outputBuffers[ch]&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">float</emphasis>&#32;*<emphasis role="keyword">&gt;</emphasis>(jack_port_get_buffer&#32;(output_ports[ch],&#32;audiocfg.<link linkend="_structAudioConfig_1ae81381142d99bc1845cb33bd048643df">bufferSize</link>.load()&#32;));
+<anchor xml:id="_audio_8cpp_source_1l00134"/>00134 &#32;&#32;&#32;&#32;}
+<anchor xml:id="_audio_8cpp_source_1l00135"/>00135 &#32;&#32;&#32;&#32;
+<anchor xml:id="_audio_8cpp_source_1l00136"/>00136 &#32;&#32;&#32;&#32;(sine.*make_sound)(tone,outputBuffers);&#32;
+<anchor xml:id="_audio_8cpp_source_1l00137"/>00137 &#32;&#32;&#32;&#32;
+<anchor xml:id="_audio_8cpp_source_1l00138"/>00138 
+<anchor xml:id="_audio_8cpp_source_1l00139"/>00139 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;0;
+<anchor xml:id="_audio_8cpp_source_1l00140"/>00140 }
+<anchor xml:id="_audio_8cpp_source_1l00141"/>00141 
+<anchor xml:id="_audio_8cpp_source_1l00142"/>00142 <emphasis role="keywordtype">void</emphasis>&#32;AudioStream::jack_shutdown&#32;(<emphasis role="keywordtype">void</emphasis>&#32;*UNUSED(arg))
+<anchor xml:id="_audio_8cpp_source_1l00143"/>00143 {
+<anchor xml:id="_audio_8cpp_source_1l00144"/>00144 &#32;&#32;&#32;&#32;exit&#32;(1);
+<anchor xml:id="_audio_8cpp_source_1l00145"/>00145 }
+<anchor xml:id="_audio_8cpp_source_1l00146"/>00146 
+<anchor xml:id="_audio_8cpp_source_1l00152"/><link linkend="_classAudioStream_1a79ba2b085605b367698a204bb28fc6e7">00152</link> <emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_classAudioStream_1a79ba2b085605b367698a204bb28fc6e7">AudioStream::update</link>(<emphasis role="keywordtype">int</emphasis>&#32;frequency,&#32;<emphasis role="keywordtype">float</emphasis>&#32;volume){
+<anchor xml:id="_audio_8cpp_source_1l00153"/>00153 &#32;&#32;&#32;&#32;tone.<link linkend="_structTone_1a8c28a65c858594e410d94921d7abc1fa">frequency</link>.store(frequency);
+<anchor xml:id="_audio_8cpp_source_1l00154"/>00154 &#32;&#32;&#32;&#32;tone.<link linkend="_structTone_1ad643b37d799caa83f6a80dc2f001aa4a">volume</link>.store(volume);
+<anchor xml:id="_audio_8cpp_source_1l00155"/>00155 }
+</programlisting></section>

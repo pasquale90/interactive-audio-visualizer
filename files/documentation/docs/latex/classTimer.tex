@@ -1,0 +1,209 @@
+\hypertarget{classTimer}{}\doxysection{Timer Class Reference}
+\label{classTimer}\index{Timer@{Timer}}
+
+
+A class responsible for managing a timer.  
+
+
+
+
+{\ttfamily \#include $<$timer.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classTimer_a5f16e8da27d2a5a5242dead46de05d97}{Timer}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor. Initializes the timer with a default time of 0 seconds. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTimer_a40123f84a3b830f2721bf4ed0d0b64f8}{set\+Timer}} (int)
+\begin{DoxyCompactList}\small\item\em Sets the timer to a specific time in seconds. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTimer_a3a8b5272198d029779dc9302a54305a8}{start}} ()
+\begin{DoxyCompactList}\small\item\em Starts the timer. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classTimer_aa8cb793518f8630a02c526c2f1666f62}{update}} (int \&)
+\begin{DoxyCompactList}\small\item\em Updates the timer. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classTimer_a904b079e716d79ae9acff4ef84fff4b7}{get\+Remaining\+Time}} () const
+\begin{DoxyCompactList}\small\item\em Gets the remaining time for display or logging purposes. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classTimer_a35483f893f25c87981e8ca97cff74bd3}{is\+Timer\+Finished}} () const
+\begin{DoxyCompactList}\small\item\em Checks if the timer has finished. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A class responsible for managing a timer. 
+
+Definition at line \mbox{\hyperlink{timer_8h_source_l00009}{9}} of file \mbox{\hyperlink{timer_8h_source}{timer.\+h}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classTimer_a5f16e8da27d2a5a5242dead46de05d97}\label{classTimer_a5f16e8da27d2a5a5242dead46de05d97}} 
+\index{Timer@{Timer}!Timer@{Timer}}
+\index{Timer@{Timer}!Timer@{Timer}}
+\doxysubsubsection{\texorpdfstring{Timer()}{Timer()}}
+{\footnotesize\ttfamily Timer\+::\+Timer (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Default constructor. Initializes the timer with a default time of 0 seconds. 
+
+
+
+Definition at line \mbox{\hyperlink{timer_8cpp_source_l00004}{4}} of file \mbox{\hyperlink{timer_8cpp_source}{timer.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00004 : initialSeconds(0), remainingTimeMilliseconds(0)\{\}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classTimer_a904b079e716d79ae9acff4ef84fff4b7}\label{classTimer_a904b079e716d79ae9acff4ef84fff4b7}} 
+\index{Timer@{Timer}!getRemainingTime@{getRemainingTime}}
+\index{getRemainingTime@{getRemainingTime}!Timer@{Timer}}
+\doxysubsubsection{\texorpdfstring{getRemainingTime()}{getRemainingTime()}}
+{\footnotesize\ttfamily int Timer\+::get\+Remaining\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Gets the remaining time for display or logging purposes. 
+
+\begin{DoxyReturn}{Returns}
+int -\/ The remaining time in seconds. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{timer_8cpp_source_l00039}{39}} of file \mbox{\hyperlink{timer_8cpp_source}{timer.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00039                                   \{}
+\DoxyCodeLine{00040     \textcolor{keywordflow}{return} remainingTimeMilliseconds / 1000;  \textcolor{comment}{// Convert milliseconds back to seconds}}
+\DoxyCodeLine{00041 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classTimer_a35483f893f25c87981e8ca97cff74bd3}\label{classTimer_a35483f893f25c87981e8ca97cff74bd3}} 
+\index{Timer@{Timer}!isTimerFinished@{isTimerFinished}}
+\index{isTimerFinished@{isTimerFinished}!Timer@{Timer}}
+\doxysubsubsection{\texorpdfstring{isTimerFinished()}{isTimerFinished()}}
+{\footnotesize\ttfamily bool Timer\+::is\+Timer\+Finished (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Checks if the timer has finished. 
+
+\begin{DoxyReturn}{Returns}
+bool -\/ True if the timer has finished, false otherwise. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{timer_8cpp_source_l00044}{44}} of file \mbox{\hyperlink{timer_8cpp_source}{timer.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00044                                   \{}
+\DoxyCodeLine{00045     \textcolor{keywordflow}{return} remainingTimeMilliseconds <= 0;}
+\DoxyCodeLine{00046 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classTimer_a40123f84a3b830f2721bf4ed0d0b64f8}\label{classTimer_a40123f84a3b830f2721bf4ed0d0b64f8}} 
+\index{Timer@{Timer}!setTimer@{setTimer}}
+\index{setTimer@{setTimer}!Timer@{Timer}}
+\doxysubsubsection{\texorpdfstring{setTimer()}{setTimer()}}
+{\footnotesize\ttfamily void Timer\+::set\+Timer (\begin{DoxyParamCaption}\item[{int}]{seconds }\end{DoxyParamCaption})}
+
+
+
+Sets the timer to a specific time in seconds. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em seconds} & -\/ The new time in seconds for the timer. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{timer_8cpp_source_l00006}{6}} of file \mbox{\hyperlink{timer_8cpp_source}{timer.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00006                                 \{}
+\DoxyCodeLine{00007     initialSeconds = seconds;  }
+\DoxyCodeLine{00008     remainingTimeMilliseconds = seconds * 1000; }
+\DoxyCodeLine{00009     lastUpdateTime = std::chrono::steady\_clock::now();}
+\DoxyCodeLine{00010 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classTimer_a3a8b5272198d029779dc9302a54305a8}\label{classTimer_a3a8b5272198d029779dc9302a54305a8}} 
+\index{Timer@{Timer}!start@{start}}
+\index{start@{start}!Timer@{Timer}}
+\doxysubsubsection{\texorpdfstring{start()}{start()}}
+{\footnotesize\ttfamily void Timer\+::start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Starts the timer. 
+
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{timer_8cpp_source_l00012}{12}} of file \mbox{\hyperlink{timer_8cpp_source}{timer.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00012                  \{}
+\DoxyCodeLine{00013     lastUpdateTime = std::chrono::steady\_clock::now(); }
+\DoxyCodeLine{00014 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classTimer_aa8cb793518f8630a02c526c2f1666f62}\label{classTimer_aa8cb793518f8630a02c526c2f1666f62}} 
+\index{Timer@{Timer}!update@{update}}
+\index{update@{update}!Timer@{Timer}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily bool Timer\+::update (\begin{DoxyParamCaption}\item[{int \&}]{seconds\+Elapsed }\end{DoxyParamCaption})}
+
+
+
+Updates the timer. 
+
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{timer_8cpp_source_l00016}{16}} of file \mbox{\hyperlink{timer_8cpp_source}{timer.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00016                                       \{}
+\DoxyCodeLine{00017 }
+\DoxyCodeLine{00018     \textcolor{comment}{// Calculate time passed since last update}}
+\DoxyCodeLine{00019     \textcolor{keyword}{auto} now = std::chrono::steady\_clock::now();}
+\DoxyCodeLine{00020     std::chrono::duration<int64\_t, std::milli> elapsed = std::chrono::duration\_cast<std::chrono::milliseconds>(now -\/ lastUpdateTime);}
+\DoxyCodeLine{00021 }
+\DoxyCodeLine{00022     \textcolor{comment}{// Subtract elapsed milliseconds from the remaining time}}
+\DoxyCodeLine{00023     remainingTimeMilliseconds -\/= \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(elapsed.count());  }
+\DoxyCodeLine{00024     lastUpdateTime = now;  \textcolor{comment}{// Update last time frame}}
+\DoxyCodeLine{00025 }
+\DoxyCodeLine{00026     \textcolor{comment}{// If the timer has finished}}
+\DoxyCodeLine{00027     \textcolor{keywordflow}{if} (remainingTimeMilliseconds <= 0) \{}
+\DoxyCodeLine{00028         remainingTimeMilliseconds = 0;}
+\DoxyCodeLine{00029         secondsElapsed = initialSeconds;  \textcolor{comment}{// Set elapsed time to the initial value}}
+\DoxyCodeLine{00030         \textcolor{keywordflow}{return} \textcolor{keyword}{true}; }
+\DoxyCodeLine{00031     \}}
+\DoxyCodeLine{00032 }
+\DoxyCodeLine{00033     \textcolor{comment}{// Return the elapsed time in seconds (rounded)}}
+\DoxyCodeLine{00034     secondsElapsed = remainingTimeMilliseconds;}
+\DoxyCodeLine{00035     \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{00036 \}}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{timer_8h}{timer.\+h}}\item 
+src/\mbox{\hyperlink{timer_8cpp}{timer.\+cpp}}\end{DoxyCompactItemize}

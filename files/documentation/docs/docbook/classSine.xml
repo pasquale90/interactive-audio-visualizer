@@ -1,0 +1,224 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_classSine" xml:lang="en-US">
+<title>Sine Class Reference</title>
+<indexterm><primary>Sine</primary></indexterm>
+<para>
+
+<para>Class responsible for generating sine wave signals for audio processing. </para>
+ 
+</para>
+<para>
+<computeroutput>#include &lt;sine.h&gt;</computeroutput>
+</para>
+<simplesect>
+    <title>Public Member Functions    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_classSine_1ac6f77168f7f50d200dc4b2d222c00608">Sine</link> ()</para>
+
+<para>Default constructor. </para>
+</listitem>
+            <listitem><para>void <link linkend="_classSine_1a4623d350f103d9dafd5ce29908e59332">setVisualizerUpdater</link> (std::function&lt; void(float)&gt;)</para>
+
+<para>Function to set the visualizer update callback. </para>
+</listitem>
+            <listitem><para>void <link linkend="_classSine_1abfd05b20115daa6b486ac26c3cb25129">setMonoSignal</link> (<link linkend="_structTone">Tone</link> &amp;, float *[2])</para>
+
+<para>Function to generate a mono sine wave signal for a given tone. </para>
+</listitem>
+            <listitem><para>void <link linkend="_classSine_1ae08432c7ada69cff0dd386c1c6b81bf8">setStereoSignal</link> (<link linkend="_structTone">Tone</link> &amp;, float *[2])</para>
+
+<para>Function to generate a stereo sine wave signal for a given tone. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Detailed Description</title>
+
+<para>Class responsible for generating sine wave signals for audio processing. </para>
+<para>
+Definition at line <link linkend="_sine_8h_source_1l00012">12</link> of file <link linkend="_sine_8h_source">sine.h</link>.</para>
+</section>
+<section>
+<title>Constructor &amp; Destructor Documentation</title>
+<anchor xml:id="_classSine_1ac6f77168f7f50d200dc4b2d222c00608"/><section>
+    <title>Sine()</title>
+<indexterm><primary>Sine</primary><secondary>Sine</secondary></indexterm>
+<indexterm><primary>Sine</primary><secondary>Sine</secondary></indexterm>
+<para><computeroutput>Sine::Sine ( )</computeroutput></para><para>
+
+<para>Default constructor. </para>
+</para>
+<para>
+Definition at line <link linkend="_sine_8cpp_source_1l00010">10</link> of file <link linkend="_sine_8cpp_source">sine.cpp</link>.</para>
+<programlisting linenumbering="unnumbered">00010 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;:audiocfg(<link linkend="_classConfig_1a2d423929da9ed51425ac0cf219b36f5e">Config::getInstance</link>().audconf){
+00011 &#32;&#32;&#32;&#32;rads_per_sample&#32;=&#32;0.;
+00012 &#32;&#32;&#32;&#32;prevfreq=0;
+00013 &#32;&#32;&#32;&#32;phase=0.0;
+00014 }
+</programlisting></section>
+</section>
+<section>
+<title>Member Function Documentation</title>
+<anchor xml:id="_classSine_1abfd05b20115daa6b486ac26c3cb25129"/><section>
+    <title>setMonoSignal()</title>
+<indexterm><primary>setMonoSignal</primary><secondary>Sine</secondary></indexterm>
+<indexterm><primary>Sine</primary><secondary>setMonoSignal</secondary></indexterm>
+<para><computeroutput>void Sine::setMonoSignal (<link linkend="_structTone">Tone</link> &amp; tone, float * monoBuffer[2])</computeroutput></para><para>
+
+<para>Function to generate a mono sine wave signal for a given tone. </para>
+</para>
+
+<para>
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>tone</entry><entry>
+<para>- The tone for which the sine wave signal should be generated. </para>
+</entry>
+                            </row>
+                            <row>
+<entry>buffer</entry><entry>
+<para>- The buffer to store the generated sine wave signal. </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <note><title>Note</title>
+
+<para>The buffer size received has two channels (to allow compatibillity with stereo), but the the first channel is only used for writting. </para>
+</note>
+</para>
+<para>
+Definition at line <link linkend="_sine_8cpp_source_1l00020">20</link> of file <link linkend="_sine_8cpp_source">sine.cpp</link>.</para>
+<programlisting linenumbering="unnumbered">00020 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+00021 &#32;&#32;&#32;&#32;
+00022 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;frequency&#32;=&#32;tone.<link linkend="_structTone_1a8c28a65c858594e410d94921d7abc1fa">frequency</link>.load();
+00023 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;amplitude&#32;=&#32;tone.<link linkend="_structTone_1ad643b37d799caa83f6a80dc2f001aa4a">volume</link>.load();
+00024 &#32;&#32;&#32;&#32;
+00025 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(frequency&#32;!=&#32;prevfreq){&#32;<emphasis role="comment">//&#32;reduce&#32;number&#32;of&#32;calculations</emphasis>
+00026 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;rads_per_sample&#32;=&#32;(<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">float</emphasis><emphasis role="keyword">&gt;</emphasis>(frequency&#32;*&#32;2.*&#32;<link linkend="_sine_8cpp_1ae71449b1cc6e6250b91f539153a7a0d3">M_PI</link>))&#32;/&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">float</emphasis><emphasis role="keyword">&gt;</emphasis>(audiocfg.<link linkend="_structAudioConfig_1aa893cf0e18009ba2aeb67a105d42aa71">sampleRate</link>.load());&#32;<emphasis role="comment">//radians&#32;traspotition&#32;per&#32;time&#32;unit</emphasis>
+00027 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;prevfreq&#32;=&#32;frequency;&#32;&#32;&#32;
+00028 &#32;&#32;&#32;&#32;}
+00029 
+00030 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">int</emphasis>&#32;i=0;i&lt;audiocfg.<link linkend="_structAudioConfig_1ae81381142d99bc1845cb33bd048643df">bufferSize</link>.load();i++){
+00031 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;value&#32;=&#32;amplitude*(float)sin(phase);
+00032 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;monoBuffer[0][i]&#32;=&#32;value;
+00033 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;phase+=rads_per_sample;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;shift&#32;phase&#32;by&#32;amount&#32;of&#32;rads_per_sample</emphasis>
+00034 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(phase&#32;&gt;=&#32;2*<link linkend="_sine_8cpp_1ae71449b1cc6e6250b91f539153a7a0d3">M_PI</link>)&#32;phase=0;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;if&#32;phase&#32;reaches&#32;2pi&#32;,&#32;zero&#32;it&#32;down.</emphasis>
+00035 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+00036 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;updateVisualizer(value);&#32;<emphasis role="comment">//&#32;fill&#32;the&#32;shareable&#32;ring&#32;buffer</emphasis>
+00037 &#32;&#32;&#32;&#32;}&#32;&#32;&#32;
+00038 }
+</programlisting></section>
+<anchor xml:id="_classSine_1ae08432c7ada69cff0dd386c1c6b81bf8"/><section>
+    <title>setStereoSignal()</title>
+<indexterm><primary>setStereoSignal</primary><secondary>Sine</secondary></indexterm>
+<indexterm><primary>Sine</primary><secondary>setStereoSignal</secondary></indexterm>
+<para><computeroutput>void Sine::setStereoSignal (<link linkend="_structTone">Tone</link> &amp; tone, float * stereoBuffer[2])</computeroutput></para><para>
+
+<para>Function to generate a stereo sine wave signal for a given tone. </para>
+</para>
+
+<para>
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>tone</entry><entry>
+<para>- The tone for which the stereo sine wave signal should be generated. </para>
+</entry>
+                            </row>
+                            <row>
+<entry>buffer</entry><entry>
+<para>- The buffer to store the generated stereo sine wave signal. </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
+<para>
+Definition at line <link linkend="_sine_8cpp_source_1l00040">40</link> of file <link linkend="_sine_8cpp_source">sine.cpp</link>.</para>
+<programlisting linenumbering="unnumbered">00040 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+00041 
+00042 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;frequency&#32;=&#32;tone.<link linkend="_structTone_1a8c28a65c858594e410d94921d7abc1fa">frequency</link>.load();
+00043 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;amplitude&#32;=&#32;tone.<link linkend="_structTone_1ad643b37d799caa83f6a80dc2f001aa4a">volume</link>.load();
+00044 
+00045 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(frequency&#32;!=&#32;prevfreq){&#32;<emphasis role="comment">//&#32;reduce&#32;number&#32;of&#32;calculations</emphasis>
+00046 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;rads_per_sample&#32;=&#32;(<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">float</emphasis><emphasis role="keyword">&gt;</emphasis>(frequency&#32;*&#32;2.&#32;*&#32;<link linkend="_sine_8cpp_1ae71449b1cc6e6250b91f539153a7a0d3">M_PI</link>))&#32;/&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">float</emphasis><emphasis role="keyword">&gt;</emphasis>(audiocfg.<link linkend="_structAudioConfig_1aa893cf0e18009ba2aeb67a105d42aa71">sampleRate</link>.load());&#32;<emphasis role="comment">//radians&#32;traspotition&#32;per&#32;time&#32;unit</emphasis>
+00047 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;prevfreq&#32;=&#32;frequency;&#32;&#32;&#32;
+00048 &#32;&#32;&#32;&#32;}
+00049 
+00050 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">for</emphasis>&#32;(<emphasis role="keywordtype">int</emphasis>&#32;i=0;i&lt;audiocfg.<link linkend="_structAudioConfig_1ae81381142d99bc1845cb33bd048643df">bufferSize</link>.load();i++){
+00051 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;value&#32;=&#32;amplitude*(float)sin(phase);
+00052 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;stereoBuffer[0][i]&#32;=&#32;value;
+00053 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;stereoBuffer[1][i]&#32;=&#32;value;
+00054 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;phase+=rads_per_sample;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;shift&#32;phase&#32;by&#32;amount&#32;of&#32;rads_per_sample</emphasis>
+00055 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(phase&#32;&gt;=&#32;2*<link linkend="_sine_8cpp_1ae71449b1cc6e6250b91f539153a7a0d3">M_PI</link>)&#32;phase=0;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;if&#32;phase&#32;reaches&#32;2pi&#32;,&#32;zero&#32;it&#32;down.</emphasis>
+00056 
+00057 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;updateVisualizer(value);&#32;<emphasis role="comment">//&#32;fill&#32;the&#32;shareable&#32;ring&#32;buffer</emphasis>
+00058 &#32;&#32;&#32;&#32;}&#32;&#32;&#32;
+00059 }
+</programlisting></section>
+<anchor xml:id="_classSine_1a4623d350f103d9dafd5ce29908e59332"/><section>
+    <title>setVisualizerUpdater()</title>
+<indexterm><primary>setVisualizerUpdater</primary><secondary>Sine</secondary></indexterm>
+<indexterm><primary>Sine</primary><secondary>setVisualizerUpdater</secondary></indexterm>
+<para><computeroutput>void Sine::setVisualizerUpdater (std::function&lt; void(float)&gt; updater)</computeroutput></para><para>
+
+<para>Function to set the visualizer update callback. </para>
+</para>
+
+<para>
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>callback</entry><entry>
+<para>- The function to be called when a new visualization update is required. </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <formalpara><title>Returns</title>
+
+<para>void </para>
+</formalpara>
+</para>
+<para>
+Definition at line <link linkend="_sine_8cpp_source_1l00016">16</link> of file <link linkend="_sine_8cpp_source">sine.cpp</link>.</para>
+<programlisting linenumbering="unnumbered">00016 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+00017 &#32;&#32;&#32;&#32;updateVisualizer&#32;=&#32;std::move(updater);
+00018 }
+</programlisting></section>
+<para>
+The documentation for this class was generated from the following files:</para>
+include/<link linkend="_sine_8h">sine.h</link>src/<link linkend="_sine_8cpp">sine.cpp</link></section>
+</section>

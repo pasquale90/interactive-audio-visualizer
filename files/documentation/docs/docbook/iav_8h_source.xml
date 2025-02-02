@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_iav_8h_source" xml:lang="en-US">
+<title>iav.h</title>
+<indexterm><primary>include/iav.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered"><anchor xml:id="_iav_8h_source_1l00001"/>00001 <emphasis role="preprocessor">#ifndef&#32;IAV_H</emphasis>
+<anchor xml:id="_iav_8h_source_1l00002"/>00002 <emphasis role="preprocessor">#define&#32;IAV_H</emphasis>
+<anchor xml:id="_iav_8h_source_1l00003"/>00003 
+<anchor xml:id="_iav_8h_source_1l00004"/>00004 <emphasis role="preprocessor">#include&#32;&lt;thread&gt;</emphasis>
+<anchor xml:id="_iav_8h_source_1l00005"/>00005 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_config_8h">config.h</link>&quot;</emphasis>
+<anchor xml:id="_iav_8h_source_1l00006"/>00006 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_audioserver_8h">audioserver.h</link>&quot;</emphasis>
+<anchor xml:id="_iav_8h_source_1l00007"/>00007 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_audio_8h">audio.h</link>&quot;</emphasis>
+<anchor xml:id="_iav_8h_source_1l00008"/>00008 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_audiolizer_8h">audiolizer.h</link>&quot;</emphasis>
+<anchor xml:id="_iav_8h_source_1l00009"/>00009 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_visualizer_8h">visualizer.h</link>&quot;</emphasis>
+<anchor xml:id="_iav_8h_source_1l00010"/>00010 
+<anchor xml:id="_iav_8h_source_1l00019"/><link linkend="_classIAV">00019</link> <emphasis role="keyword">class&#32;</emphasis><link linkend="_classIAV">IAV</link>{
+<anchor xml:id="_iav_8h_source_1l00020"/>00020 
+<anchor xml:id="_iav_8h_source_1l00021"/>00021 &#32;&#32;&#32;&#32;<emphasis role="keyword">public</emphasis>:
+<anchor xml:id="_iav_8h_source_1l00022"/>00022 
+<anchor xml:id="_iav_8h_source_1l00026"/>00026 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classIAV_1aca883bb01682e183436e708ce648be20">IAV</link>();
+<anchor xml:id="_iav_8h_source_1l00027"/>00027 
+<anchor xml:id="_iav_8h_source_1l00031"/>00031 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classIAV_1a787ff827f02c4d780d8036d61591075d">~IAV</link>();
+<anchor xml:id="_iav_8h_source_1l00032"/>00032 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+<anchor xml:id="_iav_8h_source_1l00037"/>00037 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_classIAV_1a750609975b3e4153e79c1fd012b430f3">start</link>();
+<anchor xml:id="_iav_8h_source_1l00038"/>00038 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+<anchor xml:id="_iav_8h_source_1l00042"/><link linkend="_classIAV_1aa9b9ae76d3bc5b30d4653ef1b81134f4">00042</link> &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classIAV_1aa9b9ae76d3bc5b30d4653ef1b81134f4">IAV</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_classIAV">IAV</link>&amp;)&#32;=&#32;<emphasis role="keyword">delete</emphasis>;
+<anchor xml:id="_iav_8h_source_1l00043"/>00043 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+<anchor xml:id="_iav_8h_source_1l00047"/><link linkend="_classIAV_1a2414a28dbd53b3aeacf9ac8c3dbface0">00047</link> &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classIAV_1a2414a28dbd53b3aeacf9ac8c3dbface0">IAV</link>(<link linkend="_classIAV">IAV</link>&amp;&amp;)&#32;=&#32;<emphasis role="keyword">delete</emphasis>;
+<anchor xml:id="_iav_8h_source_1l00048"/>00048 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+<anchor xml:id="_iav_8h_source_1l00052"/><link linkend="_classIAV_1a7f41f46d411cf6a37d16fc702ac5a4d4">00052</link> &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classIAV">IAV</link>&amp;&#32;<link linkend="_classIAV_1a7f41f46d411cf6a37d16fc702ac5a4d4">operator=</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_classIAV">IAV</link>&amp;)&#32;=&#32;<emphasis role="keyword">delete</emphasis>;
+<anchor xml:id="_iav_8h_source_1l00053"/>00053 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+<anchor xml:id="_iav_8h_source_1l00057"/><link linkend="_classIAV_1ae42d96691188de5447d32ae0d8785c9d">00057</link> &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classIAV">IAV</link>&amp;&amp;&#32;<link linkend="_classIAV_1ae42d96691188de5447d32ae0d8785c9d">operator=</link>(<link linkend="_classIAV">IAV</link>&amp;&amp;)&#32;=&#32;<emphasis role="keyword">delete</emphasis>;
+<anchor xml:id="_iav_8h_source_1l00058"/>00058 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+<anchor xml:id="_iav_8h_source_1l00059"/>00059 &#32;&#32;&#32;&#32;<emphasis role="keyword">private</emphasis>:
+<anchor xml:id="_iav_8h_source_1l00060"/>00060 
+<anchor xml:id="_iav_8h_source_1l00061"/>00061 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classConfig">Config</link>&amp;&#32;cfg&#32;=&#32;<link linkend="_classConfig_1a2d423929da9ed51425ac0cf219b36f5e">Config::getInstance</link>();
+<anchor xml:id="_iav_8h_source_1l00062"/>00062 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classAudioServer">AudioServer</link>&#32;audioServer;
+<anchor xml:id="_iav_8h_source_1l00063"/>00063 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classAudioStream">AudioStream</link>&#32;audioStream;
+<anchor xml:id="_iav_8h_source_1l00064"/>00064 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classAudiolizer">Audiolizer</link>&#32;audiolizer;
+<anchor xml:id="_iav_8h_source_1l00065"/>00065 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<link linkend="_classVisualizer">Visualizer</link>&#32;visualizer;
+<anchor xml:id="_iav_8h_source_1l00066"/>00066 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+<anchor xml:id="_iav_8h_source_1l00067"/>00067 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::thread&#32;audServerThread;
+<anchor xml:id="_iav_8h_source_1l00068"/>00068 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::thread&#32;audioThread;
+<anchor xml:id="_iav_8h_source_1l00069"/>00069 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::thread&#32;visualThread;
+<anchor xml:id="_iav_8h_source_1l00070"/>00070 
+<anchor xml:id="_iav_8h_source_1l00071"/>00071 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::mutex&#32;mtxServer;
+<anchor xml:id="_iav_8h_source_1l00072"/>00072 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::condition_variable&#32;cvServer;
+<anchor xml:id="_iav_8h_source_1l00073"/>00073 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;serverStarted{<emphasis role="keyword">false</emphasis>};
+<anchor xml:id="_iav_8h_source_1l00074"/>00074 
+<anchor xml:id="_iav_8h_source_1l00075"/>00075 };
+<anchor xml:id="_iav_8h_source_1l00076"/>00076 
+<anchor xml:id="_iav_8h_source_1l00077"/>00077 
+<anchor xml:id="_iav_8h_source_1l00078"/>00078 <emphasis role="preprocessor">#endif</emphasis>
+</programlisting></section>

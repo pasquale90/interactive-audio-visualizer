@@ -1,0 +1,55 @@
+\hypertarget{opencvfps_8cpp}{}\doxysection{src/gui/opencvfps.cpp File Reference}
+\label{opencvfps_8cpp}\index{src/gui/opencvfps.cpp@{src/gui/opencvfps.cpp}}
+{\ttfamily \#include \char`\"{}opencv2/opencv.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}gui/opencvfps.\+h\char`\"{}}\newline
+Include dependency graph for opencvfps.\+cpp\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=308pt]{opencvfps_8cpp__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+double \mbox{\hyperlink{opencvfps_8cpp_a26d6d12c7c1b31e27b71aeb7a8742b6b}{get\+CVfps\+\_\+approx}} (const char $\ast$camera\+Device)
+\begin{DoxyCompactList}\small\item\em Calculates the camera\textquotesingle{}s approximate frames per second (FPS) based on Open\+CV\textquotesingle{}s video capture. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{opencvfps_8cpp_a26d6d12c7c1b31e27b71aeb7a8742b6b}\label{opencvfps_8cpp_a26d6d12c7c1b31e27b71aeb7a8742b6b}} 
+\index{opencvfps.cpp@{opencvfps.cpp}!getCVfps\_approx@{getCVfps\_approx}}
+\index{getCVfps\_approx@{getCVfps\_approx}!opencvfps.cpp@{opencvfps.cpp}}
+\doxysubsubsection{\texorpdfstring{getCVfps\_approx()}{getCVfps\_approx()}}
+{\footnotesize\ttfamily double get\+CVfps\+\_\+approx (\begin{DoxyParamCaption}\item[{const char $\ast$}]{camera\+Device }\end{DoxyParamCaption})}
+
+
+
+Calculates the camera\textquotesingle{}s approximate frames per second (FPS) based on Open\+CV\textquotesingle{}s video capture. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em const} & char$\ast$ camera\+Device -\/ The camera device id. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+double -\/ The approximate frames per second (FPS) calculated from the video capture. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{opencvfps_8cpp_source_l00004}{4}} of file \mbox{\hyperlink{opencvfps_8cpp_source}{opencvfps.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00004                                                 \{}
+\DoxyCodeLine{00005     cv::VideoCapture video(cameraDevice);}
+\DoxyCodeLine{00006     }
+\DoxyCodeLine{00007     \textcolor{comment}{// Check camera}}
+\DoxyCodeLine{00008     \textcolor{comment}{// if (!video.isOpened()) \{}}
+\DoxyCodeLine{00009     \textcolor{comment}{//     return -\/1;}}
+\DoxyCodeLine{00010     \textcolor{comment}{// \}}}
+\DoxyCodeLine{00011 }
+\DoxyCodeLine{00012     \textcolor{keywordflow}{return} video.get(cv::CAP\_PROP\_FPS);}
+\DoxyCodeLine{00013 \}}
+
+\end{DoxyCode}

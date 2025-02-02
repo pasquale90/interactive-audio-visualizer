@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_camera_8cpp_source" xml:lang="en-US">
+<title>camera.cpp</title>
+<indexterm><primary>src/camera.cpp</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered"><anchor xml:id="_camera_8cpp_source_1l00001"/>00001 <emphasis role="preprocessor">#include&#32;&lt;iostream&gt;</emphasis>
+<anchor xml:id="_camera_8cpp_source_1l00002"/>00002 <emphasis role="preprocessor">#include&#32;&lt;opencv2/core/hal/interface.h&gt;</emphasis>
+<anchor xml:id="_camera_8cpp_source_1l00003"/>00003 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_camera_8h">camera.h</link>&quot;</emphasis>
+<anchor xml:id="_camera_8cpp_source_1l00004"/>00004 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_config_8h">config.h</link>&quot;</emphasis>
+<anchor xml:id="_camera_8cpp_source_1l00005"/>00005 
+<anchor xml:id="_camera_8cpp_source_1l00006"/><link linkend="_classCamera_1a01f94c3543f56ede7af49dc778f19331">00006</link> <link linkend="_classCamera_1a01f94c3543f56ede7af49dc778f19331">Camera::Camera</link>()&#32;:&#32;cameracfg(<link linkend="_classConfig">Config</link>::getInstance().camconf){
+<anchor xml:id="_camera_8cpp_source_1l00007"/>00007 &#32;&#32;&#32;&#32;frameToggle.store(<emphasis role="keyword">false</emphasis>);
+<anchor xml:id="_camera_8cpp_source_1l00008"/>00008 &#32;&#32;&#32;&#32;toggleFrame=<emphasis role="keyword">false</emphasis>;
+<anchor xml:id="_camera_8cpp_source_1l00009"/>00009 &#32;&#32;&#32;&#32;cv::Mat&#32;frame(cameracfg.<link linkend="_structCameraConfig_1a5aacf3ba605a2c6bfa6a88b971557fa2">camResH</link>.load(),cameracfg.<link linkend="_structCameraConfig_1a53d5be43d6362ca145c56a64fe475bb9">camResW</link>.load(),CV_8UC3);
+<anchor xml:id="_camera_8cpp_source_1l00010"/>00010 &#32;&#32;&#32;&#32;initialize_camera();
+<anchor xml:id="_camera_8cpp_source_1l00011"/>00011 }
+<anchor xml:id="_camera_8cpp_source_1l00012"/>00012 
+<anchor xml:id="_camera_8cpp_source_1l00013"/>00013 <emphasis role="keywordtype">void</emphasis>&#32;Camera::initialize_camera(){
+<anchor xml:id="_camera_8cpp_source_1l00014"/>00014 
+<anchor xml:id="_camera_8cpp_source_1l00015"/>00015 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;device&#32;=&#32;cameracfg.<link linkend="_structCameraConfig_1aec8bc46dada3293af2cfa3339887bc34">device</link>.back()-<emphasis role="charliteral">&apos;0&apos;</emphasis>;
+<anchor xml:id="_camera_8cpp_source_1l00016"/>00016 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;width&#32;=&#32;cameracfg.<link linkend="_structCameraConfig_1a53d5be43d6362ca145c56a64fe475bb9">camResW</link>.load();
+<anchor xml:id="_camera_8cpp_source_1l00017"/>00017 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;height&#32;=&#32;cameracfg.<link linkend="_structCameraConfig_1a5aacf3ba605a2c6bfa6a88b971557fa2">camResH</link>.load();
+<anchor xml:id="_camera_8cpp_source_1l00018"/>00018 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;fps&#32;=&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">int</emphasis><emphasis role="keyword">&gt;</emphasis>(cameracfg.<link linkend="_structCameraConfig_1a941b878bdf22ecbced58522a314bd971">frameRate</link>.load());
+<anchor xml:id="_camera_8cpp_source_1l00019"/>00019 
+<anchor xml:id="_camera_8cpp_source_1l00020"/>00020 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(!cap.open(device,&#32;cv::CAP_V4L2))&#32;{
+<anchor xml:id="_camera_8cpp_source_1l00021"/>00021 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::cerr&#32;&lt;&lt;&#32;<emphasis role="stringliteral">&quot;Error:&#32;Could&#32;not&#32;open&#32;camera&#32;&quot;</emphasis>&#32;&lt;&lt;&#32;device&#32;&lt;&lt;&#32;std::endl;
+<anchor xml:id="_camera_8cpp_source_1l00022"/>00022 &#32;&#32;&#32;&#32;}
+<anchor xml:id="_camera_8cpp_source_1l00023"/>00023 
+<anchor xml:id="_camera_8cpp_source_1l00024"/>00024 &#32;&#32;&#32;&#32;cap.set(cv::CAP_PROP_FRAME_WIDTH,&#32;width);
+<anchor xml:id="_camera_8cpp_source_1l00025"/>00025 &#32;&#32;&#32;&#32;cap.set(cv::CAP_PROP_FRAME_HEIGHT,&#32;height);
+<anchor xml:id="_camera_8cpp_source_1l00026"/>00026 &#32;&#32;&#32;&#32;cap.set(cv::CAP_PROP_FPS,&#32;fps);
+<anchor xml:id="_camera_8cpp_source_1l00027"/>00027 
+<anchor xml:id="_camera_8cpp_source_1l00028"/>00028 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;actualWidth&#32;=&#32;(int)cap.get(cv::CAP_PROP_FRAME_WIDTH);
+<anchor xml:id="_camera_8cpp_source_1l00029"/>00029 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;actualHeight&#32;=&#32;(int)cap.get(cv::CAP_PROP_FRAME_HEIGHT);
+<anchor xml:id="_camera_8cpp_source_1l00030"/>00030 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">double</emphasis>&#32;actualFps&#32;=&#32;cap.get(cv::CAP_PROP_FPS);
+<anchor xml:id="_camera_8cpp_source_1l00031"/>00031 
+<anchor xml:id="_camera_8cpp_source_1l00032"/>00032 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(actualWidth&#32;!=&#32;width&#32;||&#32;actualHeight&#32;!=&#32;height&#32;||&#32;actualFps&#32;!=&#32;fps)&#32;{
+<anchor xml:id="_camera_8cpp_source_1l00033"/>00033 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+<anchor xml:id="_camera_8cpp_source_1l00034"/>00034 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;std::cerr&#32;&lt;&lt;&#32;<emphasis role="stringliteral">&quot;Warning:&#32;Camera&#32;properties&#32;might&#32;not&#32;be&#32;set&#32;correctly!&quot;</emphasis>&#32;&lt;&lt;&#32;std::endl;
+<anchor xml:id="_camera_8cpp_source_1l00035"/>00035 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+<anchor xml:id="_camera_8cpp_source_1l00036"/>00036 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;cameracfg.<link linkend="_structCameraConfig_1a53d5be43d6362ca145c56a64fe475bb9">camResW</link>.store(actualWidth);
+<anchor xml:id="_camera_8cpp_source_1l00037"/>00037 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;cameracfg.<link linkend="_structCameraConfig_1a5aacf3ba605a2c6bfa6a88b971557fa2">camResH</link>.store(actualHeight);
+<anchor xml:id="_camera_8cpp_source_1l00038"/>00038 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;cameracfg.<link linkend="_structCameraConfig_1a941b878bdf22ecbced58522a314bd971">frameRate</link>.store(actualFps);
+<anchor xml:id="_camera_8cpp_source_1l00039"/>00039 &#32;&#32;&#32;&#32;}
+<anchor xml:id="_camera_8cpp_source_1l00040"/>00040 }
+<anchor xml:id="_camera_8cpp_source_1l00041"/>00041 
+<anchor xml:id="_camera_8cpp_source_1l00042"/><link linkend="_classCamera_1ad1897942d0ccf91052386388a497349f">00042</link> <link linkend="_classCamera_1ad1897942d0ccf91052386388a497349f">Camera::~Camera</link>(){
+<anchor xml:id="_camera_8cpp_source_1l00043"/>00043 &#32;&#32;&#32;&#32;frame.release();
+<anchor xml:id="_camera_8cpp_source_1l00044"/>00044 &#32;&#32;&#32;&#32;cap.release();
+<anchor xml:id="_camera_8cpp_source_1l00045"/>00045 &#32;&#32;&#32;&#32;std::cout&lt;&lt;<emphasis role="stringliteral">&quot;Camera&#32;object&#32;destructed&quot;</emphasis>&lt;&lt;std::endl;
+<anchor xml:id="_camera_8cpp_source_1l00046"/>00046 }
+<anchor xml:id="_camera_8cpp_source_1l00047"/>00047 
+<anchor xml:id="_camera_8cpp_source_1l00048"/><link linkend="_classCamera_1ab1640e09af17f9b84c6635a94be9d5c0">00048</link> <emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classCamera_1ab1640e09af17f9b84c6635a94be9d5c0">Camera::frame_elapsed</link>(){
+<anchor xml:id="_camera_8cpp_source_1l00049"/>00049 &#32;&#32;&#32;&#32;atomicChange&#32;=&#32;frameToggle.load();
+<anchor xml:id="_camera_8cpp_source_1l00050"/>00050 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(frameToggle.load()!=toggleFrame){&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;process&#32;the&#32;current&#32;input&#32;from&#32;camera</emphasis>
+<anchor xml:id="_camera_8cpp_source_1l00051"/>00051 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;toggleFrame=atomicChange;
+<anchor xml:id="_camera_8cpp_source_1l00052"/>00052 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+<anchor xml:id="_camera_8cpp_source_1l00053"/>00053 &#32;&#32;&#32;&#32;}<emphasis role="keywordflow">else</emphasis>
+<anchor xml:id="_camera_8cpp_source_1l00054"/>00054 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+<anchor xml:id="_camera_8cpp_source_1l00055"/>00055 }
+<anchor xml:id="_camera_8cpp_source_1l00056"/>00056 
+<anchor xml:id="_camera_8cpp_source_1l00057"/><link linkend="_classCamera_1abf92424200235ed48ec2d7135f02127e">00057</link> <emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classCamera_1abf92424200235ed48ec2d7135f02127e">Camera::capture</link>(cv::Mat&amp;&#32;frame){
+<anchor xml:id="_camera_8cpp_source_1l00058"/>00058 
+<anchor xml:id="_camera_8cpp_source_1l00059"/>00059 &#32;&#32;&#32;&#32;cap.read(frame);
+<anchor xml:id="_camera_8cpp_source_1l00060"/>00060 
+<anchor xml:id="_camera_8cpp_source_1l00061"/>00061 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>(!(frame.empty())){
+<anchor xml:id="_camera_8cpp_source_1l00062"/>00062 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;frameToggle.store(!frameToggle.load());
+<anchor xml:id="_camera_8cpp_source_1l00063"/>00063 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+<anchor xml:id="_camera_8cpp_source_1l00064"/>00064 &#32;&#32;&#32;&#32;}
+<anchor xml:id="_camera_8cpp_source_1l00065"/>00065 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+<anchor xml:id="_camera_8cpp_source_1l00066"/>00066 }
+</programlisting></section>

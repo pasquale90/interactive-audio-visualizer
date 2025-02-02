@@ -1,0 +1,88 @@
+\hypertarget{screenhw_8h}{}\doxysection{include/gui/screenhw.h File Reference}
+\label{screenhw_8h}\index{include/gui/screenhw.h@{include/gui/screenhw.h}}
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$utility$>$}\newline
+Include dependency graph for screenhw.\+h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=208pt]{screenhw_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=286pt]{screenhw_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::vector$<$ std\+::pair$<$ int, int $>$ $>$ \mbox{\hyperlink{screenhw_8h_a0fab6e35135db44188b8fd3c9e4b9a5a}{get\+\_\+screen\+\_\+resolution}} ()
+\begin{DoxyCompactList}\small\item\em Retrieves the resolution of the primary (default) screen using platform-\/specific APIs. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{screenhw_8h_a0fab6e35135db44188b8fd3c9e4b9a5a}\label{screenhw_8h_a0fab6e35135db44188b8fd3c9e4b9a5a}} 
+\index{screenhw.h@{screenhw.h}!get\_screen\_resolution@{get\_screen\_resolution}}
+\index{get\_screen\_resolution@{get\_screen\_resolution}!screenhw.h@{screenhw.h}}
+\doxysubsubsection{\texorpdfstring{get\_screen\_resolution()}{get\_screen\_resolution()}}
+{\footnotesize\ttfamily std\+::vector$<$ std\+::pair$<$ int, int $>$ $>$ get\+\_\+screen\+\_\+resolution (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Retrieves the resolution of the primary (default) screen using platform-\/specific APIs. 
+
+\begin{DoxyReturn}{Returns}
+std\+::vector$<$std\+::pair$<$int,int$>$$>$ -\/ A list of pairs of integers representing the list of width and height supported by the screen. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{screenhw_8cpp_source_l00010}{10}} of file \mbox{\hyperlink{screenhw_8cpp_source}{screenhw.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00010                                                     \{}
+\DoxyCodeLine{00011 }
+\DoxyCodeLine{00012     std::vector<std::pair<int,int>> screen\_resolutions;}
+\DoxyCodeLine{00013     std::unordered\_set<std::string> uniquesValues;}
+\DoxyCodeLine{00014 }
+\DoxyCodeLine{00015     Display* display = XOpenDisplay(NULL);}
+\DoxyCodeLine{00016     \textcolor{keywordflow}{if} (!display) \{}
+\DoxyCodeLine{00017         std::cerr << \textcolor{stringliteral}{"{}Error: Couldn't open display."{}} << std::endl;}
+\DoxyCodeLine{00018         \textcolor{keywordflow}{return} \{\};}
+\DoxyCodeLine{00019     \}}
+\DoxyCodeLine{00020 }
+\DoxyCodeLine{00021     \textcolor{keywordtype}{int} screen = DefaultScreen(display);}
+\DoxyCodeLine{00022     Window root = RootWindow(display, screen);}
+\DoxyCodeLine{00023 }
+\DoxyCodeLine{00024     XRRScreenResources* resources = XRRGetScreenResourcesCurrent(display, root);}
+\DoxyCodeLine{00025     \textcolor{keywordflow}{if} (!resources) \{}
+\DoxyCodeLine{00026         std::cerr << \textcolor{stringliteral}{"{}Error: Could not get screen resources."{}} << std::endl;}
+\DoxyCodeLine{00027         XCloseDisplay(display);}
+\DoxyCodeLine{00028         \textcolor{keywordflow}{return} \{\};}
+\DoxyCodeLine{00029     \}}
+\DoxyCodeLine{00030 }
+\DoxyCodeLine{00031     \textcolor{comment}{// std::cout << "{}Available Screen Resolutions:"{} << std::endl;}}
+\DoxyCodeLine{00032 }
+\DoxyCodeLine{00033     \textcolor{comment}{// Iterate through all modes and display valid resolutions}}
+\DoxyCodeLine{00034     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < resources-\/>nmode; ++i) \{}
+\DoxyCodeLine{00035         XRRModeInfo* mode = \&resources-\/>modes[i];}
+\DoxyCodeLine{00036         \textcolor{keywordflow}{if} (mode-\/>width > 0 \&\& mode-\/>height > 0) \{ \textcolor{comment}{// Ensure valid dimensions}}
+\DoxyCodeLine{00037             \textcolor{comment}{// std::cout << mode-\/>width << "{}x"{} << mode-\/>height << std::endl;}}
+\DoxyCodeLine{00038             std::string resVal = std::to\_string(mode-\/>width) +\textcolor{stringliteral}{"{}x"{}}+ std::to\_string(mode-\/>height);}
+\DoxyCodeLine{00039             \textcolor{keywordflow}{if}(uniquesValues.find(resVal)== uniquesValues.end())\{}
+\DoxyCodeLine{00040                 screen\_resolutions.push\_back(\{mode-\/>width, mode-\/>height\});}
+\DoxyCodeLine{00041                 uniquesValues.insert(resVal);}
+\DoxyCodeLine{00042             \}}
+\DoxyCodeLine{00043         \}}
+\DoxyCodeLine{00044     \}}
+\DoxyCodeLine{00045 }
+\DoxyCodeLine{00046     XRRFreeScreenResources(resources);}
+\DoxyCodeLine{00047     XCloseDisplay(display);}
+\DoxyCodeLine{00048 }
+\DoxyCodeLine{00049     \textcolor{keywordflow}{return} screen\_resolutions;}
+\DoxyCodeLine{00050 \}}
+
+\end{DoxyCode}

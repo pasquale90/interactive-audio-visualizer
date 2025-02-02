@@ -1,0 +1,219 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_classCamera" xml:lang="en-US">
+<title>Camera Class Reference</title>
+<indexterm><primary>Camera</primary></indexterm>
+<para>
+
+<para>Class representing a camera object. </para>
+ 
+</para>
+<para>
+<computeroutput>#include &lt;camera.h&gt;</computeroutput>
+</para>
+<simplesect>
+    <title>Public Member Functions    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_classCamera_1a01f94c3543f56ede7af49dc778f19331">Camera</link> ()</para>
+
+<para>Default constructor. </para>
+</listitem>
+            <listitem><para><link linkend="_classCamera_1ad1897942d0ccf91052386388a497349f">~Camera</link> ()</para>
+
+<para>Destructor for the camera class. It closes the camera and releases any resources. </para>
+</listitem>
+            <listitem><para>bool <link linkend="_classCamera_1abf92424200235ed48ec2d7135f02127e">capture</link> (cv::Mat &amp;)</para>
+
+<para>Method for capturing frames received from the camera. </para>
+</listitem>
+            <listitem><para>bool <link linkend="_classCamera_1ab1640e09af17f9b84c6635a94be9d5c0">frame_elapsed</link> ()</para>
+
+<para>Method that make use of std::atomic variable frameToggle to indicate whether a new frame elapsed. </para>
+</listitem>
+            <listitem><para><link linkend="_classCamera_1a18cea16e830732cc106c27c7a840c3ac">Camera</link> (const <link linkend="_classCamera">Camera</link> &amp;)=delete</para>
+
+<para>Copy constructor is deleted to prevent accidental use. </para>
+</listitem>
+            <listitem><para><link linkend="_classCamera_1acf3613432c3d044cfc28d49a90c3df2f">Camera</link> (<link linkend="_classCamera">Camera</link> &amp;&amp;)=delete</para>
+
+<para>Move constructor is deleted to prevent accidental use. </para>
+</listitem>
+            <listitem><para><link linkend="_classCamera">Camera</link> &amp; <link linkend="_classCamera_1a815562aa01b5ccfe876fcecbbcfb946d">operator=</link> (const <link linkend="_classCamera">Camera</link> &amp;)=delete</para>
+
+<para>Copy assignment operator is deleted to prevent accidental use. </para>
+</listitem>
+            <listitem><para><link linkend="_classCamera">Camera</link> &amp; <link linkend="_classCamera_1a7c4d79e8701a1373a1be674e5d4bfa1e">operator=</link> (<link linkend="_classCamera">Camera</link> &amp;&amp;)=delete</para>
+
+<para>Move assignment operator is deleted to prevent accidental use. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Detailed Description</title>
+
+<para>Class representing a camera object. </para>
+
+
+
+<para><note><title>Note</title>
+
+<para>This class encapsulates the functionality for capturing frames from a camera. </para>
+
+<para>The <link linkend="_classCamera">Camera</link> class is responsible for initializing the camera and capturing frames. </para>
+
+<para>The <link linkend="_classCamera">Camera</link> class uses OpenCV library. </para>
+</note>
+</para>
+<para>
+Definition at line <link linkend="_camera_8h_source_1l00016">16</link> of file <link linkend="_camera_8h_source">camera.h</link>.</para>
+</section>
+<section>
+<title>Constructor &amp; Destructor Documentation</title>
+<anchor xml:id="_classCamera_1a01f94c3543f56ede7af49dc778f19331"/><section>
+    <title>Camera()<computeroutput>[1/3]</computeroutput></title>
+<indexterm><primary>Camera</primary><secondary>Camera</secondary></indexterm>
+<indexterm><primary>Camera</primary><secondary>Camera</secondary></indexterm>
+<para><computeroutput>Camera::Camera ( )</computeroutput></para><para>
+
+<para>Default constructor. </para>
+</para>
+<para>
+Definition at line <link linkend="_camera_8cpp_source_1l00006">6</link> of file <link linkend="_camera_8cpp_source">camera.cpp</link>.</para>
+<programlisting linenumbering="unnumbered">00006 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;:&#32;cameracfg(<link linkend="_classConfig_1a2d423929da9ed51425ac0cf219b36f5e">Config::getInstance</link>().camconf){
+00007 &#32;&#32;&#32;&#32;frameToggle.store(<emphasis role="keyword">false</emphasis>);
+00008 &#32;&#32;&#32;&#32;toggleFrame=<emphasis role="keyword">false</emphasis>;
+00009 &#32;&#32;&#32;&#32;cv::Mat&#32;frame(cameracfg.<link linkend="_structCameraConfig_1a5aacf3ba605a2c6bfa6a88b971557fa2">camResH</link>.load(),cameracfg.<link linkend="_structCameraConfig_1a53d5be43d6362ca145c56a64fe475bb9">camResW</link>.load(),CV_8UC3);
+00010 &#32;&#32;&#32;&#32;initialize_camera();
+00011 }
+</programlisting></section>
+<anchor xml:id="_classCamera_1ad1897942d0ccf91052386388a497349f"/><section>
+    <title>~Camera()</title>
+<indexterm><primary>~Camera</primary><secondary>Camera</secondary></indexterm>
+<indexterm><primary>Camera</primary><secondary>~Camera</secondary></indexterm>
+<para><computeroutput>Camera::~Camera ( )</computeroutput></para><para>
+
+<para>Destructor for the camera class. It closes the camera and releases any resources. </para>
+</para>
+<para>
+Definition at line <link linkend="_camera_8cpp_source_1l00042">42</link> of file <link linkend="_camera_8cpp_source">camera.cpp</link>.</para>
+<programlisting linenumbering="unnumbered">00042 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+00043 &#32;&#32;&#32;&#32;frame.release();
+00044 &#32;&#32;&#32;&#32;cap.release();
+00045 &#32;&#32;&#32;&#32;std::cout&lt;&lt;<emphasis role="stringliteral">&quot;Camera&#32;object&#32;destructed&quot;</emphasis>&lt;&lt;std::endl;
+00046 }
+</programlisting></section>
+<anchor xml:id="_classCamera_1a18cea16e830732cc106c27c7a840c3ac"/><section>
+    <title>Camera()<computeroutput>[2/3]</computeroutput></title>
+<indexterm><primary>Camera</primary><secondary>Camera</secondary></indexterm>
+<indexterm><primary>Camera</primary><secondary>Camera</secondary></indexterm>
+<para><computeroutput>Camera::Camera (const <link linkend="_classCamera">Camera</link> &amp; )<computeroutput>[delete]</computeroutput></computeroutput></para><para>
+
+<para>Copy constructor is deleted to prevent accidental use. </para>
+</para>
+</section>
+<anchor xml:id="_classCamera_1acf3613432c3d044cfc28d49a90c3df2f"/><section>
+    <title>Camera()<computeroutput>[3/3]</computeroutput></title>
+<indexterm><primary>Camera</primary><secondary>Camera</secondary></indexterm>
+<indexterm><primary>Camera</primary><secondary>Camera</secondary></indexterm>
+<para><computeroutput>Camera::Camera (<link linkend="_classCamera">Camera</link> &amp;&amp; )<computeroutput>[delete]</computeroutput></computeroutput></para><para>
+
+<para>Move constructor is deleted to prevent accidental use. </para>
+</para>
+</section>
+</section>
+<section>
+<title>Member Function Documentation</title>
+<anchor xml:id="_classCamera_1abf92424200235ed48ec2d7135f02127e"/><section>
+    <title>capture()</title>
+<indexterm><primary>capture</primary><secondary>Camera</secondary></indexterm>
+<indexterm><primary>Camera</primary><secondary>capture</secondary></indexterm>
+<para><computeroutput>bool Camera::capture (cv::Mat &amp; frame)</computeroutput></para><para>
+
+<para>Method for capturing frames received from the camera. </para>
+</para>
+
+<para>
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="3" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>out</entry><entry>cv::Mat&amp;</entry><entry>
+<para>- the output frame from the camera. </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                </para>
+<para>
+Definition at line <link linkend="_camera_8cpp_source_1l00057">57</link> of file <link linkend="_camera_8cpp_source">camera.cpp</link>.</para>
+<programlisting linenumbering="unnumbered">00057 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+00058 
+00059 &#32;&#32;&#32;&#32;cap.read(frame);
+00060 
+00061 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>(!(frame.empty())){
+00062 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;frameToggle.store(!frameToggle.load());
+00063 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+00064 &#32;&#32;&#32;&#32;}
+00065 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+00066 }
+</programlisting></section>
+<anchor xml:id="_classCamera_1ab1640e09af17f9b84c6635a94be9d5c0"/><section>
+    <title>frame_elapsed()</title>
+<indexterm><primary>frame_elapsed</primary><secondary>Camera</secondary></indexterm>
+<indexterm><primary>Camera</primary><secondary>frame_elapsed</secondary></indexterm>
+<para><computeroutput>bool Camera::frame_elapsed ( )</computeroutput></para><para>
+
+<para>Method that make use of std::atomic variable frameToggle to indicate whether a new frame elapsed. </para>
+</para>
+
+<para><formalpara><title>Returns</title>
+
+<para>bool - true if a frame has elapsed. </para>
+</formalpara>
+<note><title>Note</title>
+
+<para>This method is never used in this code. </para>
+</note>
+</para>
+<para>
+Definition at line <link linkend="_camera_8cpp_source_1l00048">48</link> of file <link linkend="_camera_8cpp_source">camera.cpp</link>.</para>
+<programlisting linenumbering="unnumbered">00048 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+00049 &#32;&#32;&#32;&#32;atomicChange&#32;=&#32;frameToggle.load();
+00050 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(frameToggle.load()!=toggleFrame){&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;process&#32;the&#32;current&#32;input&#32;from&#32;camera</emphasis>
+00051 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;toggleFrame=atomicChange;
+00052 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">true</emphasis>;
+00053 &#32;&#32;&#32;&#32;}<emphasis role="keywordflow">else</emphasis>
+00054 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;<emphasis role="keyword">false</emphasis>;
+00055 }
+</programlisting></section>
+<anchor xml:id="_classCamera_1a7c4d79e8701a1373a1be674e5d4bfa1e"/><section>
+    <title>operator=()<computeroutput>[1/2]</computeroutput></title>
+<indexterm><primary>operator=</primary><secondary>Camera</secondary></indexterm>
+<indexterm><primary>Camera</primary><secondary>operator=</secondary></indexterm>
+<para><computeroutput><link linkend="_classCamera">Camera</link> &amp; Camera::operator= (<link linkend="_classCamera">Camera</link> &amp;&amp; )<computeroutput>[delete]</computeroutput></computeroutput></para><para>
+
+<para>Move assignment operator is deleted to prevent accidental use. </para>
+</para>
+</section>
+<anchor xml:id="_classCamera_1a815562aa01b5ccfe876fcecbbcfb946d"/><section>
+    <title>operator=()<computeroutput>[2/2]</computeroutput></title>
+<indexterm><primary>operator=</primary><secondary>Camera</secondary></indexterm>
+<indexterm><primary>Camera</primary><secondary>operator=</secondary></indexterm>
+<para><computeroutput><link linkend="_classCamera">Camera</link> &amp; Camera::operator= (const <link linkend="_classCamera">Camera</link> &amp; )<computeroutput>[delete]</computeroutput></computeroutput></para><para>
+
+<para>Copy assignment operator is deleted to prevent accidental use. </para>
+</para>
+</section>
+<para>
+The documentation for this class was generated from the following files:</para>
+include/<link linkend="_camera_8h">camera.h</link>src/<link linkend="_camera_8cpp">camera.cpp</link></section>
+</section>

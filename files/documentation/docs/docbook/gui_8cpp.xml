@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_gui_8cpp" xml:lang="en-US">
+<title>src/gui.cpp File Reference</title>
+<indexterm><primary>src/gui.cpp</primary></indexterm>
+<programlisting linenumbering="unnumbered">#include &lt;cstddef&gt;
+#include &lt;string&gt;
+#include &quot;gui.h&quot;
+#include &quot;gui/opencvfps.h&quot;
+#include &quot;gui/audiohw.h&quot;
+#include &quot;gui/camerahw.h&quot;
+#include &quot;gui/screenhw.h&quot;
+</programlisting>Include dependency graph for gui.cpp:<para>
+    <informalfigure>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="0" fileref="gui_8cpp__incl.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </informalfigure>
+</para>
+</section>

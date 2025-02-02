@@ -1,0 +1,319 @@
+\hypertarget{classSpectrogram}{}\doxysection{Spectrogram Class Reference}
+\label{classSpectrogram}\index{Spectrogram@{Spectrogram}}
+
+
+Ring buffer class to generate a spectrogram of the audio signal using the Fast Fourier Transform (FFT).  
+
+
+
+
+{\ttfamily \#include $<$spectrogram.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classSpectrogram_ae4523300613ab1370fd7ae9bfc71d877}{Spectrogram}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSpectrogram_a175fda7cc377563bffde2240aab8bfa7}{$\sim$\+Spectrogram}} ()
+\begin{DoxyCompactList}\small\item\em Class destructor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSpectrogram_a3dc6ad061e01b4b01cbabb6e6edc46bd}{Spectrogram}} (const \mbox{\hyperlink{classSpectrogram}{Spectrogram}} \&)=delete
+\begin{DoxyCompactList}\small\item\em Copy constructor is deleted to prevent accidental use. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSpectrogram_ab8caf0233122cf14a7b9e41d5ead6f57}{Spectrogram}} (\mbox{\hyperlink{classSpectrogram}{Spectrogram}} \&\&)=delete
+\begin{DoxyCompactList}\small\item\em Move constructor is deleted to prevent accidental use. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSpectrogram}{Spectrogram}} \& \mbox{\hyperlink{classSpectrogram_a57b032882df6524168562ac62a5a9457}{operator=}} (const \mbox{\hyperlink{classSpectrogram}{Spectrogram}} \&)=delete
+\begin{DoxyCompactList}\small\item\em Copy assignment operator is deleted to prevent accidental use. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSpectrogram}{Spectrogram}} \& \mbox{\hyperlink{classSpectrogram_a6e14e3a630b327161bad43409270e1c9}{operator=}} (\mbox{\hyperlink{classSpectrogram}{Spectrogram}} \&\&)=delete
+\begin{DoxyCompactList}\small\item\em Move assignment operator is deleted to prevent accidental use. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classSpectrogram_a4662b609d61e705f4271526cad43f045}{get\+\_\+num\+Audio\+Samples}} ()
+\begin{DoxyCompactList}\small\item\em Returns the number of audio samples used to calculate the spectrogram. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classSpectrogram_a9e2b3f56852a55ce83311d57104b7208}{get\+\_\+num\+FFTPoints}} ()
+\begin{DoxyCompactList}\small\item\em Returns the number of FFT points. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classSpectrogram_ab4f694b0b0fac913263703b588361090}{write}} (const float \&)
+\begin{DoxyCompactList}\small\item\em Function used to set the ring buffer with a value to the write position of the FIFO. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classSpectrogram_a16d81b46bf82053953892344d3f24a2c}{read\+Batch}} (std\+::vector$<$ float $>$ \&, float \&, float \&)
+\begin{DoxyCompactList}\small\item\em Function used to read a batch of audio samples from the FIFO and store them in a provided vector. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Ring buffer class to generate a spectrogram of the audio signal using the Fast Fourier Transform (FFT). 
+
+\begin{DoxyNote}{Note}
+The spectrogram is calculated using the FFTW3 library. 
+\end{DoxyNote}
+
+
+Definition at line \mbox{\hyperlink{spectrogram_8h_source_l00015}{15}} of file \mbox{\hyperlink{spectrogram_8h_source}{spectrogram.\+h}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classSpectrogram_ae4523300613ab1370fd7ae9bfc71d877}\label{classSpectrogram_ae4523300613ab1370fd7ae9bfc71d877}} 
+\index{Spectrogram@{Spectrogram}!Spectrogram@{Spectrogram}}
+\index{Spectrogram@{Spectrogram}!Spectrogram@{Spectrogram}}
+\doxysubsubsection{\texorpdfstring{Spectrogram()}{Spectrogram()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily Spectrogram\+::\+Spectrogram (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Default constructor. 
+
+
+
+Definition at line \mbox{\hyperlink{spectrogram_8cpp_source_l00005}{5}} of file \mbox{\hyperlink{spectrogram_8cpp_source}{spectrogram.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00005                         : readpos(0), writepos(0), fft\_in(700)\{}
+\DoxyCodeLine{00006   }
+\DoxyCodeLine{00007   calculateNFFT();}
+\DoxyCodeLine{00008   }
+\DoxyCodeLine{00009   initialize\_hamming(numAudioSamples);}
+\DoxyCodeLine{00010 }
+\DoxyCodeLine{00011   \textcolor{keyword}{auto} fifoSize \{numAudioSamples*2\};}
+\DoxyCodeLine{00012   ringBuffer.reserve(fifoSize);}
+\DoxyCodeLine{00013   ringBuffer.resize(fifoSize);}
+\DoxyCodeLine{00014 }
+\DoxyCodeLine{00015   \textcolor{comment}{// fft\_in = static\_cast<fftw\_complex*> (fftw\_malloc(sizeof(fftw\_complex) * numAudioSamples));}}
+\DoxyCodeLine{00016   fft\_in.reserve(numAudioSamples);}
+\DoxyCodeLine{00017   fft\_in.resize(numAudioSamples);}
+\DoxyCodeLine{00018   fft\_out = \textcolor{keyword}{static\_cast<}fftw\_complex*\textcolor{keyword}{>} (fftw\_malloc(\textcolor{keyword}{sizeof}(fftw\_complex) * numFFTPoints));}
+\DoxyCodeLine{00019 }
+\DoxyCodeLine{00020   plan = fftw\_plan\_dft\_r2c\_1d(numAudioSamples, fft\_in.data(), fft\_out, FFTW\_ESTIMATE); \textcolor{comment}{//FFTW\_MEASURE}}
+\DoxyCodeLine{00021 }
+\DoxyCodeLine{00022   minMagnitude = INT\_MAX, maxMagnitude = 0.;}
+\DoxyCodeLine{00023 }
+\DoxyCodeLine{00024 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classSpectrogram_a175fda7cc377563bffde2240aab8bfa7}\label{classSpectrogram_a175fda7cc377563bffde2240aab8bfa7}} 
+\index{Spectrogram@{Spectrogram}!````~Spectrogram@{$\sim$Spectrogram}}
+\index{````~Spectrogram@{$\sim$Spectrogram}!Spectrogram@{Spectrogram}}
+\doxysubsubsection{\texorpdfstring{$\sim$Spectrogram()}{~Spectrogram()}}
+{\footnotesize\ttfamily Spectrogram\+::$\sim$\+Spectrogram (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Class destructor. 
+
+
+
+Definition at line \mbox{\hyperlink{spectrogram_8cpp_source_l00042}{42}} of file \mbox{\hyperlink{spectrogram_8cpp_source}{spectrogram.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00042                          \{}
+\DoxyCodeLine{00043   \textcolor{keywordflow}{if} (plan) fftw\_destroy\_plan(plan);}
+\DoxyCodeLine{00044   fftw\_cleanup();}
+\DoxyCodeLine{00045   \textcolor{comment}{// fftw\_free(fft\_in); }}
+\DoxyCodeLine{00046   fftw\_free(fft\_out);}
+\DoxyCodeLine{00047 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classSpectrogram_a3dc6ad061e01b4b01cbabb6e6edc46bd}\label{classSpectrogram_a3dc6ad061e01b4b01cbabb6e6edc46bd}} 
+\index{Spectrogram@{Spectrogram}!Spectrogram@{Spectrogram}}
+\index{Spectrogram@{Spectrogram}!Spectrogram@{Spectrogram}}
+\doxysubsubsection{\texorpdfstring{Spectrogram()}{Spectrogram()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily Spectrogram\+::\+Spectrogram (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classSpectrogram}{Spectrogram}} \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+
+
+Copy constructor is deleted to prevent accidental use. 
+
+\mbox{\Hypertarget{classSpectrogram_ab8caf0233122cf14a7b9e41d5ead6f57}\label{classSpectrogram_ab8caf0233122cf14a7b9e41d5ead6f57}} 
+\index{Spectrogram@{Spectrogram}!Spectrogram@{Spectrogram}}
+\index{Spectrogram@{Spectrogram}!Spectrogram@{Spectrogram}}
+\doxysubsubsection{\texorpdfstring{Spectrogram()}{Spectrogram()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily Spectrogram\+::\+Spectrogram (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classSpectrogram}{Spectrogram}} \&\&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+
+
+Move constructor is deleted to prevent accidental use. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classSpectrogram_a4662b609d61e705f4271526cad43f045}\label{classSpectrogram_a4662b609d61e705f4271526cad43f045}} 
+\index{Spectrogram@{Spectrogram}!get\_numAudioSamples@{get\_numAudioSamples}}
+\index{get\_numAudioSamples@{get\_numAudioSamples}!Spectrogram@{Spectrogram}}
+\doxysubsubsection{\texorpdfstring{get\_numAudioSamples()}{get\_numAudioSamples()}}
+{\footnotesize\ttfamily int Spectrogram\+::get\+\_\+num\+Audio\+Samples (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Returns the number of audio samples used to calculate the spectrogram. 
+
+\begin{DoxyNote}{Note}
+the number of audio samples defines the capacity of the ring buffer (FIFO). 
+\end{DoxyNote}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{spectrogram_8cpp_source_l00049}{49}} of file \mbox{\hyperlink{spectrogram_8cpp_source}{spectrogram.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00049                                     \{}
+\DoxyCodeLine{00050   \textcolor{keywordflow}{return} numAudioSamples;}
+\DoxyCodeLine{00051 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classSpectrogram_a9e2b3f56852a55ce83311d57104b7208}\label{classSpectrogram_a9e2b3f56852a55ce83311d57104b7208}} 
+\index{Spectrogram@{Spectrogram}!get\_numFFTPoints@{get\_numFFTPoints}}
+\index{get\_numFFTPoints@{get\_numFFTPoints}!Spectrogram@{Spectrogram}}
+\doxysubsubsection{\texorpdfstring{get\_numFFTPoints()}{get\_numFFTPoints()}}
+{\footnotesize\ttfamily int Spectrogram\+::get\+\_\+num\+FFTPoints (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Returns the number of FFT points. 
+
+\begin{DoxyReturn}{Returns}
+int -\/ The number of FFT points 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{spectrogram_8cpp_source_l00053}{53}} of file \mbox{\hyperlink{spectrogram_8cpp_source}{spectrogram.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00053                                  \{}
+\DoxyCodeLine{00054     \textcolor{keywordflow}{return} numFFTPoints;}
+\DoxyCodeLine{00055 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classSpectrogram_a57b032882df6524168562ac62a5a9457}\label{classSpectrogram_a57b032882df6524168562ac62a5a9457}} 
+\index{Spectrogram@{Spectrogram}!operator=@{operator=}}
+\index{operator=@{operator=}!Spectrogram@{Spectrogram}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classSpectrogram}{Spectrogram}} \& Spectrogram\+::operator= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classSpectrogram}{Spectrogram}} \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+
+
+Copy assignment operator is deleted to prevent accidental use. 
+
+\mbox{\Hypertarget{classSpectrogram_a6e14e3a630b327161bad43409270e1c9}\label{classSpectrogram_a6e14e3a630b327161bad43409270e1c9}} 
+\index{Spectrogram@{Spectrogram}!operator=@{operator=}}
+\index{operator=@{operator=}!Spectrogram@{Spectrogram}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classSpectrogram}{Spectrogram}} \& Spectrogram\+::operator= (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classSpectrogram}{Spectrogram}} \&\&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+
+
+Move assignment operator is deleted to prevent accidental use. 
+
+\mbox{\Hypertarget{classSpectrogram_a16d81b46bf82053953892344d3f24a2c}\label{classSpectrogram_a16d81b46bf82053953892344d3f24a2c}} 
+\index{Spectrogram@{Spectrogram}!readBatch@{readBatch}}
+\index{readBatch@{readBatch}!Spectrogram@{Spectrogram}}
+\doxysubsubsection{\texorpdfstring{readBatch()}{readBatch()}}
+{\footnotesize\ttfamily bool Spectrogram\+::read\+Batch (\begin{DoxyParamCaption}\item[{std\+::vector$<$ float $>$ \&}]{result,  }\item[{float \&}]{min\+\_\+magnitude,  }\item[{float \&}]{max\+\_\+magnitude }\end{DoxyParamCaption})}
+
+
+
+Function used to read a batch of audio samples from the FIFO and store them in a provided vector. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em std\+::vector$<$float$>$\&} & -\/ the vector to store the read audio samples \\
+\hline
+{\em float\&} & -\/ the minimum magnitude of the audio samples in the batch \\
+\hline
+{\em float\&} & -\/ the maximum magnitude of the audio samples in the batch \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bool -\/ Returns true if successful, false otherwise 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{spectrogram_8cpp_source_l00074}{74}} of file \mbox{\hyperlink{spectrogram_8cpp_source}{spectrogram.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00074                                                                                                 \{}
+\DoxyCodeLine{00075     }
+\DoxyCodeLine{00076     \textcolor{comment}{// Calculate the start index for reading the last N samples in a forward manner}}
+\DoxyCodeLine{00077     \textcolor{keywordtype}{size\_t} startIndex = (writepos.load() -\/ numAudioSamples + 1 + ringBuffer.size()) \% ringBuffer.size();}
+\DoxyCodeLine{00078 }
+\DoxyCodeLine{00079     \textcolor{comment}{// Read the N samples starting from startIndex}}
+\DoxyCodeLine{00080     \textcolor{keywordtype}{size\_t} readPos = startIndex;}
+\DoxyCodeLine{00081     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < (size\_t)numAudioSamples; ++i) \{}
+\DoxyCodeLine{00082         }
+\DoxyCodeLine{00083         \textcolor{comment}{// fft\_in[i][0]=ringBuffer[readPos] * hamming\_window[i];}}
+\DoxyCodeLine{00084         \textcolor{comment}{// fft\_in[i][1]=0;}}
+\DoxyCodeLine{00085         fft\_in[i]=ringBuffer[readPos] * hamming\_window[i];}
+\DoxyCodeLine{00086         }
+\DoxyCodeLine{00087         readPos = (readPos + 1) \% ringBuffer.size();  \textcolor{comment}{// Move to the next sample (circular)}}
+\DoxyCodeLine{00088     \}}
+\DoxyCodeLine{00089 }
+\DoxyCodeLine{00090     fftw\_execute(plan);}
+\DoxyCodeLine{00091     }
+\DoxyCodeLine{00092     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < numFFTPoints; ++i) \{}
+\DoxyCodeLine{00093         \textcolor{comment}{// Magnitude of the complex number}}
+\DoxyCodeLine{00094         \textcolor{keywordtype}{float} magnitude = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(std::sqrt(fft\_out[i][0] * fft\_out[i][0] + fft\_out[i][1] * fft\_out[i][1]));}
+\DoxyCodeLine{00095 }
+\DoxyCodeLine{00096         minMagnitude = std::min(minMagnitude,magnitude);}
+\DoxyCodeLine{00097         maxMagnitude = std::max(maxMagnitude,magnitude);}
+\DoxyCodeLine{00098 }
+\DoxyCodeLine{00099         result[i] = magnitude;}
+\DoxyCodeLine{00100     \}}
+\DoxyCodeLine{00101 }
+\DoxyCodeLine{00102     min\_magnitude = minMagnitude;}
+\DoxyCodeLine{00103     max\_magnitude = maxMagnitude;}
+\DoxyCodeLine{00104     }
+\DoxyCodeLine{00105     \textcolor{comment}{// Update readpos to point to the next sample to be read}}
+\DoxyCodeLine{00106     readpos.store((readPos + 1) \% ringBuffer.size());}
+\DoxyCodeLine{00107 }
+\DoxyCodeLine{00108     \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{00109 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classSpectrogram_ab4f694b0b0fac913263703b588361090}\label{classSpectrogram_ab4f694b0b0fac913263703b588361090}} 
+\index{Spectrogram@{Spectrogram}!write@{write}}
+\index{write@{write}!Spectrogram@{Spectrogram}}
+\doxysubsubsection{\texorpdfstring{write()}{write()}}
+{\footnotesize\ttfamily bool Spectrogram\+::write (\begin{DoxyParamCaption}\item[{const float \&}]{arg }\end{DoxyParamCaption})}
+
+
+
+Function used to set the ring buffer with a value to the write position of the FIFO. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em const} & float\& -\/ the audio sample to be written \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bool -\/ Returns true if successful, false otherwise 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{spectrogram_8cpp_source_l00057}{57}} of file \mbox{\hyperlink{spectrogram_8cpp_source}{spectrogram.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00057                                        \{ \textcolor{comment}{// T\&\& arg -\/-\/> rvalue reference}}
+\DoxyCodeLine{00058     \textcolor{keyword}{auto} writePos = writepos.load(); \textcolor{comment}{//??}}
+\DoxyCodeLine{00059     \textcolor{keyword}{auto} nextWritePos = (writePos + 1) \% ringBuffer.size();}
+\DoxyCodeLine{00060 }
+\DoxyCodeLine{00061     \textcolor{comment}{// if the buffer is full, overwrite the oldest data}}
+\DoxyCodeLine{00062     \textcolor{keywordflow}{if} (nextWritePos == readpos.load()) \{}
+\DoxyCodeLine{00063         \textcolor{keyword}{auto} readPos = (readpos.load() + 1) \% ringBuffer.size();}
+\DoxyCodeLine{00064         readpos.store(readPos, std::memory\_order\_release);}
+\DoxyCodeLine{00065     \}}
+\DoxyCodeLine{00066 }
+\DoxyCodeLine{00067     \textcolor{comment}{// write data to the buffer}}
+\DoxyCodeLine{00068     ringBuffer[writePos] = arg;}
+\DoxyCodeLine{00069     writepos.store(nextWritePos);}
+\DoxyCodeLine{00070     \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{00071 }
+\DoxyCodeLine{00072 \}}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{spectrogram_8h}{spectrogram.\+h}}\item 
+src/\mbox{\hyperlink{spectrogram_8cpp}{spectrogram.\+cpp}}\end{DoxyCompactItemize}

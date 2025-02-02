@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_spectrogram_8h_source" xml:lang="en-US">
+<title>spectrogram.h</title>
+<indexterm><primary>include/spectrogram.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered"><anchor xml:id="_spectrogram_8h_source_1l00001"/>00001 <emphasis role="preprocessor">#ifndef&#32;SPECTROGRAM_H</emphasis>
+<anchor xml:id="_spectrogram_8h_source_1l00002"/>00002 <emphasis role="preprocessor">#define&#32;SPECTROGRAM_H</emphasis>
+<anchor xml:id="_spectrogram_8h_source_1l00003"/>00003 
+<anchor xml:id="_spectrogram_8h_source_1l00004"/>00004 
+<anchor xml:id="_spectrogram_8h_source_1l00005"/>00005 <emphasis role="preprocessor">#include&#32;&lt;fftw3.h&gt;</emphasis>
+<anchor xml:id="_spectrogram_8h_source_1l00006"/>00006 <emphasis role="preprocessor">#include&#32;&lt;vector&gt;</emphasis>
+<anchor xml:id="_spectrogram_8h_source_1l00007"/>00007 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_config_8h">config.h</link>&quot;</emphasis>
+<anchor xml:id="_spectrogram_8h_source_1l00008"/>00008 
+<anchor xml:id="_spectrogram_8h_source_1l00009"/><link linkend="_spectrogram_8h_1a598a3330b3c21701223ee0ca14316eca">00009</link> <emphasis role="preprocessor">#define&#32;PI&#32;3.14159</emphasis>
+<anchor xml:id="_spectrogram_8h_source_1l00010"/>00010 
+<anchor xml:id="_spectrogram_8h_source_1l00015"/><link linkend="_classSpectrogram">00015</link> <emphasis role="keyword">class&#32;</emphasis><link linkend="_classSpectrogram">Spectrogram</link>{
+<anchor xml:id="_spectrogram_8h_source_1l00016"/>00016 <emphasis role="keyword">public</emphasis>:
+<anchor xml:id="_spectrogram_8h_source_1l00017"/>00017 
+<anchor xml:id="_spectrogram_8h_source_1l00021"/>00021 &#32;&#32;&#32;&#32;<link linkend="_classSpectrogram_1ae4523300613ab1370fd7ae9bfc71d877">Spectrogram</link>();
+<anchor xml:id="_spectrogram_8h_source_1l00022"/>00022 
+<anchor xml:id="_spectrogram_8h_source_1l00026"/>00026 &#32;&#32;&#32;&#32;<link linkend="_classSpectrogram_1a175fda7cc377563bffde2240aab8bfa7">~Spectrogram</link>();
+<anchor xml:id="_spectrogram_8h_source_1l00027"/>00027 &#32;&#32;&#32;&#32;
+<anchor xml:id="_spectrogram_8h_source_1l00031"/><link linkend="_classSpectrogram_1a3dc6ad061e01b4b01cbabb6e6edc46bd">00031</link> &#32;&#32;&#32;&#32;<link linkend="_classSpectrogram_1a3dc6ad061e01b4b01cbabb6e6edc46bd">Spectrogram</link>&#32;(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_classSpectrogram">Spectrogram</link>&amp;)&#32;=&#32;<emphasis role="keyword">delete</emphasis>;
+<anchor xml:id="_spectrogram_8h_source_1l00032"/>00032 &#32;&#32;&#32;&#32;
+<anchor xml:id="_spectrogram_8h_source_1l00036"/><link linkend="_classSpectrogram_1ab8caf0233122cf14a7b9e41d5ead6f57">00036</link> &#32;&#32;&#32;&#32;<link linkend="_classSpectrogram_1ab8caf0233122cf14a7b9e41d5ead6f57">Spectrogram</link>&#32;(<link linkend="_classSpectrogram">Spectrogram</link>&amp;&amp;)&#32;=&#32;<emphasis role="keyword">delete</emphasis>;
+<anchor xml:id="_spectrogram_8h_source_1l00037"/>00037 &#32;&#32;&#32;&#32;
+<anchor xml:id="_spectrogram_8h_source_1l00041"/><link linkend="_classSpectrogram_1a57b032882df6524168562ac62a5a9457">00041</link> &#32;&#32;&#32;&#32;<link linkend="_classSpectrogram">Spectrogram</link>&amp;&#32;<link linkend="_classSpectrogram_1a57b032882df6524168562ac62a5a9457">operator=</link>(<emphasis role="keyword">const</emphasis>&#32;<link linkend="_classSpectrogram">Spectrogram</link>&amp;)&#32;=&#32;<emphasis role="keyword">delete</emphasis>;
+<anchor xml:id="_spectrogram_8h_source_1l00042"/>00042 &#32;&#32;&#32;&#32;
+<anchor xml:id="_spectrogram_8h_source_1l00046"/><link linkend="_classSpectrogram_1a6e14e3a630b327161bad43409270e1c9">00046</link> &#32;&#32;&#32;&#32;<link linkend="_classSpectrogram">Spectrogram</link>&amp;&#32;<link linkend="_classSpectrogram_1a6e14e3a630b327161bad43409270e1c9">operator=</link>(<link linkend="_classSpectrogram">Spectrogram</link>&amp;&amp;)&#32;=&#32;<emphasis role="keyword">delete</emphasis>;
+<anchor xml:id="_spectrogram_8h_source_1l00047"/>00047 &#32;&#32;&#32;&#32;
+<anchor xml:id="_spectrogram_8h_source_1l00053"/>00053 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;<link linkend="_classSpectrogram_1a4662b609d61e705f4271526cad43f045">get_numAudioSamples</link>();
+<anchor xml:id="_spectrogram_8h_source_1l00054"/>00054 &#32;&#32;&#32;&#32;
+<anchor xml:id="_spectrogram_8h_source_1l00059"/>00059 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;<link linkend="_classSpectrogram_1a9e2b3f56852a55ce83311d57104b7208">get_numFFTPoints</link>();
+<anchor xml:id="_spectrogram_8h_source_1l00060"/>00060 &#32;&#32;&#32;&#32;
+<anchor xml:id="_spectrogram_8h_source_1l00066"/>00066 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classSpectrogram_1ab4f694b0b0fac913263703b588361090">write</link>(<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">float</emphasis>&amp;);
+<anchor xml:id="_spectrogram_8h_source_1l00067"/>00067 
+<anchor xml:id="_spectrogram_8h_source_1l00075"/>00075 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;<link linkend="_classSpectrogram_1a16d81b46bf82053953892344d3f24a2c">readBatch</link>(std::vector&lt;float&gt;&amp;,&#32;<emphasis role="keywordtype">float</emphasis>&amp;,&#32;<emphasis role="keywordtype">float</emphasis>&amp;);
+<anchor xml:id="_spectrogram_8h_source_1l00076"/>00076 
+<anchor xml:id="_spectrogram_8h_source_1l00077"/>00077 <emphasis role="keyword">private</emphasis>:
+<anchor xml:id="_spectrogram_8h_source_1l00078"/>00078 &#32;&#32;&#32;&#32;<link linkend="_classConfig">Config</link>&#32;&amp;cfg&#32;=&#32;<link linkend="_classConfig_1a2d423929da9ed51425ac0cf219b36f5e">Config::getInstance</link>();
+<anchor xml:id="_spectrogram_8h_source_1l00079"/>00079 &#32;&#32;&#32;&#32;
+<anchor xml:id="_spectrogram_8h_source_1l00080"/>00080 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;numAudioSamples,&#32;numFFTPoints;
+<anchor xml:id="_spectrogram_8h_source_1l00081"/>00081 &#32;&#32;&#32;&#32;std::vector&lt;float&gt;&#32;ringBuffer,
+<anchor xml:id="_spectrogram_8h_source_1l00082"/>00082 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;hamming_window;
+<anchor xml:id="_spectrogram_8h_source_1l00083"/>00083 
+<anchor xml:id="_spectrogram_8h_source_1l00084"/>00084 &#32;&#32;&#32;&#32;std::atomic&lt;size_t&gt;&#32;readpos;
+<anchor xml:id="_spectrogram_8h_source_1l00085"/>00085 &#32;&#32;&#32;&#32;std::atomic&lt;size_t&gt;&#32;writepos;
+<anchor xml:id="_spectrogram_8h_source_1l00086"/>00086 
+<anchor xml:id="_spectrogram_8h_source_1l00087"/>00087 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;fftw_complex&#32;*fft_in;</emphasis>
+<anchor xml:id="_spectrogram_8h_source_1l00088"/>00088 &#32;&#32;&#32;&#32;std::vector&lt;double&gt;&#32;fft_in;
+<anchor xml:id="_spectrogram_8h_source_1l00089"/>00089 &#32;&#32;&#32;&#32;fftw_complex&#32;*fft_out;
+<anchor xml:id="_spectrogram_8h_source_1l00090"/>00090 &#32;&#32;&#32;&#32;fftw_plan&#32;plan;
+<anchor xml:id="_spectrogram_8h_source_1l00091"/>00091 &#32;&#32;&#32;&#32;
+<anchor xml:id="_spectrogram_8h_source_1l00092"/>00092 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">float</emphasis>&#32;minMagnitude,maxMagnitude;
+<anchor xml:id="_spectrogram_8h_source_1l00093"/>00093 
+<anchor xml:id="_spectrogram_8h_source_1l00094"/>00094 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;calculateNFFT();
+<anchor xml:id="_spectrogram_8h_source_1l00095"/>00095 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;initialize_hamming(<emphasis role="keywordtype">int</emphasis>);
+<anchor xml:id="_spectrogram_8h_source_1l00096"/>00096 
+<anchor xml:id="_spectrogram_8h_source_1l00097"/>00097 
+<anchor xml:id="_spectrogram_8h_source_1l00098"/>00098 };
+<anchor xml:id="_spectrogram_8h_source_1l00099"/>00099 
+<anchor xml:id="_spectrogram_8h_source_1l00100"/>00100 <emphasis role="preprocessor">#endif</emphasis>
+</programlisting></section>

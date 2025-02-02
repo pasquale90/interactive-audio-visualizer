@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_sine_8cpp" xml:lang="en-US">
+<title>src/sine.cpp File Reference</title>
+<indexterm><primary>src/sine.cpp</primary></indexterm>
+<programlisting linenumbering="unnumbered">#include &lt;math.h&gt;
+#include &quot;sine.h&quot;
+#include &quot;tone.h&quot;
+#include &quot;config.h&quot;
+</programlisting>Include dependency graph for sine.cpp:<para>
+    <informalfigure>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="0" fileref="sine_8cpp__incl.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </informalfigure>
+</para>
+<simplesect>
+    <title>Macros    </title>
+        <itemizedlist>
+            <listitem><para>#define <link linkend="_sine_8cpp_1ae71449b1cc6e6250b91f539153a7a0d3">M_PI</link>   (3.14159265)</para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Macro Definition Documentation</title>
+<anchor xml:id="_sine_8cpp_1ae71449b1cc6e6250b91f539153a7a0d3"/><section>
+    <title>M_PI</title>
+<indexterm><primary>M_PI</primary><secondary>sine.cpp</secondary></indexterm>
+<indexterm><primary>sine.cpp</primary><secondary>M_PI</secondary></indexterm>
+<para><computeroutput>#define M_PI   (3.14159265)</computeroutput></para><para>
+Definition at line <link linkend="_sine_8cpp_source_1l00006">6</link> of file <link linkend="_sine_8cpp_source">sine.cpp</link>.</para>
+</section>
+</section>
+</section>

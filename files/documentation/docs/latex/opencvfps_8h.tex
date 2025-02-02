@@ -1,0 +1,53 @@
+\hypertarget{opencvfps_8h}{}\doxysection{include/gui/opencvfps.h File Reference}
+\label{opencvfps_8h}\index{include/gui/opencvfps.h@{include/gui/opencvfps.h}}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=290pt]{opencvfps_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+double \mbox{\hyperlink{opencvfps_8h_ad3237be6e5ff04e9823256e7dad8d8d4}{get\+CVfps\+\_\+approx}} (const char $\ast$)
+\begin{DoxyCompactList}\small\item\em Calculates the camera\textquotesingle{}s approximate frames per second (FPS) based on Open\+CV\textquotesingle{}s video capture. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{opencvfps_8h_ad3237be6e5ff04e9823256e7dad8d8d4}\label{opencvfps_8h_ad3237be6e5ff04e9823256e7dad8d8d4}} 
+\index{opencvfps.h@{opencvfps.h}!getCVfps\_approx@{getCVfps\_approx}}
+\index{getCVfps\_approx@{getCVfps\_approx}!opencvfps.h@{opencvfps.h}}
+\doxysubsubsection{\texorpdfstring{getCVfps\_approx()}{getCVfps\_approx()}}
+{\footnotesize\ttfamily double get\+CVfps\+\_\+approx (\begin{DoxyParamCaption}\item[{const char $\ast$}]{camera\+Device }\end{DoxyParamCaption})}
+
+
+
+Calculates the camera\textquotesingle{}s approximate frames per second (FPS) based on Open\+CV\textquotesingle{}s video capture. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em const} & char$\ast$ camera\+Device -\/ The camera device id. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+double -\/ The approximate frames per second (FPS) calculated from the video capture. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{opencvfps_8cpp_source_l00004}{4}} of file \mbox{\hyperlink{opencvfps_8cpp_source}{opencvfps.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00004                                                 \{}
+\DoxyCodeLine{00005     cv::VideoCapture video(cameraDevice);}
+\DoxyCodeLine{00006     }
+\DoxyCodeLine{00007     \textcolor{comment}{// Check camera}}
+\DoxyCodeLine{00008     \textcolor{comment}{// if (!video.isOpened()) \{}}
+\DoxyCodeLine{00009     \textcolor{comment}{//     return -\/1;}}
+\DoxyCodeLine{00010     \textcolor{comment}{// \}}}
+\DoxyCodeLine{00011 }
+\DoxyCodeLine{00012     \textcolor{keywordflow}{return} video.get(cv::CAP\_PROP\_FPS);}
+\DoxyCodeLine{00013 \}}
+
+\end{DoxyCode}

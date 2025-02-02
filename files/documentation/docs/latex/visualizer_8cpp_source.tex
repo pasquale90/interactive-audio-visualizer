@@ -1,0 +1,433 @@
+\hypertarget{visualizer_8cpp_source}{}\doxysection{visualizer.\+cpp}
+\label{visualizer_8cpp_source}\index{src/visualizer.cpp@{src/visualizer.cpp}}
+\mbox{\hyperlink{visualizer_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00001}00001 \textcolor{preprocessor}{\#include <iostream>}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00002}00002 \textcolor{preprocessor}{\#include <opencv2/highgui/highgui.hpp>}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00003}00003 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{visualizer_8h}{visualizer.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00004}00004 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{roi_8h}{roi.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00005}00005 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{tone_8h}{tone.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00006}00006 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00007}00007 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00008}\mbox{\hyperlink{visualizer_8cpp_a3f329f01ab431f5a51cdfa2810b5f4db}{00008}} \textcolor{keyword}{constexpr} \textcolor{keywordtype}{int} \mbox{\hyperlink{visualizer_8cpp_a3f329f01ab431f5a51cdfa2810b5f4db}{qASCII}} \{113\}; \textcolor{comment}{// 113 q}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00009}00009 \textcolor{comment}{// constexpr int spaceASCII \{32\};// 32 space}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00010}00010 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00011}\mbox{\hyperlink{classVisualizer_a104487003c9fea602e26c072aae27efc}{00011}} \mbox{\hyperlink{classVisualizer_a104487003c9fea602e26c072aae27efc}{Visualizer::Visualizer}}()\{}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00012}00012 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00013}00013     \textcolor{keywordtype}{int} W=cfg.\mbox{\hyperlink{classConfig_ab6692268f819ce3f8474d1d791f3aaee}{dispconf}}.\mbox{\hyperlink{structDisplayConfig_a633402e1095e221e678ce55fee7f3f9e}{dispResW}}.load();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00014}00014     \textcolor{keywordtype}{int} H=cfg.\mbox{\hyperlink{classConfig_ab6692268f819ce3f8474d1d791f3aaee}{dispconf}}.\mbox{\hyperlink{structDisplayConfig_ae781f975c0fac0c92d0f1802468ee578}{dispResH}}.load();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00015}00015 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00016}00016     cv::namedWindow(\textcolor{stringliteral}{"{}Interactive Audio Visualizer"{}},cv::WINDOW\_AUTOSIZE);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00017}00017     cv::Mat img( H , W, CV\_8UC3,cv::Scalar(0,0,0));}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00018}00018     visualFrame = img;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00019}00019        }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00020}00020     \_create\_camMask();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00021}00021 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00022}00022     \textcolor{keywordtype}{int} cameraW = cfg.\mbox{\hyperlink{classConfig_ac0cf8c10aea198ce117dffb91206251c}{camconf}}.\mbox{\hyperlink{structCameraConfig_a53d5be43d6362ca145c56a64fe475bb9}{camResW}}.load();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00023}00023     \textcolor{keywordtype}{int} cameraH = cfg.\mbox{\hyperlink{classConfig_ac0cf8c10aea198ce117dffb91206251c}{camconf}}.\mbox{\hyperlink{structCameraConfig_a5aacf3ba605a2c6bfa6a88b971557fa2}{camResH}}.load();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00024}00024     LR = W -\/ cameraW;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00025}00025     TB = H -\/ cameraH;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00026}00026 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00027}00027     transpose\_ratio\_x = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(W) / \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(cameraW) / 2.0f;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00028}00028     transpose\_ratio\_y = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(H) / \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(cameraH) / 2.0f;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00029}00029 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00030}00030     trackingToggle = \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00031}00031     }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00032}00032     \textcolor{keywordtype}{int} nfft = spectrogram.\mbox{\hyperlink{classSpectrogram_a9e2b3f56852a55ce83311d57104b7208}{get\_numFFTPoints}}();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00033}00033     specMagnitude.reserve(nfft);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00034}00034     specMagnitude.resize(nfft);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00035}00035 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00036}00036     \_set\_freq\_midBoundaries();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00037}00037 \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00038}00038 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00039}\mbox{\hyperlink{classVisualizer_a2c7e8bfe6cc35f01084ae3aeaae768db}{00039}} \textcolor{keywordtype}{void} \mbox{\hyperlink{classVisualizer_a2c7e8bfe6cc35f01084ae3aeaae768db}{Visualizer::setAudiolizerUpdater}}(std::function<\textcolor{keywordtype}{void}(\textcolor{keyword}{const} \textcolor{keywordtype}{bool}, \textcolor{keyword}{const} \textcolor{keywordtype}{bool}, \textcolor{keyword}{const} \mbox{\hyperlink{structRegionOfInterest}{RegionOfInterest}}\&, \mbox{\hyperlink{structTone}{Tone}}\&)> function)\{}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00040}00040     updateAudioLizer = std::move(function);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00041}00041 \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00042}00042 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00043}00043 \textcolor{keywordtype}{void} Visualizer::updateTrackingMode(\textcolor{keywordtype}{bool} trackingEnabled)\{}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00044}00044 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00045}00045     \textcolor{keywordflow}{if} (trackingToggle!=trackingEnabled)\{}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00046}00046         \textcolor{keywordflow}{if} (!trackingToggle \&\& trackingEnabled)\{}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00047}00047             videoTracker.\mbox{\hyperlink{classVideoTracker_af83065f606e3a076307a156c27f71b11}{initializeTracker}}(cameraFrame);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00048}00048         \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00049}00049         trackingToggle = trackingEnabled;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00050}00050         }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00051}00051     \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00052}00052 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00053}00053 \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00054}00054 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00055}\mbox{\hyperlink{classVisualizer_a1e2c66042ba2df8011fe934abad95f7b}{00055}} \textcolor{keywordtype}{void} \mbox{\hyperlink{classVisualizer_a1e2c66042ba2df8011fe934abad95f7b}{Visualizer::updateAudioSignal}}(\textcolor{keywordtype}{float} newValue)\{}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00056}00056     waveform.\mbox{\hyperlink{classWaveform_a6b4f4455a6a8ae2222f967e88b80460b}{write}}(newValue);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00057}00057     spectrogram.\mbox{\hyperlink{classSpectrogram_ab4f694b0b0fac913263703b588361090}{write}}(newValue);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00058}00058 \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00059}00059 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00060}00060 \textcolor{keywordtype}{void} Visualizer::\_create\_camMask()\{}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00061}00061 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00062}00062     \textcolor{keywordtype}{int} cameraW = cfg.\mbox{\hyperlink{classConfig_ac0cf8c10aea198ce117dffb91206251c}{camconf}}.\mbox{\hyperlink{structCameraConfig_a53d5be43d6362ca145c56a64fe475bb9}{camResW}}.load();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00063}00063     \textcolor{keywordtype}{int} cameraH = cfg.\mbox{\hyperlink{classConfig_ac0cf8c10aea198ce117dffb91206251c}{camconf}}.\mbox{\hyperlink{structCameraConfig_a5aacf3ba605a2c6bfa6a88b971557fa2}{camResH}}.load();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00064}00064     \textcolor{keywordtype}{int} W=cfg.\mbox{\hyperlink{classConfig_ab6692268f819ce3f8474d1d791f3aaee}{dispconf}}.\mbox{\hyperlink{structDisplayConfig_a633402e1095e221e678ce55fee7f3f9e}{dispResW}}.load();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00065}00065     \textcolor{keywordtype}{int} H=cfg.\mbox{\hyperlink{classConfig_ab6692268f819ce3f8474d1d791f3aaee}{dispconf}}.\mbox{\hyperlink{structDisplayConfig_ae781f975c0fac0c92d0f1802468ee578}{dispResH}}.load();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00066}00066 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00067}00067     \textcolor{comment}{// calculate areas}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00068}00068     \textcolor{comment}{// int r = (cameraW>cameraH) ? cameraH/2 : cameraW/2;}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00069}00069     \textcolor{keywordtype}{int} r = std::min(cameraW , cameraH)/2;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00070}00070     }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00071}00071     \textcolor{comment}{// int outArea = pow( 2*r, 2 ) -\/ (M\_PI * pow(r,2)); // pow( 2*r, 2 ) is the area of the box (same center, 2*r both edges) which is subtracted by the circle area πr\string^2}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00072}00072     \textcolor{comment}{// outArea+= (abs(cameraW-\/cameraH) * r); // abs(cameraW-\/cameraH) = rest area outside the camera frame}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00073}00073 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00074}00074     \textcolor{keywordtype}{int} center\_x = cameraW/2;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00075}00075     \textcolor{keywordtype}{int} center\_y = cameraH/2;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00076}00076 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00077}00077     numPointsPerimeter = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(floor((sqrt(2)*(r-\/1)+4)/2)*8);  \textcolor{comment}{// https://stackoverflow.com/a/14995443/15842840}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00078}00078 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00079}00079     cv::Mat m1 = cv::Mat(cameraH,cameraW, CV\_64F, cv::Scalar(0)); \textcolor{comment}{// CV\_32F}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00080}00080     camBinaryMask=m1;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00081}00081 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00082}00082     r = cfg.\mbox{\hyperlink{classConfig_a91839b9ae92f5503ed43baa71da88fdc}{iavconf}}.\mbox{\hyperlink{structIAVConfig_ab61ab68c3f8855d2b5b71c8ffcf9844e}{roiRadius}};}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00083}00083     \textcolor{keywordtype}{int} thickness = 1;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00084}00084     circle( camBinaryMask,}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00085}00085         cv::Point(center\_x,center\_y),}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00086}00086         r,}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00087}00087         cv::Scalar( 0, 255, 0 ),}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00088}00088         thickness,}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00089}00089         cv::LINE\_8);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00090}00090     }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00091}00091     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=0;i<cameraW;i++)\{}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00092}00092         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} j=0;j<cameraH;j++)\{}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00093}00093             }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00094}00094             \textcolor{keywordtype}{float} center\_dist = (float) sqrt ( pow((i-\/center\_x),2) + pow((j-\/center\_y),2) );}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00095}00095             }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00096}00096             \textcolor{comment}{// https://stackoverflow.com/a/839931/15842840}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00097}00097             \textcolor{comment}{// Get the max distance for each point to normalize the distance between square and circles perimeter}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00098}00098             \textcolor{comment}{// x = cx + r * cos(a)}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00099}00099             \textcolor{comment}{// y = cy + r * sin(a)}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00100}00100             \textcolor{keywordtype}{float} max\_dist = (float) sqrt ( pow((i-\/center\_x),2) + pow((j-\/center\_y),2) );}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00101}00101             \textcolor{keywordtype}{bool} condition = center\_dist > (float)r ;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00102}00102             }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00103}00103             \textcolor{comment}{//(x -\/ a)**2 + (y -\/ b)**2 == r**2;}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00104}00104             \textcolor{comment}{// double term1 = (pow((i -\/ cameraW/2),2) + pow((j -\/ cameraH/2),2));}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00105}00105             \textcolor{comment}{// double term2 = pow(r,2);}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00106}00106             \textcolor{comment}{// bool condition2 = term1 >= term2;}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00107}00107             \textcolor{comment}{// bool condition2 = (pow((i -\/ cameraW/2),2) + pow((j -\/ cameraH/2),2)) >= }}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00108}00108 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00109}00109             \textcolor{keywordflow}{if} (condition)\{}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00110}00110                 \textcolor{keywordtype}{float} transparency = (center\_dist-\/ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(r))/ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(sqrt(pow(cameraW-\/cameraH,2)));}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00111}00111             }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00112}00112                 camBinaryMask.at<\textcolor{keywordtype}{double}>(j,i) = transparency;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00113}00113 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00114}00114                 \textcolor{comment}{// if (max\_dist == r+4 || center\_dist == r+3 || center\_dist == r+1 || center\_dist == r+2 || center\_dist == r)\{}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00115}00115                 \textcolor{keywordflow}{if} (max\_dist == \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(r+4) || center\_dist == \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(r+3) || }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00116}00116                     center\_dist == \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(r+1) || center\_dist == \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(r+2) || }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00117}00117                     center\_dist == \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(r))\{}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00118}00118 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00119}00119                     \textcolor{keywordtype}{int} T = (H -\/ cameraH)/2;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00120}00120                     \textcolor{keywordtype}{int} L = (W -\/ cameraW)/2;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00121}00121                     \textcolor{keywordtype}{int} x = L + i;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00122}00122                     \textcolor{keywordtype}{int} y = T + j;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00123}00123                     visualFrame.at<cv::Vec3b>(y,x)[0] = 137;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00124}00124                     visualFrame.at<cv::Vec3b>(y,x)[1] = 137;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00125}00125                     visualFrame.at<cv::Vec3b>(y,x)[2] = 137;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00126}00126                 \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00127}00127             \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00128}00128         \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00129}00129     \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00130}00130 \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00131}00131 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00132}00132 \textcolor{keywordtype}{void} Visualizer::\_set\_freq\_midBoundaries()\{}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00133}00133     \textcolor{comment}{// set mid frequencies}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00134}00134     \textcolor{keywordtype}{int} minFreq  = cfg.\mbox{\hyperlink{classConfig_a91839b9ae92f5503ed43baa71da88fdc}{iavconf}}.\mbox{\hyperlink{structIAVConfig_ad171cfdbc06a2403eb3dad6636a59cf0}{minFrequency}};}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00135}00135     \textcolor{keywordtype}{int} maxFreq = cfg.\mbox{\hyperlink{classConfig_a91839b9ae92f5503ed43baa71da88fdc}{iavconf}}.\mbox{\hyperlink{structIAVConfig_a00eb72c5d6c59eb3d3308bdb1d337a10}{maxFrequency}};}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00136}00136 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00137}00137     \textcolor{keywordtype}{int} frange = maxFreq -\/ minFreq;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00138}00138     leftMidFreq  = minFreq + (frange/3);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00139}00139     rightMidFreq = minFreq + (2*frange/3);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00140}00140 \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00141}00141 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00142}\mbox{\hyperlink{classVisualizer_a968f280b3f09b86105bc662021babbe9}{00142}} \textcolor{keywordtype}{void} \mbox{\hyperlink{classVisualizer_a968f280b3f09b86105bc662021babbe9}{Visualizer::broadcast}}()\{}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00143}00143 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00144}00144     \textcolor{keywordtype}{bool} trackingEnabled,trackingUpdated;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00145}00145     \mbox{\hyperlink{structRegionOfInterest}{RegionOfInterest}} trackingSig;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00146}00146     \mbox{\hyperlink{structTone}{Tone}} tone;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00147}00147 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00148}00148     \textcolor{keywordflow}{while}(\textcolor{keyword}{true})\{}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00149}00149 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00150}00150         \textcolor{comment}{// camera in visualizer}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00151}00151         \textcolor{keywordtype}{bool} frameElapsed = camera.\mbox{\hyperlink{classCamera_abf92424200235ed48ec2d7135f02127e}{capture}}(cameraFrame); \textcolor{comment}{// get data}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00152}00152         \textcolor{keywordflow}{if} (!frameElapsed)\{}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00153}00153             \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00154}00154         \}   }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00155}00155 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00156}00156         \textcolor{keywordtype}{float} remaining\_percentage;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00157}00157         trackingEnabled = trigger.\mbox{\hyperlink{classTrigger_a0f1b544e6fdc6ed75b2888113fc413a2}{isTrackingEnabled}}(remaining\_percentage);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00158}00158         updateTrackingMode(trackingEnabled);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00159}00159 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00160}00160         \textcolor{keywordflow}{if} (trackingEnabled)\{ \textcolor{comment}{// preprocess visual\_frame -\/-\/>   doesn't depict the frame, it just edits it so it does not require a new frame to be captured by the camera.}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00161}00161             }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00162}00162             trackingUpdated = videoTracker.\mbox{\hyperlink{classVideoTracker_a548651167191b0d3f5e69d252e3f30da}{trackObject}}(cameraFrame, trackingSig);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00163}00163 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00164}00164             \textcolor{keywordflow}{if} (!trackingUpdated)\{}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00165}00165                 \textcolor{comment}{// reset}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00166}00166                 trigger.\mbox{\hyperlink{classTrigger_a465a643de1ace6e23b5d4e0f8c94d5a0}{reset}}();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00167}00167             \}            }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00168}00168                 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00169}00169             \textcolor{comment}{// update the current visualframe according to the changing of the tracking stimulus}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00170}00170             \_set\_BG\_manually(tone);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00171}00171             \_set\_FG\_manually(trackingSig);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00172}00172 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00173}00173 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00174}00174         \}\textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00175}00175             \_setToCamera(remaining\_percentage);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00176}00176             trackingUpdated = trackingEnabled = \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00177}00177         \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00178}00178 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00179}00179         updateAudioLizer(trackingUpdated, trackingEnabled, trackingSig, tone);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00180}00180 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00181}00181         \textcolor{keywordtype}{bool} exit\_msg = \_showFrame();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00182}00182         \textcolor{keywordflow}{if} (exit\_msg)}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00183}00183             \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00184}00184     \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00185}00185 \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00186}00186 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00187}\mbox{\hyperlink{classVisualizer_a013ec3101407fbe4805f289bc32d1265}{00187}} \mbox{\hyperlink{classVisualizer_a013ec3101407fbe4805f289bc32d1265}{Visualizer::\string~Visualizer}}()\{}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00188}00188     cv::destroyWindow(\textcolor{stringliteral}{"{}Interactive Audio Visualizer"{}});  }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00189}00189     visualFrame.release();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00190}00190     cameraFrame.release();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00191}00191     camBinaryMask.release();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00192}00192 \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00193}00193 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00194}00194 \textcolor{keywordtype}{bool} Visualizer::\_showFrame()\{ }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00195}00195     cv::imshow(\textcolor{stringliteral}{"{}Interactive Audio Visualizer"{}}, visualFrame);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00196}00196     \textcolor{keywordtype}{int} msg = cv::waitKey(1);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00197}00197     \textcolor{keywordflow}{if} (msg == \mbox{\hyperlink{visualizer_8cpp_a3f329f01ab431f5a51cdfa2810b5f4db}{qASCII}}) \textcolor{keywordflow}{return} \textcolor{keyword}{true}; }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00198}00198     \textcolor{comment}{// else if (cfg.iavconf.trigger=="{}Manual"{} \&\& msg == spaceASCII)    }}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00199}00199     \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00200}00200 \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00201}00201 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00202}00202 \textcolor{keywordtype}{void} Visualizer::\_set\_BG\_manually(\mbox{\hyperlink{structTone}{Tone}} \&tone)\{}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00203}00203 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00204}00204     \textcolor{keywordtype}{int} frequency = tone.\mbox{\hyperlink{structTone_a8c28a65c858594e410d94921d7abc1fa}{frequency}}.load();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00205}00205     \textcolor{keywordtype}{float} volume = tone.\mbox{\hyperlink{structTone_ad643b37d799caa83f6a80dc2f001aa4a}{volume}}.load();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00206}00206 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00207}00207     \textcolor{keywordtype}{float} percent;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00208}00208 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00209}00209     B = G = R = 0; }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00210}00210     \textcolor{keywordflow}{if} (frequency> cfg.\mbox{\hyperlink{classConfig_a91839b9ae92f5503ed43baa71da88fdc}{iavconf}}.\mbox{\hyperlink{structIAVConfig_ad171cfdbc06a2403eb3dad6636a59cf0}{minFrequency}} \&\& frequency<=leftMidFreq)\{                \textcolor{comment}{// keep blue             }}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00211}00211         percent = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(frequency)/ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(leftMidFreq);  \textcolor{comment}{// high trans}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00212}00212         B = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(255.f * volume );}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00213}00213         G = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(255.f * percent);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00214}00214         R = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(255.f * (1.-\/percent));}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00215}00215     \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00216}00216     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (frequency >leftMidFreq \&\& frequency <= rightMidFreq)\{       \textcolor{comment}{// keep green}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00217}00217         percent = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(frequency)/ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(rightMidFreq); \textcolor{comment}{// low trans}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00218}00218         B = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(255.f * percent);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00219}00219         G = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(255.f * volume);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00220}00220         R = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(255.*(1.-\/percent));}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00221}00221     \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00222}00222     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (frequency > rightMidFreq \&\& frequency <= cfg.\mbox{\hyperlink{classConfig_a91839b9ae92f5503ed43baa71da88fdc}{iavconf}}.\mbox{\hyperlink{structIAVConfig_a00eb72c5d6c59eb3d3308bdb1d337a10}{maxFrequency}}) \{    \textcolor{comment}{// keep red}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00223}00223         percent = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(frequency)/\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(cfg.\mbox{\hyperlink{classConfig_a91839b9ae92f5503ed43baa71da88fdc}{iavconf}}.\mbox{\hyperlink{structIAVConfig_a00eb72c5d6c59eb3d3308bdb1d337a10}{maxFrequency}});            }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00224}00224         B = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(255.*percent);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00225}00225         G = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(255.*(1.-\/percent));}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00226}00226         R = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(255.f * volume);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00227}00227     \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00228}00228     visualFrame.setTo( cv::Scalar( B, G, R ) );}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00229}00229 \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00230}00230 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00231}00231 \textcolor{keywordtype}{void} Visualizer::drawSmallcircle(\textcolor{keyword}{const} \mbox{\hyperlink{structRegionOfInterest}{RegionOfInterest}} \&roi)\{}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00232}00232 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00233}00233 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00234}00234     \textcolor{keywordtype}{int} W=cfg.\mbox{\hyperlink{classConfig_ab6692268f819ce3f8474d1d791f3aaee}{dispconf}}.\mbox{\hyperlink{structDisplayConfig_a633402e1095e221e678ce55fee7f3f9e}{dispResW}}.load();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00235}00235     \textcolor{keywordtype}{int} H=cfg.\mbox{\hyperlink{classConfig_ab6692268f819ce3f8474d1d791f3aaee}{dispconf}}.\mbox{\hyperlink{structDisplayConfig_ae781f975c0fac0c92d0f1802468ee578}{dispResH}}.load();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00236}00236     }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00237}00237     \textcolor{keywordtype}{int} roicenterX = roi.\mbox{\hyperlink{structRegionOfInterest_a7c05ee763a1dbcea5d7722c8611e6bc7}{centerX}}.load();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00238}00238     \textcolor{keywordtype}{int} roicenterY = roi.\mbox{\hyperlink{structRegionOfInterest_a9a5c08c619eb5383833aabae962490df}{centerY}}.load();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00239}00239     \textcolor{keywordtype}{int} roiVolumeW = roi.\mbox{\hyperlink{structRegionOfInterest_a0272d3fbebc59f034dd2de9e89d50598}{volumeW}}.load();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00240}00240     \textcolor{keywordtype}{int} roiVolumeH = roi.\mbox{\hyperlink{structRegionOfInterest_a33377fff7783a831c2b373c2194e7afb}{volumeH}}.load();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00241}00241 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00242}00242     \textcolor{keywordtype}{int} center\_x = LR/2 + roicenterX; \textcolor{comment}{//  }}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00243}00243     \textcolor{keywordtype}{int} center\_y = TB/2 + roicenterY; \textcolor{comment}{// H/2;}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00244}00244 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00245}00245     \textcolor{keywordflow}{if} ( center\_x < W/2 ) \textcolor{comment}{//-\/W*2/3)}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00246}00246         center\_x -\/= \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(transpose\_ratio\_x * (\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(W) / 2.0f -\/ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(center\_x)));}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00247}00247     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} ( center\_x > W/2) \textcolor{comment}{//*2/3)}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00248}00248         center\_x += \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(transpose\_ratio\_x * (\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(center\_x) -\/ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(W) / 2.0f));}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00249}00249     \textcolor{keywordflow}{if} ( center\_y < H/2 )}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00250}00250         center\_y -\/= \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(transpose\_ratio\_y * (\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(H) / 2.0f -\/ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(center\_y)));}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00251}00251     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} ( center\_y > H/2 )}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00252}00252         center\_y += \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(transpose\_ratio\_y * (\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(center\_y) -\/ \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(H) / 2.0f));}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00253}00253 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00254}00254     cv::Point center(W -\/ center\_x, center\_y);\textcolor{comment}{//Declaring the center point -\/ Reflect horizontally}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00255}00255     \textcolor{keywordtype}{int} radius = roiVolumeW > roiVolumeH ? roiVolumeW/2 : roiVolumeH/2; \textcolor{comment}{//Declaring the radius}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00256}00256     cv::Scalar line\_Color(0, 0, 0);\textcolor{comment}{//Color of the circle}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00257}00257     \textcolor{keywordtype}{int} thickness = 2;\textcolor{comment}{//thickens of the line}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00258}00258     circle(visualFrame, center,radius, line\_Color, thickness);\textcolor{comment}{//Using circle()functi}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00259}00259 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00260}00260 \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00261}00261 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00262}00262 \textcolor{keywordtype}{void} Visualizer::draWaveform()\{}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00263}00263 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00264}00264     \textcolor{keywordtype}{int} W=cfg.\mbox{\hyperlink{classConfig_ab6692268f819ce3f8474d1d791f3aaee}{dispconf}}.\mbox{\hyperlink{structDisplayConfig_a633402e1095e221e678ce55fee7f3f9e}{dispResW}}.load();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00265}00265     \textcolor{keywordtype}{int} H=cfg.\mbox{\hyperlink{classConfig_ab6692268f819ce3f8474d1d791f3aaee}{dispconf}}.\mbox{\hyperlink{structDisplayConfig_ae781f975c0fac0c92d0f1802468ee578}{dispResH}}.load();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00266}00266     \textcolor{keywordtype}{int} cameraW = cfg.\mbox{\hyperlink{classConfig_ac0cf8c10aea198ce117dffb91206251c}{camconf}}.\mbox{\hyperlink{structCameraConfig_a53d5be43d6362ca145c56a64fe475bb9}{camResW}}.load();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00267}00267     \textcolor{keywordtype}{int} cameraH = cfg.\mbox{\hyperlink{classConfig_ac0cf8c10aea198ce117dffb91206251c}{camconf}}.\mbox{\hyperlink{structCameraConfig_a5aacf3ba605a2c6bfa6a88b971557fa2}{camResH}}.load();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00268}00268 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00269}00269     \textcolor{keywordtype}{int} x\_centre = W/2; }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00270}00270     \textcolor{keywordtype}{int} y\_centre = H/2; }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00271}00271     \textcolor{keywordtype}{int} r = (cameraW>cameraH) ? cameraH/2 : cameraW/2;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00272}00272 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00273}00273     \textcolor{keywordtype}{float} minMax[2];}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00274}00274     \textcolor{keywordtype}{size\_t} numSamples;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00275}00275     waveform.\mbox{\hyperlink{classWaveform_a57d9f5fae074ff6e3d7d1f687442e427}{getMinMax}}(minMax);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00276}00276     \textcolor{keywordtype}{float} min = minMax[0],max = minMax[1];}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00277}00277     numSamples = waveform.\mbox{\hyperlink{classWaveform_affe280dcbbde4ed935db6ad3f5d6cc80}{availableForReading}}();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00278}00278 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00279}00279 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00280}00280     \textcolor{comment}{// depict waveform}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00281}00281     \textcolor{keywordtype}{size\_t} end;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00282}00282     \textcolor{keywordtype}{double} curRadians=0.0;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00283}00283     \textcolor{keywordtype}{double} radianStep=2*\mbox{\hyperlink{sine_8cpp_ae71449b1cc6e6250b91f539153a7a0d3}{M\_PI}} / (double)numPointsPerimeter;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00284}00284 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00285}00285     \textcolor{keywordflow}{if} (numSamples< \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(numPointsPerimeter))\{}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00286}00286         end=numSamples;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00287}00287     \}\textcolor{keywordflow}{else} end = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{size\_t}\textcolor{keyword}{>}(numPointsPerimeter);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00288}00288 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00289}00289     \textcolor{keywordtype}{int} thickness=1;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00290}00290     \textcolor{keywordtype}{int} x1,x2,y1,y2;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00291}00291     \textcolor{keywordtype}{float} percent;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00292}00292     \textcolor{keywordtype}{float} new\_radius;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00293}00293     \textcolor{keywordtype}{float} waveVal;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00294}00294     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i=0; i<end ; i++)\{}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00295}00295         }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00296}00296         \textcolor{comment}{// pixels are calculated given the following equations:}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00297}00297         \textcolor{comment}{// x = cx + r * cos(a)}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00298}00298         \textcolor{comment}{// y = cy + r * sin(a)}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00299}00299         x1 = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}((float)r * std::cos(curRadians) + (float)x\_centre);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00300}00300         y1 = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}((float)r * std::sin(curRadians) + (float)y\_centre);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00301}00301     }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00302}00302         waveform.\mbox{\hyperlink{classWaveform_ad4309d03c34e0b7ebe173ee8bd536116}{read}}(waveVal);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00303}00303         \textcolor{comment}{// normalize in range [-\/1 1]}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00304}00304         percent = 2* ( (waveVal-\/min) / (max-\/min) ) -\/1;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00305}00305 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00306}00306         \textcolor{comment}{// trasport x and y}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00307}00307         new\_radius = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(r + ((float)H / 40. * percent));}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00308}00308 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00309}00309         x2 = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(new\_radius * std::cos(curRadians) + (float)x\_centre);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00310}00310         y2 = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(new\_radius * std::sin(curRadians) + (float)y\_centre);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00311}00311 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00312}00312         cv::Point p1(x1, y1), p2(x2, y2); }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00313}00313         cv::line(visualFrame, p1, p2, cv::Scalar(255, 0, 0), thickness, cv::LINE\_8); }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00314}00314 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00315}00315         curRadians+=radianStep;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00316}00316     \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00317}00317     }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00318}00318 \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00319}00319 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00320}00320 \textcolor{keywordtype}{void} Visualizer::\_set\_FG\_manually(\textcolor{keyword}{const} \mbox{\hyperlink{structRegionOfInterest}{RegionOfInterest}} \&roi)\{}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00321}00321 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00322}00322     drawSmallcircle(roi);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00323}00323     draWaveform();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00324}00324     drawSpectrogram();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00325}00325     }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00326}00326 \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00327}00327 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00328}00328 \textcolor{keywordtype}{void} Visualizer::\_show\_timer(\textcolor{keywordtype}{float} percent) \{}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00329}00329     }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00330}00330     \textcolor{keywordtype}{int} x = cameraFrame.cols / 2;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00331}00331     \textcolor{keywordtype}{int} y = cameraFrame.rows / 2;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00332}00332 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00333}00333     \textcolor{keywordtype}{int} radius = cfg.\mbox{\hyperlink{classConfig_a91839b9ae92f5503ed43baa71da88fdc}{iavconf}}.\mbox{\hyperlink{structIAVConfig_ab61ab68c3f8855d2b5b71c8ffcf9844e}{roiRadius}};  }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00334}00334     \textcolor{keywordtype}{int} thickness = 3;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00335}00335     \textcolor{keywordtype}{float} angle = percent * 360.0f;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00336}00336     cv::circle(cameraFrame, cv::Point(x, y), radius, CV\_RGB(245, 245, 245), thickness);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00337}00337 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00338}00338     \textcolor{comment}{// int r = 255 -\/ (millisecondsElapsed * 5) \% 255;  // Gradually change the color to orange/yellow}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00339}00339     \textcolor{comment}{// int g = (millisecondsElapsed * 2) \% 255;}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00340}00340     \textcolor{comment}{// int b = (millisecondsElapsed * 4) \% 255;}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00341}00341     \textcolor{keywordtype}{int} r = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(127.5 * (1 + sin(angle * \mbox{\hyperlink{sine_8cpp_ae71449b1cc6e6250b91f539153a7a0d3}{M\_PI}} / 180.0)));  \textcolor{comment}{// Sinusoidal for red}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00342}00342     \textcolor{keywordtype}{int} g = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(127.5 * (1 + sin((angle + 120) * \mbox{\hyperlink{sine_8cpp_ae71449b1cc6e6250b91f539153a7a0d3}{M\_PI}} / 180.0)));  \textcolor{comment}{// Sinusoidal for green}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00343}00343     \textcolor{keywordtype}{int} b = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(127.5 * (1 + sin((angle + 240) * \mbox{\hyperlink{sine_8cpp_ae71449b1cc6e6250b91f539153a7a0d3}{M\_PI}} / 180.0)));  \textcolor{comment}{// Sinusoidal for blue}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00344}00344 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00345}00345     cv::ellipse(cameraFrame, cv::Point(x, y), cv::Size(radius, radius), 0, -\/90, -\/90 + angle, CV\_RGB(r, g, b), thickness);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00346}00346 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00347}00347 \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00348}00348 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00349}00349 \textcolor{keywordtype}{void} Visualizer::\_setToCamera(\textcolor{keywordtype}{float} remaining\_percentage)\{}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00350}00350 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00351}00351     \_show\_timer(remaining\_percentage);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00352}00352 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00353}00353     \textcolor{keywordtype}{int} cameraW=cameraFrame.cols;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00354}00354     \textcolor{keywordtype}{int} cameraH=cameraFrame.rows;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00355}00355     \textcolor{comment}{// top left of the visualFrame is ...}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00356}00356     \textcolor{keywordtype}{int} L = (visualFrame.cols -\/ cameraW)/2;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00357}00357     \textcolor{keywordtype}{int} T = (visualFrame.rows -\/ cameraH)/2;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00358}00358 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00359}00359     \textcolor{comment}{// draw transparent pixels in a form of enclosed circle within camera frame}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00360}00360     \textcolor{keywordtype}{double} vB = (double)visualFrame.at<cv::Vec3b>(0,0)[0];}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00361}00361     \textcolor{keywordtype}{double} vG = (double)visualFrame.at<cv::Vec3b>(0,0)[1];}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00362}00362     \textcolor{keywordtype}{double} vR = (double)visualFrame.at<cv::Vec3b>(0,0)[2];}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00363}00363     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=0;i<cameraW;i++)\{}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00364}00364         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} j=0;j<cameraH;j++)\{}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00365}00365             \textcolor{keywordflow}{if} (camBinaryMask.at<\textcolor{keywordtype}{double}>(j,i)>0.)\{}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00366}00366                 \textcolor{keywordtype}{double} ratio = camBinaryMask.at<\textcolor{keywordtype}{double}>(j,i);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00367}00367                 cameraFrame.at<cv::Vec3b>(j,i)[0] = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}\textcolor{keyword}{>}(((ratio*vB) + (1.-\/ratio)*(\textcolor{keywordtype}{double})cameraFrame.at<cv::Vec3b>(j,i)[0])/2.);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00368}00368                 cameraFrame.at<cv::Vec3b>(j,i)[1] = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}\textcolor{keyword}{>}(((ratio*vG) + (1.-\/ratio)*(\textcolor{keywordtype}{double})cameraFrame.at<cv::Vec3b>(j,i)[1])/2.);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00369}00369                 cameraFrame.at<cv::Vec3b>(j,i)[2] = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char}\textcolor{keyword}{>}(((ratio*vR) + (1.-\/ratio)*(\textcolor{keywordtype}{double})cameraFrame.at<cv::Vec3b>(j,i)[2])/2.);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00370}00370             \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00371}00371         \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00372}00372     \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00373}00373     cameraFrame.copyTo(visualFrame(cv::Rect(L,T,cameraW,cameraH)));}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00374}00374 \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00375}00375 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00376}00376 \textcolor{keywordtype}{void} Visualizer::drawSpectrogram()\{}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00377}00377 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00378}00378     \textcolor{keyword}{const} \textcolor{keywordtype}{double} FREQ\_MIN = (double)cfg.\mbox{\hyperlink{classConfig_a91839b9ae92f5503ed43baa71da88fdc}{iavconf}}.\mbox{\hyperlink{structIAVConfig_ad171cfdbc06a2403eb3dad6636a59cf0}{minFrequency}}; }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00379}00379     \textcolor{keyword}{const} \textcolor{keywordtype}{double} FREQ\_MAX = (\textcolor{keywordtype}{double})cfg.\mbox{\hyperlink{classConfig_a91839b9ae92f5503ed43baa71da88fdc}{iavconf}}.\mbox{\hyperlink{structIAVConfig_a00eb72c5d6c59eb3d3308bdb1d337a10}{maxFrequency}};}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00380}00380     \textcolor{keywordtype}{int} SR = cfg.\mbox{\hyperlink{classConfig_a9f58fb425653b02d94a2961f7bdd9e45}{audconf}}.\mbox{\hyperlink{structAudioConfig_aa893cf0e18009ba2aeb67a105d42aa71}{sampleRate}}.load();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00381}00381     \textcolor{keywordtype}{int} W = cfg.\mbox{\hyperlink{classConfig_ab6692268f819ce3f8474d1d791f3aaee}{dispconf}}.\mbox{\hyperlink{structDisplayConfig_a633402e1095e221e678ce55fee7f3f9e}{dispResW}}.load();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00382}00382     \textcolor{keywordtype}{int} H = cfg.\mbox{\hyperlink{classConfig_ab6692268f819ce3f8474d1d791f3aaee}{dispconf}}.\mbox{\hyperlink{structDisplayConfig_ae781f975c0fac0c92d0f1802468ee578}{dispResH}}.load();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00383}00383     \textcolor{keywordtype}{int} numAudioSamples = spectrogram.\mbox{\hyperlink{classSpectrogram_a4662b609d61e705f4271526cad43f045}{get\_numAudioSamples}}();}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00384}00384 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00385}00385     \textcolor{keywordtype}{float} min\_magnitude,max\_magnitude;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00386}00386     spectrogram.\mbox{\hyperlink{classSpectrogram_a16d81b46bf82053953892344d3f24a2c}{readBatch}}(specMagnitude,min\_magnitude,max\_magnitude);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00387}00387 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00388}00388     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < specMagnitude.size() ; ++i) \{}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00389}00389 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00390}00390         \textcolor{keywordtype}{float} magnitude = specMagnitude[i];}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00391}00391         }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00392}00392         \textcolor{comment}{// Minmax magnitude's normalization  }}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00393}00393         \textcolor{keywordtype}{int} normalized\_magnitude = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}( }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00394}00394                                         std::min( }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00395}00395                                             (\textcolor{keywordtype}{float})((magnitude -\/ min\_magnitude) / (max\_magnitude -\/ min\_magnitude) * \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(H) * 0.5),}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00396}00396                                             \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(H)/2.f}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00397}00397                                         )}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00398}00398                                     );}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00399}00399 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00400}00400         \textcolor{comment}{// Calculate the frequency interval for each bin}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00401}00401         \textcolor{keywordtype}{double} freq\_bin = (SR / 2.0) * (\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(i) / \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{double}\textcolor{keyword}{>}(numAudioSamples / 2.0)); \textcolor{comment}{// Frequency of the current bin}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00402}00402 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00403}00403         \textcolor{comment}{// filtering the frequencies outside the scope of the iav application}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00404}00404         \textcolor{keywordflow}{if} (freq\_bin >= FREQ\_MIN \&\& freq\_bin <= FREQ\_MAX) \{}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00405}00405             }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00406}00406             \textcolor{keywordtype}{int} x = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}((freq\_bin -\/ FREQ\_MIN) / (FREQ\_MAX -\/ FREQ\_MIN) * W);}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00407}00407             }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00408}00408             \textcolor{comment}{// Create a the drawing line}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00409}00409             \textcolor{keywordtype}{int} line\_length = normalized\_magnitude;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00410}00410             \textcolor{keywordtype}{int} top = H / 2 -\/ line\_length;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00411}00411             \textcolor{keywordtype}{int} bottom = H / 2 + line\_length;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00412}00412         }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00413}00413             \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} y = top; y <= bottom; ++y) \{}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00414}00414                 \textcolor{comment}{// Ensure not out-\/of-\/bounds }}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00415}00415                 \textcolor{keywordflow}{if} (y >= 0 \&\& y < H \&\& x >= 0 \&\& x < W) \{}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00416}00416                     visualFrame.at<cv::Vec3b>(y,x)[0] = 255 -\/ B;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00417}00417                     visualFrame.at<cv::Vec3b>(y,x)[1] = 255 -\/ G;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00418}00418                     visualFrame.at<cv::Vec3b>(y,x)[2] = 255 -\/ R;}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00419}00419 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00420}00420                 \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00421}00421             \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00422}00422 }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00423}00423         \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00424}00424     \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00425}00425     }
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00426}00426 \}}
+\DoxyCodeLine{\Hypertarget{visualizer_8cpp_source_l00427}00427 }
+
+\end{DoxyCode}

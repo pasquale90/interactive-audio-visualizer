@@ -1,0 +1,201 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_classAudiolizer" xml:lang="en-US">
+<title>Audiolizer Class Reference</title>
+<indexterm><primary>Audiolizer</primary></indexterm>
+<para>
+
+<para>A class responsible for translating tracking signal into audio frequency. </para>
+ 
+</para>
+<para>
+<computeroutput>#include &lt;audiolizer.h&gt;</computeroutput>
+</para>
+<simplesect>
+    <title>Public Member Functions    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_classAudiolizer_1a416bdbc7e4c303d921cf8a1995a08c9a">Audiolizer</link> ()</para>
+
+<para>Default constructor. </para>
+</listitem>
+            <listitem><para>bool <link linkend="_classAudiolizer_1a2b9a26bd1486ebf2bdae14d7edd370c0">turn_Image_into_Sound</link> (const bool, const bool, const <link linkend="_structRegionOfInterest">RegionOfInterest</link> &amp;, <link linkend="_structTone">Tone</link> &amp;)</para>
+
+<para>Member function responsible for obtaining image signal and converting it into sound of a certain frequency. </para>
+</listitem>
+            <listitem><para>void <link linkend="_classAudiolizer_1a615968fb43d145079d06521ad7634946">setAudioUpdater</link> (std::function&lt; void(int, float)&gt;)</para>
+
+<para>Method that sets the audio updater function. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Detailed Description</title>
+
+<para>A class responsible for translating tracking signal into audio frequency. </para>
+
+
+
+<para><note><title>Note</title>
+
+<para>This class is responsible for managing the conversion from image to audio. </para>
+</note>
+</para>
+<para>
+Definition at line <link linkend="_audiolizer_8h_source_1l00013">13</link> of file <link linkend="_audiolizer_8h_source">audiolizer.h</link>.</para>
+</section>
+<section>
+<title>Constructor &amp; Destructor Documentation</title>
+<anchor xml:id="_classAudiolizer_1a416bdbc7e4c303d921cf8a1995a08c9a"/><section>
+    <title>Audiolizer()</title>
+<indexterm><primary>Audiolizer</primary><secondary>Audiolizer</secondary></indexterm>
+<indexterm><primary>Audiolizer</primary><secondary>Audiolizer</secondary></indexterm>
+<para><computeroutput>Audiolizer::Audiolizer ( )</computeroutput></para><para>
+
+<para>Default constructor. </para>
+</para>
+<para>
+Definition at line <link linkend="_audiolizer_8cpp_source_1l00007">7</link> of file <link linkend="_audiolizer_8cpp_source">audiolizer.cpp</link>.</para>
+<programlisting linenumbering="unnumbered">00007 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;:cameracfg(<link linkend="_classConfig_1a2d423929da9ed51425ac0cf219b36f5e">Config::getInstance</link>().camconf),iavcfg(<link linkend="_classConfig_1a2d423929da9ed51425ac0cf219b36f5e">Config::getInstance</link>().iavconf){
+00008 
+00009 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;@TEMPORARY&#32;DISABLED</emphasis>
+00010 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;init_log_freq_scale();&#32;//&#32;currently&#32;not&#32;used.&#32;Use&#32;_int2log_freq&#32;(currently&#32;not&#32;used&#32;either)&#32;is&#32;affected&#32;by&#32;this&#32;method..</emphasis>
+00011 
+00012 &#32;&#32;&#32;&#32;frequencyRange&#32;=&#32;iavcfg.<link linkend="_structIAVConfig_1a00eb72c5d6c59eb3d3308bdb1d337a10">maxFrequency</link>&#32;-&#32;iavcfg.<link linkend="_structIAVConfig_1ad171cfdbc06a2403eb3dad6636a59cf0">minFrequency</link>;
+00013 &#32;&#32;&#32;&#32;prev_freq=0;
+00014 &#32;&#32;&#32;&#32;volume&#32;=&#32;0.f;
+00015 }
+</programlisting></section>
+</section>
+<section>
+<title>Member Function Documentation</title>
+<anchor xml:id="_classAudiolizer_1a615968fb43d145079d06521ad7634946"/><section>
+    <title>setAudioUpdater()</title>
+<indexterm><primary>setAudioUpdater</primary><secondary>Audiolizer</secondary></indexterm>
+<indexterm><primary>Audiolizer</primary><secondary>setAudioUpdater</secondary></indexterm>
+<para><computeroutput>void Audiolizer::setAudioUpdater (std::function&lt; void(int, float)&gt; func)</computeroutput></para><para>
+
+<para>Method that sets the audio updater function. </para>
+</para>
+
+<para>
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>std::function&lt;void(int, float)&gt;</entry><entry>
+<para>- the audio updater function that receives as parameters the current frequency and volume. </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <formalpara><title>Returns</title>
+
+<para>void </para>
+</formalpara>
+</para>
+<para>
+Definition at line <link linkend="_audiolizer_8cpp_source_1l00017">17</link> of file <link linkend="_audiolizer_8cpp_source">audiolizer.cpp</link>.</para>
+<programlisting linenumbering="unnumbered">00017 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+00018 &#32;&#32;&#32;&#32;updateAudio&#32;=&#32;std::move(func);
+00019 }
+</programlisting></section>
+<anchor xml:id="_classAudiolizer_1a2b9a26bd1486ebf2bdae14d7edd370c0"/><section>
+    <title>turn_Image_into_Sound()</title>
+<indexterm><primary>turn_Image_into_Sound</primary><secondary>Audiolizer</secondary></indexterm>
+<indexterm><primary>Audiolizer</primary><secondary>turn_Image_into_Sound</secondary></indexterm>
+<para><computeroutput>bool Audiolizer::turn_Image_into_Sound (const bool tracking_updated, const bool pattern_locked, const <link linkend="_structRegionOfInterest">RegionOfInterest</link> &amp; roi, <link linkend="_structTone">Tone</link> &amp; tone)</computeroutput></para><para>
+
+<para>Member function responsible for obtaining image signal and converting it into sound of a certain frequency. </para>
+</para>
+
+<para>
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="3" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>in</entry><entry>bool</entry><entry>
+<para>trackingUpdated - variable that indicates whether there is a new tracking signal. </para>
+</entry>
+                            </row>
+                            <row>
+<entry>in</entry><entry>bool</entry><entry>
+<para>trackingEnabled - variable that indicates whether the tracking is enabled or not. </para>
+</entry>
+                            </row>
+                            <row>
+<entry></entry><entry>RegionOfInterest&amp;</entry><entry>
+<para>roi - variable passed by reference that updates the value of the current tracking signal. </para>
+</entry>
+                            </row>
+                            <row>
+<entry>in</entry><entry>Tone&amp;</entry><entry>
+<para>- the tone object for storing the current frequency and volume </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <formalpara><title>Returns</title>
+
+<para>bool - returns true if frequency has changed </para>
+</formalpara>
+</para>
+<para>
+Definition at line <link linkend="_audiolizer_8cpp_source_1l00021">21</link> of file <link linkend="_audiolizer_8cpp_source">audiolizer.cpp</link>.</para>
+<programlisting linenumbering="unnumbered">00021 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+00022 
+00023 <emphasis role="comment">&#32;&#32;&#32;/***</emphasis>
+00024 <emphasis role="comment">&#32;&#32;&#32;&#32;*&#32;returns&#32;by&#32;reference&#32;the&#32;frequency&#32;that&#32;will&#32;be&#32;streamed&#32;on&#32;the&#32;next&#32;audio&#32;buffer</emphasis>
+00025 <emphasis role="comment">&#32;&#32;&#32;*/</emphasis>
+00026 &#32;&#32;&#32;&#32;
+00027 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;frequency&#32;=&#32;tone.<link linkend="_structTone_1a8c28a65c858594e410d94921d7abc1fa">frequency</link>.load();
+00028 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;prevFreq&#32;=&#32;prev_freq;
+00029 
+00030 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(pattern_locked){
+00031 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(tracking_updated)&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;if&#32;tracking&#32;updated&#32;--&gt;&#32;new&#32;x,y&#32;--&gt;&#32;new&#32;freq</emphasis>
+00032 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;translate(roi,&#32;frequency);&#32;&#32;&#32;&#32;&#32;&#32;
+00033 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">else</emphasis>{&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;else&#32;--&gt;&#32;previous&#32;frequency</emphasis>
+00034 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;frequency=prev_freq;
+00035 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}&#32;
+00036 &#32;&#32;&#32;&#32;}<emphasis role="keywordflow">else</emphasis>{&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;gradualy&#32;fade&#32;frequency&#32;to&#32;zero&#32;--&gt;&#32;if&#32;frequency&#32;&gt;&#32;0&#32;,&#32;slowly&#32;decline</emphasis>
+00037 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(frequency&gt;1){&#32;
+00038 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;gradualy_fade(frequency);&#32;<emphasis role="comment">//&#32;gradualy&#32;fade&#32;frequency&#32;to&#32;zero&#32;--&gt;&#32;if&#32;frequency&#32;&gt;&#32;0&#32;,&#32;slowly&#32;decline</emphasis>
+00039 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}<emphasis role="keywordflow">else</emphasis>{
+00040 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;frequency=0;
+00041 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;volume&#32;=&#32;0.f;
+00042 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+00043 &#32;&#32;&#32;&#32;}
+00044 
+00045 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;update&#32;audioStream&#32;with&#32;the&#32;newFrequency</emphasis>
+00046 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;frequencyChanged&#32;=&#32;frequency&#32;!=&#32;prevFreq;
+00047 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(frequencyChanged){
+00048 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;updateAudio(frequency&#32;,&#32;volume);
+00049 &#32;&#32;&#32;&#32;}
+00050 &#32;&#32;&#32;&#32;tone.<link linkend="_structTone_1a8c28a65c858594e410d94921d7abc1fa">frequency</link>.store(frequency);
+00051 &#32;&#32;&#32;&#32;tone.<link linkend="_structTone_1ad643b37d799caa83f6a80dc2f001aa4a">volume</link>.store(volume);
+00052 
+00053 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;frequencyChanged;
+00054 
+00055 }
+</programlisting></section>
+<para>
+The documentation for this class was generated from the following files:</para>
+include/<link linkend="_audiolizer_8h">audiolizer.h</link>src/<link linkend="_audiolizer_8cpp">audiolizer.cpp</link></section>
+</section>

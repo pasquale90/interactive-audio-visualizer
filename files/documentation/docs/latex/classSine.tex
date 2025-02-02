@@ -1,0 +1,185 @@
+\hypertarget{classSine}{}\doxysection{Sine Class Reference}
+\label{classSine}\index{Sine@{Sine}}
+
+
+Class responsible for generating sine wave signals for audio processing.  
+
+
+
+
+{\ttfamily \#include $<$sine.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classSine_ac6f77168f7f50d200dc4b2d222c00608}{Sine}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSine_a4623d350f103d9dafd5ce29908e59332}{set\+Visualizer\+Updater}} (std\+::function$<$ void(float)$>$)
+\begin{DoxyCompactList}\small\item\em Function to set the visualizer update callback. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSine_abfd05b20115daa6b486ac26c3cb25129}{set\+Mono\+Signal}} (\mbox{\hyperlink{structTone}{Tone}} \&, float $\ast$\mbox{[}2\mbox{]})
+\begin{DoxyCompactList}\small\item\em Function to generate a mono sine wave signal for a given tone. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSine_ae08432c7ada69cff0dd386c1c6b81bf8}{set\+Stereo\+Signal}} (\mbox{\hyperlink{structTone}{Tone}} \&, float $\ast$\mbox{[}2\mbox{]})
+\begin{DoxyCompactList}\small\item\em Function to generate a stereo sine wave signal for a given tone. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class responsible for generating sine wave signals for audio processing. 
+
+Definition at line \mbox{\hyperlink{sine_8h_source_l00012}{12}} of file \mbox{\hyperlink{sine_8h_source}{sine.\+h}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classSine_ac6f77168f7f50d200dc4b2d222c00608}\label{classSine_ac6f77168f7f50d200dc4b2d222c00608}} 
+\index{Sine@{Sine}!Sine@{Sine}}
+\index{Sine@{Sine}!Sine@{Sine}}
+\doxysubsubsection{\texorpdfstring{Sine()}{Sine()}}
+{\footnotesize\ttfamily Sine\+::\+Sine (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Default constructor. 
+
+
+
+Definition at line \mbox{\hyperlink{sine_8cpp_source_l00010}{10}} of file \mbox{\hyperlink{sine_8cpp_source}{sine.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00010           :audiocfg(\mbox{\hyperlink{classConfig_a2d423929da9ed51425ac0cf219b36f5e}{Config::getInstance}}().audconf)\{}
+\DoxyCodeLine{00011     rads\_per\_sample = 0.;}
+\DoxyCodeLine{00012     prevfreq=0;}
+\DoxyCodeLine{00013     phase=0.0;}
+\DoxyCodeLine{00014 \}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classSine_abfd05b20115daa6b486ac26c3cb25129}\label{classSine_abfd05b20115daa6b486ac26c3cb25129}} 
+\index{Sine@{Sine}!setMonoSignal@{setMonoSignal}}
+\index{setMonoSignal@{setMonoSignal}!Sine@{Sine}}
+\doxysubsubsection{\texorpdfstring{setMonoSignal()}{setMonoSignal()}}
+{\footnotesize\ttfamily void Sine\+::set\+Mono\+Signal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structTone}{Tone}} \&}]{tone,  }\item[{float $\ast$}]{mono\+Buffer\mbox{[}2\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Function to generate a mono sine wave signal for a given tone. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tone} & -\/ The tone for which the sine wave signal should be generated. \\
+\hline
+{\em buffer} & -\/ The buffer to store the generated sine wave signal. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+The buffer size received has two channels (to allow compatibillity with stereo), but the the first channel is only used for writting. 
+\end{DoxyNote}
+
+
+Definition at line \mbox{\hyperlink{sine_8cpp_source_l00020}{20}} of file \mbox{\hyperlink{sine_8cpp_source}{sine.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00020                                                         \{}
+\DoxyCodeLine{00021     }
+\DoxyCodeLine{00022     \textcolor{keywordtype}{int} frequency = tone.\mbox{\hyperlink{structTone_a8c28a65c858594e410d94921d7abc1fa}{frequency}}.load();}
+\DoxyCodeLine{00023     \textcolor{keywordtype}{float} amplitude = tone.\mbox{\hyperlink{structTone_ad643b37d799caa83f6a80dc2f001aa4a}{volume}}.load();}
+\DoxyCodeLine{00024     }
+\DoxyCodeLine{00025     \textcolor{keywordflow}{if} (frequency != prevfreq)\{ \textcolor{comment}{// reduce number of calculations}}
+\DoxyCodeLine{00026         rads\_per\_sample = (\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(frequency * 2.* \mbox{\hyperlink{sine_8cpp_ae71449b1cc6e6250b91f539153a7a0d3}{M\_PI}})) / \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(audiocfg.\mbox{\hyperlink{structAudioConfig_aa893cf0e18009ba2aeb67a105d42aa71}{sampleRate}}.load()); \textcolor{comment}{//radians traspotition per time unit}}
+\DoxyCodeLine{00027         prevfreq = frequency;   }
+\DoxyCodeLine{00028     \}}
+\DoxyCodeLine{00029 }
+\DoxyCodeLine{00030     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=0;i<audiocfg.\mbox{\hyperlink{structAudioConfig_ae81381142d99bc1845cb33bd048643df}{bufferSize}}.load();i++)\{}
+\DoxyCodeLine{00031         \textcolor{keywordtype}{float} value = amplitude*(float)sin(phase);}
+\DoxyCodeLine{00032         monoBuffer[0][i] = value;}
+\DoxyCodeLine{00033         phase+=rads\_per\_sample;                 \textcolor{comment}{// shift phase by amount of rads\_per\_sample}}
+\DoxyCodeLine{00034         \textcolor{keywordflow}{if} (phase >= 2*\mbox{\hyperlink{sine_8cpp_ae71449b1cc6e6250b91f539153a7a0d3}{M\_PI}}) phase=0;           \textcolor{comment}{// if phase reaches 2pi , zero it down.}}
+\DoxyCodeLine{00035         }
+\DoxyCodeLine{00036         updateVisualizer(value); \textcolor{comment}{// fill the shareable ring buffer}}
+\DoxyCodeLine{00037     \}   }
+\DoxyCodeLine{00038 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classSine_ae08432c7ada69cff0dd386c1c6b81bf8}\label{classSine_ae08432c7ada69cff0dd386c1c6b81bf8}} 
+\index{Sine@{Sine}!setStereoSignal@{setStereoSignal}}
+\index{setStereoSignal@{setStereoSignal}!Sine@{Sine}}
+\doxysubsubsection{\texorpdfstring{setStereoSignal()}{setStereoSignal()}}
+{\footnotesize\ttfamily void Sine\+::set\+Stereo\+Signal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structTone}{Tone}} \&}]{tone,  }\item[{float $\ast$}]{stereo\+Buffer\mbox{[}2\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Function to generate a stereo sine wave signal for a given tone. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tone} & -\/ The tone for which the stereo sine wave signal should be generated. \\
+\hline
+{\em buffer} & -\/ The buffer to store the generated stereo sine wave signal. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{sine_8cpp_source_l00040}{40}} of file \mbox{\hyperlink{sine_8cpp_source}{sine.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00040                                                             \{}
+\DoxyCodeLine{00041 }
+\DoxyCodeLine{00042     \textcolor{keywordtype}{int} frequency = tone.\mbox{\hyperlink{structTone_a8c28a65c858594e410d94921d7abc1fa}{frequency}}.load();}
+\DoxyCodeLine{00043     \textcolor{keywordtype}{float} amplitude = tone.\mbox{\hyperlink{structTone_ad643b37d799caa83f6a80dc2f001aa4a}{volume}}.load();}
+\DoxyCodeLine{00044 }
+\DoxyCodeLine{00045     \textcolor{keywordflow}{if} (frequency != prevfreq)\{ \textcolor{comment}{// reduce number of calculations}}
+\DoxyCodeLine{00046         rads\_per\_sample = (\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(frequency * 2. * \mbox{\hyperlink{sine_8cpp_ae71449b1cc6e6250b91f539153a7a0d3}{M\_PI}})) / \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float}\textcolor{keyword}{>}(audiocfg.\mbox{\hyperlink{structAudioConfig_aa893cf0e18009ba2aeb67a105d42aa71}{sampleRate}}.load()); \textcolor{comment}{//radians traspotition per time unit}}
+\DoxyCodeLine{00047         prevfreq = frequency;   }
+\DoxyCodeLine{00048     \}}
+\DoxyCodeLine{00049 }
+\DoxyCodeLine{00050     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=0;i<audiocfg.\mbox{\hyperlink{structAudioConfig_ae81381142d99bc1845cb33bd048643df}{bufferSize}}.load();i++)\{}
+\DoxyCodeLine{00051         \textcolor{keywordtype}{float} value = amplitude*(float)sin(phase);}
+\DoxyCodeLine{00052         stereoBuffer[0][i] = value;}
+\DoxyCodeLine{00053         stereoBuffer[1][i] = value;}
+\DoxyCodeLine{00054         phase+=rads\_per\_sample;                 \textcolor{comment}{// shift phase by amount of rads\_per\_sample}}
+\DoxyCodeLine{00055         \textcolor{keywordflow}{if} (phase >= 2*\mbox{\hyperlink{sine_8cpp_ae71449b1cc6e6250b91f539153a7a0d3}{M\_PI}}) phase=0;           \textcolor{comment}{// if phase reaches 2pi , zero it down.}}
+\DoxyCodeLine{00056 }
+\DoxyCodeLine{00057         updateVisualizer(value); \textcolor{comment}{// fill the shareable ring buffer}}
+\DoxyCodeLine{00058     \}   }
+\DoxyCodeLine{00059 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classSine_a4623d350f103d9dafd5ce29908e59332}\label{classSine_a4623d350f103d9dafd5ce29908e59332}} 
+\index{Sine@{Sine}!setVisualizerUpdater@{setVisualizerUpdater}}
+\index{setVisualizerUpdater@{setVisualizerUpdater}!Sine@{Sine}}
+\doxysubsubsection{\texorpdfstring{setVisualizerUpdater()}{setVisualizerUpdater()}}
+{\footnotesize\ttfamily void Sine\+::set\+Visualizer\+Updater (\begin{DoxyParamCaption}\item[{std\+::function$<$ void(float)$>$}]{updater }\end{DoxyParamCaption})}
+
+
+
+Function to set the visualizer update callback. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em callback} & -\/ The function to be called when a new visualization update is required. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{sine_8cpp_source_l00016}{16}} of file \mbox{\hyperlink{sine_8cpp_source}{sine.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00016                                                                \{}
+\DoxyCodeLine{00017     updateVisualizer = std::move(updater);}
+\DoxyCodeLine{00018 \}}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{sine_8h}{sine.\+h}}\item 
+src/\mbox{\hyperlink{sine_8cpp}{sine.\+cpp}}\end{DoxyCompactItemize}

@@ -1,0 +1,183 @@
+\hypertarget{classIAV}{}\doxysection{IAV Class Reference}
+\label{classIAV}\index{IAV@{IAV}}
+
+
+Class to manage the \mbox{\hyperlink{classIAV}{IAV}} multi-\/threaded processing pipeline.  
+
+
+
+
+{\ttfamily \#include $<$iav.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classIAV_aca883bb01682e183436e708ce648be20}{IAV}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classIAV_a787ff827f02c4d780d8036d61591075d}{$\sim$\+IAV}} ()
+\begin{DoxyCompactList}\small\item\em Class destructor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classIAV_a750609975b3e4153e79c1fd012b430f3}{start}} ()
+\begin{DoxyCompactList}\small\item\em Starts the \mbox{\hyperlink{classIAV}{IAV}} processing pipeline. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classIAV_aa9b9ae76d3bc5b30d4653ef1b81134f4}{IAV}} (const \mbox{\hyperlink{classIAV}{IAV}} \&)=delete
+\begin{DoxyCompactList}\small\item\em Copy constructor is deleted to prevent accidental use. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classIAV_a2414a28dbd53b3aeacf9ac8c3dbface0}{IAV}} (\mbox{\hyperlink{classIAV}{IAV}} \&\&)=delete
+\begin{DoxyCompactList}\small\item\em Move constructor is deleted to prevent accidental use. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classIAV}{IAV}} \& \mbox{\hyperlink{classIAV_a7f41f46d411cf6a37d16fc702ac5a4d4}{operator=}} (const \mbox{\hyperlink{classIAV}{IAV}} \&)=delete
+\begin{DoxyCompactList}\small\item\em Copy assignment operator is deleted to prevent accidental use. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classIAV}{IAV}} \&\& \mbox{\hyperlink{classIAV_ae42d96691188de5447d32ae0d8785c9d}{operator=}} (\mbox{\hyperlink{classIAV}{IAV}} \&\&)=delete
+\begin{DoxyCompactList}\small\item\em Move assignment operator is deleted to prevent accidental use. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class to manage the \mbox{\hyperlink{classIAV}{IAV}} multi-\/threaded processing pipeline. 
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{classAudioServer}{Audio\+Server}} class for the audio server operations. 
+
+\mbox{\hyperlink{classAudioStream}{Audio\+Stream}} class for audio processing and streaming. 
+
+\mbox{\hyperlink{classVisualizer}{Visualizer}} class for visualizing audio data. 
+
+\mbox{\hyperlink{classAudiolizer}{Audiolizer}} class for converting visual stimulus into audio related data. 
+
+\mbox{\hyperlink{classConfig}{Config}} class for managing configuration settings. 
+\end{DoxySeeAlso}
+
+
+Definition at line \mbox{\hyperlink{iav_8h_source_l00019}{19}} of file \mbox{\hyperlink{iav_8h_source}{iav.\+h}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classIAV_aca883bb01682e183436e708ce648be20}\label{classIAV_aca883bb01682e183436e708ce648be20}} 
+\index{IAV@{IAV}!IAV@{IAV}}
+\index{IAV@{IAV}!IAV@{IAV}}
+\doxysubsubsection{\texorpdfstring{IAV()}{IAV()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily IAV\+::\+IAV (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Default constructor. 
+
+
+
+Definition at line \mbox{\hyperlink{iav_8cpp_source_l00003}{3}} of file \mbox{\hyperlink{iav_8cpp_source}{iav.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00004 \{}
+\DoxyCodeLine{00005     audioServer.\mbox{\hyperlink{classAudioServer_a19903646817c7d1f3dc2bec8d1f2811e}{setup\_server}}();}
+\DoxyCodeLine{00006 }
+\DoxyCodeLine{00007     audiolizer.\mbox{\hyperlink{classAudiolizer_a615968fb43d145079d06521ad7634946}{setAudioUpdater}}(std::bind(\&\mbox{\hyperlink{classAudioStream_a79ba2b085605b367698a204bb28fc6e7}{AudioStream::update}},\&audioStream,std::placeholders::\_1,std::placeholders::\_2));}
+\DoxyCodeLine{00008     visualizer.\mbox{\hyperlink{classVisualizer_a2c7e8bfe6cc35f01084ae3aeaae768db}{setAudiolizerUpdater}}(std::bind(\&\mbox{\hyperlink{classAudiolizer_a2b9a26bd1486ebf2bdae14d7edd370c0}{Audiolizer::turn\_Image\_into\_Sound}}, \&audiolizer, std::placeholders::\_1,std::placeholders::\_2,std::placeholders::\_3,std::placeholders::\_4));}
+\DoxyCodeLine{00009     audioStream.\mbox{\hyperlink{classAudioStream_a0f4ac8181f32c9b1466eb35ed723b167}{setVisualizerUpdater}}(std::bind(\&\mbox{\hyperlink{classVisualizer_a1e2c66042ba2df8011fe934abad95f7b}{Visualizer::updateAudioSignal}}, \&visualizer, std::placeholders::\_1));}
+\DoxyCodeLine{00010 }
+\DoxyCodeLine{00011     audServerThread = std::thread (\&\mbox{\hyperlink{classAudioServer_ad727e135d3776ff9a631e47873a6e239}{AudioServer::start\_server}},\&audioServer,std::ref(mtxServer), std::ref(cvServer), std::ref(serverStarted));}
+\DoxyCodeLine{00012     audioThread = std::thread (\&\mbox{\hyperlink{classAudioStream_ab4f577911f9c1b1ae64de56e6b2b96af}{AudioStream::clientConnect}},\&audioStream,std::ref(mtxServer), std::ref(cvServer), std::ref(serverStarted));}
+\DoxyCodeLine{00013     visualThread = std::thread(\&\mbox{\hyperlink{classVisualizer_a968f280b3f09b86105bc662021babbe9}{Visualizer::broadcast}},\&visualizer);}
+\DoxyCodeLine{00014 }
+\DoxyCodeLine{00015     cfg.\mbox{\hyperlink{classConfig_a975933ecde91dc436d4ca39464cfd25f}{display}}();}
+\DoxyCodeLine{00016 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classIAV_a787ff827f02c4d780d8036d61591075d}\label{classIAV_a787ff827f02c4d780d8036d61591075d}} 
+\index{IAV@{IAV}!````~IAV@{$\sim$IAV}}
+\index{````~IAV@{$\sim$IAV}!IAV@{IAV}}
+\doxysubsubsection{\texorpdfstring{$\sim$IAV()}{~IAV()}}
+{\footnotesize\ttfamily IAV\+::$\sim$\+IAV (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Class destructor. 
+
+
+
+Definition at line \mbox{\hyperlink{iav_8cpp_source_l00018}{18}} of file \mbox{\hyperlink{iav_8cpp_source}{iav.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00018          \{}
+\DoxyCodeLine{00019     audioServer.\mbox{\hyperlink{classAudioServer_ae0e8c5f59aac9a1f4311b262e868cc5a}{\string~AudioServer}}();}
+\DoxyCodeLine{00020     audioStream.\mbox{\hyperlink{classAudioStream_a480e5d3468bfe9357dd6c40649b1e449}{\string~AudioStream}}();}
+\DoxyCodeLine{00021     audiolizer.\string~Audiolizer() ;}
+\DoxyCodeLine{00022     visualizer.\mbox{\hyperlink{classVisualizer_a013ec3101407fbe4805f289bc32d1265}{\string~Visualizer}}();}
+\DoxyCodeLine{00023 \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{classIAV_aa9b9ae76d3bc5b30d4653ef1b81134f4}\label{classIAV_aa9b9ae76d3bc5b30d4653ef1b81134f4}} 
+\index{IAV@{IAV}!IAV@{IAV}}
+\index{IAV@{IAV}!IAV@{IAV}}
+\doxysubsubsection{\texorpdfstring{IAV()}{IAV()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily IAV\+::\+IAV (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classIAV}{IAV}} \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+
+
+Copy constructor is deleted to prevent accidental use. 
+
+\mbox{\Hypertarget{classIAV_a2414a28dbd53b3aeacf9ac8c3dbface0}\label{classIAV_a2414a28dbd53b3aeacf9ac8c3dbface0}} 
+\index{IAV@{IAV}!IAV@{IAV}}
+\index{IAV@{IAV}!IAV@{IAV}}
+\doxysubsubsection{\texorpdfstring{IAV()}{IAV()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily IAV\+::\+IAV (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classIAV}{IAV}} \&\&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+
+
+Move constructor is deleted to prevent accidental use. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classIAV_a7f41f46d411cf6a37d16fc702ac5a4d4}\label{classIAV_a7f41f46d411cf6a37d16fc702ac5a4d4}} 
+\index{IAV@{IAV}!operator=@{operator=}}
+\index{operator=@{operator=}!IAV@{IAV}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classIAV}{IAV}} \& IAV\+::operator= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classIAV}{IAV}} \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+
+
+Copy assignment operator is deleted to prevent accidental use. 
+
+\mbox{\Hypertarget{classIAV_ae42d96691188de5447d32ae0d8785c9d}\label{classIAV_ae42d96691188de5447d32ae0d8785c9d}} 
+\index{IAV@{IAV}!operator=@{operator=}}
+\index{operator=@{operator=}!IAV@{IAV}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classIAV}{IAV}} \&\& IAV\+::operator= (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classIAV}{IAV}} \&\&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+
+
+Move assignment operator is deleted to prevent accidental use. 
+
+\mbox{\Hypertarget{classIAV_a750609975b3e4153e79c1fd012b430f3}\label{classIAV_a750609975b3e4153e79c1fd012b430f3}} 
+\index{IAV@{IAV}!start@{start}}
+\index{start@{start}!IAV@{IAV}}
+\doxysubsubsection{\texorpdfstring{start()}{start()}}
+{\footnotesize\ttfamily void IAV\+::start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Starts the \mbox{\hyperlink{classIAV}{IAV}} processing pipeline. 
+
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{iav_8cpp_source_l00025}{25}} of file \mbox{\hyperlink{iav_8cpp_source}{iav.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00025                \{}
+\DoxyCodeLine{00026     }
+\DoxyCodeLine{00027     audServerThread.detach();}
+\DoxyCodeLine{00028     audioThread.detach();}
+\DoxyCodeLine{00029     visualThread.join();}
+\DoxyCodeLine{00030 }
+\DoxyCodeLine{00031 \}}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{iav_8h}{iav.\+h}}\item 
+src/\mbox{\hyperlink{iav_8cpp}{iav.\+cpp}}\end{DoxyCompactItemize}

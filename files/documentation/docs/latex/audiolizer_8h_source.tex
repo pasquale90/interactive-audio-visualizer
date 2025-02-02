@@ -1,0 +1,56 @@
+\hypertarget{audiolizer_8h_source}{}\doxysection{audiolizer.\+h}
+\label{audiolizer_8h_source}\index{include/audiolizer.h@{include/audiolizer.h}}
+\mbox{\hyperlink{audiolizer_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00001}00001 \textcolor{preprocessor}{\#ifndef AUDIOLIZER\_H}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00002}00002 \textcolor{preprocessor}{\#define AUDIOLIZER\_H}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00003}00003 }
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00004}00004 \textcolor{preprocessor}{\#include <functional>}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00005}00005 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{config__types_8h}{config\_types.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00006}00006 \textcolor{keyword}{struct }\mbox{\hyperlink{structRegionOfInterest}{RegionOfInterest}};}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00007}00007 \textcolor{keyword}{class }\mbox{\hyperlink{structTone}{Tone}};}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00008}00008 }
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00013}\mbox{\hyperlink{classAudiolizer}{00013}} \textcolor{keyword}{class }\mbox{\hyperlink{classAudiolizer}{Audiolizer}}\{}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00014}00014 }
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00015}00015 \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00016}00016 }
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00019}00019     \mbox{\hyperlink{classAudiolizer_a416bdbc7e4c303d921cf8a1995a08c9a}{Audiolizer}}();}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00020}00020     }
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00028}00028     \textcolor{keywordtype}{bool} \mbox{\hyperlink{classAudiolizer_a2b9a26bd1486ebf2bdae14d7edd370c0}{turn\_Image\_into\_Sound}}(\textcolor{keyword}{const} \textcolor{keywordtype}{bool}, \textcolor{keyword}{const} \textcolor{keywordtype}{bool}, \textcolor{keyword}{const} \mbox{\hyperlink{structRegionOfInterest}{RegionOfInterest}}\&, \mbox{\hyperlink{structTone}{Tone}}\&);}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00029}00029 }
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00036}00036     \textcolor{keywordtype}{void} \mbox{\hyperlink{classAudiolizer_a615968fb43d145079d06521ad7634946}{setAudioUpdater}}(std::function<\textcolor{keywordtype}{void}(\textcolor{keywordtype}{int},\textcolor{keywordtype}{float})>);}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00037}00037 }
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00038}00038 \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00039}00039 }
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00040}00040     \mbox{\hyperlink{structCameraConfig}{CameraConfig}} \&cameracfg;}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00041}00041     \mbox{\hyperlink{structIAVConfig}{IAVConfig}} \&iavcfg;}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00042}00042     \textcolor{keywordtype}{int} frequencyRange,prev\_freq;}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00043}00043     \textcolor{keywordtype}{float} volume;}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00044}00044 }
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00045}00045     std::function<void(\textcolor{keywordtype}{int},\textcolor{keywordtype}{float})> updateAudio;}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00046}00046 }
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00053}00053     \textcolor{keywordtype}{bool} translate(\textcolor{keyword}{const} \mbox{\hyperlink{structRegionOfInterest}{RegionOfInterest}}\&,\textcolor{keywordtype}{int}\&);}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00054}00054     }
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00059}00059     \textcolor{keywordtype}{void} gradualy\_fade(\textcolor{keywordtype}{int}\&);}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00060}00060 }
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00061}00061     \textcolor{comment}{// @TEMPORARY DISABLED}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00062}00062     \textcolor{comment}{// /*! @brief Method that is called once during implicit construction to calculate 2 terms (a and b). }}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00063}00063     \textcolor{comment}{//  *a and b are latter used for converting frequency range into a logarithic scale}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00064}00064     \textcolor{comment}{//  *Currently not used.    }}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00065}00065     \textcolor{comment}{//  * @param int -\/ the minimum value of the frequency range defined.}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00066}00066     \textcolor{comment}{//  * @param int -\/ the maximum value of the frequency range defined.}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00067}00067     \textcolor{comment}{//  * @returns void}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00068}00068     \textcolor{comment}{//  */}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00069}00069     \textcolor{comment}{// void init\_log\_freq\_scale();}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00070}00070 }
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00071}00071     \textcolor{comment}{// /*! @brief Method to map the linear values of a predifined frequency range into a logarithmic range.}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00072}00072     \textcolor{comment}{// * Currently not used.}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00073}00073     \textcolor{comment}{// * @param int\& -\/ frequency variable passed by reference.}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00074}00074     \textcolor{comment}{// */}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00075}00075     \textcolor{comment}{// void int2log\_freq(int\&);  // currently not used}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00076}00076     \textcolor{comment}{// double a,b;}}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00077}00077 \};}
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00078}00078 }
+\DoxyCodeLine{\Hypertarget{audiolizer_8h_source_l00079}00079 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_camera_8cpp" xml:lang="en-US">
+<title>src/camera.cpp File Reference</title>
+<indexterm><primary>src/camera.cpp</primary></indexterm>
+<programlisting linenumbering="unnumbered">#include &lt;iostream&gt;
+#include &lt;opencv2/core/hal/interface.h&gt;
+#include &quot;camera.h&quot;
+#include &quot;config.h&quot;
+</programlisting>Include dependency graph for camera.cpp:<para>
+    <informalfigure>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="0" fileref="camera_8cpp__incl.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </informalfigure>
+</para>
+</section>

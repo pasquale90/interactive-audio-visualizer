@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_camerahw_8h_source" xml:lang="en-US">
+<title>camerahw.h</title>
+<indexterm><primary>include/gui/camerahw.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered"><anchor xml:id="_camerahw_8h_source_1l00001"/>00001 <emphasis role="preprocessor">#ifndef&#32;CAMERA_HW</emphasis>
+<anchor xml:id="_camerahw_8h_source_1l00002"/>00002 <emphasis role="preprocessor">#define&#32;CAMERA_HW</emphasis>
+<anchor xml:id="_camerahw_8h_source_1l00003"/>00003 
+<anchor xml:id="_camerahw_8h_source_1l00004"/>00004 <emphasis role="preprocessor">#include&#32;&lt;string&gt;</emphasis>
+<anchor xml:id="_camerahw_8h_source_1l00005"/>00005 <emphasis role="preprocessor">#include&#32;&lt;vector&gt;</emphasis>
+<anchor xml:id="_camerahw_8h_source_1l00006"/>00006 
+<anchor xml:id="_camerahw_8h_source_1l00015"/><link linkend="_structCameraInfo">00015</link> <emphasis role="keyword">struct&#32;</emphasis><link linkend="_structCameraInfo">CameraInfo</link>&#32;{
+<anchor xml:id="_camerahw_8h_source_1l00016"/><link linkend="_structCameraInfo_1aae33d6b66dff390f7de58e343745cf22">00016</link> &#32;&#32;&#32;&#32;std::string&#32;<link linkend="_structCameraInfo_1aae33d6b66dff390f7de58e343745cf22">devicePath</link>;
+<anchor xml:id="_camerahw_8h_source_1l00017"/><link linkend="_structCameraInfo_1a3d087eed7588f561a3fc89d4420aba53">00017</link> &#32;&#32;&#32;&#32;std::vector&lt;std::pair&lt;int,&#32;int&gt;&gt;&#32;<link linkend="_structCameraInfo_1a3d087eed7588f561a3fc89d4420aba53">resolutions</link>;
+<anchor xml:id="_camerahw_8h_source_1l00018"/>00018 };
+<anchor xml:id="_camerahw_8h_source_1l00019"/>00019 
+<anchor xml:id="_camerahw_8h_source_1l00030"/>00030 std::vector&lt;CameraInfo&gt;&#32;<link linkend="_camerahw_8h_1a3d0a95992cb94b91094a9251b01b821c">getAvailableCameras</link>();
+<anchor xml:id="_camerahw_8h_source_1l00031"/>00031 
+<anchor xml:id="_camerahw_8h_source_1l00032"/>00032 <emphasis role="preprocessor">#endif</emphasis>
+</programlisting></section>

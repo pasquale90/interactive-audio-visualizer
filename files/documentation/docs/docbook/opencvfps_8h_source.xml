@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_opencvfps_8h_source" xml:lang="en-US">
+<title>opencvfps.h</title>
+<indexterm><primary>include/gui/opencvfps.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered"><anchor xml:id="_opencvfps_8h_source_1l00001"/>00001 <emphasis role="preprocessor">#ifndef&#32;OPENCVFPS_H</emphasis>
+<anchor xml:id="_opencvfps_8h_source_1l00002"/>00002 <emphasis role="preprocessor">#define&#32;OPENCVFPS_H</emphasis>
+<anchor xml:id="_opencvfps_8h_source_1l00003"/>00003 
+<anchor xml:id="_opencvfps_8h_source_1l00010"/>00010 <emphasis role="keywordtype">double</emphasis>&#32;<link linkend="_opencvfps_8h_1ad3237be6e5ff04e9823256e7dad8d8d4">getCVfps_approx</link>(<emphasis role="keyword">const</emphasis>&#32;<emphasis role="keywordtype">char</emphasis>*);
+<anchor xml:id="_opencvfps_8h_source_1l00011"/>00011 
+<anchor xml:id="_opencvfps_8h_source_1l00012"/>00012 <emphasis role="preprocessor">#endif</emphasis>
+</programlisting></section>

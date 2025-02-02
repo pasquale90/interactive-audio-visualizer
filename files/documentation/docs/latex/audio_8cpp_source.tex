@@ -1,0 +1,156 @@
+\hypertarget{audio_8cpp_source}{}\doxysection{audio.\+cpp}
+\label{audio_8cpp_source}\index{src/audio.cpp@{src/audio.cpp}}
+\mbox{\hyperlink{audio_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00001}00001 \textcolor{preprocessor}{\#include <cstddef>}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00002}00002 \textcolor{preprocessor}{\#include <iostream>}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00003}00003 \textcolor{preprocessor}{\#include <cstring>}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00004}00004 \textcolor{preprocessor}{\#include <unistd.h>}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00005}00005 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{audio_8h}{audio.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00006}00006 \textcolor{preprocessor}{\#include "{}unused\_defines.h"{}}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00007}00007 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{config_8h}{config.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00008}00008 }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00009}00009 }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00010}\mbox{\hyperlink{audio_8cpp_a110faf924682c6b22e3526a1f47b0fe9}{00010}} \textcolor{keyword}{const} \textcolor{keywordtype}{char} *\mbox{\hyperlink{audio_8cpp_a110faf924682c6b22e3526a1f47b0fe9}{server\_name}} = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00011}\mbox{\hyperlink{audio_8cpp_ab44315834bf3a9a5d29b7752aac6c09b}{00011}} \textcolor{keyword}{const} \textcolor{keywordtype}{char} \mbox{\hyperlink{audio_8cpp_ab44315834bf3a9a5d29b7752aac6c09b}{clientName}}[17] = \textcolor{stringliteral}{"{}IAV-\/audio-\/client"{}};}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00012}00012 }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00013}00013 \textcolor{keywordtype}{int} AudioStream::streamAudio ( jack\_nframes\_t UNUSED(nframes), \textcolor{keywordtype}{void} *arg)\{ \textcolor{comment}{//, float *in,void (*threading)(float *sig)}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00014}00014     }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00015}00015     \textcolor{keywordflow}{return} \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classAudioStream}{AudioStream}}*\textcolor{keyword}{>}(arg)-\/>\mbox{\hyperlink{classAudioStream_ac6b5d301d25e74b9b18a58cf5d854385}{streamBuffer}}();}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00016}00016 \}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00017}00017 }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00018}\mbox{\hyperlink{classAudioStream_ab2e106f7e2f70f0cfb1d7b171da71f16}{00018}} \mbox{\hyperlink{classAudioStream_ab2e106f7e2f70f0cfb1d7b171da71f16}{AudioStream::AudioStream}}():audiocfg (\mbox{\hyperlink{classConfig}{Config}}::getInstance().audconf)\{}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00019}00019 }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00020}00020     client\_name=\mbox{\hyperlink{audio_8cpp_ab44315834bf3a9a5d29b7752aac6c09b}{clientName}};}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00021}00021     \textcolor{comment}{// nullify all}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00022}00022     client = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00023}00023     todevice = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00024}00024     }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00025}00025     \textcolor{keywordflow}{if} (audiocfg.\mbox{\hyperlink{structAudioConfig_ae2854185c92301b90a7775242fe6c629}{numChannels}}.load() == 1)\{}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00026}00026         output\_ports[1] = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00027}00027         outputBuffers[1]=\textcolor{keyword}{nullptr};}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00028}00028         make\_sound = \&\mbox{\hyperlink{classSine_abfd05b20115daa6b486ac26c3cb25129}{Sine::setMonoSignal}};  \textcolor{comment}{// Point to setMonoSignal for processing 1 single mono buffer}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00029}00029     \}        }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00030}00030     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (audiocfg.\mbox{\hyperlink{structAudioConfig_ae2854185c92301b90a7775242fe6c629}{numChannels}}.load() == 2) \{}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00031}00031         make\_sound = \&\mbox{\hyperlink{classSine_ae08432c7ada69cff0dd386c1c6b81bf8}{Sine::setStereoSignal}};  \textcolor{comment}{// Point to setStereoSignal for processing 2 stereo buffers}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00032}00032     \}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00033}00033 \}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00034}00034 }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00035}\mbox{\hyperlink{classAudioStream_a0f4ac8181f32c9b1466eb35ed723b167}{00035}} \textcolor{keywordtype}{void} \mbox{\hyperlink{classAudioStream_a0f4ac8181f32c9b1466eb35ed723b167}{AudioStream::setVisualizerUpdater}}(std::function<\textcolor{keywordtype}{void}(\textcolor{keywordtype}{float})> updater)\{}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00036}00036     sine.\mbox{\hyperlink{classSine_a4623d350f103d9dafd5ce29908e59332}{setVisualizerUpdater}}(std::move(updater));}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00037}00037 \}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00038}00038 }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00039}\mbox{\hyperlink{classAudioStream_a480e5d3468bfe9357dd6c40649b1e449}{00039}} \mbox{\hyperlink{classAudioStream_a480e5d3468bfe9357dd6c40649b1e449}{AudioStream::\string~AudioStream}}()\{}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00040}00040     \mbox{\hyperlink{classAudioStream_a86a07551cb80ac8248ad0b1953ffb81d}{closeStream}}();}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00041}00041     std::cout<<\textcolor{stringliteral}{"{}Audio stream object destructed"{}}<<std::endl;}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00042}00042 \}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00043}00043 }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00044}\mbox{\hyperlink{classAudioStream_ab4f577911f9c1b1ae64de56e6b2b96af}{00044}} \textcolor{keywordtype}{void} \mbox{\hyperlink{classAudioStream_ab4f577911f9c1b1ae64de56e6b2b96af}{AudioStream::clientConnect}}(std::mutex\& mtx, std::condition\_variable\& cv, \textcolor{keywordtype}{bool}\& serverStarted)\{}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00045}00045 }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00046}00046     std::cout << \textcolor{stringliteral}{"{}Waiting for jack server to start\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00047}00047     std::unique\_lock<std::mutex> lock(mtx);}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00048}00048     cv.wait(lock, [\&] \{ \textcolor{keywordflow}{return} serverStarted; \});}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00049}00049 }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00050}00050     jack\_options\_t options = JackNoStartServer;\textcolor{comment}{//(JackSessionID|JackServerName|JackNoStartServer|JackUseExactName|JackNullOption)}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00051}00051     jack\_status\_t status;}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00052}00052 }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00053}00053     \textcolor{comment}{/* open a client connection to the JACK server */}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00054}00054     client = jack\_client\_open (client\_name, options, \&status,\textcolor{keyword}{nullptr});}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00055}00055     \textcolor{keywordflow}{if} (status \& JackNameNotUnique) \{    \textcolor{comment}{//client name not unique, set a client name;}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00056}00056         client\_name = jack\_get\_client\_name(client);}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00057}00057         std::cerr<<\textcolor{stringliteral}{"{}\(\backslash\)t>>unique name "{}}<<client\_name<<\textcolor{stringliteral}{"{} assigned to the client obj."{}}<<std::endl;}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00058}00058     \}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00059}00059     }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00060}00060     \textcolor{keywordflow}{if} (client == NULL) \{}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00061}00061         std::cerr<<\textcolor{stringliteral}{"{}\(\backslash\)t>>jack\_client\_open() failed, status = "{}}<<status<<std::endl;}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00062}00062         \textcolor{keywordflow}{if} (status \& JackServerFailed) \{}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00063}00063             std::cerr<<\textcolor{stringliteral}{"{}\(\backslash\)t>>Unable to connect to JACK server"{}}<<std::endl;}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00064}00064         \}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00065}00065         exit (1);}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00066}00066     \}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00067}00067     \textcolor{keywordflow}{if} (status \& JackServerStarted) \{}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00068}00068         std::cout<<\textcolor{stringliteral}{"{}\(\backslash\)t>>JACK server started"{}}<<std::endl;}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00069}00069     \}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00070}00070 }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00071}00071     \textcolor{comment}{//callback}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00072}00072     \textcolor{keywordflow}{if} (jack\_set\_process\_callback (client,streamAudio,\textcolor{keyword}{this}))\{ \textcolor{comment}{//arg}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00073}00073             std::cerr<<\textcolor{stringliteral}{"{}\(\backslash\)t>>Callback operation failed"{}}<<std::endl;}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00074}00074     \}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00075}00075 }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00076}00076     \textcolor{comment}{//prevent failure}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00077}00077     jack\_on\_shutdown(client,\&jack\_shutdown,0);}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00078}00078 }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00079}00079     \textcolor{comment}{//register physical ports}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00080}00080     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} ch=0; ch<audiocfg.\mbox{\hyperlink{structAudioConfig_ae2854185c92301b90a7775242fe6c629}{numChannels}}.load();++ch)\{}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00081}00081         std::string portName = (ch\%2) ? (\textcolor{stringliteral}{"{}PortRight"{}}+std::to\_string(ch/2)) : (\textcolor{stringliteral}{"{}PortLeft"{}}+std::to\_string(ch/2));}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00082}00082         \textcolor{comment}{// std::cout<<"{}portName = "{}<<portName<<std::endl;}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00083}00083         output\_ports[ch]=jack\_port\_register (client,portName.c\_str(),JACK\_DEFAULT\_AUDIO\_TYPE, JackPortIsOutput, 0);}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00084}00084         \textcolor{comment}{// output\_port\_right=jack\_port\_register (client,"{}rightPort"{},JACK\_DEFAULT\_AUDIO\_TYPE, JackPortIsOutput, 0);}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00085}00085         \textcolor{keywordflow}{if} (output\_ports[ch] == NULL)\{}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00086}00086             std::cerr<<\textcolor{stringliteral}{"{}\(\backslash\)t>>Unable to register output port for \{"{}}<<jack\_port\_name(output\_ports[ch])<<\textcolor{stringliteral}{"{}\}"{}}<<std::endl;}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00087}00087             exit (1);\}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00088}00088     \}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00089}00089     }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00090}00090     \textcolor{comment}{//activate client}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00091}00091     \textcolor{keywordflow}{if} (jack\_activate (client)) \{}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00092}00092         std::cerr<<\textcolor{stringliteral}{"{}\(\backslash\)t>>cannot activate client \{"{}}<<client\_name<<\textcolor{stringliteral}{"{}\}"{}}<<std::endl;}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00093}00093         exit (1);}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00094}00094     \}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00095}00095 }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00096}00096     \textcolor{comment}{// Getting acces to destination ports}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00097}00097     todevice = jack\_get\_ports (client, NULL, NULL, JackPortIsPhysical|JackPortIsInput);}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00098}00098     \textcolor{keywordflow}{if} (todevice == NULL) \{}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00099}00099         std::cerr<<\textcolor{stringliteral}{"{}\(\backslash\)t>>no physical playback devices"{}}<<std::endl;}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00100}00100         exit (1);}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00101}00101     \}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00102}00102 }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00103}00103     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} ch=0; ch <audiocfg.\mbox{\hyperlink{structAudioConfig_ae2854185c92301b90a7775242fe6c629}{numChannels}}.load();++ch)\{}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00104}00104         \textcolor{keywordflow}{if} (output\_ports[ch]!=NULL)\{}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00105}00105             \textcolor{keywordflow}{if} (jack\_connect (client, jack\_port\_name(output\_ports[ch]), todevice[ch]))\{\textcolor{comment}{//returns full name}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00106}00106                 std::cerr<<\textcolor{stringliteral}{"{}\(\backslash\)t>>cannot connect left plysical output port \{"{}}<<todevice[ch]<<\textcolor{stringliteral}{"{}\} with input port \{"{}}<<jack\_port\_name(output\_ports[ch])<<\textcolor{stringliteral}{"{}\}"{}}<<std::endl;}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00107}00107             \}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00108}00108         \}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00109}00109     \}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00110}00110 }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00111}00111     free (todevice);}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00112}00112 \}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00113}00113 }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00114}00114 }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00115}\mbox{\hyperlink{classAudioStream_a86a07551cb80ac8248ad0b1953ffb81d}{00115}} \textcolor{keywordtype}{void} \mbox{\hyperlink{classAudioStream_a86a07551cb80ac8248ad0b1953ffb81d}{AudioStream::closeStream}}()\{}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00116}00116     }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00117}00117     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i=0; i<audiocfg.\mbox{\hyperlink{structAudioConfig_ae2854185c92301b90a7775242fe6c629}{numChannels}}.load();++i)\{}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00118}00118         \textcolor{keywordflow}{if} (jack\_port\_connected(output\_ports[i]))\{}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00119}00119             \textcolor{keywordflow}{if}(jack\_port\_disconnect(client,output\_ports[i]))\{}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00120}00120                 std::cerr<<\textcolor{stringliteral}{"{}Couldnt disconnect the "{}}<<jack\_port\_name(output\_ports[i])<<\textcolor{stringliteral}{"{} output port from the main stream"{}}<<std::endl;}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00121}00121             \}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00122}00122         \}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00123}00123         }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00124}00124     \}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00125}00125 }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00126}00126     std::cout<<\textcolor{stringliteral}{"{}Closing stream -\/ turning off audio client.."{}}<<std::endl;}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00127}00127     jack\_client\_close (client);}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00128}00128 \}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00129}00129 }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00130}\mbox{\hyperlink{classAudioStream_ac6b5d301d25e74b9b18a58cf5d854385}{00130}} \textcolor{keywordtype}{int} \mbox{\hyperlink{classAudioStream_ac6b5d301d25e74b9b18a58cf5d854385}{AudioStream::streamBuffer}}()\{}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00131}00131 }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00132}00132     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} ch = 0 ; ch < audiocfg.\mbox{\hyperlink{structAudioConfig_ae2854185c92301b90a7775242fe6c629}{numChannels}}.load(); ++ch)\{}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00133}00133         outputBuffers[ch] = \textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{float} *\textcolor{keyword}{>}(jack\_port\_get\_buffer (output\_ports[ch], audiocfg.\mbox{\hyperlink{structAudioConfig_ae81381142d99bc1845cb33bd048643df}{bufferSize}}.load() ));}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00134}00134     \}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00135}00135     }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00136}00136     (sine.*make\_sound)(tone,outputBuffers); }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00137}00137     }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00138}00138 }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00139}00139     \textcolor{keywordflow}{return} 0;}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00140}00140 \}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00141}00141 }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00142}00142 \textcolor{keywordtype}{void} AudioStream::jack\_shutdown (\textcolor{keywordtype}{void} *UNUSED(arg))}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00143}00143 \{}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00144}00144     exit (1);}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00145}00145 \}}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00146}00146 }
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00152}\mbox{\hyperlink{classAudioStream_a79ba2b085605b367698a204bb28fc6e7}{00152}} \textcolor{keywordtype}{void} \mbox{\hyperlink{classAudioStream_a79ba2b085605b367698a204bb28fc6e7}{AudioStream::update}}(\textcolor{keywordtype}{int} frequency, \textcolor{keywordtype}{float} volume)\{}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00153}00153     tone.\mbox{\hyperlink{structTone_a8c28a65c858594e410d94921d7abc1fa}{frequency}}.store(frequency);}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00154}00154     tone.\mbox{\hyperlink{structTone_ad643b37d799caa83f6a80dc2f001aa4a}{volume}}.store(volume);}
+\DoxyCodeLine{\Hypertarget{audio_8cpp_source_l00155}00155 \}}
+
+\end{DoxyCode}

@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_dir_99d0482cf009f9d97a0877749b817f19" xml:lang="en-US">
+<title>src/gui Directory Reference</title>
+<indexterm><primary>src/gui Directory Reference</primary></indexterm>
+Directory dependency graph for gui:<para>
+    <informalfigure>
+        <mediaobject>
+            <imageobject>
+                <imagedata width="50%" align="center" valign="middle" scalefit="0" fileref="dir_99d0482cf009f9d97a0877749b817f19_dep.png"></imagedata>
+            </imageobject>
+        </mediaobject>
+    </informalfigure>
+</para>
+<simplesect>
+    <title>Files    </title>
+        <itemizedlist>
+            <listitem><para>file <link linkend="_audiohw_8cpp">audiohw.cpp</link></para>
+</listitem>
+            <listitem><para>file <link linkend="_camerahw_8cpp">camerahw.cpp</link></para>
+</listitem>
+            <listitem><para>file <link linkend="_opencvfps_8cpp">opencvfps.cpp</link></para>
+</listitem>
+            <listitem><para>file <link linkend="_screenhw_8cpp">screenhw.cpp</link></para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+</section>

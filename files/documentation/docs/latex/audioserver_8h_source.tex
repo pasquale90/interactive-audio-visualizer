@@ -1,0 +1,64 @@
+\hypertarget{audioserver_8h_source}{}\doxysection{audioserver.\+h}
+\label{audioserver_8h_source}\index{include/audioserver.h@{include/audioserver.h}}
+\mbox{\hyperlink{audioserver_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00001}00001 \textcolor{preprocessor}{\#ifndef AUDIOSERVER\_H}}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00002}00002 \textcolor{preprocessor}{\#define AUDIOSERVER\_H}}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00003}00003 \textcolor{preprocessor}{\#include <mutex>}}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00004}00004 \textcolor{preprocessor}{\#include <condition\_variable>}}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00005}00005 \textcolor{preprocessor}{\#include <jack/jack.h>}}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00006}00006 \textcolor{preprocessor}{\#include <jack/control.h>}}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00007}00007 }
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00008}00008 \textcolor{comment}{// \#define SERVER\_VERBOSE}}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00009}00009 }
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00010}00010 \textcolor{keyword}{struct }\mbox{\hyperlink{structAudioConfig}{AudioConfig}};}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00011}00011 }
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00012}\mbox{\hyperlink{audioserver_8h_acec480b06d69cadd02c28e6ebb9e2412}{00012}} \textcolor{keyword}{const} \textcolor{keywordtype}{char} \mbox{\hyperlink{audioserver_8h_acec480b06d69cadd02c28e6ebb9e2412}{supported\_driver}}[5] = \textcolor{stringliteral}{"{}alsa"{}};}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00013}00013 }
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00022}\mbox{\hyperlink{classAudioServer}{00022}} \textcolor{keyword}{class }\mbox{\hyperlink{classAudioServer}{AudioServer}}\{}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00023}00023 \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00026}00026     \textcolor{keyword}{explicit} \mbox{\hyperlink{classAudioServer_a805734cde851bf85b3bcb9bc8a76fb9e}{AudioServer}}(\textcolor{keyword}{const} \textcolor{keywordtype}{char}* driverName = \mbox{\hyperlink{audioserver_8h_acec480b06d69cadd02c28e6ebb9e2412}{supported\_driver}});}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00027}00027     }
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00031}00031     \mbox{\hyperlink{classAudioServer_ae0e8c5f59aac9a1f4311b262e868cc5a}{\string~AudioServer}}();}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00032}00032     }
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00036}00036     \textcolor{keywordtype}{void} \mbox{\hyperlink{classAudioServer_a19903646817c7d1f3dc2bec8d1f2811e}{setup\_server}}();}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00037}00037     }
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00044}00044     \textcolor{keywordtype}{void} \mbox{\hyperlink{classAudioServer_ad727e135d3776ff9a631e47873a6e239}{start\_server}}(std::mutex\&, std::condition\_variable\&, \textcolor{keywordtype}{bool}\&);}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00045}00045 }
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00049}00049     \textcolor{keywordtype}{void} \mbox{\hyperlink{classAudioServer_a536a796af0497242444f845df99aba34}{stop\_server}}();}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00050}00050 }
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00051}00051     \textcolor{comment}{// Rule of five (5)}}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00055}\mbox{\hyperlink{classAudioServer_a812b89afeb671dae2fda7674aa858761}{00055}} \textcolor{comment}{}    \mbox{\hyperlink{classAudioServer_a812b89afeb671dae2fda7674aa858761}{AudioServer}} (\textcolor{keyword}{const} \mbox{\hyperlink{classAudioServer}{AudioServer}}\&) = \textcolor{keyword}{delete};}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00056}00056 }
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00060}\mbox{\hyperlink{classAudioServer_a445545e5e10004d65ec649aafe53bf5f}{00060}}     \mbox{\hyperlink{classAudioServer_a445545e5e10004d65ec649aafe53bf5f}{AudioServer}} (\mbox{\hyperlink{classAudioServer}{AudioServer}}\&\&) = \textcolor{keyword}{delete};}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00061}00061 }
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00065}\mbox{\hyperlink{classAudioServer_a506d1caeb1dcdd2a93565d6ea1b8d213}{00065}}     \mbox{\hyperlink{classAudioServer}{AudioServer}}\& \mbox{\hyperlink{classAudioServer_a506d1caeb1dcdd2a93565d6ea1b8d213}{operator=}}(\textcolor{keyword}{const} \mbox{\hyperlink{classAudioServer}{AudioServer}}\&) = \textcolor{keyword}{delete};}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00066}00066     }
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00070}\mbox{\hyperlink{classAudioServer_a8bdf6e1d1391cfe12f19dab76ade9eb6}{00070}}     \mbox{\hyperlink{classAudioServer}{AudioServer}}\& \mbox{\hyperlink{classAudioServer_a8bdf6e1d1391cfe12f19dab76ade9eb6}{operator=}}(\mbox{\hyperlink{classAudioServer}{AudioServer}}\&\&) = \textcolor{keyword}{delete};}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00071}00071     }
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00072}00072 \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00073}00073     jackctl\_server\_t *server;}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00074}00074     \textcolor{keyword}{const} JSList *parameters;}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00075}00075     \textcolor{keyword}{const} JSList *drivers;}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00076}00076     jackctl\_sigmask\_t *sigmask;}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00077}00077     \textcolor{keyword}{const} \textcolor{keywordtype}{char} *driver\_name;}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00078}00078     \textcolor{keyword}{const} \mbox{\hyperlink{structAudioConfig}{AudioConfig}}\& audiocfg;}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00079}00079 }
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00083}00083     \textcolor{keywordtype}{void} change\_server\_parameters();}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00087}00087     \textcolor{keywordtype}{void} change\_ALSAdriver\_parameters();}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00088}00088     }
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00092}00092     jackctl\_driver\_t* jackctl\_server\_get\_driver();}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00098}00098     \textcolor{keyword}{static} jackctl\_parameter\_t* jackctl\_get\_parameter(\textcolor{keyword}{const} JSList*,\textcolor{keyword}{const} \textcolor{keywordtype}{char} *);}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00099}00099 }
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00100}00100 \textcolor{preprocessor}{\#ifdef SERVER\_VERBOSE}}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00105}00105     \textcolor{keyword}{static} \textcolor{keywordtype}{void} print\_parameters(\textcolor{keyword}{const} JSList*);}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00106}00106     }
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00112}00112     \textcolor{keyword}{static} \textcolor{keywordtype}{void} print\_value(\textcolor{keyword}{union} jackctl\_parameter\_value, jackctl\_param\_type\_t);}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00113}00113     }
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00118}00118     \textcolor{keywordtype}{void} print\_driver\_info();}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00119}00119 \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00120}00120 }
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00121}00121 \};}
+\DoxyCodeLine{\Hypertarget{audioserver_8h_source_l00122}00122 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_config_8h_source" xml:lang="en-US">
+<title>config.h</title>
+<indexterm><primary>include/config.h</primary></indexterm>
+Go to the documentation of this file.<programlisting linenumbering="unnumbered"><anchor xml:id="_config_8h_source_1l00001"/>00001 <emphasis role="preprocessor">#ifndef&#32;CONFIG_H</emphasis>
+<anchor xml:id="_config_8h_source_1l00002"/>00002 <emphasis role="preprocessor">#define&#32;CONFIG_H</emphasis>
+<anchor xml:id="_config_8h_source_1l00003"/>00003 
+<anchor xml:id="_config_8h_source_1l00004"/>00004 <emphasis role="preprocessor">#include&#32;&lt;unordered_map&gt;</emphasis>
+<anchor xml:id="_config_8h_source_1l00005"/>00005 <emphasis role="preprocessor">#include&#32;&quot;<link linkend="_config__types_8h">config_types.h</link>&quot;</emphasis>
+<anchor xml:id="_config_8h_source_1l00006"/>00006 
+<anchor xml:id="_config_8h_source_1l00013"/><link linkend="_classConfig">00013</link> <emphasis role="keyword">class&#32;</emphasis><link linkend="_classConfig">Config</link>{
+<anchor xml:id="_config_8h_source_1l00014"/>00014 
+<anchor xml:id="_config_8h_source_1l00015"/>00015 <emphasis role="keyword">public</emphasis>:
+<anchor xml:id="_config_8h_source_1l00016"/>00016 &#32;&#32;&#32;&#32;
+<anchor xml:id="_config_8h_source_1l00020"/><link linkend="_classConfig_1a2d423929da9ed51425ac0cf219b36f5e">00020</link> &#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<link linkend="_classConfig">Config</link>&amp;&#32;<link linkend="_classConfig_1a2d423929da9ed51425ac0cf219b36f5e">getInstance</link>(){
+<anchor xml:id="_config_8h_source_1l00021"/>00021 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keyword">static</emphasis>&#32;<link linkend="_classConfig">Config</link>&#32;config;
+<anchor xml:id="_config_8h_source_1l00022"/>00022 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;config;
+<anchor xml:id="_config_8h_source_1l00023"/>00023 &#32;&#32;&#32;&#32;}
+<anchor xml:id="_config_8h_source_1l00024"/>00024 
+<anchor xml:id="_config_8h_source_1l00028"/><link linkend="_classConfig_1ad2e93ef08a872f46ca139ad28d64e2f9">00028</link> &#32;&#32;&#32;&#32;<link linkend="_classConfig_1ad2e93ef08a872f46ca139ad28d64e2f9">Config</link>(<link linkend="_classConfig">Config</link>&#32;<emphasis role="keyword">const</emphasis>&amp;)&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;=&#32;<emphasis role="keyword">delete</emphasis>;
+<anchor xml:id="_config_8h_source_1l00029"/>00029 &#32;&#32;&#32;&#32;
+<anchor xml:id="_config_8h_source_1l00033"/><link linkend="_classConfig_1aaef650a441e006c24120aae8e78b6c64">00033</link> &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_classConfig_1aaef650a441e006c24120aae8e78b6c64">operator=</link>(<link linkend="_classConfig">Config</link>&#32;<emphasis role="keyword">const</emphasis>&amp;)&#32;&#32;&#32;=&#32;<emphasis role="keyword">delete</emphasis>;
+<anchor xml:id="_config_8h_source_1l00034"/>00034 
+<anchor xml:id="_config_8h_source_1l00038"/>00038 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">void</emphasis>&#32;<link linkend="_classConfig_1a975933ecde91dc436d4ca39464cfd25f">display</link>();
+<anchor xml:id="_config_8h_source_1l00039"/>00039 
+<anchor xml:id="_config_8h_source_1l00043"/><link linkend="_classConfig_1a9f58fb425653b02d94a2961f7bdd9e45">00043</link> &#32;&#32;&#32;&#32;<link linkend="_structAudioConfig">AudioConfig</link>&#32;<link linkend="_classConfig_1a9f58fb425653b02d94a2961f7bdd9e45">audconf</link>;
+<anchor xml:id="_config_8h_source_1l00044"/>00044 
+<anchor xml:id="_config_8h_source_1l00048"/><link linkend="_classConfig_1ac0cf8c10aea198ce117dffb91206251c">00048</link> &#32;&#32;&#32;&#32;<link linkend="_structCameraConfig">CameraConfig</link>&#32;<link linkend="_classConfig_1ac0cf8c10aea198ce117dffb91206251c">camconf</link>;
+<anchor xml:id="_config_8h_source_1l00049"/>00049 &#32;&#32;&#32;&#32;
+<anchor xml:id="_config_8h_source_1l00053"/><link linkend="_classConfig_1ab6692268f819ce3f8474d1d791f3aaee">00053</link> &#32;&#32;&#32;&#32;<link linkend="_structDisplayConfig">DisplayConfig</link>&#32;<link linkend="_classConfig_1ab6692268f819ce3f8474d1d791f3aaee">dispconf</link>;
+<anchor xml:id="_config_8h_source_1l00054"/>00054 &#32;&#32;&#32;&#32;
+<anchor xml:id="_config_8h_source_1l00058"/><link linkend="_classConfig_1a91839b9ae92f5503ed43baa71da88fdc">00058</link> &#32;&#32;&#32;&#32;<link linkend="_structIAVConfig">IAVConfig</link>&#32;&#32;<link linkend="_classConfig_1a91839b9ae92f5503ed43baa71da88fdc">iavconf</link>;
+<anchor xml:id="_config_8h_source_1l00059"/>00059 
+<anchor xml:id="_config_8h_source_1l00060"/>00060 <emphasis role="keyword">private</emphasis>:
+<anchor xml:id="_config_8h_source_1l00064"/>00064 &#32;&#32;&#32;&#32;<link linkend="_classConfig">Config</link>();
+<anchor xml:id="_config_8h_source_1l00065"/>00065 &#32;&#32;&#32;&#32;
+<anchor xml:id="_config_8h_source_1l00066"/>00066 &#32;&#32;&#32;&#32;std::unordered_map&lt;std::string,&#32;std::string&gt;&#32;settings;
+<anchor xml:id="_config_8h_source_1l00067"/>00067 
+<anchor xml:id="_config_8h_source_1l00068"/>00068 &#32;&#32;&#32;&#32;<emphasis role="keywordtype">bool</emphasis>&#32;runAtomicityCheck();
+<anchor xml:id="_config_8h_source_1l00069"/>00069 
+<anchor xml:id="_config_8h_source_1l00070"/>00070 };
+<anchor xml:id="_config_8h_source_1l00071"/>00071 
+<anchor xml:id="_config_8h_source_1l00072"/>00072 <emphasis role="preprocessor">#endif</emphasis>
+</programlisting></section>

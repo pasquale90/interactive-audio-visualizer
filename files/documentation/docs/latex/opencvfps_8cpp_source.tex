@@ -1,0 +1,19 @@
+\hypertarget{opencvfps_8cpp_source}{}\doxysection{opencvfps.\+cpp}
+\label{opencvfps_8cpp_source}\index{src/gui/opencvfps.cpp@{src/gui/opencvfps.cpp}}
+\mbox{\hyperlink{opencvfps_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{opencvfps_8cpp_source_l00001}00001 \textcolor{preprocessor}{\#include "{}opencv2/opencv.hpp"{}}}
+\DoxyCodeLine{\Hypertarget{opencvfps_8cpp_source_l00002}00002 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{opencvfps_8h}{gui/opencvfps.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{opencvfps_8cpp_source_l00003}00003 }
+\DoxyCodeLine{\Hypertarget{opencvfps_8cpp_source_l00004}\mbox{\hyperlink{opencvfps_8cpp_a26d6d12c7c1b31e27b71aeb7a8742b6b}{00004}} \textcolor{keywordtype}{double} \mbox{\hyperlink{opencvfps_8cpp_a26d6d12c7c1b31e27b71aeb7a8742b6b}{getCVfps\_approx}}(\textcolor{keyword}{const} \textcolor{keywordtype}{char}* cameraDevice)\{}
+\DoxyCodeLine{\Hypertarget{opencvfps_8cpp_source_l00005}00005     cv::VideoCapture video(cameraDevice);}
+\DoxyCodeLine{\Hypertarget{opencvfps_8cpp_source_l00006}00006     }
+\DoxyCodeLine{\Hypertarget{opencvfps_8cpp_source_l00007}00007     \textcolor{comment}{// Check camera}}
+\DoxyCodeLine{\Hypertarget{opencvfps_8cpp_source_l00008}00008     \textcolor{comment}{// if (!video.isOpened()) \{}}
+\DoxyCodeLine{\Hypertarget{opencvfps_8cpp_source_l00009}00009     \textcolor{comment}{//     return -\/1;}}
+\DoxyCodeLine{\Hypertarget{opencvfps_8cpp_source_l00010}00010     \textcolor{comment}{// \}}}
+\DoxyCodeLine{\Hypertarget{opencvfps_8cpp_source_l00011}00011 }
+\DoxyCodeLine{\Hypertarget{opencvfps_8cpp_source_l00012}00012     \textcolor{keywordflow}{return} video.get(cv::CAP\_PROP\_FPS);}
+\DoxyCodeLine{\Hypertarget{opencvfps_8cpp_source_l00013}00013 \}}
+
+\end{DoxyCode}

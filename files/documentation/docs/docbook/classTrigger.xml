@@ -1,0 +1,186 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="_classTrigger" xml:lang="en-US">
+<title>Trigger Class Reference</title>
+<indexterm><primary>Trigger</primary></indexterm>
+<para>
+
+<para>A class responsible for managing the trigger behavior. </para>
+ 
+</para>
+<para>
+<computeroutput>#include &lt;trigger.h&gt;</computeroutput>
+</para>
+<simplesect>
+    <title>Public Member Functions    </title>
+        <itemizedlist>
+            <listitem><para><link linkend="_classTrigger_1afcf974790b6e846cd89eba5a802e7fa5">Trigger</link> ()</para>
+
+<para>Default constructor. </para>
+</listitem>
+            <listitem><para>bool <link linkend="_classTrigger_1a0f1b544e6fdc6ed75b2888113fc413a2">isTrackingEnabled</link> (float &amp;)</para>
+
+<para>Function used to enable or disable tracking mode. </para>
+</listitem>
+            <listitem><para>void <link linkend="_classTrigger_1a465a643de1ace6e23b5d4e0f8c94d5a0">reset</link> ()</para>
+
+<para>Function to reset the trigger&apos;s state to default (set tracking mode to false). </para>
+</listitem>
+            <listitem><para><link linkend="_classTimer">Timer</link> * <link linkend="_classTrigger_1a007133df14feb0397c0a095542c7acb1">getTimer</link> ()</para>
+
+<para>Function to get a pointer to the timer object used for tracking mode. </para>
+</listitem>
+        </itemizedlist>
+</simplesect>
+<section>
+<title>Detailed Description</title>
+
+<para>A class responsible for managing the trigger behavior. </para>
+
+
+
+<para><note><title>Note</title>
+
+<para>This class handles the enabling and disabling of tracking mode based on a timer. </para>
+</note>
+</para>
+<para>
+Definition at line <link linkend="_trigger_8h_source_1l00015">15</link> of file <link linkend="_trigger_8h_source">trigger.h</link>.</para>
+</section>
+<section>
+<title>Constructor &amp; Destructor Documentation</title>
+<anchor xml:id="_classTrigger_1afcf974790b6e846cd89eba5a802e7fa5"/><section>
+    <title>Trigger()</title>
+<indexterm><primary>Trigger</primary><secondary>Trigger</secondary></indexterm>
+<indexterm><primary>Trigger</primary><secondary>Trigger</secondary></indexterm>
+<para><computeroutput>Trigger::Trigger ( )</computeroutput></para><para>
+
+<para>Default constructor. </para>
+</para>
+
+<para><note><title>Note</title>
+
+<para>Initializes a timer with a default time duration of 5 seconds. </para>
+
+<para>The trigger is disabled by default. </para>
+</note>
+</para>
+<para>
+Definition at line <link linkend="_trigger_8cpp_source_1l00004">4</link> of file <link linkend="_trigger_8cpp_source">trigger.cpp</link>.</para>
+<programlisting linenumbering="unnumbered">00004 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;:&#32;iavcfg&#32;(<link linkend="_classConfig_1a2d423929da9ed51425ac0cf219b36f5e">Config::getInstance</link>().iavconf),timeDurationSec(<link linkend="_trigger_8h_1ab5d9a356db05331fcb8c6c8882a528bc">photo_countdown_sec</link>),mode(0)
+00005 {
+00006 
+00007 &#32;&#32;&#32;&#32;timer.<link linkend="_classTimer_1a40123f84a3b830f2721bf4ed0d0b64f8">setTimer</link>(timeDurationSec);
+00008 &#32;&#32;&#32;&#32;
+00009 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;if&#32;(iavcfg.trigger&#32;==&#32;&quot;Auto&quot;){}&#32;</emphasis>
+00010 &#32;&#32;&#32;&#32;<emphasis role="comment">//&#32;else&#32;if&#32;(iavcfg.trigger&#32;==&#32;&quot;Manual&quot;){}</emphasis>
+00011 }
+</programlisting></section>
+</section>
+<section>
+<title>Member Function Documentation</title>
+<anchor xml:id="_classTrigger_1a007133df14feb0397c0a095542c7acb1"/><section>
+    <title>getTimer()</title>
+<indexterm><primary>getTimer</primary><secondary>Trigger</secondary></indexterm>
+<indexterm><primary>Trigger</primary><secondary>getTimer</secondary></indexterm>
+<para><computeroutput><link linkend="_classTimer">Timer</link> * Trigger::getTimer ( )</computeroutput></para><para>
+
+<para>Function to get a pointer to the timer object used for tracking mode. </para>
+</para>
+
+<para><note><title>Note</title>
+
+<para>This function is used for testing purposes. </para>
+</note>
+<formalpara><title>Returns</title>
+
+<para>Timer* - A pointer to the timer object. </para>
+</formalpara>
+</para>
+<para>
+Definition at line <link linkend="_trigger_8cpp_source_1l00038">38</link> of file <link linkend="_trigger_8cpp_source">trigger.cpp</link>.</para>
+<programlisting linenumbering="unnumbered">00038 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+00039 &#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;&amp;timer;
+00040 }
+</programlisting></section>
+<anchor xml:id="_classTrigger_1a0f1b544e6fdc6ed75b2888113fc413a2"/><section>
+    <title>isTrackingEnabled()</title>
+<indexterm><primary>isTrackingEnabled</primary><secondary>Trigger</secondary></indexterm>
+<indexterm><primary>Trigger</primary><secondary>isTrackingEnabled</secondary></indexterm>
+<para><computeroutput>bool Trigger::isTrackingEnabled (float &amp; remaining_percentage)</computeroutput></para><para>
+
+<para>Function used to enable or disable tracking mode. </para>
+</para>
+
+<para>The enabling and disabling of tracking mode is handled using a timer. *In the future this function should be replaced with a more efficient mechanism to handle enabling and disabling based on keyboard inputs.</para>
+
+<para><note><title>Note</title>
+
+<para>The mode is disabled by default. </para>
+</note>
+
+                <formalpara>
+                    <title>
+Parameters</title>
+                    <para>
+                    <table frame="all">
+                        <tgroup cols="2" align="left" colsep="1" rowsep="1">
+                        <colspec colwidth="1*"/>
+                        <colspec colwidth="4*"/>
+                        <tbody>
+                            <row>
+<entry>float&amp;</entry><entry>
+<para>- True to enable tracking mode, false to disable it. </para>
+</entry>
+                            </row>
+                        </tbody>
+                        </tgroup>
+                    </table>
+                    </para>
+                </formalpara>
+                <formalpara><title>Returns</title>
+
+<para>bool - True if tracking mode is enabled, false otherwise. </para>
+</formalpara>
+</para>
+<para>
+Definition at line <link linkend="_trigger_8cpp_source_1l00018">18</link> of file <link linkend="_trigger_8cpp_source">trigger.cpp</link>.</para>
+<programlisting linenumbering="unnumbered">00018 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+00019 
+00020 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">if</emphasis>&#32;(timer.<link linkend="_classTimer_1a35483f893f25c87981e8ca97cff74bd3">isTimerFinished</link>()){
+00021 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;_modeToggle();
+00022 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;timer.<link linkend="_classTimer_1a40123f84a3b830f2721bf4ed0d0b64f8">setTimer</link>(timeDurationSec);
+00023 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;}
+00024 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+00025 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordtype">int</emphasis>&#32;millisecondsElapsed;
+00026 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+00027 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;timer.<link linkend="_classTimer_1aa8cb793518f8630a02c526c2f1666f62">update</link>(millisecondsElapsed);
+00028 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;remaining_percentage&#32;=&#32;(<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">float</emphasis><emphasis role="keyword">&gt;</emphasis>&#32;(millisecondsElapsed)&#32;/&#32;<emphasis role="keyword">static_cast&lt;</emphasis><emphasis role="keywordtype">float</emphasis><emphasis role="keyword">&gt;</emphasis>(timeDurationSec*1000));&#32;
+00029 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;
+00030 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;<emphasis role="keywordflow">return</emphasis>&#32;mode;
+00031 }
+</programlisting></section>
+<anchor xml:id="_classTrigger_1a465a643de1ace6e23b5d4e0f8c94d5a0"/><section>
+    <title>reset()</title>
+<indexterm><primary>reset</primary><secondary>Trigger</secondary></indexterm>
+<indexterm><primary>Trigger</primary><secondary>reset</secondary></indexterm>
+<para><computeroutput>void Trigger::reset ( )</computeroutput></para><para>
+
+<para>Function to reset the trigger&apos;s state to default (set tracking mode to false). </para>
+</para>
+
+<para><formalpara><title>Returns</title>
+
+<para>void </para>
+</formalpara>
+</para>
+<para>
+Definition at line <link linkend="_trigger_8cpp_source_1l00033">33</link> of file <link linkend="_trigger_8cpp_source">trigger.cpp</link>.</para>
+<programlisting linenumbering="unnumbered">00033 &#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;{
+00034 &#32;&#32;&#32;&#32;mode&#32;=&#32;0;
+00035 &#32;&#32;&#32;&#32;timeDurationSec&#32;=&#32;<link linkend="_trigger_8h_1ab5d9a356db05331fcb8c6c8882a528bc">photo_countdown_sec</link>;
+00036 }
+</programlisting></section>
+<para>
+The documentation for this class was generated from the following files:</para>
+include/<link linkend="_trigger_8h">trigger.h</link>src/<link linkend="_trigger_8cpp">trigger.cpp</link></section>
+</section>
