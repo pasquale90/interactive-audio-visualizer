@@ -2,7 +2,7 @@
 
 <a href="https://github.com/pasquale90/interactive-audio-visualizer"><img src="files/imgs/interactive-audio-visualizer.svg" width="650"></a>
 
-<a href="https://youtu.be/y8mJdEyd31Y"><img src="files/imgs/iav.gif" width="650"></a>
+<a href="https://github.com/pasquale90/interactive-audio-visualizer"><img src="files/imgs/iav.gif" width="650"></a>
 
 ### *Bringing Sound to Life with Interactive Real-Time Audio-Visual Experience*
 
