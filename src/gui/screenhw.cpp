@@ -14,7 +14,7 @@ std::vector<std::pair<int,int>> get_screen_resolution() {
 
     Display* display = XOpenDisplay(NULL);
     if (!display) {
-        std::cerr << "Error: Couldn't open display." << std::endl;
+        std::cerr << "Error: Couldn't open display.\n";
         return {};
     }
 
@@ -23,7 +23,7 @@ std::vector<std::pair<int,int>> get_screen_resolution() {
 
     XRRScreenResources* resources = XRRGetScreenResourcesCurrent(display, root);
     if (!resources) {
-        std::cerr << "Error: Could not get screen resources." << std::endl;
+        std::cerr << "Error: Could not get screen resources."<<std::endl;
         XCloseDisplay(display);
         return {};
     }

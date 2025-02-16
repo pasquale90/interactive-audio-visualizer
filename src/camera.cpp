@@ -18,7 +18,7 @@ void Camera::initialize_camera(){
     int fps = static_cast<int>(cameracfg.frameRate.load());
 
     if (!cap.open(device, cv::CAP_V4L2)) {
-        std::cerr << "Error: Could not open camera " << device << std::endl;
+        std::cerr << "Error: Could not open camera " << device << "\n";
     }
 
     cap.set(cv::CAP_PROP_FRAME_WIDTH, width);
@@ -31,7 +31,7 @@ void Camera::initialize_camera(){
 
     if (actualWidth != width || actualHeight != height || actualFps != fps) {
         
-        std::cerr << "Warning: Camera properties might not be set correctly!" << std::endl;
+        std::cerr << "Warning: Camera properties might not be set correctly!"<<std::endl;
         
         cameracfg.camResW.store(actualWidth);
         cameracfg.camResH.store(actualHeight);
@@ -42,7 +42,6 @@ void Camera::initialize_camera(){
 Camera::~Camera(){
     frame.release();
     cap.release();
-    std::cout<<"Camera object destructed"<<std::endl;
 }
 
 bool Camera::frame_elapsed(){

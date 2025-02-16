@@ -38,12 +38,11 @@ void AudioStream::setVisualizerUpdater(std::function<void(float)> updater){
 
 AudioStream::~AudioStream(){
     closeStream();
-    std::cout<<"Audio stream object destructed"<<std::endl;
 }
 
 void AudioStream::clientConnect(std::mutex& mtx, std::condition_variable& cv, bool& serverStarted){
 
-    std::cout << "Waiting for jack server to start\n";
+    // Waiting for jack server to start
     std::unique_lock<std::mutex> lock(mtx);
     cv.wait(lock, [&] { return serverStarted; });
 
@@ -54,7 +53,7 @@ void AudioStream::clientConnect(std::mutex& mtx, std::condition_variable& cv, bo
 	client = jack_client_open (client_name, options, &status,nullptr);
     if (status & JackNameNotUnique) {    //client name not unique, set a client name;
         client_name = jack_get_client_name(client);
-        std::cerr<<"\t>>unique name "<<client_name<<" assigned to the client obj."<<std::endl;
+        std::cerr<<"\t>>unique name "<<client_name<<" assigned to the client obj."<<std::endl;;
     }
     
 	if (client == NULL) {
@@ -65,7 +64,7 @@ void AudioStream::clientConnect(std::mutex& mtx, std::condition_variable& cv, bo
         exit (1);
     }
     if (status & JackServerStarted) {
-        std::cout<<"\t>>JACK server started"<<std::endl;
+        printf("JACK server started\n");
     }
 
     //callback
@@ -79,11 +78,9 @@ void AudioStream::clientConnect(std::mutex& mtx, std::condition_variable& cv, bo
     //register physical ports
     for (size_t ch=0; ch<audiocfg.numChannels.load();++ch){
         std::string portName = (ch%2) ? ("PortRight"+std::to_string(ch/2)) : ("PortLeft"+std::to_string(ch/2));
-        // std::cout<<"portName = "<<portName<<std::endl;
         output_ports[ch]=jack_port_register (client,portName.c_str(),JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
-        // output_port_right=jack_port_register (client,"rightPort",JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
         if (output_ports[ch] == NULL){
-            std::cerr<<"\t>>Unable to register output port for {"<<jack_port_name(output_ports[ch])<<"}"<<std::endl;
+            std::cerr<<"\t>>Unable to register output port for {"<<jack_port_name(output_ports[ch])<<"}"<<std::endl;;
             exit (1);}
     }
     
@@ -117,13 +114,11 @@ void AudioStream::closeStream(){
     for (size_t i=0; i<audiocfg.numChannels.load();++i){
         if (jack_port_connected(output_ports[i])){
             if(jack_port_disconnect(client,output_ports[i])){
-                std::cerr<<"Couldnt disconnect the "<<jack_port_name(output_ports[i])<<" output port from the main stream"<<std::endl;
+                std::cerr<<"Couldnt disconnect the "<<jack_port_name(output_ports[i])<<" output port from the main stream\n";
             }
         }
         
     }
-
-    std::cout<<"Closing stream - turning off audio client.."<<std::endl;
     jack_client_close (client);
 }
 

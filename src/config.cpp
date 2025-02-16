@@ -69,29 +69,29 @@ void Config::display(){
 
     std::cout<<"########## Interactive Audio Visualizer Config ##########\n";
     std::cout<<"------------------ audio settings -----------------------\n";
-    std::cout<<"audio device             \t:\t"<<audconf.audioDevice<<std::endl;
-    std::cout<<"sampling rate            \t:\t"<<audconf.sampleRate.load()<<" samples/sec"<<std::endl;
-    std::cout<<"quantization             \t:\t"<<audconf.quantization<<" bits"<<std::endl;
-    std::cout<<"buffer size              \t:\t"<<audconf.bufferSize.load()<<" samples"<<std::endl;
-	std::cout<<"num output channels      \t:\t"<<audconf.numChannels.load()<<" "<<std::endl;
+    std::cout<<"audio device             \t:\t"<<audconf.audioDevice<<"\n";
+    std::cout<<"sampling rate            \t:\t"<<audconf.sampleRate.load()<<" samples/sec"<<"\n";
+    std::cout<<"quantization             \t:\t"<<audconf.quantization<<" bits"<<"\n";
+    std::cout<<"buffer size              \t:\t"<<audconf.bufferSize.load()<<" samples"<<"\n";
+	std::cout<<"num output channels      \t:\t"<<audconf.numChannels.load()<<" "<<"\n";
 	std::cout<<"----------------- display settings ----------------------\n";
-    std::cout<<"frames per second        \t:\t"<<dispconf.fps.load()<<" fps"<<std::endl;
-    std::cout<<"display Width            \t:\t"<<dispconf.dispResW.load()<<" pixels"<<std::endl;
-    std::cout<<"display Height           \t:\t"<<dispconf.dispResH.load()<<" pixels"<<std::endl;
+    std::cout<<"frames per second        \t:\t"<<dispconf.fps.load()<<" fps"<<"\n";
+    std::cout<<"display Width            \t:\t"<<dispconf.dispResW.load()<<" pixels"<<"\n";
+    std::cout<<"display Height           \t:\t"<<dispconf.dispResH.load()<<" pixels"<<"\n";
     std::cout<<"------------------ camera settings ----------------------\n";
-    std::cout<<"camera device            \t:\t"<<camconf.device<<std::endl; 
-    std::cout<<"camera resolution width  \t:\t"<<camconf.camResW.load()<<" pixels"<<std::endl;
-    std::cout<<"camera resolution height \t:\t"<<camconf.camResH.load()<<" pixels"<<std::endl;
-    std::cout<<"camera frame rate        \t:\t"<<camconf.frameRate.load()<<" fps"<<std::endl;
+    std::cout<<"camera device            \t:\t"<<camconf.device<<"\n"; 
+    std::cout<<"camera resolution width  \t:\t"<<camconf.camResW.load()<<" pixels"<<"\n";
+    std::cout<<"camera resolution height \t:\t"<<camconf.camResH.load()<<" pixels"<<"\n";
+    std::cout<<"camera frame rate        \t:\t"<<camconf.frameRate.load()<<" fps"<<"\n";
     std::cout<<"------------------ iav Settings -------------------------\n";
-    std::cout<<"mininum frequency        \t:\t"<<iavconf.minFrequency<<" Hz"<<std::endl;
-    std::cout<<"maxinum frequency        \t:\t"<<iavconf.maxFrequency<<" Hz"<<std::endl;
-    std::cout<<"radius                   \t:\t"<<iavconf.roiRadius<<" pixels"<<std::endl;
-    std::cout<<"trigger method           \t:\t"<<iavconf.trigger<<std::endl;
-    std::cout<<"tracking algorithm       \t:\t"<<iavconf.trackingAlg<<std::endl;
-	// std::cout<<"skip frames ratio        \t:\t"<<iavconf.skipFramesRatio<<std::endl;
-	// std::cout<<"number of skip frames	 \t:\t"<<iavconf.skipFramesRatio-1<<" frames"<<std::endl;
-    std::cout<<"#########################################################\n\n";
+    std::cout<<"mininum frequency        \t:\t"<<iavconf.minFrequency<<" Hz"<<"\n";
+    std::cout<<"maxinum frequency        \t:\t"<<iavconf.maxFrequency<<" Hz"<<"\n";
+    std::cout<<"radius                   \t:\t"<<iavconf.roiRadius<<" pixels"<<"\n";
+    std::cout<<"trigger method           \t:\t"<<iavconf.trigger<<"\n";
+    std::cout<<"tracking algorithm       \t:\t"<<iavconf.trackingAlg<<"\n";
+	// std::cout<<"skip frames ratio        \t:\t"<<iavconf.skipFramesRatio<<"\n";
+	// std::cout<<"number of skip frames	 \t:\t"<<iavconf.skipFramesRatio-1<<" frames"<<"\n";
+    std::cout<<"#########################################################\n\n"<<std::endl;
 
 }
 
@@ -101,17 +101,17 @@ bool Config::runAtomicityCheck() {
 	
 	// Check for atomic lock freedom for each atomic member in ConfigStruct
 	if (!std::atomic<int>::is_always_lock_free) {
-		std::cout << "Warning: atomic<int> is not lock-free!\n";
+		std::cerr << "Warning: atomic<int> is not lock-free!\n";
 		warning = true;
 	}
 
 	if (!std::atomic<unsigned int>::is_always_lock_free) {
-		std::cout << "Warning: atomic<unsigned int> is not lock-free!\n";
+		std::cerr << "Warning: atomic<unsigned int> is not lock-free!\n";
 		warning = true;
 	}
 
 	if (!std::atomic<double>::is_always_lock_free) {
-		std::cout << "Warning: atomic<double> is not lock-free!\n";
+		std::cerr << "Warning: atomic<double> is not lock-free!\n";
 		warning = true;
 	}
 
